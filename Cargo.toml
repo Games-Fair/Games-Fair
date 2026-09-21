@@ -27,10 +27,12 @@ name = "dayapp"
 crate-type = ["rlib"]
 
 [dependencies]
-day = { git = "https://github.com/daybrite/day.git", features = ["model"] }
+# Track the framework's main branch. Which revision a build uses is still the committed
+# Cargo.lock's; `cargo update -p day -p day-build` moves it to the tip of main.
+day = { git = "https://github.com/daybrite/day.git", branch = "main", features = ["model"] }
 
 [build-dependencies]
-day-build = { git = "https://github.com/daybrite/day.git" }
+day-build = { git = "https://github.com/daybrite/day.git", branch = "main" }
 
 
 [workspace]

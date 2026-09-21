@@ -93,7 +93,9 @@ fn language_row() -> AnyPiece {
         },
     );
     let mut names = vec![res::str::appearance_system().format()];
-    names.extend(res::locales::ALL.iter().map(|(_, name)| (*name).to_string()));
+    for (_, name) in res::locales::ALL {
+        names.push((*name).to_string());
+    }
     labeled(
         res::str::settings_language(),
         picker(names, choice).id("language-picker"),

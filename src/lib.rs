@@ -116,8 +116,7 @@ fn menus() -> Vec<MenuEntry> {
             // The platform's New Window item and ⌘N.
             menu_role(MenuRole::NewWindow),
             menu_separator(),
-            menu_item(res::str::cmd_appfair().format())
-                .action(|| open_link("https://appfair.org")),
+            menu_item(res::str::cmd_appfair().format()).action(|| open_link("https://appfair.org")),
             menu_separator(),
             menu_role(MenuRole::CloseWindow),
         ],
