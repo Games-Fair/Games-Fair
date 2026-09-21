@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+[package]
+name = "solitaire"
+version.workspace = true
+edition = "2024"
+license = "Apache-2.0"
+
+# A composite Day piece: a reusable widget built purely from Day's core primitives, with no native
+# per-backend code and no cargo features, so it works on every backend as is. Depend on it with a
+# plain `{ workspace = true }` (or git) line and call the builder from `use day::prelude::*` code.
+
+[dependencies]
+day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-reactive = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-geometry = { git = "https://github.com/daybrite/day.git", branch = "main" }
+
+day-part-haptics = { git = "https://github.com/daybrite/day.git", branch = "main" }
+gamekit = { path = "../../gamekit" }
+serde = { version = "1", features = ["derive"] }
+day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }

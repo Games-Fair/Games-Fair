@@ -1,41 +1,382 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 # Games Fair: UI strings (https://daybrite.dev/docs/localization). Add a locale by dropping a
-# sibling folder and translating it. This starter ships English and French.
+# sibling folder (e.g. locales/fr/app.ftl) and registering it in src/lib.rs.
 
-app_title = Games Fair
+# The name comes from app metadata; translations can place it without duplicating the brand.
+app_title = { $title }
 
-nav_welcome = Welcome
-nav_navigate = The App Fair
-nav_settings = Settings
+nav_breakout = Breakout
+nav_sirtet = Sirtet
+nav_sudoku = Sudoku
+nav_2048 = 2048
+nav_blockblast = Block Blast
+nav_solitaire = Solitaire
 
-# The Welcome page. `welcome_body` is markdown, so a translator can stress a different word.
-# One line per paragraph: Fluent keeps the line breaks you write, and a paragraph may not
-# begin with `*`, `[`, `.`, or `}`, which Fluent reserves.
-welcome_title = Welcome to Games Fair
-welcome_body =
-    This is **Games Fair**, an [App Fair](https://appfair.org) app: free software, built from source you can read, and distributed through the App Fair Project.
+gk_close = Close game
 
-    The App Fair builds every app from a tagged commit, compares that build against the release the maintainer published, and signs it with the project's keys.
+# Shared game chrome (gamekit::chrome)
+gk_pause = Pause
+gk_paused = PAUSED
+gk_resume = Resume
+gk_new_game = New Game
+gk_settings = Settings
+gk_instructions = Instructions
+gk_quit = Quit Game
+gk_play_again = Play Again
+gk_game_over = GAME OVER
+gk_score = Score
+gk_best = Best
+gk_new_high_score = New High Score!
+gk_sounds = Sounds
+gk_vibrations = Vibrations
+gk_data = Data
+gk_done = Done
+gk_cancel = Cancel
+gk_reset_high_score = Reset High Score
+gk_reset_high_score_title = Reset High Score?
+gk_reset_high_score_message = This will permanently reset the high score to zero.
+gk_reset_confirm = Reset
+gk_game_over_heading = Game over
 
-    Read more at [appfair.org](https://appfair.org), or open [**Settings**](#settings) to change the appearance and the language.
+# Breakout
+bk_level_caption = Level
+bk_lives = Lives
+bk_tap_to_launch = TAP TO LAUNCH
+bk_drag_to_move = DRAG TO MOVE PADDLE
+bk_level_clear = LEVEL { $n } CLEAR!
+bk_next_level = Next Level
+bk_help_intro = Bounce a ball off your paddle to break every brick.
+bk_help_play = How to play
+bk_help_play_1 = • **Drag** anywhere on the play area to move the paddle. It rides above your finger, and a quick upward swipe smashes the ball harder.
+bk_help_play_2 = • Keep the ball in play. If it falls below the paddle, you lose a life.
+bk_help_play_3 = • Hit every brick to clear the level and advance. Bricks broken in quick succession multiply your score.
+bk_help_powerups = Power-ups
+bk_help_powerups_1 = Some bricks drop power-ups when broken. Catch them with the paddle for short-lived bonuses such as a wider paddle, a slower ball, a smashing ball that flies straight through bricks, extra balls, or an extra life.
+bk_help_lives = Lives and game over
+bk_help_lives_1 = You start with three lives. Lose all of them and the game ends. Clearing every brick advances you to the next, faster level, where some bricks take more than one hit.
 
-# The second section.
-navigate_title = The App Fair Project
-navigate_body =
-    Apps here are licensed under the [AGPL](https://www.gnu.org/licenses/agpl-3.0.html), with an exception that lets them be distributed through the app stores. Both texts ship beside this app, in LICENSE.txt and LICENSE-EXCEPTIONS.txt.
-navigate_links = Where to go next
-link_home = The App Fair
-link_docs = Documentation
-link_source = Source on GitHub
+# Sirtet
+st_level = Level
+st_lines = Lines
+st_next = Next
+st_next_a11y = Next piece
+st_game_over = Game Over
+st_clear_single = SINGLE
+st_clear_double = DOUBLE
+st_clear_triple = TRIPLE
+st_clear_sirtet = SIRTET!
+st_help_intro = Stack the falling pieces and clear complete rows before the well fills up.
+st_help_play = How to play
+st_help_play_1 = • **Drag left or right** to move the falling piece; on a keyboard, the arrow keys move it.
+st_help_play_2 = • **Tap** to rotate the piece.
+st_help_play_3 = • **Drag down** to drop the piece faster.
+st_help_lines = Clearing lines
+st_help_lines_1 = • Fill a complete horizontal row to clear it.
+st_help_lines_2 = • Clearing **several lines at once** scores extra. Four at a time is the biggest reward.
+st_help_levels = Levels and speed
+st_help_levels_1 = The game speeds up as you clear lines. Higher levels drop pieces faster.
+st_help_over_1 = The game ends when a new piece can no longer enter the well.
 
-# Settings.
-section_general = General
-settings_appearance = Appearance
-settings_language = Language
-appearance_system = System
-appearance_light = Light
-appearance_dark = Dark
+# 2048
+tf_game_over = Game Over
+tf_keep_going = Keep Going
+tf_won_title = 2048!
+tf_difficulty = Difficulty
+tf_easy = Easy
+tf_normal = Normal
+tf_hard = Hard
+tf_detail_easy = Only 2s spawn. 3 undos per game.
+tf_detail_normal = Classic rules. 90% twos, 10% fours.
+tf_detail_hard = 20% fours. Two tiles spawn per move.
+tf_choose_difficulty = Choose Difficulty
+tf_undo = Undo ({ $n })
+tf_undo_a11y = Undo the last move
+tf_won_message = You made the 2048 tile. Keep going for a higher score?
+tf_help_intro = Combine matching tiles on a 4×4 grid to reach the **2048** tile.
+tf_help_play = How to play
+tf_help_play_1 = • **Swipe** up, down, left, or right to slide every tile that way; on a keyboard, use the arrow keys.
+tf_help_play_2 = • When two tiles with the **same number** collide, they merge into one tile with their **sum**.
+tf_help_play_3 = • After every move, a new **2** (or sometimes **4**) appears on a random empty cell.
+tf_help_goal = Goal
+tf_help_goal_1 = Create a **2048** tile to win. After winning, you can keep going for a higher score.
+tf_help_over_1 = The game ends when the board is full and no two adjacent tiles match.
+tf_help_tips = Tips
+tf_help_tips_1 = • Pick a corner and keep your largest tile parked there.
+tf_help_tips_2 = • Build merges in a single direction so smaller tiles line up underneath your big one.
+tf_help_tips_3 = • On Easy, **undo** is available. Use it to recover from a mistake.
 
-# Menus and commands.
-menu_file = File
-cmd_appfair = Visit the App Fair
+# Block Blast
+bb_board_a11y = Block Blast board and piece tray
+bb_no_moves = No piece in the tray fits on the board.
+bb_combo = Combo ×{ $n }
+bb_lines = { $n } Lines
+bb_msg_nice = Nice!
+bb_msg_good = Good!
+bb_msg_sweet = Sweet!
+bb_msg_great = Great!
+bb_msg_smooth = Smooth!
+bb_msg_slick = Slick!
+bb_msg_awesome = Awesome!
+bb_msg_excellent = Excellent!
+bb_msg_fantastic = Fantastic!
+bb_msg_amazing = Amazing!
+bb_msg_incredible = Incredible!
+bb_msg_spectacular = Spectacular!
+bb_msg_unbelievable = UNBELIEVABLE!
+bb_msg_legendary = LEGENDARY!
+bb_msg_unstoppable = UNSTOPPABLE!
+bb_msg_perfect = PERFECT CLEAR!
+bb_msg_flawless = FLAWLESS!
+bb_easy = Easy
+bb_normal = Normal
+bb_hard = Hard
+bb_detail_easy = Every set of three pieces can be placed.
+bb_detail_normal = Pieces usually fit. A balanced challenge.
+bb_detail_hard = Random pieces. The board can run out of room.
+bb_choose_difficulty = Choose Difficulty
+bb_help_intro = Place pieces on the 8×8 board. Fill a whole **row** or **column** and it clears.
+bb_help_play = How to play
+bb_help_play_1 = • **Drag** a piece from the tray onto the board. It rides above your finger, a shadow shows where it will land, and the lines it would complete light up.
+bb_help_play_2 = • Pieces never rotate. When all three are placed, three new ones arrive.
+bb_help_play_3 = • On a keyboard, press **1**, **2**, or **3** to pick up a piece, move it with the arrow keys, and press the same number again to drop it.
+bb_help_score = Scoring
+bb_help_score_1 = • Each block you place is worth 10 points. Cleared lines score 100 × the square of how many clear at once, so four lines together pay 1,600.
+bb_help_score_2 = • Clear on consecutive placements to build a **combo** that multiplies a clear's points, up to ×4. A combo survives two placements without a clear; the third ends it.
+bb_help_score_3 = • Empty the whole board for a **5,000-point** bonus.
+bb_help_difficulty = Difficulty
+bb_help_difficulty_1 = • On **Easy**, every set of three pieces can be placed. **Normal** usually deals a set that fits, and **Hard** deals at random.
+bb_help_over_1 = The game ends when no piece in the tray fits anywhere on the board. A piece that fits nowhere is dimmed in the tray.
+
+# Solitaire
+sol_table_a11y = Solitaire table
+sol_time = Time
+sol_moves = Moves
+sol_hint = Hint
+sol_undo = Undo
+sol_draw_one = Turn One
+sol_draw_three = Turn Three
+sol_detail_one = Turn one card at a time from the stock.
+sol_detail_three = Turn three at a time; only the top one plays.
+sol_choose = Choose a Game
+sol_shuffling = Shuffling…
+sol_finding = Finding a deal you can win
+sol_suit_done = Suit Complete!
+sol_you_win = YOU WIN!
+sol_new_best_time = New Best Time!
+sol_best_time = Best Time
+sol_record = Won { $won } of { $played } · Streak { $streak }
+sol_stuck_title = NO MORE MOVES
+sol_stuck_message = Nothing left on the table can be played. Undo a few moves or deal again.
+sol_no_line = No Way to Win from Here
+sol_try_undo = Undo a few moves and try another line.
+sol_winnable = Winnable Deals Only
+sol_winnable_detail = A solver plays each deal through to a win before you see it.
+sol_statistics = Statistics
+sol_stats_one = Turn One: won { $won } of { $played }
+sol_stats_three = Turn Three: won { $won } of { $played }
+sol_reset_stats = Reset Statistics
+sol_reset_stats_title = Reset Statistics?
+sol_reset_stats_message = This will permanently reset every Solitaire win, streak and best time.
+sol_help_intro = Build four foundations up from **ace to king**, one suit each.
+sol_help_play = How to play
+sol_help_play_1 = • On the table, build columns **down in alternating colors**: a red 6 goes on a black 7. A card moves together with everything on top of it.
+sol_help_play_2 = • Only a **king** can start an empty column. Moving the cards off a face-down card turns it over.
+sol_help_play_3 = • Tap the stock to turn cards onto the waste. When it runs out, tap it again to turn the waste back over.
+sol_help_play_4 = • **Drag** cards where you want them, or **tap** a card to send it to its best spot. Once every card is face up, the rest fly home by themselves.
+sol_help_score = Scoring
+sol_help_score_1 = • A card to a foundation scores 10, a card from the waste to the table 5, and a card turned face up 5. Taking a card back down off a foundation costs 15.
+sol_help_score_2 = • Turning the waste back over costs 100 in Turn One and 20 in Turn Three. A win adds a bonus for speed.
+sol_help_winnable = Winnable deals
+sol_help_winnable_1 = • With **Winnable Deals Only** on in Settings, a solver has played every deal through to a win before it reaches you. **Hint** shows a move on a winning line, and says so when there is no way left to win.
+sol_help_keys = Keyboard
+sol_help_keys_1 = • Press **1** to **7** to pick a column, then another of them to move it there, or the same one again to send it to its best spot. **8** picks the waste, **9** sends a card home, and **0** turns the stock. The arrow keys move the pick and change how many cards it takes.
+
+# Sudoku
+su_difficulty = Difficulty
+su_time = Time
+su_easy = Easy
+su_medium = Medium
+su_hard = Hard
+su_expert = Expert
+su_detail_easy = 46 clues • unlimited hints
+su_detail_medium = 36 clues • 3 hints
+su_detail_hard = 30 clues • no hints
+su_detail_expert = 26 clues • no hints • no same-number highlight
+su_cell_a11y = Row { $row }, column { $col }
+su_key_a11y = Enter { $n }
+su_notes = Notes
+su_notes_on = Notes ✓
+su_hint = Hint
+su_hint_n = Hint ({ $n })
+su_hint_unlimited = Hint (∞)
+su_undo = Undo
+su_redo = Redo
+su_checkpoint = Checkpoint
+su_commit = Commit
+su_revert = Revert
+su_give_up = Give Up
+su_give_up_title = Give up?
+su_give_up_message = The solution fills the empty cells and the puzzle does not count as solved.
+su_give_up_confirm = Give Up
+su_stars = ⭐⭐⭐
+su_solved_title = Puzzle Solved!
+su_new_best = New Best Time!
+su_best = Best: { $time }
+su_choose_difficulty = Choose Difficulty
+su_default_difficulty = Default Difficulty
+su_records = Records
+su_puzzles_solved = Puzzles Solved
+su_reset_records = Reset Sudoku Records
+su_reset_title = Reset Sudoku Records?
+su_reset_message = This will permanently reset all Sudoku best times and puzzle counts.
+
+# Sudoku instructions (the how-to-play sheet; inline markdown for emphasis)
+su_help_intro = Fill the 9×9 grid so every row, every column, and every 3×3 box contains the digits 1 through 9 exactly once.
+su_help_play = How to play
+su_help_play_1 = • **Tap a cell** to select it.
+su_help_play_2 = • **Tap a digit** in the keypad to fill the selected cell.
+su_help_play_3 = • When the selected cell already contains a digit, that digit's key sinks in. Tap it again to clear the cell.
+su_help_play_4 = • Use **notes mode** (the pencil) to mark candidate digits in a cell while you work out which numbers are still possible.
+su_help_play_5 = • On a keyboard, type a digit to fill the selected cell, or **0** to clear it. The arrow keys move the selection.
+su_help_checkpoint = Checkpoint
+su_help_checkpoint_1 = • Tap **Checkpoint** to start a tentative session. Every digit you place after that point is shown in a distinctive color so you can tell experiment from confirmed work.
+su_help_checkpoint_2 = • The Checkpoint button then splits into **Commit** (keep the placements and clear the highlight) and **Revert** (remove every checkpoint placement and return to where the session started).
+su_help_undo = Undo and redo
+su_help_undo_1 = • Tap **Undo** to take back the most recent move. After undoing, the button splits in two so you can **Redo**.
+su_help_undo_2 = • Undo and redo are unlimited within the current puzzle. A new placement after an undo clears the redo history.
+su_help_win = Hints and winning
+su_help_win_1 = • The starting clues cannot be changed.
+su_help_win_2 = • The timer runs while you play. Your **best time** for each difficulty is saved.
+su_help_win_3 = • Some difficulties allow **hints**. Use them sparingly.
+su_help_win_4 = • The puzzle is complete when every cell holds a valid digit and every row, column, and 3×3 box satisfies the no-repeat rule.
+
+# --- Charades ---
+nav_charades = Charades
+ch_pick_deck = Pick a deck, hold the phone to your forehead, and let your friends give you clues.
+ch_deck_meta = { $count } cards · Best { $best }
+ch_card_a11y = Card: { $word }
+ch_back = Back
+ch_start = Start
+ch_correct = Correct
+ch_pass = Pass
+ch_ready_title = Place it on your forehead
+ch_ready_tilt = Screen facing out. The round starts when you hold it steady.
+ch_ready_buttons = Hold it up for your friends, then tap Start.
+ch_no_motion = This device's motion sensor isn't reporting, so this round uses the buttons.
+ch_get_ready = Get ready
+ch_correct_banner = CORRECT!
+ch_pass_banner = PASS
+ch_tilt_hint = Tilt down for correct · Tilt up to pass
+ch_time_up = TIME'S UP!
+ch_out_of_cards = OUT OF CARDS!
+ch_new_best = New best for this deck!
+ch_play_again = Play Again
+ch_decks = Decks
+ch_end_round = End Round
+ch_round_length = Round length
+ch_seconds = { $n } seconds
+ch_tilt = Answer by Tilting
+ch_tilt_detail = Nod the phone down for correct and tip it back to pass. Off, rounds use buttons.
+ch_tilt_missing = This device has no motion sensor, so rounds use the buttons.
+ch_records = Records
+ch_rounds_played = Rounds played
+ch_reset_records = Reset Records
+ch_reset_records_title = Reset Records?
+ch_reset_records_message = This will permanently reset every Charades best score and round count.
+ch_help_intro = One player holds the phone to their forehead, screen facing out, without peeking. Everyone else gives clues until that player guesses the word on the screen.
+ch_help_play = How to play
+ch_help_play_1 = • Pick a deck, then put the phone on your forehead. The round starts when you hold it steady.
+ch_help_play_2 = • **Nod** to tilt the phone down when you guess right. **Tip your head back** to tilt it up and pass.
+ch_help_play_3 = • Clue-givers can describe, act out or hum the word, but can't say it, spell it or point at it.
+ch_help_play_4 = • When time runs out, see which words you got and which you passed. A deck doesn't repeat a word until you've played through all of them.
+ch_help_buttons = Without tilting
+ch_help_buttons_1 = • On a device with no motion sensor, or with **Answer by Tilting** off in Settings, use the **Correct** and **Pass** buttons. On a keyboard, press ↓ or Return for correct and ↑ to pass.
+
+# --- Mines ---
+nav_mines = Mines
+mi_mines_left = Mines
+mi_time = Time
+mi_flag_mode = Flag Mode
+mi_flag_mode_a11y = Flag mode: a tap plants a flag
+mi_board_a11y = Mines board
+mi_swept = SWEPT!
+mi_boom = BOOM!
+mi_best_time = Best Time
+mi_new_best = New Best Time!
+mi_try_again = Try Again
+mi_easy = Easy
+mi_medium = Medium
+mi_hard = Hard
+mi_board_detail = { $cols } × { $rows } · { $mines } mines
+mi_choose = Choose a Board
+mi_records = Records
+mi_record_line = Won { $won } of { $played }
+mi_reset_records = Reset Records
+mi_reset_records_title = Reset Records?
+mi_reset_records_message = This will permanently reset every Mines best time and game count.
+mi_help_intro = Every board hides mines. Uncover every square that isn't one, and the board is swept.
+mi_help_play = How to play
+mi_help_play_1 = • Tap a square to uncover it. **Your first tap is always safe**, and it opens a clearing to start from.
+mi_help_play_2 = • A number says how many mines touch that square, counting diagonals. An empty square opens everything around it.
+mi_help_play_3 = • **Hold a square** to plant a flag where you think a mine is, or turn on **Flag Mode** and tap. Hold a flag to take it back.
+mi_help_play_4 = • Tap a number that already has all its flags and the rest of its neighbors open at once. It's quick, and it's wrong if a flag is.
+mi_help_keys = Keyboard
+mi_help_keys_1 = • The arrow keys move the pointer, **Space** or **Return** uncovers, and **F** plants or lifts a flag.
+
+# Reversi
+nav_reversi = Reversi
+rv_black = Black
+rv_white = White
+rv_black_turn = Black to move
+rv_white_turn = White to move
+rv_thinking = White is thinking…
+rv_passed = No move for the other side — pass. { $turn }
+rv_black_wins = Black wins!
+rv_white_wins = White wins!
+rv_draw = A draw!
+rv_final_score = Black { $black } · White { $white }
+rv_board_hint = Dots mark legal moves. The gold dot marks the last move.
+rv_board_a11y = Reversi board. Use arrow keys to select a square and Enter to place a disc.
+rv_mode = Opponent
+rv_solo = Computer
+rv_two_players = Two players
+rv_difficulty = Computer difficulty
+rv_easy = Easy
+rv_medium = Medium
+rv_hard = Hard
+rv_start = Start game
+rv_help_rules = Black moves first. Place a disc on a dotted square to trap a line of opposing discs between it and one of yours. Every trapped disc flips to your color, horizontally, vertically, or diagonally.
+rv_help_pass = If you have no legal move, your turn passes automatically. When neither side can move, the game ends—even if squares remain empty. The side with more discs wins.
+rv_help_solo = Play as Black against the computer, or choose Two players in New Game to share the board. Easy plays random legal moves; Medium and Hard look ahead. Corners cannot be flipped: try to claim them!
+rv_help_keys = Tap a dotted square to play. With a keyboard, move the gold outline with the arrow keys and press Space or Enter to place a disc. Press P or Escape to pause. Games save when you leave; pause also freezes the computer and animations.
+
+rv_selection = { $column }{ $row }: { $state }
+rv_legal = Legal move
+rv_empty = Empty
+
+# Pipes
+nav_pipes = Pipes
+pp_moves = Rotations
+pp_connected = Connected
+pp_goal = Connect every pipe to the gold source.
+pp_solved = All connected!
+pp_lock_mode = Lock mode
+pp_locked = Locked
+pp_unlocked = Unlocked
+pp_north = up
+pp_east = right
+pp_south = down
+pp_west = left
+pp_selection = Row { $row }, column { $column }: { $ports }. { $state }.
+pp_board_a11y = Pipes board. Arrows select a tile, Enter rotates, and L locks or unlocks it.
+pp_size = Board size
+pp_small = 5 × 5
+pp_medium = 7 × 7
+pp_large = 9 × 9
+pp_start = Start puzzle
+pp_restart = Restart puzzle
+pp_best = Fewest rotations · this size
+pp_help_goal = Rotate the tiles to connect every pipe to the gold source in the center. Connected pipes light up turquoise. All pipe ends must meet another pipe; nothing may point off the board.
+pp_help_controls = Tap a tile to rotate it a quarter-turn clockwise. End caps, bends, straight pipes, and branches all belong to one network. Every puzzle has a solution. A wave of light celebrates when the whole network connects.
+pp_help_locks = Turn on Lock mode, then tap tiles to lock or unlock them. A padlock protects a tile from rotation. Turn Lock mode off to keep rotating. Restart puzzle restores the original scramble and clears your locks and rotation count.
+pp_help_keys = On a keyboard, use the arrows to select a tile, Space or Enter to rotate it, and L to lock or unlock it. Press P or Escape to pause. Progress saves when you leave. Choose a 5 × 5, 7 × 7, or 9 × 9 board in New Game.

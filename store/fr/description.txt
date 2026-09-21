@@ -1,7 +1,0 @@
-Games Fair est une application App Fair.
-
-Le projet App Fair compile chaque application depuis un commit étiqueté de son code source
-public, compare le résultat à la version publiée par la mainteneuse, puis la signe avec ses
-clés.
-
-Décrivez ici votre application : ce qu'elle fait et à qui elle s'adresse.

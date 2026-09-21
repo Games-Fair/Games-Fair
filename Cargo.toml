@@ -3,12 +3,15 @@
 name = "games-fair"
 version.workspace = true
 edition = "2024"
-# Generates typed `res::` constants from `resource/` (see build.rs).
+license = "AGPL-3.0-only WITH App-Fair-Distribution-Exception"
+# Generates typed resource constants (`res::images::…`, `res::assets::…`, `res::fonts::…`) from
+# the files under `resource/` on every build; see build.rs and src/lib.rs.
 build = "build.rs"
 
+# One backend feature per toolkit; `day build`/`day launch` pass the real one per target
+# (`--no-default-features --features <backend>`). `mock` is the default so bare `cargo` and
+# rust-analyzer link.
 [features]
-# `mock` keeps bare cargo and rust-analyzer compiling; `day build` overrides it with
-# `--no-default-features --features <backend>` (https://daybrite.dev/docs/project-structure).
 default = ["mock"]
 appkit = ["day/appkit"]
 gtk = ["day/gtk"]
@@ -20,22 +23,59 @@ arkui = ["day/arkui"]
 dom = ["day/dom"]
 mock = ["day/mock"]
 
-# rlib for the desktop bin; the mobile pipeline requests staticlib/cdylib via `cargo rustc`.
+# rlib for the desktop bin; the mobile pipeline requests the iOS staticlib / Android cdylib
+# explicitly via `cargo rustc --crate-type` (a desktop cdylib blows past the windows-gnu PE
+# export cap).
 [lib]
-# A constant lib name: staged artifacts and the `dayapp::` import never move on a package rename.
+# A constant name, not the package's. Every artifact Day stages is named after the LIB target
+# (`libdayapp.a` for the iOS/macOS staticlib, `libdayapp.so` for the Android cdylib, and the
+# `dayapp::` path `src/main.rs` imports), so none of them move when the package is renamed.
+# Renaming this app is a one-line edit to `[package] name` above.
 name = "dayapp"
 crate-type = ["rlib"]
 
 [dependencies]
-# Track the framework's main branch. Which revision a build uses is still the committed
-# Cargo.lock's; `cargo update -p day -p day-build` moves it to the tip of main.
-day = { git = "https://github.com/daybrite/day.git", branch = "main", features = ["model"] }
+# The day framework resolves from the main branch of its git repository, here and in every game
+# crate; the lock is not committed, so a build takes the tip. Local development against a
+# checkout goes through the gitignored .cargo/config.toml that `day patch --local ../day` writes.
+day = { git = "https://github.com/daybrite/day.git", branch = "main" }
+blockblast = { path = "games/blockblast" }
+breakout = { path = "games/breakout" }
+charades = { path = "games/charades" }
+mines = { path = "games/mines" }
+reversi = { path = "games/reversi" }
+pipes = { path = "games/pipes" }
+gamekit = { path = "gamekit" }
+sirtet = { path = "games/sirtet" }
+solitaire = { path = "games/solitaire" }
+sudoku = { path = "games/sudoku" }
+twentyfortyeight = { path = "games/twentyfortyeight" }
 
 [build-dependencies]
 day-build = { git = "https://github.com/daybrite/day.git", branch = "main" }
 
+# Solitaire proves each new deal winnable by searching tens of thousands of positions, which an
+# unoptimized build does dozens of times slower; debug builds and walkthroughs optimize that crate.
+[profile.dev.package.solitaire]
+opt-level = 3
+
 
 [workspace]
+resolver = "2"
+members = [
+    ".",
+    "games/blockblast",
+    "games/breakout",
+    "games/charades",
+    "games/mines",
+    "games/reversi",
+    "games/pipes",
+    "games/sirtet",
+    "games/solitaire",
+    "games/sudoku",
+    "games/twentyfortyeight",
+    "gamekit",
+]
 
 [workspace.package]
-version = "0.1.0"
+version = "2.0.4"

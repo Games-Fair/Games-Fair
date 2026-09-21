@@ -1,22 +1,48 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
-# The Day project manifest (https://daybrite.dev/docs/cli). `name`/`version` come from
+#
+# The Day project manifest (https://daybrite.dev/docs/cli). `name` and `version` come from
 # Cargo.toml; any [app] property may be overridden per platform, toolkit, or target.
 schema = 1
 
 [app]
-id = "org.appfair.app.Games-Fair"
+# The App Store and Play records this app publishes to.
+id = "org.appfair.app.Faire-Games"
+# The URL scheme the App Fair build registered; the id's last segment would be the default.
+scheme = "fairegames"
 title = "Games Fair"
-build = 1
-targets = ["windows-xaml", "macos-appkit", "linux-gtk", "linux-qt", "ios-uikit", "android-mdc", "harmony-arkui", "web-dom"]
+# Above the 36 the stores have seen. Both order releases by version and build, and refuse one
+# that repeats or lowers them.
+build = 37
+# The 8 shipping platform-toolkit pairs. `windows-xaml`, `linux-gtk`, and `linux-qt` build in CI
+# on their native hosts; on a macOS dev box the toolkits run locally as `macos-appkit`,
+# `macos-gtk`, `macos-qt`, `ios-uikit`, `android-mdc`, `harmony-arkui`, and `web-dom` (GTK/Qt are
+# portable, so `macos-gtk`/`macos-qt` stand in for `linux-gtk`/`linux-qt`). `day build -p <target>`
+# accepts any host-buildable target regardless of this list.
+targets = [
+  "windows-xaml",
+  "macos-appkit",
+  "linux-gtk",
+  "linux-qt",
+  "ios-uikit",
+  "android-mdc",
+  "harmony-arkui",
+  "web-dom",
+]
 
-# Play package names take no hyphen, so the Android build uses the token with underscores.
+# Play package names take no hyphen, so the Android build uses the token with underscores. It is
+# the id the live Play listing carries.
 [app.android]
-id = "org.appfair.app.Games_Fair"
+id = "org.appfair.app.Faire_Games"
 
-# The window's geometry in points (https://daybrite.dev/docs/size-classes). `day build` carries
-# all four into the Android manifest's <layout> element and the iOS Info.plist.
+# The desktop window's default size in points; phones fill the screen regardless. Tall enough
+# for the Sudoku board and its keypad; the minimum keeps a game's controls reachable.
 [window]
-width = 960
-height = 640
-min_width = 320
-min_height = 400
+width = 720
+height = 780
+min_width = 480
+min_height = 640
+
+# Charades reads the accelerometer, which HarmonyOS gates behind a permission in the app's
+# module.json5; Day's portable permission set has no key for it (docs/permissions.md).
+[permissions.raw]
+ohos = [{ name = "ohos.permission.ACCELEROMETER", reason = "Charades reads the phone's tilt to score a nod.", when = "inuse" }]

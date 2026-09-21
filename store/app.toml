@@ -1,14 +1,17 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
-# Store listing metadata that is not localized. The localized text lives in store/<locale>/,
-# one directory per locale in resource/locales/, and `day lint` checks that the two agree.
+# The store listing that is not localized; the localized copy is in store/<locale>/. It belongs
+# to the App Store record (ID 6761661340) and the Play listing this app already has.
 #
-# `day store stage` turns this tree into the layouts App Store Connect and Google Play expect,
-# under build/day/fastlane/<target>/, ready for `fastlane deliver` / `fastlane supply`.
-# bundle-id: left out so `day store` falls back to Day.toml [app] id, the id the app is built
-# with. Set it here only to publish under an id the app does not build with.
+# bundle-id is omitted, so `day store` uses Day.toml's [app] id, which is the id of the live
+# record on each store.
+apple-category = "GAMES"
+copyright = "2026 The App Fair Project"
+contact-email = "support@appfair.org"
+review-notes = """
+Built with the Day framework and submitted from github.com/Games-Fair/Games-Fair.
 
-# apple-category = "DEVELOPER_TOOLS"    # App Store primary category
-# (Google Play's category is set in the Play Console; `supply` cannot write it.)
-# copyright = "2026 Games Fair"
-# contact-email = "support@example.com" # where a store reviewer writes back
-# review-notes = "How to exercise the app, for the store reviewer."
+Every game plays offline from the first launch. Tap a tile on the home screen to open a game full
+screen; the X closes it and saves your progress.
+
+No account, no network access, no advertising, and no purchases of any kind.
+"""

@@ -1,1 +1,1 @@
-app fair,free software,open source
+solitaire,cards,block,blast,sudoku,2048,puzzle,arcade,classic,offline,no ads,mines,charades

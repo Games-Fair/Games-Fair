@@ -1,0 +1,67 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# A dayscript walkthrough (https://daybrite.dev/docs/dayscript): drives the running app by
+# element id and route, on any target. Run it with:
+#
+#     day launch -p ios-uikit --script dayscript/smoke.yaml
+#
+flow:
+  # The home grid mounts immediately on every platform.
+  - wait_for: { id: home }
+  - assert_visible: { id: app-title }
+  - assert_visible: { id: tile-breakout }
+
+  # A tile tap presents the game in the fullscreen cover.
+  - tap: { id: tile-breakout }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: bk-canvas }
+  - assert_route: { route: breakout }
+
+  # The X in the top-leading corner is the way out.
+  - tap: { id: close-game }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: tile-sirtet }
+
+  # Covers are route surfaces too: navigate presents, nav_back dismisses.
+  - navigate: { route: twentyfortyeight }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: tf-canvas }
+  - nav_back:
+  - pause: { secs: 0.6 }
+
+  - navigate: { route: blockblast }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: bb-canvas }
+  - nav_back:
+  - pause: { secs: 0.6 }
+
+  - navigate: { route: solitaire }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: sol-canvas }
+  - nav_back:
+  - pause: { secs: 0.6 }
+
+  - navigate: { route: charades }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: ch-deck-animals }
+  - nav_back:
+  - pause: { secs: 0.6 }
+
+  - navigate: { route: mines }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: mi-board }
+  - nav_back:
+  - pause: { secs: 0.6 }
+
+  - navigate: { route: reversi }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: rv-board }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+
+  - navigate: { route: pipes }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: pp-board }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+
+  - screenshot: smoke

@@ -26,10 +26,11 @@ jobs:
       # add it here too.
       targets: "windows-xaml, macos-appkit, linux-gtk, linux-qt, ios-uikit, android-mdc, harmony-arkui, web-dom"
       day-version: main
-      # The walkthrough beside the app, run per locale and per theme, so a string that breaks
-      # only in French breaks the build.
-      scripts: dayscript/demo.yaml
-      locales: en fr
+      # The walkthroughs beside the app: the navigation sweep, every game's screenshots, and the
+      # two games whose input needs its own script.
+      scripts: dayscript/smoke.yaml dayscript/games.yaml dayscript/reversi.yaml dayscript/pipes.yaml
+      # Pins every game's RNG, so a scripted run meets the same puzzle and layout everywhere.
+      launch-env: DAY_GAMES_SEED=15
       themes: light dark
       # A tagged build attaches its packages to the release. The App Fair queue compares its
       # own build against these, so leave them on.

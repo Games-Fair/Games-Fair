@@ -1,41 +1,145 @@
 # Games Fair
 
-An [App Fair](https://appfair.org) app, built with [Day](https://daybrite.dev): one Rust codebase,
-drawn with each platform's native widgets.
+Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Reversi, and
+Pipes in one app. Built with
+[Day](https://daybrite.dev) in one Rust codebase and rendered with the platform's own widgets on
+iPhone, Android, HarmonyOS, macOS, Windows, Linux, and the web. Every game runs entirely on the
+device, and your progress is saved when you leave a game and restored when you come back.
 
-This app was scaffolded from the App Fair's template:
+## Run it in one command
 
-```bash
-day new app Games-Fair --template https://github.com/appfair/day-appfair
+Install the `day` CLI, then let it clone, build, and launch the app on your desktop:
+
+```sh
+cargo install day-cli
+day launch --git https://github.com/Games-Fair/Games-Fair.git
 ```
 
-## Running it
+With no `-p`, the CLI picks the host's own toolkit (`macos-appkit`, `windows-xaml`, `linux-gtk`).
+Name a target to run elsewhere: `-p ios-uikit` for a booted Simulator, `-p android-mdc` for a
+running emulator or device, `-p harmony-arkui` for HarmonyOS, `-p web-dom` to serve the browser
+build. `day doctor` lists what each toolkit needs and prints the install command for anything
+missing. The launch prints where it put the checkout, so you can open the code and change it.
 
-```bash
-day launch -p windows-xaml                              # build and run
-day launch -p windows-xaml --script dayscript/demo.yaml # run the walkthrough
-day launch -p windows-xaml --locale fr                  # in French
+To rename a fork, change `[app].title` in `Day.toml`: the home header and the window title read
+it. The App Store and Play records this app publishes to are named there too, as
+`org.appfair.app.Faire-Games` and `org.appfair.app.Faire_Games`.
+
+## The games
+
+- **Solitaire.** Klondike, turning the stock one card at a time or three. With Winnable Deals
+  Only on, a solver plays every deal through to a win before it reaches the table, and Hint
+  shows a move on a winning line. Drag or tap cards; once every card is face up, the rest fly
+  home by themselves, and a win sends the whole deck bouncing off the table.
+- **Block Blast.** Drag pieces from a tray of three onto an 8×8 board and fill rows and columns
+  to clear them. A preview lights up the lines a drop would clear, clears on consecutive
+  placements build a combo worth up to four times the points, emptying the board pays a
+  5,000-point bonus, and three difficulties decide how reliably the tray deals pieces that fit.
+- **Breakout.** Clear the bricks with a paddle that glides under your finger and can smash the
+  ball up or down. Quick successive breaks multiply the score, armored bricks arrive on later
+  levels, and five power-ups drop from marked bricks: a wider paddle, a slower ball, a ball
+  that smashes straight through, extra balls, and an extra life.
+- **Falling blocks.** The one you already know how to play, with the next piece shown, lines
+  clearing in a flash, and the pieces coming quicker as the level climbs.
+- **Sudoku.** Four difficulties, pencil marks, unlimited undo and redo, a checkpoint you can
+  commit or revert, hints where the difficulty allows them, and a best time per difficulty.
+- **2048.** Slide the tiles, watch them merge, and chase your best score. Reaching 2048 is not
+  the end unless you want it to be.
+- **Mines.** The sweeper you know, with the sharp edges filed off: your first tap is always safe
+  and opens a clearing, holding a square plants a flag (or turn on Flag Mode and tap), and tapping
+  a number that already has its flags opens the rest around it. Three board sizes, each turning
+  with the window so the squares stay big enough to hit on a phone, and a best time for each.
+- **Pipes.** Rotate tiles to connect every branch to the gold source. Choose a 5×5, 7×7,
+  or 9×9 generated puzzle; lock tiles to protect them, and watch a wave of light cross the
+  completed network. Every puzzle is solvable. Saves include rotations and locks, and each
+  board size keeps its fewest-rotation record. Arrows select, Space/Enter rotates, and L locks.
+- **Reversi.** Trap and flip opposing discs on an 8×8 board. Play Black against three
+  computer difficulties or share the board in pass-and-play. Legal moves are marked, flips
+  animate, and a side with no move passes automatically. Use arrows and Space/Enter on a
+  keyboard. The game ends when neither side can move; the larger disc count wins.
+- **Charades.** The party game for a phone on your forehead: your friends give clues, you nod
+  when you guess right and tip your head back to pass, and the phone reads the tilt. Decks run
+  from animals and movies to sayings and things to act out, no word repeats until its deck is
+  played through, and the screen stays on for the whole round. Without a motion sensor, rounds
+  use Correct and Pass buttons. The word lists live in `games/charades/words/`, one folder per
+  language; its README explains the format and how another language gets its own lists.
+
+Every game has the same shell: a pause button, a menu to resume, start over, open the
+settings, or reread the rules, and a results card with your score or the outcome. The rules open by
+themselves the first time you play a game. Each game plays sound effects timed to its haptics,
+and its settings have a Sounds switch and a Vibrations switch. With a mouse or trackpad the Breakout paddle follows the pointer across the field
+and the cursor hides while it does; the arrow keys move the paddle, the piece, the tiles, or
+the Sudoku selection. In Block Blast, 1 to 3 pick up a piece, the arrows move it, and the same
+number drops it. In Solitaire, 1 to 7 pick a column and another of those digits moves it there,
+8 picks the waste, 9 sends a card home, and 0 turns the stock. In Charades, ↓ or Return scores
+a card and ↑ passes it. In Mines, the arrows move the pointer, Space or Return uncovers, and F
+plants a flag.
+
+The home screen is a grid of tiles that fills the window's width and adds a column whenever
+the window has room for another tile. Each preview is drawn by the game's own crate with the same code that renders gameplay. Tapping a tile presents the game in a fullscreen cover with an X
+to exit. On the phones the games defer the system's edge gestures and disable interactive
+dismissal, so an edge swipe mid-game stays in the game.
+
+Everything runs on the device with nothing to sign in to and nothing shown but the game. Each
+game is a self-contained crate with physics on the frame clock and a serde save state.
+
+## Build from a clone
+
+Day compiles one toolkit backend per binary, so name a target when you build or launch. Every
+target the app ships is listed in `Day.toml`.
+
+```sh
+day doctor                       # toolchains present and missing, with fixes
+day launch -p macos-appkit       # the Mac's own toolkit (macos-gtk and macos-qt run here too)
+day launch -p ios-uikit          # needs a booted Simulator
+day launch -p android-mdc        # needs a JDK and a running emulator or device
+day launch -p harmony-arkui      # needs the OpenHarmony SDK and an emulator
+day launch -p web-dom            # builds the wasm bundle and serves it to your browser
+day build  -p windows-xaml       # build only (Windows builds on a Windows host)
 ```
 
-`day devices list` shows the simulators and emulators available for the mobile targets, and
-`day doctor` says what a target still needs installed.
+To build from plain cargo, pass the backend feature yourself, for example
+`cargo build --features appkit`; a bare `cargo build` enables no backend and will not link.
 
-## What is here
+[Dayscripts](https://daybrite.dev/docs/dayscript) drive the app: `smoke.yaml` opens each
+game, `sudoku.yaml` walks every Sudoku surface, `blockblast.yaml` places Block Blast pieces
+from the keyboard and walks its menus, `reversi.yaml` checks captures, solo play, menus, and save restoration;
+`pipes.yaml` checks locks, saves, all board sizes, and a complete seeded solution;
+`solitaire.yaml` plays a proven-winnable deal from the
+keyboard, and `bk.yaml` and `games.yaml` sweep gameplay for screenshots:
 
-| path | what it is |
-|---|---|
-| `src/lib.rs` | the window, the navigation host, and the menu bar |
-| `src/pages/` | one file per section: Welcome, The App Fair, Settings |
-| `resource/locales/` | the strings, in English and French. Add a folder to add a language |
-| `resource/vectors/` | the tab art, drawn as vectors on every platform |
-| `dayscript/demo.yaml` | the walkthrough, which is also the test CI runs |
-| `store/` | the App Store and Play listing, per language |
-| `platform/` | the native host projects, regenerated by `day build` |
-| `.github/workflows/ci.yml` | builds every target and runs the walkthrough in every language |
+```sh
+day launch -p ios-uikit --script dayscript/games.yaml
+```
+
+## Inside the code
+
+- `src/lib.rs` is `root()`: the home grid and the fullscreen cover each game opens in, with typed
+  routes so deep links and dayscript can open a game by name.
+- `games/blockblast`, `games/breakout`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/reversi`, `games/pipes`, and
+  `games/twentyfortyeight` are one crate per game: canvas or grid-layout UI, physics on the
+  frame clock, and a serde save state.
+- `gamekit/` is the shared persistence layer: each game's state is saved when its cover closes
+  or the app is backgrounded, and restored the next time it opens. A game that keeps a clock
+  can also hook the backgrounding itself, which is how Sudoku pauses.
+- `resource/locales/en/app.ftl` carries every user-facing string.
+- `platform/` holds the thin native host projects the Apple, Android, and HarmonyOS targets
+  build through.
+
+`day lint` checks routes, element ids, and locale coverage.
+
+For Android cover hit testing, launch on a 360×640dp emulator with
+`day launch -p android-mdc --android-device SERIAL --env DAY_GAMES_SEED=15 --keep-alive`,
+then run `python3 scripts/android-cover-touch-test.py SERIAL` with `adb` on PATH.
+This uses native screen taps to check that passive game headers cannot activate the hidden
+home grid, while pause, close, and the home tiles still respond. Ordinary dayscript taps
+address a node directly and cannot detect this form of touch-through.
+
+Day Games is open source under the Apache-2.0 license.
 
 ## License
 
-This app is free software under the GNU Affero General Public License, version 3 only
+Games Fair is free software under the GNU Affero General Public License, version 3 only
 ([`LICENSE.txt`](LICENSE.txt)), with the App Fair Distribution Exception
 ([`LICENSE-EXCEPTIONS.txt`](LICENSE-EXCEPTIONS.txt)), which permits distribution through an app
 storefront notwithstanding terms that would otherwise conflict with the AGPL. Every source file
@@ -45,12 +149,8 @@ says so:
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 ```
 
-Keep both files beside the app, and keep the notice on files you add. To publish under different
-terms, replace both files and the notices before your first release. The App Fair publishes what
-the repository declares.
-
 ## Publishing through the App Fair
 
-The App Fair Project builds, signs, and submits the apps in its catalog. When this app is ready,
-tag a release and open a pull request against
+The App Fair Project builds, signs, and submits the apps in its catalog. To publish a new
+version, tag a release and open a pull request against
 [`appfair/appfair-apps`](https://github.com/appfair/appfair-apps) naming the tag and its commit.

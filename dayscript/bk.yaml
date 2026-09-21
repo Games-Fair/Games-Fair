@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+name: bk
+flow:
+  - navigate: { route: breakout }
+  - pause: { secs: 0.8 }
+  - screenshot: bk-before

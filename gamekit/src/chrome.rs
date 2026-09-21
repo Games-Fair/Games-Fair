@@ -1,0 +1,660 @@
+// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+//! The chrome every game shares: the dark card the pause menu, the
+//! game-over card, the settings sheet, and the how-to-play sheet sit on; the menu buttons; the
+//! pause button and its glyph; the per-game settings record; and the haptic gate. Composed from
+//! Day's core pieces, so it renders the same on every toolkit (docs/compose.md).
+
+use day_fluent::LocalizedText;
+use day_part_haptics::Haptic;
+use day_part_sound::{AssetName, Play};
+use day_pieces::prelude::*;
+use day_reactive::Scope;
+use day_spec::{LineCap, LineJoin, StrokeStyle};
+use serde::{Deserialize, Serialize};
+
+/// The card surface the overlays sit on.
+pub const CARD: Color = Color::rgb(0.08, 0.08, 0.18);
+/// The dimming scrim behind a card.
+pub const SCRIM: Color = Color::rgba(0.0, 0.0, 0.0, 0.72);
+pub const TEXT: Color = Color::rgba(1.0, 1.0, 1.0, 0.85);
+pub const TEXT_DIM: Color = Color::rgba(1.0, 1.0, 1.0, 0.55);
+
+thread_local! {
+    /// The surface a game's header and readouts are drawn on, set per open cover by the shell.
+    static SURFACE_INK: std::cell::Cell<Option<Color>> = const { std::cell::Cell::new(None) };
+}
+
+/// Tell the chrome which surface the header sits on, for as long as the current scope (the
+/// shell's game cover) is alive. Nine of the ten games are dark, so white ink went unquestioned
+/// until 2048's cream board swallowed its own title and pause button.
+pub fn set_surface(surface: Color) {
+    SURFACE_INK.with(|s| s.set(Some(surface)));
+    Scope::current().on_cleanup(|| {
+        SURFACE_INK.with(|s| s.set(None));
+    });
+}
+
+/// Ink for the current game's surface at `alpha`: white on a dark board, near-black on a light
+/// one. [`TEXT`] and [`TEXT_DIM`] stay white: cards and sheets bring their own dark surface with
+/// them, whatever the game behind them looks like.
+pub fn ink_at(alpha: f64) -> Color {
+    // Rec. 709 luma: 2048's cream lands near 0.96, every other game's surface below 0.1.
+    let light = SURFACE_INK
+        .with(|s| s.get())
+        .is_some_and(|c| 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b > 0.5);
+    if light {
+        Color::rgba(0.0, 0.0, 0.0, alpha)
+    } else {
+        Color::rgba(1.0, 1.0, 1.0, alpha)
+    }
+}
+pub const GOLD: Color = Color::rgb(1.0, 0.84, 0.25);
+// Menu button tints (Faire's pause menu).
+pub const GREEN: Color = Color::rgb(0.30, 0.70, 0.40);
+pub const BLUE: Color = Color::rgb(0.30, 0.55, 0.95);
+pub const SLATE: Color = Color::rgb(0.30, 0.40, 0.60);
+pub const INDIGO: Color = Color::rgb(0.40, 0.40, 0.70);
+pub const AMBER: Color = Color::rgb(0.70, 0.40, 0.10);
+pub const RED: Color = Color::rgb(0.85, 0.30, 0.30);
+
+/// One fixed width for every menu button, so a stack of them lines up.
+pub const MENU_W: f64 = 180.0;
+
+/// The side of the close and pause buttons: the minimum comfortable touch target.
+pub const BUTTON: f64 = 44.0;
+/// The size a game's name is drawn at in its header row.
+pub const TITLE: f64 = 22.0;
+/// The margin the header and the rows under it keep from the edges of the page.
+pub const EDGE: f64 = 8.0;
+
+/// The settings every game keeps: sounds and haptics on or off, and whether the how-to-play sheet
+/// has opened by itself yet. Persisted per game under its own key.
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
+pub struct GameSettings {
+    /// On by default, and on for a record saved before sounds existed.
+    #[serde(default = "on")]
+    pub sounds: bool,
+    pub vibrations: bool,
+    pub instructions_shown: bool,
+}
+
+/// The default for a switch that starts on.
+pub fn on() -> bool {
+    true
+}
+
+impl Default for GameSettings {
+    fn default() -> Self {
+        GameSettings {
+            sounds: true,
+            vibrations: true,
+            instructions_shown: false,
+        }
+    }
+}
+
+/// A sound clip bundled with the app, named by its path under `resource/assets/`.
+pub type Sfx = AssetName;
+
+/// A clip by path, for a `const`: `sfx("sounds/shared/tap.wav")`.
+pub const fn sfx(path: &'static str) -> Sfx {
+    AssetName::from_static(path)
+}
+
+/// What a moment sounds and feels like: a clip, when it starts and how loud, and the haptic phrase
+/// it goes with. [`cue`] plays both, each behind its own switch.
+pub struct Cue {
+    pub sound: Option<Sfx>,
+    /// Milliseconds after the phrase's start that the clip starts: 0 for most, later when the
+    /// phrase itself waits (a game-over sound timed to a sweep).
+    pub sound_at: u32,
+    pub volume: f32,
+    pub haptic: Pattern,
+}
+
+/// A game's two feedback switches, read as a cue fires.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Feedback {
+    pub sounds: bool,
+    pub vibrations: bool,
+}
+
+/// Play `c`: its phrase when vibrations are on, its clip when sounds are.
+pub fn cue(fb: Feedback, c: &Cue) {
+    haptic_pattern(fb.vibrations, c.haptic);
+    if let Some(clip) = &c.sound {
+        sound_after(fb.sounds, clip, c.volume, c.sound_at);
+    }
+}
+
+/// Play `clip` at `volume` when sounds are on.
+pub fn sound(enabled: bool, clip: &Sfx, volume: f32) {
+    if enabled {
+        day_part_sound::play_with(clip, Play::at(volume));
+    }
+}
+
+/// Play `clip` at `volume` after `delay_ms`, when sounds are on.
+pub fn sound_after(enabled: bool, clip: &Sfx, volume: f32, delay_ms: u32) {
+    if !enabled {
+        return;
+    }
+    if delay_ms == 0 {
+        sound(true, clip, volume);
+        return;
+    }
+    let clip = clip.clone();
+    day_core::task(async move {
+        day_core::sleep(delay_ms).await;
+        day_part_sound::play_with(&clip, Play::at(volume));
+    });
+}
+
+/// The shared cues: the shell's own sounds and the ones several games share. Each game adds its
+/// own beside these.
+pub mod cues {
+    use super::{Cue, Haptic, Pattern, Sfx, sfx};
+
+    pub const TICK_BEAT: Pattern = &[(0, Haptic::Selection)];
+    pub const LIGHT_BEAT: Pattern = &[(0, Haptic::Light)];
+    pub const MEDIUM_BEAT: Pattern = &[(0, Haptic::Medium)];
+    pub const HEAVY_BEAT: Pattern = &[(0, Haptic::Heavy)];
+    pub const SUCCESS_BEAT: Pattern = &[(0, Haptic::Success)];
+    pub const WARNING_BEAT: Pattern = &[(0, Haptic::Warning)];
+
+    /// The clip at `path` at full volume, starting with `haptic`.
+    pub const fn with(path: &'static str, haptic: Pattern) -> Cue {
+        Cue {
+            sound: Some(sfx(path)),
+            sound_at: 0,
+            volume: 1.0,
+            haptic,
+        }
+    }
+
+    /// Pause, a menu choice.
+    pub static SELECT: Cue = with("sounds/shared/select.wav", TICK_BEAT);
+    /// A value passing a detent: a snap, a step, a moved selection.
+    pub static TICK: Cue = with("sounds/shared/tick.wav", TICK_BEAT);
+    pub static TAP: Cue = with("sounds/shared/tap.wav", LIGHT_BEAT);
+    pub static PLUCK: Cue = with("sounds/shared/pluck.wav", LIGHT_BEAT);
+    /// A new game or level.
+    pub static START: Cue = with("sounds/shared/start.wav", MEDIUM_BEAT);
+    pub static SUCCESS: Cue = with("sounds/shared/success.wav", SUCCESS_BEAT);
+    /// A refused move.
+    pub static WARNING: Cue = with("sounds/shared/warning.wav", WARNING_BEAT);
+    pub static HINT: Cue = with("sounds/shared/hint.wav", TICK_BEAT);
+    pub static THUD: Cue = with("sounds/shared/thud.wav", super::THUD);
+    pub static LETDOWN: Cue = with("sounds/shared/letdown.wav", super::LETDOWN);
+    pub static OVER_ARCADE: Cue = with("sounds/shared/over_arcade.wav", super::GAME_OVER);
+    pub static OVER_PUZZLE: Cue = with("sounds/shared/over_puzzle.wav", super::GAME_OVER);
+
+    /// Every shared clip, for preloading and for the app's check that each one is bundled.
+    pub const SHARED: &[Sfx] = &[
+        sfx("sounds/shared/select.wav"),
+        sfx("sounds/shared/tick.wav"),
+        sfx("sounds/shared/tap.wav"),
+        sfx("sounds/shared/pluck.wav"),
+        sfx("sounds/shared/start.wav"),
+        sfx("sounds/shared/success.wav"),
+        sfx("sounds/shared/warning.wav"),
+        sfx("sounds/shared/hint.wav"),
+        sfx("sounds/shared/thud.wav"),
+        sfx("sounds/shared/letdown.wav"),
+        sfx("sounds/shared/over_arcade.wav"),
+        sfx("sounds/shared/over_puzzle.wav"),
+    ];
+}
+
+/// Play `h` when the game's Vibrations setting allows it and the platform has an engine.
+pub fn haptic(enabled: bool, h: Haptic) {
+    if enabled && day_part_haptics::is_supported() {
+        day_part_haptics::play(h);
+    }
+}
+
+/// A haptic phrase: `(delay in ms from the start, style)` beats, played in order. Day's
+/// engine plays one style at a time, so a phrase is what turns a single tick into a
+/// celebration or a letdown.
+pub type Pattern = &'static [(u32, Haptic)];
+
+/// A clean win: a rising three-beat.
+pub const CELEBRATE: Pattern = &[
+    (0, Haptic::Success),
+    (120, Haptic::Light),
+    (240, Haptic::Medium),
+];
+/// The big one: a level cleared, four lines at once, the 2048 tile.
+pub const BIG_CELEBRATE: Pattern = &[
+    (0, Haptic::Success),
+    (100, Haptic::Light),
+    (200, Haptic::Medium),
+    (300, Haptic::Heavy),
+    (460, Haptic::Success),
+];
+/// A setback that is not the end: a life lost, a checkpoint thrown away.
+pub const LETDOWN: Pattern = &[(0, Haptic::Error), (160, Haptic::Heavy)];
+/// The game ending: two slow thuds and a final buzz.
+pub const GAME_OVER: Pattern = &[
+    (0, Haptic::Heavy),
+    (150, Haptic::Heavy),
+    (320, Haptic::Error),
+];
+/// A firm double tap: a piece locking, a heavy merge.
+pub const THUD: Pattern = &[(0, Haptic::Heavy), (60, Haptic::Medium)];
+
+/// Play `pattern` when the game's Vibrations setting allows it: the first beat now, the rest
+/// on the UI thread after their delays.
+pub fn haptic_pattern(enabled: bool, pattern: Pattern) {
+    if !enabled || !day_part_haptics::is_supported() {
+        return;
+    }
+    let Some((&(first_at, first), rest)) = pattern.split_first() else {
+        return;
+    };
+    if first_at == 0 {
+        day_part_haptics::play(first);
+    }
+    let later: Vec<(u32, Haptic)> = if first_at == 0 {
+        rest.to_vec()
+    } else {
+        pattern.to_vec()
+    };
+    if later.is_empty() {
+        return;
+    }
+    day_core::task(async move {
+        let mut elapsed = 0u32;
+        for (at, h) in later {
+            if at > elapsed {
+                day_core::sleep(at - elapsed).await;
+                elapsed = at;
+            }
+            day_part_haptics::play(h);
+        }
+    });
+}
+
+pub fn canvas_font(weight: FontWeight) -> CanvasFont {
+    CanvasFont {
+        family: None,
+        weight: Some(weight),
+        italic: false,
+    }
+}
+
+/// The largest size, up to `size`, at which `text` drawn in `font` is no wider than `width`: a
+/// canvas line's shrink-to-fit, so a long score or a long translation narrows instead of running
+/// into its neighbor.
+pub fn fit_text(text: &str, size: f64, font: &CanvasFont, width: f64) -> f64 {
+    let wide = day_core::measure_text(text, size, font).width;
+    if wide <= width || wide <= 0.0 {
+        size
+    } else {
+        (size * width.max(0.0) / wide).max(1.0)
+    }
+}
+
+/// Below this, a fitted title steps aside rather than draw text too small to read.
+const LEGIBLE: f64 = 10.0;
+
+/// A one-line title for a header it shares with scores and buttons: drawn at `size` when the row
+/// leaves it room, narrowed to fit when it does not, and left out once that would take it below a
+/// legible size. A label in that spot wraps or ellipsizes instead, one letter per line at worst.
+/// Give it `.grow_w()` so it takes what the row has left.
+pub fn fitted_title(text: LocalizedText, size: f64, weight: FontWeight, color: Color) -> AnyPiece {
+    let spoken = text.format();
+    canvas(move |d, sz| {
+        let s = text.format();
+        let font = canvas_font(weight);
+        let fit = fit_text(&s, size, &font, sz.width).min(sz.height * 0.75);
+        if fit >= LEGIBLE {
+            d.text(
+                &s,
+                Point::new(sz.width / 2.0, sz.height / 2.0),
+                TextStyle {
+                    size: fit,
+                    color,
+                    anchor: TextAnchor::CENTERED,
+                    font,
+                },
+            );
+        }
+    })
+    .a11y(move |a| a.label(spoken.clone()))
+    .height(size * 1.5)
+    .any()
+}
+
+/// A round stroke style `size` points across.
+pub fn stroke_style(size: f64) -> StrokeStyle {
+    StrokeStyle {
+        width: (size * 0.12).max(1.5),
+        cap: LineCap::Round,
+        join: LineJoin::Round,
+        ..Default::default()
+    }
+}
+
+/// The pause-circle glyph, centered at `c` in a `size`-point square.
+pub fn draw_pause_glyph(d: &mut Draw, c: Point, size: f64, color: Color) {
+    let s = size / 2.0;
+    let style = stroke_style(size);
+    let p = |x: f64, y: f64| Point::new(c.x + x * s, c.y + y * s);
+    d.stroke_styled(
+        Shape::Ellipse(Rect::new(c.x - s, c.y - s, 2.0 * s, 2.0 * s)),
+        color,
+        style.clone(),
+    );
+    d.stroke_styled(
+        Shape::Line(p(-0.25, -0.4), p(-0.25, 0.4)),
+        color,
+        style.clone(),
+    );
+    d.stroke_styled(Shape::Line(p(0.25, -0.4), p(0.25, 0.4)), color, style);
+}
+
+/// A check mark, centered at `c` in a `size`-point square.
+pub fn draw_check_glyph(d: &mut Draw, c: Point, size: f64, color: Color) {
+    let s = size / 2.0;
+    let p = |x: f64, y: f64| Point::new(c.x + x * s, c.y + y * s);
+    d.stroke_styled(
+        PathBuilder::new()
+            .move_to(p(-0.8, 0.05))
+            .line_to(p(-0.25, 0.65))
+            .line_to(p(0.85, -0.6))
+            .build(),
+        color,
+        stroke_style(size),
+    );
+}
+
+/// A cross, centered at `c` in a `size`-point square.
+pub fn draw_cross_glyph(d: &mut Draw, c: Point, size: f64, color: Color) {
+    let s = size / 2.0;
+    let style = stroke_style(size);
+    let p = |x: f64, y: f64| Point::new(c.x + x * s, c.y + y * s);
+    d.stroke_styled(
+        Shape::Line(p(-0.7, -0.7), p(0.7, 0.7)),
+        color,
+        style.clone(),
+    );
+    d.stroke_styled(Shape::Line(p(-0.7, 0.7), p(0.7, -0.7)), color, style);
+}
+
+/// The 44-point pause button (a pause circle), for a game's top-trailing corner.
+pub fn pause_button(
+    a11y: LocalizedText,
+    id: &'static str,
+    action: impl Fn() + 'static,
+) -> AnyPiece {
+    canvas(|d, sz| {
+        draw_pause_glyph(
+            d,
+            Point::new(sz.width / 2.0, sz.height / 2.0),
+            24.0,
+            ink_at(0.7),
+        );
+    })
+    .on_tap(action)
+    .a11y(move |a| a.label(a11y.format()).role(Role::Button))
+    .id(id)
+    .frame(44.0, 44.0)
+    .any()
+}
+
+/// The 44-point close button (a circled cross) that opens a game's header row: the one way out
+/// of a game. Tapping it runs what the shell registered with [`crate::on_close`].
+pub fn close_button() -> AnyPiece {
+    canvas(|d, sz| {
+        // The circle sits a little inside the 44pt touch target, as it did when the shell drew
+        // this on top of the game.
+        let r = sz.width.min(sz.height) * 0.40;
+        let c = Point::new(sz.width / 2.0, sz.height / 2.0);
+        d.fill(
+            Shape::Ellipse(Rect::new(c.x - r, c.y - r, 2.0 * r, 2.0 * r)),
+            Color::rgba(0.5, 0.5, 0.55, 0.35),
+        );
+        draw_cross_glyph(d, c, r * 1.2, ink_at(0.92));
+    })
+    .on_tap(crate::close)
+    .a11y(|a| {
+        a.label(day_fluent::tr("gk_close").format())
+            .role(Role::Button)
+    })
+    // The id every dayscript taps to leave a game.
+    .id("close-game")
+    .frame(BUTTON, BUTTON)
+    .any()
+}
+
+/// The top row every game wears: the close button, the game's name, the pause button. One row,
+/// so the three line up with each other on every game and every screen. The close button is
+/// part of the layout rather than something laid over it, and no game leaves a gap of its own
+/// guessing at its width.
+pub fn game_header(
+    title: LocalizedText,
+    pause_id: &'static str,
+    on_pause: impl Fn() + 'static,
+) -> AnyPiece {
+    row((
+        close_button(),
+        fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow_w(),
+        pause_button(day_fluent::tr("gk_pause"), pause_id, on_pause),
+    ))
+    .align(VAlign::Center)
+    .padding(EDGE)
+    .any()
+}
+
+/// The header for a screen with nothing to pause, a game's deck picker, say. The pause button's
+/// room is kept, so the title sits exactly where it does on the screens that have one.
+pub fn game_header_plain(title: LocalizedText) -> AnyPiece {
+    row((
+        close_button(),
+        fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow_w(),
+        spacer().width(BUTTON),
+    ))
+    .align(VAlign::Center)
+    .padding(EDGE)
+    .any()
+}
+
+/// One readout for a game's info row: a dim caption over its value, in the size and weight every
+/// game uses for these. `stat` is its bigger cousin, for the numbers on a results card.
+pub fn info_stat<M, C>(
+    caption: LocalizedText,
+    value: impl IntoText<M>,
+    // A constant, or a source that recolors the value as the game changes: Sudoku's clock turns
+    // once the puzzle is given up, and its difficulty carries that difficulty's accent.
+    color: impl IntoReactive<Color, C>,
+    id: &'static str,
+) -> AnyPiece {
+    column((
+        label(caption).font(Font::Caption).color(ink_at(0.55)),
+        label(value)
+            .font(Font::Title3)
+            .bold()
+            .tabular()
+            .color(color)
+            .id(id),
+    ))
+    .spacing(2.0)
+    .align(HAlign::Center)
+    .any()
+}
+
+/// The row of readouts directly under the header: the score, the clock, whatever the game
+/// counts. Built from [`info_stat`]s, evenly spaced and centered.
+pub fn info_row(stats: Vec<AnyPiece>) -> AnyPiece {
+    row(PieceVec(stats))
+        .spacing(28.0)
+        .align(VAlign::Center)
+        .padding(Insets {
+            top: 0.0,
+            leading: EDGE,
+            bottom: 4.0,
+            trailing: EDGE,
+        })
+        .any()
+}
+
+/// The shape of a game page: the header row, the readouts under it, the play area centered in
+/// what is left, and whatever controls belong at the foot of the page.
+///
+/// Pass `None` for a game with no readouts or no footer; the row is not there. A play
+/// area that grows fills the middle, and one with a size of its own is centered in it, which is
+/// what puts a board in the middle of the space between the readouts and the controls.
+pub fn game_frame(
+    header: AnyPiece,
+    info: Option<AnyPiece>,
+    play: AnyPiece,
+    footer: Option<AnyPiece>,
+) -> AnyPiece {
+    // The play area is the only child that takes what the header and the rows around it leave.
+    // A spacer either side of it would centre it, but spacers are the cells layout hands the
+    // slack to first, which leaves a play area that grows sitting at its smallest. A growing
+    // stack centres instead: one that fills takes the whole box, one with a size of its own sits
+    // in the middle of it.
+    let mut kids: Vec<AnyPiece> = vec![header];
+    if let Some(info) = info {
+        kids.push(info);
+    }
+    kids.push(zstack(PieceVec(vec![play])).grow().any());
+    if let Some(footer) = footer {
+        kids.push(footer);
+    }
+    column(PieceVec(kids)).align(HAlign::Center).grow().any()
+}
+
+/// The dimming layer under a card. Absorbs taps so the game underneath never hears them.
+pub fn scrim() -> AnyPiece {
+    canvas(|d, sz| {
+        d.fill(Shape::Rect(Rect::new(0.0, 0.0, sz.width, sz.height)), SCRIM);
+    })
+    .on_tap(|| {})
+    .grow()
+    .any()
+}
+
+/// The rounded dark card an overlay's content sits on.
+pub fn card(content: impl Piece) -> AnyPiece {
+    content
+        .padding(24.0)
+        .background(CARD)
+        .corner_radius(20.0)
+        .max_width(380.0)
+        .any()
+}
+
+/// A card's headline: "PAUSED", "GAME over".
+pub fn card_title(text: LocalizedText, color: Color) -> AnyPiece {
+    label(text)
+        .font(Font::LargeTitle)
+        .weight(FontWeight::Black)
+        .color(color)
+        .align(TextAlign::Center)
+        .any()
+}
+
+/// A menu button: filled in `tint`, one fixed width so the stack lines up.
+pub fn menu_button(
+    title: LocalizedText,
+    tint: Color,
+    id: &'static str,
+    action: impl Fn() + 'static,
+) -> AnyPiece {
+    button(title)
+        .prominent()
+        .tint(tint)
+        .action(action)
+        .id(id)
+        .width(MENU_W)
+        .any()
+}
+
+/// A caption over a value, centered: the "Score / 1240" block of a results card.
+pub fn stat<M>(
+    caption: LocalizedText,
+    value: impl IntoText<M>,
+    font: Font,
+    color: Color,
+    id: &'static str,
+) -> AnyPiece {
+    column((
+        label(caption).font(Font::Caption).color(TEXT_DIM),
+        label(value).font(font).bold().tabular().color(color).id(id),
+    ))
+    .spacing(2.0)
+    .align(HAlign::Center)
+    .any()
+}
+
+/// A settings card's section heading.
+pub fn section_heading(text: LocalizedText) -> AnyPiece {
+    label(text)
+        .font(Font::Caption)
+        .weight(FontWeight::Semibold)
+        .color(TEXT_DIM)
+        .any()
+}
+
+/// A settings row: a title on the leading edge, its control trailing.
+pub fn setting_row(title: LocalizedText, control: AnyPiece) -> AnyPiece {
+    row((label(title).color(TEXT).grow_w(), control))
+        .align(VAlign::Center)
+        .width(300.0)
+        .any()
+}
+
+/// A block of the how-to-play sheet.
+pub enum Help {
+    Heading(LocalizedText),
+    /// A paragraph or bullet; inline markdown for the emphasis.
+    Para(LocalizedText),
+}
+
+/// The how-to-play sheet: a titled, scrolling column of headings and paragraphs with a Done
+/// button at the end. At most fifteen blocks per call (a Day tuple's arity); longer sheets
+/// split their blocks across two columns.
+pub fn instructions_card(
+    title: LocalizedText,
+    blocks: Vec<Help>,
+    done_id: &'static str,
+    on_done: impl Fn() + 'static,
+) -> AnyPiece {
+    let mut pieces: Vec<AnyPiece> = Vec::with_capacity(blocks.len());
+    for block in blocks {
+        pieces.push(match block {
+            Help::Heading(t) => label(t)
+                .font(Font::Headline)
+                .color(Color::WHITE)
+                .align(TextAlign::Leading)
+                .any(),
+            Help::Para(t) => label(t)
+                .font(Font::Body)
+                .color(TEXT)
+                .markdown()
+                .align(TextAlign::Leading)
+                .any(),
+        });
+    }
+    card(
+        scroll(
+            column((
+                label(title).font(Font::Title2).bold().color(Color::WHITE),
+                column(PieceVec(pieces))
+                    .spacing(10.0)
+                    .align(HAlign::Leading),
+                button(day_fluent::tr("gk_done"))
+                    .prominent()
+                    .action(on_done)
+                    .id(done_id),
+            ))
+            .spacing(10.0)
+            .align(HAlign::Leading)
+            .width(300.0),
+        )
+        .height(440.0),
+    )
+}

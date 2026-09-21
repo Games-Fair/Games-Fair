@@ -1,0 +1,203 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# Gameplay sweep for screenshots. Run with `--env DAY_GAMES_SEED=15` so the Sudoku cells it
+# taps are empty (see dayscript/sudoku.yaml).
+name: games
+flow:
+  - wait_for: { id: home }
+  - screenshot: { name: home, title: Home, caption: "Every game is one tap away, and every tile is drawn by the game it opens.", source: src/lib.rs }
+  # Every game opens its rules by itself the first time it is played; opening each once
+  # first makes the sweep below the same from any saved state.
+  - navigate: { route: breakout }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: sirtet }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: twentyfortyeight }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: blockblast }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: solitaire }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: charades }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: mines }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: reversi }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: pipes }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  # Block Blast from the keyboard, on a fresh Normal deal so the pieces are the seeded ones
+  # (dayscript/blockblast.yaml explains the moves): three placements, then a fourth that
+  # clears the top row, photographed while the preview is lit and mid-clear.
+  - navigate: { route: blockblast }
+  - pause: { secs: 0.8 }
+  - tap: { id: bb-pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: bb-new-game }
+  - pause: { secs: 0.4 }
+  - tap: { id: bb-diff-normal }
+  - pause: { secs: 0.8 }
+  - key: { id: bb-canvas, key: "3" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowLeft" }
+  - key: { id: bb-canvas, key: "ArrowLeft" }
+  - key: { id: bb-canvas, key: "3" }
+  - pause: { secs: 0.3 }
+  - key: { id: bb-canvas, key: "1" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowRight" }
+  - key: { id: bb-canvas, key: "1" }
+  - pause: { secs: 0.3 }
+  - key: { id: bb-canvas, key: "2" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowRight" }
+  - key: { id: bb-canvas, key: "ArrowRight" }
+  - key: { id: bb-canvas, key: "2" }
+  - pause: { secs: 0.6 }
+  - key: { id: bb-canvas, key: "2" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowUp" }
+  - key: { id: bb-canvas, key: "ArrowRight" }
+  - key: { id: bb-canvas, key: "ArrowRight" }
+  - key: { id: bb-canvas, key: "ArrowRight" }
+  - pause: { secs: 0.2 }
+  - screenshot: blockblast-lift
+  - key: { id: bb-canvas, key: "2" }
+  - pause: { secs: 0.35 }
+  - screenshot: { name: blockblast, title: Block Blast, caption: "Drag pieces onto the board; full rows and columns clear, and back-to-back clears build a combo.", source: games/blockblast/src/lib.rs }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  # Solitaire: a fresh Turn One deal, proven winnable before it is dealt, and 9 sending its aces
+  # home (dayscript/solitaire.yaml explains the keys).
+  - navigate: { route: solitaire }
+  - pause: { secs: 0.8 }
+  - tap: { id: sol-pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: sol-new-game }
+  - pause: { secs: 0.4 }
+  - tap: { id: sol-draw-1 }
+  - pause: { secs: 3.0 }
+  - key: { id: sol-canvas, key: "9" }
+  - pause: { secs: 0.12 }
+  - screenshot: solitaire-flight
+  - pause: { secs: 1.0 }
+  - key: { id: sol-canvas, key: "9" }
+  - pause: { secs: 1.0 }
+  - screenshot: { name: solitaire, title: Solitaire, caption: "Klondike, one card at a time or three; with Winnable Deals Only on, a solver proves every deal before it reaches the table.", source: games/solitaire/src/lib.rs }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  # Charades: the decks, then a card from a round started by hand (dayscript/charades.yaml
+  # explains why tilting goes off first).
+  - navigate: { route: charades }
+  - pause: { secs: 0.6 }
+  - screenshot: { name: charades, title: Charades, caption: "Hold the phone to your forehead, let your friends give clues, and nod when you guess right.", source: games/charades/src/lib.rs }
+  - tap: { id: ch-settings }
+  - pause: { secs: 0.4 }
+  - toggle: { id: ch-tilt, value: false }
+  - tap: { id: ch-done }
+  - pause: { secs: 0.4 }
+  - tap: { id: ch-deck-animals }
+  - pause: { secs: 0.5 }
+  - tap: { id: ch-start }
+  - pause: { secs: 3.6 }
+  - screenshot: charades-card
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  # Mines: a fresh Easy board with a flag planted beside the opening. A flagged square holds the
+  # cascade, so the flag is still there once the clearing runs into it.
+  - navigate: { route: mines }
+  - pause: { secs: 0.6 }
+  - tap: { id: mi-pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: mi-new-game }
+  - pause: { secs: 0.4 }
+  - tap: { id: mi-diff-easy }
+  - pause: { secs: 0.6 }
+  - key: { id: mi-board, key: "f" }
+  - key: { id: mi-board, key: "ArrowDown" }
+  - key: { id: mi-board, key: " " }
+  - pause: { secs: 0.6 }
+  - screenshot: { name: mines, title: Mines, caption: "The classic sweeper: your first tap is always safe, hold a square to flag it, and the board turns with the window.", source: games/mines/src/lib.rs }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - navigate: { route: breakout }
+  - pause: { secs: 0.6 }
+  - tap: { id: bk-canvas }
+  - pause: { secs: 0.9 }
+  - screenshot: { name: breakout-a, title: Breakout, caption: "The paddle glides under your finger or pointer; combos, power-ups, and armored bricks follow.", source: games/breakout/src/lib.rs }
+  - pause: { secs: 0.7 }
+  - screenshot: breakout-b
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - navigate: { route: sirtet }
+  - pause: { secs: 0.5 }
+  - tap: { id: st-canvas }
+  - tap: { id: st-canvas }
+  - pause: { secs: 0.4 }
+  - screenshot: sirtet-a
+  - pause: { secs: 1.0 }
+  - screenshot: { name: sirtet-b, title: Sirtet, caption: "Falling blocks with the next piece shown and a call-out for every clear.", source: games/sirtet/src/lib.rs }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - navigate: { route: twentyfortyeight }
+  - pause: { secs: 0.6 }
+  - screenshot: { name: g2048, title: "2048", caption: "Slide, merge, and chase your best score.", source: games/twentyfortyeight/src/lib.rs }
+  # New Game asks for the rules; Easy adds the undo button beside pause.
+  - tap: { id: tf-pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: tf-new-game }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: tf-difficulty-picker }
+  - screenshot: { name: g2048-difficulty, title: "2048 difficulty", caption: "Easy grants three undos; Hard spawns two tiles a move.", source: games/twentyfortyeight/src/lib.rs }
+  - tap: { id: tf-diff-easy }
+  - pause: { secs: 0.5 }
+  - assert_visible: { id: tf-undo }
+  - screenshot: g2048-easy
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - navigate: { route: sudoku }
+  - pause: { secs: 0.8 }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - navigate: { route: sudoku }
+  - pause: { secs: 0.8 }
+  - tap: { id: su-cell-40 }
+  - tap: { id: su-key-5 }
+  - pause: { secs: 0.4 }
+  - screenshot: { name: sudoku, title: Sudoku, caption: "Pencil marks, a checkpoint you can commit or revert, and a best time per difficulty.", source: games/sudoku/src/lib.rs }
+  - nav_back: {}
+
+  - navigate: { route: reversi }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: rv-board }
+  - screenshot: reversi
+  - nav_back: {}
+
+  - navigate: { route: pipes }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: pp-board }
+  - screenshot: pipes
+  - nav_back: {}
