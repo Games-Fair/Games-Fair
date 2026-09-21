@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+{
+  "app": {
+    "bundleName": "org.appfair.app.Games-Fair",
+    "vendor": "example",
+    "versionCode": 1000000,
+    "versionName": "1.0.0",
+    "icon": "$media:layered_image",
+    "label": "$string:app_name"
+  }
+}

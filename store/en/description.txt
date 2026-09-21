@@ -1,0 +1,7 @@
+Games Fair is an App Fair app.
+
+The App Fair Project builds every app it publishes from a tagged commit of its public
+source, checks that build against the one the maintainer released, and signs it with the
+project's keys.
+
+Describe your app here: what it does and who it is for.

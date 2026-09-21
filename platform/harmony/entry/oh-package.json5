@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Day ArkUI entry module",
+  "main": "",
+  "dependencies": {
+    "libentry.so": "file:./src/main/cpp/types/libentry"
+  }
+}

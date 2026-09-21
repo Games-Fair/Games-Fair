@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+#
+# Games Fair's walkthrough (https://daybrite.dev/docs/dayscript): drives the running app by element
+# id and route on any target, and doubles as its test.
+#
+#     day launch -p windows-xaml --script dayscript/demo.yaml
+#
+# CI runs it on every toolkit and in every bundled locale, so assert on ids and routes rather
+# than on translated text.
+flow:
+  # --- Welcome ------------------------------------------------------------------------------
+  # The nav host mounts on every platform; which chrome it wears depends on the window width.
+  - wait_for: { id: nav }
+  - navigate: { route: welcome }
+  - assert_visible: { id: welcome-mark }
+  - assert_visible: { id: welcome-title }
+  # Markdown from the locale catalog, so this proves resources, Fluent, and the parser at once.
+  - assert_visible: { id: welcome-body }
+  - screenshot: welcome
+
+  # --- The App Fair section -----------------------------------------------------------------
+  - navigate: { route: navigate }
+  - assert_route: { route: navigate }
+  - assert_visible: { id: navigate-title }
+  - assert_visible: { id: link-list }
+  - assert_visible: { id: link-home }
+  - screenshot: appfair
+
+  # --- Adaptive navigation ------------------------------------------------------------------
+  # The same host re-presented; the route has to survive each change.
+  - size_class: { width: compact }
+  - wait_idle: {}
+  - assert_route: { route: navigate }
+  - screenshot: compact
+  - size_class: { width: expanded }
+  - wait_idle: {}
+  - assert_route: { route: navigate }
+  - screenshot: expanded
+  # Back to the device's width. A forced class changes the layout, not the pixels.
+  - size_class: { width: auto }
+  - wait_idle: {}
+
+  # --- Settings -----------------------------------------------------------------------------
+  # A menu-bar platform opens Settings in a separate window through App ▸ Settings…, so the
+  # route is driven only where Settings is a nav row.
+  - navigate: { route: settings, skip_on: [appkit, gtk, qt, xaml] }
+  - wait_idle: {}
+  # The appearance row is present only where the backend honors a runtime override;
+  # android-mdc cannot, so it is left out there. The language row is always present.
+  - assert_visible: { id: theme-picker, skip_on: [appkit, gtk, qt, xaml, mdc] }
+  - assert_visible: { id: language-picker, skip_on: [appkit, gtk, qt, xaml] }
+  - screenshot: settings
+  # Appearance applies live where the row exists.
+  - select: { id: theme-picker, index: 2, skip_on: [appkit, gtk, qt, xaml, mdc] }
+  - wait_idle: {}
+  - screenshot: dark
+  - select: { id: theme-picker, index: 0, skip_on: [appkit, gtk, qt, xaml, mdc] }
+  - wait_idle: {}
+
+  # --- Back to Welcome ----------------------------------------------------------------------
+  - navigate: { route: welcome }
+  - assert_route: { route: welcome }
+  - assert_visible: { id: welcome-body }

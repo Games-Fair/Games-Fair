@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# The Day project manifest (https://daybrite.dev/docs/cli). `name`/`version` come from
+# Cargo.toml; any [app] property may be overridden per platform, toolkit, or target.
+schema = 1
+
+[app]
+id = "org.appfair.app.Games-Fair"
+title = "Games Fair"
+build = 1
+targets = ["windows-xaml", "macos-appkit", "linux-gtk", "linux-qt", "ios-uikit", "android-mdc", "harmony-arkui", "web-dom"]
+
+# Play package names take no hyphen, so the Android build uses the token with underscores.
+[app.android]
+id = "org.appfair.app.Games_Fair"
+
+# The window's geometry in points (https://daybrite.dev/docs/size-classes). `day build` carries
+# all four into the Android manifest's <layout> element and the iOS Info.plist.
+[window]
+width = 960
+height = 640
+min_width = 320
+min_height = 400
