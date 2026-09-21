@@ -16,6 +16,8 @@ on:
 
 permissions:
   contents: write # release assets on a tag build
+  pages: write    # web-dom → GitHub Pages (deploy-web)
+  id-token: write # deploy-pages OIDC token (deploy-web)
 
 jobs:
   app:
@@ -35,6 +37,11 @@ jobs:
       # A tagged build attaches its packages to the release. The App Fair queue compares its
       # own build against these, so leave them on.
       release-assets: true
+      # website/site.toml makes the workflow build and deploy the full project site
+      # (https://games-fair.github.io/Games-Fair/) from the daybrite/daysite template on every
+      # push to main, with the web build hosted at /Games-Fair/webapp/. deploy-web stays on as
+      # the fallback: were website/ ever removed, the bare web app would return to the Pages root.
+      deploy-web: true
       # The App Fair Project signs and submits through its catalog
       # (https://github.com/appfair/appfair-apps), so this workflow uploads to no store.
       upload-ios: "false"

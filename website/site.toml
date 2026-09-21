@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+#
+# Games Fair's website (https://games-fair.github.io/Games-Fair/) — built by the shared dayapp
+# workflow from the daybrite/daysite template. Everything content-ful (name, description,
+# screenshots, downloads) comes from Day.toml, store/, and the release pipeline; this file holds
+# only what is genuinely site-specific.
+
+host = "https://games-fair.github.io/Games-Fair"
+locales = ["en"]
+
+# The red-pink of the icon's heart, deepened until it reads as link text on white.
+accent-color = "#E31B4D"
+
+# The hosted web build lives at /Games-Fair/webapp/ (the hero's "Open the web app" button).
+webapp = "webapp"
+
+# The games play in the browser, so the live build is preselected in the platform picker.
+default-platform = "web"
+
+# The mark is a pixel heart, every pixel sitting on its own radius from the centre, which is the
+# arrangement bloom is for.
+icon-effect = "bloom"

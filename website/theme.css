@@ -1,0 +1,19 @@
+/* SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception */
+
+/* Games Fair site overrides — inlined after the template's styles, so anything here wins.
+   Kept to a whisper on purpose: the template carries the design; this file holds the few things
+   that are Games Fair's own. */
+
+/* The title in the icon's pinks, deepening into the accent. It stays inside the reds: the
+   backdrop's night purple, tried as the last stop, disappeared into the dark theme. */
+.rise h1 {
+  background: linear-gradient(105deg, #ff6f91, #ff3d67 45%, #e31b4d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Scores and best times sit beside captions: tabular figures keep them from jittering. */
+.rise :is(code, .tabular) {
+  font-variant-numeric: tabular-nums;
+}
