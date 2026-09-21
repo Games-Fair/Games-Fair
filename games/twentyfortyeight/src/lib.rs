@@ -43,7 +43,7 @@ impl Rng {
     }
 }
 
-/// The three rule sets (Faire's): how often a 4 spawns, how many tiles spawn per move, and
+/// The three rule sets: how often a 4 spawns, how many tiles spawn per move, and
 /// whether undo is on the table.
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Default, Serialize, Deserialize)]
 enum Difficulty {

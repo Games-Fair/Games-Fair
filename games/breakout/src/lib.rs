@@ -22,7 +22,7 @@ const SAVE_KEY: &str = "breakout.v2";
 const RECORD_KEY: &str = "breakout.best";
 const SETTINGS_KEY: &str = "breakout.settings";
 
-// --- tuning (Faire's constants) ---------------------------------------------------------
+// --- tuning -----------------------------------------------------------------------------
 const PADDLE_H: f64 = 14.0;
 /// The paddle rests this fraction of the field height above the bottom.
 const PADDLE_BOTTOM_FRACTION: f64 = 0.25;

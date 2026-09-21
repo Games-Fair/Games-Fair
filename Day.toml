@@ -34,6 +34,11 @@ targets = [
 [app.android]
 id = "org.appfair.app.Faire_Games"
 
+# HarmonyOS rejects a hyphen in `bundleName` too (AppScope/app.json5 is schema-checked), so the
+# harmony build takes the same underscore form.
+[app.harmony]
+id = "org.appfair.app.Faire_Games"
+
 # The desktop window's default size in points; phones fill the screen regardless. Tall enough
 # for the Sudoku board and its keypad; the minimum keeps a game's controls reachable.
 [window]

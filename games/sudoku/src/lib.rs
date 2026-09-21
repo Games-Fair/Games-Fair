@@ -38,7 +38,7 @@ const ACTION_W: f64 = 64.0;
 const ACTION_H: f64 = (KEY_H * 3.0 + KEY_GAP * 2.0 - 8.0) / 2.0;
 const MENU_W: f64 = 180.0;
 
-// Palette (Faire's night-blue look).
+// Palette (night-blue).
 const BG_TOP: Color = Color::rgb(0.06, 0.07, 0.14);
 const BG_BOTTOM: Color = Color::rgb(0.04, 0.04, 0.10);
 const BOARD_BG: Color = Color::rgb(0.10, 0.12, 0.22);

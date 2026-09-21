@@ -49,7 +49,7 @@ pub fn ink_at(alpha: f64) -> Color {
     }
 }
 pub const GOLD: Color = Color::rgb(1.0, 0.84, 0.25);
-// Menu button tints (Faire's pause menu).
+// Menu button tints (the pause menu).
 pub const GREEN: Color = Color::rgb(0.30, 0.70, 0.40);
 pub const BLUE: Color = Color::rgb(0.30, 0.55, 0.95);
 pub const SLATE: Color = Color::rgb(0.30, 0.40, 0.60);

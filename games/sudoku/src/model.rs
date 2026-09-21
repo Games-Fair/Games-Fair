@@ -372,7 +372,7 @@ impl Model {
         peers
     }
 
-    /// Enter a digit (or toggle a note) into the selected cell, Faire's placeDigit.
+    /// Enter a digit (or toggle a note) into the selected cell.
     /// Returns true when something changed.
     pub fn place(&mut self, digit: u8) -> bool {
         let Some(i) = self.selected else { return false };
@@ -653,7 +653,7 @@ impl Model {
 }
 
 // ---------------------------------------------------------------------------
-// Puzzle generation (Faire's scheme): the canonical solution scrambled by digit
+// Puzzle generation: the canonical solution scrambled by digit
 // relabeling and thirty random row/column/band/stack swaps, then cells removed
 // in 180°-symmetric pairs down to the difficulty's clue count. The win check is
 // rule-based, so uniqueness is not required.
