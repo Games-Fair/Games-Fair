@@ -1,0 +1,1 @@
+solitaire,sudoku,2048,charades,démineur,reversi,tuyaux,blocs,cartes,arcade,hors ligne

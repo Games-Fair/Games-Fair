@@ -1,0 +1,16 @@
+Zehn klassische Spiele in einer App. Spiele offline, ohne Werbung, Käufe oder Konto. Dein Spielstand wird automatisch gespeichert, damit du später weiterspielen kannst.
+
+SOLITÄR — Klondike mit einer oder drei Karten pro Zug, Tipps und auf Wunsch nachweislich lösbaren Spielen.
+BLOCK BLAST — Platziere Blöcke, vervollständige Reihen und Spalten und sammle Kombos.
+BREAKOUT — Lass den Ball abprallen, zerstöre Steine und sammle Extras.
+SIRTET — Drehe fallende Blöcke und fülle Reihen, während das Tempo steigt.
+SUDOKU — Wähle den Schwierigkeitsgrad, mache Notizen, nutze Tipps und speichere Zwischenstände.
+2048 — Verschiebe und verschmelze gleiche Kacheln. Spiele nach 2048 weiter.
+SCHARADE — Rate mit Freunden anhand thematischer Kartenstapel. Nutze Tasten oder auf unterstützten Geräten die Neigungssteuerung.
+MINEN — Decke sichere Felder auf und markiere Minen. Der erste Zug ist immer sicher.
+REVERSI — Drehe gegnerische Steine um. Spiele gegen den Computer oder zu zweit an einem Gerät.
+ROHRE — Drehe Rohrstücke, um das ganze Netz zu verbinden.
+
+Menüs, Anleitungen und Beschriftungen für Bedienungshilfen in 13 Sprachen. Scharade enthält übersetzte Tier- und Essenskarten; die englische Sammlung bietet weitere Themen.
+
+Quelloffen, mit dem Day-Framework und den nativen Oberflächen der Plattformen entwickelt. Quellcode: github.com/Games-Fair/Games-Fair

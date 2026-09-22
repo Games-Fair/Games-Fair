@@ -1,0 +1,6 @@
+Dix jeux dans une seule application : Solitaire, Block Blast, Breakout, blocs qui tombent, Sudoku,
+2048, Démineur, Devinettes, Reversi et Tuyaux.
+
+Chaque écran est dessiné avec les composants natifs de la plateforme. Les parties sont enregistrées
+et restaurées automatiquement, même en cours de manche, et toute l'application fonctionne hors
+ligne, sans publicité, sans achat et sans compte.

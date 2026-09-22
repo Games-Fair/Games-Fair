@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
-# Games Fair: UI strings (https://daybrite.dev/docs/localization). Add a locale by dropping a
-# sibling folder (e.g. locales/fr/app.ftl) and registering it in src/lib.rs.
+# Games Fair: UI strings (https://daybrite.dev/docs/localization). This is the catalog the other
+# locales are generated against: a key added here is added to locales/<tag>/app.ftl beside it,
+# which day-build picks up on its own.
 
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
@@ -254,6 +255,7 @@ su_help_win_4 = • The puzzle is complete when every cell holds a valid digit a
 nav_charades = Charades
 ch_pick_deck = Pick a deck, hold the phone to your forehead, and let your friends give you clues.
 ch_deck_meta = { $count } cards · Best { $best }
+ch_preview_word = Giraffe
 ch_card_a11y = Card: { $word }
 ch_back = Back
 ch_start = Start
@@ -380,3 +382,6 @@ pp_help_goal = Rotate the tiles to connect every pipe to the gold source in the 
 pp_help_controls = Tap a tile to rotate it a quarter-turn clockwise. End caps, bends, straight pipes, and branches all belong to one network. Every puzzle has a solution. A wave of light celebrates when the whole network connects.
 pp_help_locks = Turn on Lock mode, then tap tiles to lock or unlock them. A padlock protects a tile from rotation. Turn Lock mode off to keep rotating. Restart puzzle restores the original scramble and clears your locks and rotation count.
 pp_help_keys = On a keyboard, use the arrows to select a tile, Space or Enter to rotate it, and L to lock or unlock it. Press P or Escape to pause. Progress saves when you leave. Choose a 5 × 5, 7 × 7, or 9 × 9 board in New Game.
+
+# The reason HarmonyOS shows when Charades asks for the accelerometer.
+permission_ohos_permission_ACCELEROMETER = Charades reads the phone's tilt to score a nod.

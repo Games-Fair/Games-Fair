@@ -1,0 +1,1 @@
+solitaire,sudoku,2048,tebak kata,ranjau,reversi,pipa,balok,kartu,arkade,luring

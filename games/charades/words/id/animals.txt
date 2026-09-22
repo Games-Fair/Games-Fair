@@ -1,0 +1,122 @@
+# title: Hewan
+# blurb: Dari hewan peliharaan hingga satwa liar.
+Kucing
+Anjing
+Kuda
+Keledai
+Sapi
+Banteng
+Domba
+Kambing
+Babi
+Kelinci
+Tikus
+Hamster
+Marmut
+Tupai
+Landak
+Kelelawar
+Rubah
+Serigala
+Beruang
+Rusa
+Kijang
+Bison
+Kerbau
+Unta
+Llama
+Alpaka
+Gajah
+Badak
+Kuda nil
+Jerapah
+Zebra
+Singa
+Harimau
+Macan tutul
+Citah
+Macan kumbang
+Puma
+Jaguar
+Hiena
+Monyet
+Gorila
+Simpanse
+Orangutan
+Lemur
+Panda
+Koala
+Kanguru
+Walabi
+Wombat
+Kungkang
+Armadilo
+Trenggiling
+Berang-berang
+Musang
+Rakun
+Sigung
+Surikat
+Anjing laut
+Walrus
+Singa laut
+Lumba-lumba
+Paus
+Orka
+Hiu
+Ikan pari
+Gurita
+Cumi-cumi
+Ubur-ubur
+Bintang laut
+Kuda laut
+Kepiting
+Lobster
+Udang
+Siput
+Lintah
+Cacing tanah
+Semut
+Lebah
+Tawon
+Kupu-kupu
+Capung
+Kumbang koksi
+Belalang
+Jangkrik
+Kumbang
+Laba-laba
+Kalajengking
+Katak
+Kodok
+Salamander
+Kura-kura
+Buaya
+Ular
+Kadal
+Bunglon
+Iguana
+Pinguin
+Burung unta
+Elang
+Burung hantu
+Kakatua
+Flamingo
+Pelikan
+Bebek
+Angsa
+Ayam
+Ayam jantan
+Kalkun
+Merak
+Merpati
+Gagak
+Burung gereja
+Komodo
+Tapir
+Jalak
+Cenderawasih
+Bekantan
+Ikan mas
+Lele
+Tokek

@@ -1,0 +1,114 @@
+# title: Makanan
+# blurb: Tebak buah, hidangan, dan camilan favorit.
+Apel
+Pir
+Pisang
+Jeruk
+Lemon
+Stroberi
+Rasberi
+Bluberi
+Ceri
+Anggur
+Persik
+Aprikot
+Prem
+Nanas
+Mangga
+Pepaya
+Kiwi
+Semangka
+Melon
+Kelapa
+Buah ara
+Kurma
+Delima
+Alpukat
+Tomat
+Kentang
+Wortel
+Bawang merah
+Bawang putih
+Daun bawang
+Mentimun
+Labu siam
+Terong
+Labu kuning
+Brokoli
+Kembang kol
+Kubis
+Selada
+Bayam
+Kacang polong
+Kacang merah
+Lentil
+Buncis
+Jagung
+Jamur
+Lobak
+Bit
+Seledri
+Paprika
+Cabai
+Roti
+Roti bakar
+Kroisan
+Donat
+Panekuk
+Wafel
+Biskuit
+Kue bolu
+Pai
+Puding
+Klepon
+Cokelat
+Permen
+Es krim
+Madu
+Selai
+Mentega
+Keju
+Yoghurt
+Santan
+Susu
+Telur
+Telur dadar
+Nasi
+Pasta
+Mi
+Bubur
+Piza
+Martabak
+Roti lapis
+Burger
+Kentang goreng
+Perkedel
+Sup
+Salad
+Gado-gado
+Rendang
+Ayam goreng
+Sate
+Sosis
+Bakso
+Ikan
+Salmon
+Tuna
+Sarden
+Udang
+Kerang
+Tiram
+Sushi
+Lumpia
+Tahu
+Tempe
+Kacang mete
+Kacang tanah
+Pisang goreng
+Popcorn
+Pempek
+Nasi goreng
+Soto
+Durian
+Rambutan
+Manggis

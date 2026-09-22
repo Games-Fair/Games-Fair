@@ -1,0 +1,6 @@
+Sepuluh permainan dalam satu aplikasi: Solitaire, Block Blast, Breakout, balok jatuh, Sudoku,
+2048, Ranjau, Tebak Kata, Reversi, dan Pipa.
+
+Setiap layar digambar dengan komponen asli tiap platform. Permainan tersimpan dan berlanjut
+sendiri, termasuk di tengah ronde, dan seluruh aplikasi berjalan luring, tanpa iklan, tanpa
+pembelian, dan tanpa akun.

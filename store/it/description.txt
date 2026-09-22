@@ -1,0 +1,16 @@
+Dieci giochi classici in un’unica app. Gioca offline, senza pubblicità, acquisti o account. Le partite si salvano automaticamente, così puoi riprenderle in seguito.
+
+SOLITARIO — Klondike con pesca di una o tre carte, suggerimenti e un’opzione per distribuzioni verificate come risolvibili.
+BLOCK BLAST — Posiziona i blocchi, completa righe e colonne e crea combo.
+BREAKOUT — Fai rimbalzare la pallina, rompi i mattoni e raccogli potenziamenti.
+SIRTET — Ruota i blocchi in caduta e completa le linee mentre il ritmo aumenta.
+SUDOKU — Scegli la difficoltà, prendi appunti, usa suggerimenti e salva punti di controllo.
+2048 — Scorri e unisci tessere uguali. Continua anche dopo aver raggiunto 2048.
+MIMI — Indovina con gli amici usando mazzi tematici. Usa i pulsanti o, sui dispositivi compatibili, i controlli di inclinazione.
+CAMPO MINATO — Scopri le caselle sicure e segna le mine. La prima mossa è sempre sicura.
+REVERSI — Capovolgi le pedine avversarie. Sfida il computer o un amico sullo stesso dispositivo.
+TUBI — Ruota i tubi per collegare tutta la rete.
+
+Menu, istruzioni ed etichette di accessibilità in 13 lingue. Mimi include mazzi tradotti su animali e cibo; la raccolta inglese offre altri temi.
+
+App open source, realizzata con il framework Day e l’interfaccia nativa di ogni piattaforma. Codice: github.com/Games-Fair/Games-Fair

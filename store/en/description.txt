@@ -33,6 +33,11 @@ MINES
 The classic sweeper. Your first tap is always safe, holding a square plants a flag, and a number
 with all its flags opens the rest around it. Three board sizes, each shaped to fit your screen.
 
+LANGUAGES
+
+Menus, instructions and accessibility labels are in 13 languages. Charades has localized animal
+and food decks in each of them, and twenty-one themed decks in English.
+
 WHAT IT DOES NOT DO
 
 No advertising. No purchases. No account. No network access at all — every game runs entirely on

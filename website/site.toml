@@ -6,7 +6,9 @@
 # only what is genuinely site-specific.
 
 host = "https://games-fair.github.io/Games-Fair"
-locales = ["en"]
+# Every language the app ships, in the order the picker offers them: English first, then by
+# the language's own name.
+locales = ["en", "ar", "de", "es", "fr", "hi", "id", "it", "ja", "ko", "pt-BR", "ru", "zh-CN"]
 
 # The red-pink of the icon's heart, deepened until it reads as link text on white.
 accent-color = "#E31B4D"

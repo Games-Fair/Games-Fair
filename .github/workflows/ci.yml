@@ -33,6 +33,9 @@ jobs:
       scripts: dayscript/smoke.yaml dayscript/games.yaml dayscript/reversi.yaml dayscript/pipes.yaml
       # Pins every game's RNG, so a scripted run meets the same puzzle and layout everywhere.
       launch-env: DAY_GAMES_SEED=15
+      # Every language the app ships, read from resource/locales/, so a language added to the app
+      # is walked through without editing this file. Each locale captures its own screenshots.
+      locales: all
       themes: light dark
       # A tagged build attaches its packages to the release. The App Fair queue compares its
       # own build against these, so leave them on.

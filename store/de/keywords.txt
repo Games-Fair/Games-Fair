@@ -1,0 +1,1 @@
+solitär,sudoku,2048,scharade,minensuche,reversi,rohre,blöcke,karten,arcade,offline

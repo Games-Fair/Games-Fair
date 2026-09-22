@@ -1328,7 +1328,7 @@ pub fn charades_preview() -> AnyPiece {
             );
             centered(
                 d,
-                "Giraffe",
+                &tr("ch_preview_word").format(),
                 Point::new(c.x, c.y),
                 ph * 0.30,
                 Color::WHITE,
