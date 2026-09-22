@@ -22,8 +22,9 @@ build. `day doctor` lists what each toolkit needs and prints the install command
 missing. The launch prints where it put the checkout, so you can open the code and change it.
 
 To rename a fork, change `[app].title` in `Day.toml`: the home header and the window title read
-it. The App Store and Play records this app publishes to are named there too, as
-`org.appfair.app.Faire-Games` and `org.appfair.app.Faire_Games`.
+it. `[app].id` there is the app's own id, `io.github.GamesFair`. The App Store and Play records
+the App Fair publishes this app under are separate, and live in `Day-appfair.toml`, which
+`day --flavor appfair` merges over the manifest.
 
 ## The games
 

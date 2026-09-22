@@ -5,9 +5,10 @@
 schema = 1
 
 [app]
-# The App Store and Play records this app publishes to.
-id = "org.appfair.app.Faire-Games"
-# The URL scheme the App Fair build registered; the id's last segment would be the default.
+# The app's own id, which anyone can build and run it under. The ids the App Fair publishes
+# under live in Day-appfair.toml beside this file.
+id = "io.github.GamesFair"
+# The URL scheme the published app registered; the id's last segment would be the default.
 scheme = "fairegames"
 title = "Games Fair"
 # Above the 36 the stores have seen. Both order releases by version and build, and refuse one
@@ -29,16 +30,6 @@ targets = [
   "web-dom",
 ]
 
-# Play package names take no hyphen, so the Android build uses the token with underscores. It is
-# the id the live Play listing carries.
-[app.android]
-id = "org.appfair.app.Faire_Games"
-
-# HarmonyOS rejects a hyphen in `bundleName` too (AppScope/app.json5 is schema-checked), so the
-# harmony build takes the same underscore form.
-[app.harmony]
-id = "org.appfair.app.Faire_Games"
-
 # The desktop window's default size in points; phones fill the screen regardless. Tall enough
 # for the Sudoku board and its keypad; the minimum keeps a game's controls reachable.
 [window]
@@ -47,9 +38,8 @@ height = 780
 min_width = 480
 min_height = 640
 
-# Charades reads the accelerometer, which HarmonyOS gates behind a permission in the app's
-# module.json5; Day's portable permission set has no key for it (docs/permissions.md). The text
-# HarmonyOS shows is `permission_ohos_permission_ACCELEROMETER` in the catalog, so it is asked for
-# in the reader's own language.
+# Charades reads the accelerometer, which HarmonyOS gates behind a permission in module.json5;
+# Day's portable set has no key for it (docs/permissions.md). The text HarmonyOS shows is
+# `permission_ohos_permission_ACCELEROMETER` in the catalog, so it is translated.
 [permissions.raw]
 ohos = [{ name = "ohos.permission.ACCELEROMETER", when = "inuse" }]

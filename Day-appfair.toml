@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+#
+# The App Fair build of this app (https://daybrite.dev/docs/flavors). `day --flavor appfair …`
+# merges this over Day.toml, and the catalog (github.com/appfair/appfair-apps) builds every
+# submission that way. Only the ids differ; the sources, the listing, the icons and the version
+# are the app's own.
+
+[app]
+# The App Store record this app publishes under. It predates the rename from Faire-Games, and a
+# store keys a record by its id, so the id stays.
+id = "org.appfair.app.Faire-Games"
+
+# A Play package name takes no hyphen, and the live listing carries the underscore form.
+[app.android]
+id = "org.appfair.app.Faire_Games"
+
+# HarmonyOS refuses a hyphen in `bundleName` too, so the underscore form again.
+[app.harmony]
+id = "org.appfair.app.Faire_Games"

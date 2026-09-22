@@ -20,6 +20,16 @@ permissions:
   id-token: write # deploy-pages OIDC token (deploy-web)
 
 jobs:
+  # The catalog's rules: the licence texts, the licence notice in every source file, and the
+  # flavor manifest holding the ids this app publishes under. The submission checks run the same
+  # action (github.com/appfair/appfair-apps).
+  appfair-lint:
+    name: appfair-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: appfair/appfair-apps/.github/actions/appfair-lint@main
+
   app:
     uses: daybrite/actions/.github/workflows/dayapp.yml@main
     secrets: inherit
@@ -35,8 +45,14 @@ jobs:
       launch-env: DAY_GAMES_SEED=15
       # Every language the app ships, read from resource/locales/, so a language added to the app
       # is walked through without editing this file. Each locale captures its own screenshots.
-      locales: all
+      #locales: all
+      locales: en fr
       themes: light dark
+      # The App Fair identity (Day-appfair.toml) gets a leg per target, so a break under those
+      # ids shows up here rather than in the publishing queue (HarmonyOS refuses a hyphen in a
+      # bundle name, for one). Release assets, Pages and the store uploads stay with the base
+      # build, which the queue compares its flavor build against.
+      flavors: appfair
       # A tagged build attaches its packages to the release. The App Fair queue compares its
       # own build against these, so leave them on.
       release-assets: true

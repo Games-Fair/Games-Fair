@@ -20,7 +20,7 @@ PRODUCT_NAME = GamesFair
 // The name on the home screen. The generated include below rewrites it from Day.toml [app]
 // title on every `day build`; this line only carries a checkout that has not built yet.
 DAY_APP_TITLE = Games Fair
-PRODUCT_BUNDLE_IDENTIFIER = org.appfair.app.Games-Fair
+PRODUCT_BUNDLE_IDENTIFIER = io.github.GamesFair
 MARKETING_VERSION = 0.1.0
 CURRENT_PROJECT_VERSION = 1
 
