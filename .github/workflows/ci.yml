@@ -12,6 +12,9 @@ on:
     branches: ["**"]
     tags: ["v[0-9]+.[0-9]+.[0-9]+*"]
   pull_request:
+  # Marking a staged release Latest (see `release-mode` below) rebuilds the site against it.
+  release:
+    types: [released]
   workflow_dispatch:
 
 permissions:
@@ -57,6 +60,12 @@ jobs:
       # A tagged build attaches its packages to the release. The App Fair queue compares its
       # own build against these, so leave them on.
       release-assets: true
+      # A tag publishes a pre-release: the packages are downloadable by tag, and
+      # releases/latest, the download links on the site and everything else that reads "the
+      # latest release" keep describing the version before it. Marking the release Latest, which
+      # the App Fair's queue also does once it has attached its signed packages, fires the
+      # `release: released` event above and rebuilds the site against the new version.
+      release-mode: pre-release
       # website/site.toml makes the workflow build and deploy the full project site
       # (https://games-fair.github.io/Games-Fair/) from the daybrite/daysite template on every
       # push to main, with the web build hosted at /Games-Fair/webapp/. deploy-web stays on as
