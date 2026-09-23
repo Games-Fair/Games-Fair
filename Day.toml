@@ -30,6 +30,13 @@ targets = [
   "web-dom",
 ]
 
+# The live listings, which the website turns into each store's localized badge
+# (https://daybrite.dev/docs/store#listed-apps). The App Fair publishes this app to both stores
+# under the ids in Day-appfair.toml, and these are the records it publishes to.
+[store]
+apple-app-id = "6761661340"
+google-play-id = "org.appfair.app.Faire_Games"
+
 # The desktop window's default size in points; phones fill the screen regardless. Tall enough
 # for the Sudoku board and its keypad; the minimum keeps a game's controls reachable.
 [window]
