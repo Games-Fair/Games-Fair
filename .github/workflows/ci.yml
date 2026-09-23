@@ -51,6 +51,13 @@ jobs:
       #locales: all
       locales: en fr
       themes: light dark
+      # Android captures on a 9:16 phone rather than the default 20:9 one: Google Play takes a
+      # screenshot whose long side is at most twice its short, and the listing's screenshots
+      # are these captures. The tablet is the default.
+      android-devices: |
+        device=pixel,          os=36, orientation=portrait,  slug=phone
+        device=medium_tablet,  os=36, orientation=landscape, slug=tablet
+        device=medium_phone,   os=24, optional=true
       # On a tag, the App Fair identity (Day-appfair.toml) gets a leg per target: that is the
       # build the publishing queue rebuilds, and a break under those ids (HarmonyOS refuses a
       # hyphen in a bundle name, for one) shows up here first. An ordinary push builds the base
