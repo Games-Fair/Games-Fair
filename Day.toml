@@ -13,7 +13,7 @@ scheme = "fairegames"
 title = "Games Fair"
 # Above the 36 the stores have seen. Both order releases by version and build, and refuse one
 # that repeats or lowers them.
-build = 69
+build = 70
 # The 8 shipping platform-toolkit pairs. `windows-xaml`, `linux-gtk`, and `linux-qt` build in CI
 # on their native hosts; on a macOS dev box the toolkits run locally as `macos-appkit`,
 # `macos-gtk`, `macos-qt`, `ios-uikit`, `android-mdc`, `harmony-arkui`, and `web-dom` (GTK/Qt are
