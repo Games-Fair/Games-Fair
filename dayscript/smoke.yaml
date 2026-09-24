@@ -65,3 +65,8 @@ flow:
   - pause: { secs: 0.6 }
 
   - screenshot: smoke
+
+  - navigate: { route: matchthree }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: mt-board }
+  - nav_back: {}

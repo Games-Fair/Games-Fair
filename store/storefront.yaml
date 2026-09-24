@@ -1,0 +1,436 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# The store listing: submission info, the localized text, and the screenshots each listing shows. It belongs
+# to the App Store record (ID 6761661340) and the Play listing this app already has.
+#
+# The same declaration as a store/storefront.toml, in YAML: `day store` reads either. bundle-id is
+# omitted, so it uses Day.toml's [app] id, which is the id of the live record on each store.
+# submission-info is shared by both stores; a store's own submission-info overrides it key by
+# key.
+storefront:
+  submission-info:
+    copyright: "2026 The App Fair Project"
+    contact-email: support@appfair.org
+    review-notes: |
+      Built with the Day framework and submitted from github.com/Games-Fair/Games-Fair.
+
+      Every game plays offline from the first launch. Tap a tile on the home screen to open a game full
+      screen; the X closes it and saves your progress.
+
+      No account, no network access, no advertising, and no purchases of any kind.
+
+  # The listing text (docs/store.md): the default locale's fields, then a table per other
+  # locale carrying what differs from them; the name and the URLs are set once here.
+  metadata:
+    name: "Games Fair"
+    subtitle: "Classic Puzzle & Arcade Games"
+    short: "Solitaire, Block Blast, Sudoku, 2048, Mines and more. Offline, no ads."
+    description: |-
+      Games Fair is a free, open-source collection of classic puzzle and arcade games, in one app that
+      never asks you for anything.
+
+      SOLITAIRE
+      Klondike, turning one card at a time or three. With Winnable Deals Only on, a solver plays every
+      deal through to a win before it reaches the table, and Hint shows a move on the way. Once every
+      card is face up, the rest fly home by themselves.
+
+      BLOCK BLAST
+      Drag pieces onto the board and fill rows and columns to clear them. Clear on back-to-back moves
+      for a combo, or empty the whole board for a 5,000-point bonus.
+
+      BREAKOUT
+      Clear the bricks. Power-ups widen the paddle, slow the ball, or let it smash straight through.
+      Levels get faster.
+
+      FALLING BLOCKS
+      The one you already know how to play. Lines clear, the level climbs, the pieces come quicker.
+
+      SUDOKU
+      Puzzles at several difficulties, with the number pad where your thumb already is.
+
+      2048
+      Slide the tiles, watch them merge, chase your best score. Reaching 2048 is not the end if you do
+      not want it to be.
+
+      CHARADES
+      Hold the phone to your forehead while your friends give clues, nod when you guess right, and tip
+      your head back to pass. Decks run from animals and movies to sayings and things to act out, and
+      the screen stays on for the whole round.
+
+      MINES
+      The classic sweeper. Your first tap is always safe, holding a square plants a flag, and a number
+      with all its flags opens the rest around it. Three board sizes, each shaped to fit your screen.
+
+      LANGUAGES
+
+      Menus, instructions and accessibility labels are in 13 languages. Charades has localized animal
+      and food decks in each of them, and twenty-one themed decks in English.
+
+      WHAT IT DOES NOT DO
+
+      No advertising. No purchases. No account. No network access at all — every game runs entirely on
+      your device. Your progress is saved when you leave a game and restored when you come back,
+      including if the phone puts the app to sleep mid-round.
+
+      Games Fair is published by the App Fair Project and is free software under the GNU Affero
+      General Public License, with an exception for distribution through the app stores. It is built
+      with the Day framework: one Rust codebase drawing itself with each platform's real native
+      widgets. github.com/Games-Fair/Games-Fair
+    keywords: ["solitaire", "cards", "block", "blast", "sudoku", "2048", "puzzle", "arcade", "classic", "offline", "no ads", "mines", "charades"]
+    release-notes: |-
+      Ten games in one app: Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines,
+      Charades, Reversi and Pipes.
+
+      Every screen is drawn with the platform's own native widgets. Games save and restore themselves
+      automatically, including mid-round, and the whole app runs offline, with no advertising, no
+      purchases and no account.
+    promo: "Classic games, offline, with no ads and nothing to buy."
+    marketing-url: "https://appfair.org"
+    support-url: "https://github.com/Games-Fair/Games-Fair/issues"
+    privacy-url: "https://appfair.org/privacy/"
+    ar:
+      subtitle: "ألعاب كلاسيكية بلا إعلانات"
+      short: "عشر ألعاب كلاسيكية: ورق وألغاز وأركيد. بلا إنترنت أو إعلانات."
+      description: |-
+        عشر ألعاب كلاسيكية في تطبيق واحد. العب بلا إنترنت أو إعلانات أو مشتريات أو حساب. تُحفظ ألعابك تلقائيًا لتتمكن من متابعتها لاحقًا.
+
+        سوليتير — كلوندايك بسحب ورقة أو ثلاث، مع تلميحات وخيار توزيعات تم التحقق من إمكانية حلها.
+        BLOCK BLAST — ضع المكعبات وأكمل الصفوف والأعمدة وحقق سلاسل متتالية.
+        BREAKOUT — ارتد بالكرة وحطّم الطوب واجمع المعززات.
+        SIRTET — أدر المكعبات الساقطة وأكمل الصفوف مع ازدياد السرعة.
+        سودوكو — اختر الصعوبة ودوّن الملاحظات واستخدم التلميحات واحفظ نقاط الرجوع.
+        2048 — حرّك البلاطات المتطابقة وادمجها. يمكنك المتابعة بعد بلوغ 2048.
+        خمن الكلمة — خمّن مع الأصدقاء باستخدام مجموعات كلمات ذات موضوعات مختلفة. استخدم الأزرار أو التحكم بالإمالة على الأجهزة المدعومة.
+        الألغام — اكشف الخانات الآمنة وحدّد الألغام بالأعلام. الحركة الأولى آمنة دائمًا.
+        ريفيرسي — اقلب أقراص خصمك. واجه الحاسوب أو شارك الجهاز مع صديق.
+        الأنابيب — أدر قطع الأنابيب لتوصيل الشبكة بأكملها.
+
+        القوائم والتعليمات وتسميات إمكانية الوصول متاحة بثلاث عشرة لغة. تتضمن لعبة خمن الكلمة مجموعات مترجمة للحيوانات والطعام؛ وتوفر المجموعة الإنجليزية موضوعات إضافية.
+
+        تطبيق مفتوح المصدر مبني بإطار Day وواجهة أصلية لكل منصة. الشفرة: github.com/Games-Fair/Games-Fair
+      keywords: ["سوليتير", "سودوكو", "2048", "تمثيل", "ألغام", "ريفيرسي", "أنابيب", "مكعبات", "ورق", "ألغاز", "بلا إنترنت"]
+      release-notes: |-
+        عشر ألعاب في تطبيق واحد: سوليتير، وBlock Blast، وBreakout، والمكعبات المتساقطة، وسودوكو، و2048، والألغام، وخمن الكلمة، وريفيرسي، والأنابيب.
+
+        كل شاشة مرسومة بعناصر الواجهة الأصلية للنظام. تُحفظ الألعاب وتُستأنف تلقائيًا، حتى في منتصف الجولة، ويعمل التطبيق كاملًا بلا إنترنت، وبلا إعلانات أو مشتريات أو حساب.
+      promo: "سوليتير وسودوكو و2048 وخمن الكلمة والمزيد: عشر ألعاب مع حفظ التقدم، بلا إعلانات أو مشتريات."
+    de:
+      subtitle: "Klassische Spiele ohne Werbung"
+      short: "Zehn Klassiker: Karten, Rätsel und Arcade. Offline und ohne Werbung."
+      description: |-
+        Zehn klassische Spiele in einer App. Spiele offline, ohne Werbung, Käufe oder Konto. Dein Spielstand wird automatisch gespeichert, damit du später weiterspielen kannst.
+
+        SOLITÄR — Klondike mit einer oder drei Karten pro Zug, Tipps und auf Wunsch nachweislich lösbaren Spielen.
+        BLOCK BLAST — Platziere Blöcke, vervollständige Reihen und Spalten und sammle Kombos.
+        BREAKOUT — Lass den Ball abprallen, zerstöre Steine und sammle Extras.
+        SIRTET — Drehe fallende Blöcke und fülle Reihen, während das Tempo steigt.
+        SUDOKU — Wähle den Schwierigkeitsgrad, mache Notizen, nutze Tipps und speichere Zwischenstände.
+        2048 — Verschiebe und verschmelze gleiche Kacheln. Spiele nach 2048 weiter.
+        SCHARADE — Rate mit Freunden anhand thematischer Kartenstapel. Nutze Tasten oder auf unterstützten Geräten die Neigungssteuerung.
+        MINEN — Decke sichere Felder auf und markiere Minen. Der erste Zug ist immer sicher.
+        REVERSI — Drehe gegnerische Steine um. Spiele gegen den Computer oder zu zweit an einem Gerät.
+        ROHRE — Drehe Rohrstücke, um das ganze Netz zu verbinden.
+
+        Menüs, Anleitungen und Beschriftungen für Bedienungshilfen in 13 Sprachen. Scharade enthält übersetzte Tier- und Essenskarten; die englische Sammlung bietet weitere Themen.
+
+        Quelloffen, mit dem Day-Framework und den nativen Oberflächen der Plattformen entwickelt. Quellcode: github.com/Games-Fair/Games-Fair
+      keywords: ["solitär", "sudoku", "2048", "scharade", "minensuche", "reversi", "rohre", "blöcke", "karten", "arcade", "offline"]
+      release-notes: |-
+        Zehn Spiele in einer App: Solitär, Block Blast, Breakout, fallende Blöcke, Sudoku, 2048, Minen,
+        Scharade, Reversi und Rohre.
+
+        Jeder Bildschirm wird mit den nativen Bedienelementen der Plattform gezeichnet. Spiele speichern
+        und laden sich automatisch, auch mitten in einer Runde, und die ganze App läuft offline, ohne
+        Werbung, ohne Käufe und ohne Konto.
+      promo: "Solitaire, Sudoku, 2048, Scharade und mehr: zehn Spiele mit gespeichertem Fortschritt, ohne Werbung und Käufe."
+    es:
+      subtitle: "Juegos clásicos sin anuncios"
+      short: "Diez clásicos: cartas, puzles y arcade. Sin conexión ni anuncios."
+      description: |-
+        Diez juegos clásicos en una sola aplicación. Juega sin conexión, anuncios, compras ni cuenta. Tus partidas se guardan automáticamente para que puedas retomarlas después.
+
+        SOLITARIO — Klondike con robo de una o tres cartas, pistas y opción de repartos comprobados como resolubles.
+        BLOCK BLAST — Coloca bloques, completa filas y columnas y encadena combos.
+        BREAKOUT — Haz rebotar la pelota, rompe ladrillos y recoge potenciadores.
+        SIRTET — Gira las piezas que caen y completa líneas mientras aumenta la velocidad.
+        SUDOKU — Elige la dificultad, toma notas, usa pistas y guarda puntos de control.
+        2048 — Desliza y fusiona fichas iguales. Sigue jugando después de alcanzar 2048.
+        CHARADAS — Adivina con amigos usando mazos temáticos. Usa botones o controles de inclinación en dispositivos compatibles.
+        MINAS — Descubre casillas seguras y marca minas. La primera jugada siempre es segura.
+        REVERSI — Voltea las fichas rivales. Juega contra el ordenador o comparte el dispositivo con un amigo.
+        TUBERÍAS — Gira las piezas para conectar toda la red.
+
+        Menús, instrucciones y etiquetas de accesibilidad en 13 idiomas. Charadas incluye mazos traducidos de animales y comida; la colección en inglés ofrece más temas.
+
+        Código abierto, creado con el framework Day y la interfaz nativa de cada plataforma. Código: github.com/Games-Fair/Games-Fair
+      keywords: ["solitario", "sudoku", "2048", "charadas", "buscaminas", "reversi", "tuberías", "bloques", "cartas", "arcade", "sin conexión"]
+      release-notes: |-
+        Diez juegos en una sola app: Solitario, Block Blast, Breakout, bloques que caen, Sudoku, 2048,
+        Minas, Charadas, Reversi y Tuberías.
+
+        Cada pantalla se dibuja con los controles nativos de la plataforma. Las partidas se guardan y se
+        restauran solas, incluso a mitad de ronda, y toda la app funciona sin conexión, sin publicidad, sin
+        compras y sin cuenta.
+      promo: "Solitario, Sudoku, 2048, Charadas y más: diez juegos con progreso guardado, sin anuncios ni compras."
+    fr:
+      subtitle: "Jeux classiques, sans pub"
+      short: "Dix jeux classiques : cartes, puzzles et arcade. Hors ligne, sans pub."
+      description: |-
+        Dix jeux classiques dans une seule application. Jouez hors ligne, sans publicité, achats ni compte. Vos parties sont sauvegardées automatiquement pour les reprendre plus tard.
+
+        SOLITAIRE — Klondike avec tirage d’une ou trois cartes, indices et option de distributions vérifiées gagnables.
+        BLOCK BLAST — Placez les blocs, complétez les lignes et les colonnes, puis enchaînez les combos.
+        BREAKOUT — Faites rebondir la balle, cassez les briques et récupérez des bonus.
+        SIRTET — Faites pivoter les blocs qui tombent et complétez des lignes à un rythme croissant.
+        SUDOKU — Choisissez la difficulté, prenez des notes, utilisez des indices et sauvegardez des points de contrôle.
+        2048 — Faites glisser et fusionnez les tuiles identiques. Continuez après avoir atteint 2048.
+        DEVINETTES — Devinez entre amis avec des paquets thématiques. Utilisez les boutons ou l’inclinaison sur les appareils compatibles.
+        DÉMINEUR — Révélez les cases sûres et marquez les mines. Le premier coup est toujours sûr.
+        REVERSI — Retournez les pions adverses. Affrontez l’ordinateur ou un ami sur le même appareil.
+        TUYAUX — Faites pivoter les tuyaux pour relier tout le réseau.
+
+        Menus, règles et libellés d’accessibilité en 13 langues. Devinettes propose des paquets traduits sur les animaux et les aliments ; la collection anglaise contient d’autres thèmes.
+
+        Application libre, créée avec le framework Day et l’interface native de chaque plateforme. Code source : github.com/Games-Fair/Games-Fair
+      keywords: ["solitaire", "sudoku", "2048", "charades", "démineur", "reversi", "tuyaux", "blocs", "cartes", "arcade", "hors ligne"]
+      release-notes: |-
+        Dix jeux dans une seule application : Solitaire, Block Blast, Breakout, blocs qui tombent, Sudoku,
+        2048, Démineur, Devinettes, Reversi et Tuyaux.
+
+        Chaque écran est dessiné avec les composants natifs de la plateforme. Les parties sont enregistrées
+        et restaurées automatiquement, même en cours de manche, et toute l'application fonctionne hors
+        ligne, sans publicité, sans achat et sans compte.
+      promo: "Solitaire, Sudoku, 2048, Devinettes et plus : dix jeux, une progression sauvegardée, sans publicité ni achats."
+    hi:
+      subtitle: "बिना विज्ञापन के क्लासिक गेम"
+      short: "दस क्लासिक गेम: ताश, पहेलियाँ और आर्केड। ऑफ़लाइन, बिना विज्ञापन।"
+      description: |-
+        एक ऐप में दस क्लासिक गेम। इंटरनेट, विज्ञापन, खरीदारी या खाते के बिना खेलें। गेम अपने-आप सहेजे जाते हैं ताकि आप बाद में वहीं से जारी रख सकें।
+
+        सॉलिटेयर — एक या तीन पत्ते खींचने वाला क्लोंडाइक। संकेत और केवल हल की जा सकने वाली सत्यापित बाज़ियों का विकल्प।
+        BLOCK BLAST — ब्लॉक रखें, पंक्तियाँ और स्तंभ भरें और कॉम्बो बनाएँ।
+        BREAKOUT — गेंद उछालें, ईंटें तोड़ें और पावर-अप इकट्ठा करें।
+        SIRTET — गिरते ब्लॉक घुमाएँ और बढ़ती रफ़्तार के साथ पंक्तियाँ पूरी करें।
+        सुडोकू — कठिनाई चुनें, नोट बनाएँ, संकेत लें और चेकपॉइंट सहेजें।
+        2048 — एक जैसी टाइलों को खिसकाकर जोड़ें। 2048 तक पहुँचने के बाद भी खेलते रहें।
+        शब्द पहचानो — विषयों पर आधारित शब्द समूहों से दोस्तों के साथ अनुमान लगाएँ। बटन या समर्थित उपकरणों पर झुकाव नियंत्रण इस्तेमाल करें।
+        माइनस्वीपर — सुरक्षित खाने खोलें और बारूदी सुरंगों पर झंडा लगाएँ। पहली चाल हमेशा सुरक्षित होती है।
+        रिवर्सी — विरोधी की गोटियाँ पलटें। कंप्यूटर के ख़िलाफ़ खेलें या दोस्त के साथ एक ही उपकरण पर खेलें।
+        पाइप — पाइप की टाइलें घुमाकर पूरे जाल को जोड़ें।
+
+        मेनू, निर्देश और सुलभता लेबल 13 भाषाओं में उपलब्ध हैं। शब्द पहचानो में जानवरों और खाने के अनुवादित समूह हैं; अंग्रेज़ी संग्रह में अतिरिक्त विषय मिलते हैं।
+
+        खुला स्रोत ऐप, Day फ़्रेमवर्क और हर प्लेटफ़ॉर्म के मूल इंटरफ़ेस से बना है। स्रोत: github.com/Games-Fair/Games-Fair
+      keywords: ["सॉलिटेयर", "सुडोकू", "2048", "अभिनय", "माइनस्वीपर", "रिवर्सी", "पाइप", "ब्लॉक", "ताश", "पहेली", "ऑफ़लाइन"]
+      release-notes: |-
+        एक ही ऐप में दस खेल: सॉलिटेयर, Block Blast, Breakout, गिरते ब्लॉक, सुडोकू, 2048, माइनस्वीपर, शब्द पहचानो, रिवर्सी और पाइप।
+
+        हर स्क्रीन प्लेटफ़ॉर्म के अपने नेटिव कंट्रोल से बनी है। खेल अपने आप सहेजे और बहाल होते हैं, राउंड के बीच में भी, और पूरा ऐप ऑफ़लाइन चलता है — बिना विज्ञापन, बिना खरीदारी और बिना खाते के।
+      promo: "सॉलिटेयर, सुडोकू, 2048, शब्द पहचानो और बहुत कुछ: दस गेम, अपने-आप सहेजी गई प्रगति, बिना विज्ञापन या खरीदारी।"
+    id:
+      subtitle: "Gim klasik tanpa iklan"
+      short: "Sepuluh gim klasik: kartu, teka-teki, dan arkade. Luring, tanpa iklan."
+      description: |-
+        Sepuluh gim klasik dalam satu aplikasi. Mainkan secara luring tanpa iklan, pembelian, atau akun. Permainan disimpan otomatis agar bisa dilanjutkan nanti.
+
+        SOLITAIRE — Klondike dengan tarikan satu atau tiga kartu, petunjuk, dan pilihan susunan kartu yang sudah dipastikan dapat diselesaikan.
+        BLOCK BLAST — Letakkan balok, penuhi baris dan kolom, lalu rangkai kombo.
+        BREAKOUT — Pantulkan bola, hancurkan bata, dan kumpulkan penguat.
+        SIRTET — Putar balok yang jatuh dan penuhi baris saat permainan makin cepat.
+        SUDOKU — Pilih tingkat kesulitan, buat catatan, gunakan petunjuk, dan simpan titik pemulihan.
+        2048 — Geser dan gabungkan ubin yang sama. Terus mainkan setelah mencapai 2048.
+        TEBAK KATA — Menebak bersama teman dengan kumpulan kata bertema. Gunakan tombol atau kontrol kemiringan pada perangkat yang mendukungnya.
+        RANJAU — Buka petak aman dan tandai ranjau. Langkah pertama selalu aman.
+        REVERSI — Balik keping lawan. Lawan komputer atau bermain bersama teman di satu perangkat.
+        PIPA — Putar potongan pipa untuk menghubungkan seluruh jaringan.
+
+        Menu, petunjuk, dan label aksesibilitas tersedia dalam 13 bahasa. Tebak Kata memiliki kumpulan hewan dan makanan yang diterjemahkan; koleksi bahasa Inggris menawarkan tema tambahan.
+
+        Sumber terbuka, dibuat dengan kerangka kerja Day dan antarmuka asli tiap platform. Kode: github.com/Games-Fair/Games-Fair
+      keywords: ["solitaire", "sudoku", "2048", "tebak kata", "ranjau", "reversi", "pipa", "balok", "kartu", "arkade", "luring"]
+      release-notes: |-
+        Sepuluh permainan dalam satu aplikasi: Solitaire, Block Blast, Breakout, balok jatuh, Sudoku,
+        2048, Ranjau, Tebak Kata, Reversi, dan Pipa.
+
+        Setiap layar digambar dengan komponen asli tiap platform. Permainan tersimpan dan berlanjut
+        sendiri, termasuk di tengah ronde, dan seluruh aplikasi berjalan luring, tanpa iklan, tanpa
+        pembelian, dan tanpa akun.
+      promo: "Solitaire, Sudoku, 2048, Tebak Kata, dan lainnya: sepuluh gim dengan progres tersimpan, tanpa iklan atau pembelian."
+    it:
+      subtitle: "Classici senza pubblicità"
+      short: "Dieci classici: carte, rompicapi e arcade. Offline e senza pubblicità."
+      description: |-
+        Dieci giochi classici in un’unica app. Gioca offline, senza pubblicità, acquisti o account. Le partite si salvano automaticamente, così puoi riprenderle in seguito.
+
+        SOLITARIO — Klondike con pesca di una o tre carte, suggerimenti e un’opzione per distribuzioni verificate come risolvibili.
+        BLOCK BLAST — Posiziona i blocchi, completa righe e colonne e crea combo.
+        BREAKOUT — Fai rimbalzare la pallina, rompi i mattoni e raccogli potenziamenti.
+        SIRTET — Ruota i blocchi in caduta e completa le linee mentre il ritmo aumenta.
+        SUDOKU — Scegli la difficoltà, prendi appunti, usa suggerimenti e salva punti di controllo.
+        2048 — Scorri e unisci tessere uguali. Continua anche dopo aver raggiunto 2048.
+        MIMI — Indovina con gli amici usando mazzi tematici. Usa i pulsanti o, sui dispositivi compatibili, i controlli di inclinazione.
+        CAMPO MINATO — Scopri le caselle sicure e segna le mine. La prima mossa è sempre sicura.
+        REVERSI — Capovolgi le pedine avversarie. Sfida il computer o un amico sullo stesso dispositivo.
+        TUBI — Ruota i tubi per collegare tutta la rete.
+
+        Menu, istruzioni ed etichette di accessibilità in 13 lingue. Mimi include mazzi tradotti su animali e cibo; la raccolta inglese offre altri temi.
+
+        App open source, realizzata con il framework Day e l’interfaccia nativa di ogni piattaforma. Codice: github.com/Games-Fair/Games-Fair
+      keywords: ["solitario", "sudoku", "2048", "sciarade", "campo minato", "reversi", "tubi", "blocchi", "carte", "arcade", "offline"]
+      release-notes: |-
+        Dieci giochi in un'unica app: Solitario, Block Blast, Breakout, blocchi che cadono, Sudoku, 2048,
+        Campo minato, Mimi, Reversi e Tubi.
+
+        Ogni schermata è disegnata con i controlli nativi della piattaforma. Le partite si salvano e si
+        ripristinano da sole, anche a metà turno, e tutta l'app funziona offline, senza pubblicità, senza
+        acquisti e senza account.
+      promo: "Solitario, Sudoku, 2048, Mimi e altro: dieci giochi con salvataggio dei progressi, senza pubblicità né acquisti."
+    ja:
+      subtitle: "広告なしの定番ゲーム集"
+      short: "カード、パズル、アーケードなど10種類の定番ゲーム。オフライン対応、広告なし。"
+      description: |-
+        10種類の定番ゲームをひとつのアプリで。広告、購入、アカウント登録なしでオフラインでも遊べます。進行状況は自動保存され、いつでも続きを楽しめます。
+
+        ソリティア — 1枚引きと3枚引きに対応したクロンダイク。ヒント機能と、解けることを検証した配札だけを選ぶ設定があります。
+        BLOCK BLAST — ブロックを置いて行や列をそろえ、コンボをつなげましょう。
+        BREAKOUT — ボールを跳ね返してレンガを壊し、パワーアップを集めましょう。
+        SIRTET — 落ちてくるブロックを回転させて列を消します。徐々にスピードが上がります。
+        数独 — 難易度を選び、メモやヒント、チェックポイントを活用できます。
+        2048 — 同じ数字のタイルをスライドして合体。2048達成後も続けられます。
+        ジェスチャーゲーム — テーマ別のお題を友達と当てましょう。ボタン操作のほか、対応端末では傾き操作も使えます。
+        マインスイーパー — 安全なマスを開き、地雷に旗を立てます。最初の一手は必ず安全です。
+        リバーシ — 相手の石を裏返しましょう。コンピューター対戦と、1台の端末での友達との対戦に対応。
+        パイプ — パイプを回転させて、ネットワーク全体をつなげましょう。
+
+        メニュー、遊び方、アクセシビリティ用ラベルは13言語に対応。ジェスチャーゲームには翻訳済みの動物と食べ物のお題があり、英語版にはさらに多くのテーマがあります。
+
+        Dayフレームワークと各プラットフォームのネイティブUIで作られたオープンソースアプリです。ソースコード：github.com/Games-Fair/Games-Fair
+      keywords: ["ソリティア", "数独", "2048", "ジェスチャー", "マインスイーパー", "リバーシ", "パイプ", "ブロック", "カード", "パズル", "オフライン"]
+      release-notes: |-
+        10種類のゲームをひとつのアプリで。ソリティア、Block Blast、Breakout、落ちものブロック、数独、2048、マインスイーパー、ジェスチャーゲーム、リバーシ、パイプ。
+
+        画面はすべて各プラットフォーム標準のUI部品で描いています。ゲームは途中でも自動で保存・再開され、アプリ全体がオフラインで動作します。広告も、購入も、アカウントもありません。
+      promo: "ソリティア、数独、2048、ジェスチャーゲームなど10種類をひとつのアプリに。進行状況を自動保存。広告もアプリ内購入もありません。"
+    ko:
+      subtitle: "광고 없는 클래식 게임"
+      short: "카드, 퍼즐, 아케이드 등 클래식 게임 10종. 광고 없이 오프라인으로 즐기세요."
+      description: |-
+        클래식 게임 10종을 하나의 앱에 담았습니다. 광고, 구매, 계정 없이 오프라인으로 플레이하세요. 게임이 자동으로 저장되어 나중에 이어서 즐길 수 있습니다.
+
+        솔리테어 — 한 장 또는 세 장씩 뽑는 클론다이크. 힌트와 해결 가능 여부를 검증한 패만 사용하는 옵션이 있습니다.
+        BLOCK BLAST — 블록을 놓고 행과 열을 채워 콤보를 이어 가세요.
+        BREAKOUT — 공을 튕겨 벽돌을 부수고 아이템을 모으세요.
+        SIRTET — 떨어지는 블록을 회전해 줄을 완성하세요. 속도가 점점 빨라집니다.
+        스도쿠 — 난이도를 고르고 메모, 힌트, 체크포인트를 활용하세요.
+        2048 — 같은 타일을 밀어서 합치세요. 2048을 만든 뒤에도 계속할 수 있습니다.
+        몸으로 말해요 — 주제별 낱말 묶음으로 친구와 정답을 맞혀 보세요. 버튼이나 지원 기기의 기울이기 조작을 사용할 수 있습니다.
+        지뢰찾기 — 안전한 칸을 열고 지뢰에 깃발을 꽂으세요. 첫 수는 항상 안전합니다.
+        리버시 — 상대 돌을 뒤집으세요. 컴퓨터와 대결하거나 친구와 한 기기를 나눠 쓰며 플레이하세요.
+        파이프 — 파이프를 회전해 전체 연결망을 이으세요.
+
+        메뉴, 게임 방법, 접근성 레이블은 13개 언어를 지원합니다. 몸으로 말해요에는 번역된 동물과 음식 낱말 묶음이 있으며, 영어 모음에는 다른 주제도 있습니다.
+
+        Day 프레임워크와 각 플랫폼의 네이티브 UI로 만든 오픈 소스 앱입니다. 소스 코드: github.com/Games-Fair/Games-Fair
+      keywords: ["솔리테어", "스도쿠", "2048", "몸으로말해요", "지뢰찾기", "리버시", "파이프", "블록", "카드", "퍼즐", "오프라인"]
+      release-notes: |-
+        앱 하나에 게임 열 가지: 솔리테어, Block Blast, Breakout, 떨어지는 블록, 스도쿠, 2048, 지뢰찾기, 몸으로 말해요, 리버시, 파이프.
+
+        모든 화면은 각 플랫폼의 기본 UI 요소로 그립니다. 게임은 라운드 중간에도 자동으로 저장되고 이어서 할 수 있으며, 앱 전체가 오프라인으로 동작합니다. 광고도, 결제도, 계정도 없습니다.
+      promo: "솔리테어, 스도쿠, 2048, 몸으로 말해요 등 게임 10종을 한 앱에서! 진행 상황 자동 저장, 광고와 구매 없음."
+    pt-BR:
+      subtitle: "Jogos clássicos sem anúncios"
+      short: "Dez clássicos: cartas, quebra-cabeças e arcade. Offline e sem anúncios."
+      description: |-
+        Dez jogos clássicos em um só aplicativo. Jogue offline, sem anúncios, compras ou conta. Suas partidas são salvas automaticamente para você continuar depois.
+
+        PACIÊNCIA — Klondike comprando uma ou três cartas, com dicas e opção de partidas verificadas como solucionáveis.
+        BLOCK BLAST — Posicione blocos, complete linhas e colunas e faça combos.
+        BREAKOUT — Rebata a bola, quebre tijolos e pegue melhorias.
+        SIRTET — Gire os blocos que caem e complete linhas conforme o ritmo aumenta.
+        SUDOKU — Escolha a dificuldade, faça anotações, use dicas e salve pontos de controle.
+        2048 — Deslize e combine peças iguais. Continue jogando depois de chegar a 2048.
+        MÍMICA — Adivinhe com amigos usando baralhos temáticos. Use botões ou controles de inclinação em dispositivos compatíveis.
+        CAMPO MINADO — Revele casas seguras e marque minas. A primeira jogada é sempre segura.
+        REVERSI — Vire as peças do adversário. Jogue contra o computador ou divida o aparelho com um amigo.
+        CANOS — Gire os canos para conectar toda a rede.
+
+        Menus, instruções e rótulos de acessibilidade em 13 idiomas. Mímica inclui baralhos traduzidos de animais e comida; a coleção em inglês oferece outros temas.
+
+        Código aberto, feito com o framework Day e a interface nativa de cada plataforma. Código: github.com/Games-Fair/Games-Fair
+      keywords: ["paciência", "sudoku", "2048", "mímica", "campo minado", "reversi", "canos", "blocos", "cartas", "arcade", "offline"]
+      release-notes: |-
+        Dez jogos em um só app: Paciência, Block Blast, Breakout, blocos que caem, Sudoku, 2048, Campo
+        Minado, Mímica, Reversi e Canos.
+
+        Cada tela é desenhada com os controles nativos da plataforma. Os jogos salvam e retomam sozinhos,
+        inclusive no meio de uma rodada, e o app inteiro funciona offline, sem anúncios, sem compras e sem
+        conta.
+      promo: "Paciência, Sudoku, 2048, Mímica e mais: dez jogos com progresso salvo, sem anúncios nem compras."
+    ru:
+      subtitle: "Классические игры без рекламы"
+      short: "Десять классических игр: карты, головоломки и аркады. Офлайн, без рекламы."
+      description: |-
+        Десять классических игр в одном приложении. Играйте без интернета, рекламы, покупок и регистрации. Партии сохраняются автоматически, чтобы вы могли продолжить позже.
+
+        ПАСЬЯНС — Косынка со сдачей по одной или три карты, подсказками и режимом только проверенных решаемых раскладов.
+        BLOCK BLAST — Размещайте блоки, заполняйте ряды и столбцы и собирайте комбо.
+        BREAKOUT — Отбивайте мяч, разбивайте кирпичи и собирайте усиления.
+        SIRTET — Вращайте падающие блоки и заполняйте линии при возрастающей скорости.
+        СУДОКУ — Выбирайте сложность, делайте заметки, используйте подсказки и сохраняйте контрольные точки.
+        2048 — Сдвигайте и объединяйте одинаковые плитки. Продолжайте играть после достижения 2048.
+        КРОКОДИЛ — Угадывайте слова с друзьями по тематическим колодам. Используйте кнопки или наклоны на поддерживаемых устройствах.
+        САПЁР — Открывайте безопасные клетки и отмечайте мины. Первый ход всегда безопасен.
+        РЕВЕРСИ — Переворачивайте фишки соперника. Играйте с компьютером или другом на одном устройстве.
+        ТРУБЫ — Поворачивайте трубы, чтобы соединить всю сеть.
+
+        Меню, правила и подписи для специальных возможностей доступны на 13 языках. В игре «Крокодил» переведены колоды о животных и еде; в английской коллекции есть дополнительные темы.
+
+        Открытый исходный код, фреймворк Day и родной интерфейс каждой платформы. Код: github.com/Games-Fair/Games-Fair
+      keywords: ["пасьянс", "судоку", "2048", "«Крокодил»", "сапёр", "реверси", "трубы", "блоки", "карты", "аркада", "офлайн"]
+      release-notes: |-
+        Десять игр в одном приложении: Пасьянс, Block Blast, Breakout, падающие блоки, Судоку, 2048,
+        Сапёр, Крокодил, Реверси и Трубы.
+
+        Каждый экран нарисован системными элементами самой платформы. Игры сохраняются и восстанавливаются
+        сами, в том числе посреди партии, а всё приложение работает офлайн — без рекламы, без покупок и без
+        аккаунта.
+      promo: "Пасьянс, судоку, 2048, «Крокодил» и другие: десять игр с сохранением прогресса, без рекламы и покупок."
+    zh-CN:
+      subtitle: "无广告的经典游戏"
+      short: "十款经典游戏：纸牌、益智和街机。离线畅玩，无广告。"
+      description: |-
+        一个应用，十款经典游戏。无需联网、广告、购买或注册账号，即可畅玩。游戏进度自动保存，随时继续。
+
+        纸牌接龙 — 支持一次翻一张或三张的克朗代克纸牌。提供提示，还可选择仅玩经过验证可解的牌局。
+        BLOCK BLAST — 放置方块，填满行列并连续消除，获得连击。
+        BREAKOUT — 反弹小球、击碎砖块并收集强化道具。
+        SIRTET — 旋转下落的方块并填满整行，挑战不断加快的节奏。
+        数独 — 选择难度，使用笔记和提示，保存检查点。
+        2048 — 滑动并合并相同的方块。达到2048后仍可继续。
+        你说我猜 — 与朋友一起猜主题词卡。使用按钮操作，也可在支持的设备上倾斜操作。
+        扫雷 — 翻开安全格并标记地雷。第一步始终安全。
+        黑白棋 — 翻转对手的棋子。可与电脑对战，也可和朋友共用一台设备。
+        水管 — 旋转水管方块，连接整个管网。
+
+        菜单、玩法说明和无障碍标签支持13种语言。你说我猜包含已翻译的动物和食物词卡，英语词卡还提供更多主题。
+
+        开源应用，使用Day框架及各平台原生界面构建。源代码：github.com/Games-Fair/Games-Fair
+      keywords: ["纸牌", "数独", "2048", "你说我猜", "扫雷", "黑白棋", "水管", "方块", "街机", "益智", "离线"]
+      release-notes: |-
+        十款游戏，一个应用：纸牌接龙、Block Blast、Breakout、方块下落、数独、2048、扫雷、你说我猜、黑白棋、水管。
+
+        每个界面都用各平台自己的原生控件绘制。游戏会自动保存和恢复，中途退出也不例外；整个应用离线运行，没有广告、没有内购、无需账号。
+      promo: "纸牌、数独、2048、你说我猜等十款游戏，尽在一个应用中。自动保存进度，无广告，无内购。"
+
+  ios-uikit:
+    apple-app-store:
+      submission-info:
+        apple-category: GAMES
+    # Which captures the listings show, in order (docs/store.md): the names of `screenshot:`
+    # steps in dayscript/games.yaml. One list per target serves the store's listing and the
+    # website's page.
+    screenshots:
+      default: [home, blockblast, solitaire, sudoku, mines, g2048, breakout-a, charades]
+
+  android-mdc:
+    screenshots:
+      default: [home, blockblast, solitaire, sudoku, mines, g2048, breakout-a, charades]

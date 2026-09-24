@@ -385,3 +385,42 @@ pp_help_keys = On a keyboard, use the arrows to select a tile, Space or Enter to
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Charades reads the phone's tilt to score a nod.
+
+## Match Three
+nav_matchthree = Match Three
+mt_moves = Moves left
+mt_goal = Target
+mt_classic = Classic
+mt_corners = Corners
+mt_bridges = Bridges
+mt_diamond = Diamond
+mt_windows = Windows
+mt_mixed = Mixed
+mt_goal_score = Reach the target score
+mt_goal_collect = Red circles: { $berries } / { $target } · Reach the target score
+mt_goal_frost = Layers left: { $frost } · Reach the target score
+mt_goal_final = Circles: { $berries } / { $target } · Layers: { $frost } · Reach the target
+mt_swap_hint = Swap neighbors to match three or more
+mt_shuffling = No moves available. Reshuffling…
+mt_cascade = Cascade ×{ $n }
+mt_hint = Hint
+mt_levels = Levels
+mt_map_intro = Complete each level to unlock the next.
+mt_locked = Locked
+mt_retry = Replay level
+mt_reduced = Reduce motion
+mt_win = Level complete
+mt_complete = All levels complete
+mt_out = Out of moves
+mt_win_detail = Your score is saved. Continue when you're ready.
+mt_retry_detail = Try again to complete the remaining objectives.
+mt_next = Next level
+mt_board_a11y = Match Three board. Arrows move the cursor; Enter selects or swaps; H shows a legal swap.
+mt_help_swap = Hold and drag a gem to preview a swap. Try different neighbors, then lift to commit. Drag back to the starting cell or off the board to cancel. You can also tap two neighbors. Match three or more of the same shape; cascades increase your score. Swaps that make no match cost nothing.
+mt_help_special_title = Special pieces
+mt_help_special = Match four for a striped piece that clears its row or column. A T or L creates a burst piece that clears a 3 × 3 area. Match five in a line for a wildcard: swap it with any piece to clear that color.
+mt_help_combo = Combine two specials for a larger clear. Two stripes clear a cross; a burst combination clears three rows and columns. A wildcard plus a special turns every piece of that color into specials. Two wildcards clear the whole board.
+mt_help_goals = Reach the score target before your moves run out. Later levels also require collecting red circles or clearing layers beneath pieces. Double layers need two hits. Holes divide the board into separate falling lanes. Finish with 10 moves for three stars, or 5 moves for two. Completed levels can be replayed.
+mt_help_keys = Use arrows and Enter to select and swap. H highlights a legal swap; Enter plays it. Pause opens settings, rules, and replay. Sounds, vibrations, and reduced motion are adjustable. Your board and progress save automatically.
+mt_complete_detail = You can replay any level to improve your score and star rating.
+mt_matching = Matching…

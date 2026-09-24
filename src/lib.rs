@@ -40,6 +40,7 @@ day::routes! {
         BlockBlast => "blockblast",
         Breakout => "breakout",
         Charades => "charades",
+        MatchThree => "matchthree",
         Mines => "mines",
         Reversi => "reversi",
         Pipes => "pipes",
@@ -62,6 +63,7 @@ fn game_background(section: Section) -> Color {
         Section::BlockBlast => blockblast::SURFACE,
         Section::Breakout => breakout::SURFACE,
         Section::Charades => charades::SURFACE,
+        Section::MatchThree => matchthree::SURFACE,
         Section::Mines => mines::SURFACE,
         Section::Reversi => reversi::SURFACE,
         Section::Pipes => pipes::SURFACE,
@@ -192,6 +194,13 @@ fn home_page(open: Signal<Option<Section>>) -> impl Piece {
                     mines::mines_preview(),
                     "tile-mines",
                 ),
+                tile(
+                    open,
+                    Section::MatchThree,
+                    res::str::nav_matchthree(),
+                    matchthree::matchthree_preview(),
+                    "tile-matchthree",
+                ),
             ))
             .spacing(16.0)
             .fit(RowFit::WrapColumns { run_spacing: 16.0 }),
@@ -218,6 +227,7 @@ fn game_cover(open: Signal<Option<Section>>) -> impl Piece {
             Section::BlockBlast => blockblast::blockblast_page(),
             Section::Breakout => breakout::breakout_page(),
             Section::Charades => charades::charades_page(),
+            Section::MatchThree => matchthree::matchthree_page(),
             Section::Mines => mines::mines_page(),
             Section::Reversi => reversi::reversi_page(),
             Section::Pipes => pipes::pipes_page(),

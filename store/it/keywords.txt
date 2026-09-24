@@ -1,1 +1,0 @@
-solitario,sudoku,2048,sciarade,campo minato,reversi,tubi,blocchi,carte,arcade,offline

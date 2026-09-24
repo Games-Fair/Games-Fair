@@ -1,6 +1,0 @@
-Ten games in one app: Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines,
-Charades, Reversi and Pipes.
-
-Every screen is drawn with the platform's own native widgets. Games save and restore themselves
-automatically, including mid-round, and the whole app runs offline, with no advertising, no
-purchases and no account.

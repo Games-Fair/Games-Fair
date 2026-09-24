@@ -1,7 +1,7 @@
 # Games Fair
 
-Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Reversi, and
-Pipes in one app. Built with
+Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Reversi, Pipes, and
+Match Three in one app. Built with
 [Day](https://daybrite.dev) in one Rust codebase and rendered with the platform's own widgets on
 iPhone, Android, HarmonyOS, macOS, Windows, Linux, and the web. Every game runs entirely on the
 device, and your progress is saved when you leave a game and restored when you come back.
@@ -65,6 +65,14 @@ the App Fair publishes this app under are separate, and live in `Day-appfair.tom
   use Correct and Pass buttons. The word lists live in `games/charades/words/`, one folder per
   language; its README explains the format and how another language gets its own lists.
 
+- **Match Three.** Six levels of shape matching with animated swaps, clears, and cascades.
+  Hold and drag to preview neighboring swaps; lift to commit or drag home to cancel. You can
+  also tap neighbors. Match four for stripes, T/L shapes for area bursts, and five for a
+  wildcard. Combine specials, collect red circles, and clear single/double layers on boards
+  with different layouts and falling lanes. Earn up to three stars per level; the current
+  board and progress save automatically. Original sound cues accompany haptic patterns,
+  with separate sound, vibration, and reduced-motion settings.
+
 Every game has the same shell: a pause button, a menu to resume, start over, open the
 settings, or reread the rules, and a results card with your score or the outcome. The rules open by
 themselves the first time you play a game. Each game plays sound effects timed to its haptics,
@@ -106,6 +114,8 @@ To build from plain cargo, pass the backend feature yourself, for example
 game, `sudoku.yaml` walks every Sudoku surface, `blockblast.yaml` places Block Blast pieces
 from the keyboard and walks its menus, `reversi.yaml` checks captures, solo play, menus, and save restoration;
 `pipes.yaml` checks locks, saves, all board sizes, and a complete seeded solution;
+`matchthree.yaml` checks invalid swaps, a win, progression, settings, and save restoration;
+`matchthree-levels.yaml` completes all six levels (both use `--env DAY_GAMES_SEED=15 --locale en`);
 `solitaire.yaml` plays a proven-winnable deal from the
 keyboard, and `bk.yaml` and `games.yaml` sweep gameplay for screenshots:
 
@@ -128,6 +138,11 @@ day launch -p ios-uikit --script dayscript/games.yaml
   build through.
 
 `day lint` checks routes, element ids, and locale coverage.
+
+For a native Match Three held-drag check, launch an Android emulator with
+`--env DAY_GAMES_SEED=15 --locale en`, then run
+`python3 scripts/matchthree-touch-test.py SERIAL`. This checks reversible previews while a
+finger is held, commit on release, cancellation, and ordinary taps.
 
 For Android cover hit testing, launch on a 360×640dp emulator with
 `day launch -p android-mdc --android-device SERIAL --env DAY_GAMES_SEED=15 --keep-alive`,

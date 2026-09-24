@@ -1,6 +1,0 @@
-Dez jogos em um só app: Paciência, Block Blast, Breakout, blocos que caem, Sudoku, 2048, Campo
-Minado, Mímica, Reversi e Canos.
-
-Cada tela é desenhada com os controles nativos da plataforma. Os jogos salvam e retomam sozinhos,
-inclusive no meio de uma rodada, e o app inteiro funciona offline, sem anúncios, sem compras e sem
-conta.

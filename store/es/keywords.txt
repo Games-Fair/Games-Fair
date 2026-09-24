@@ -1,1 +1,0 @@
-solitario,sudoku,2048,charadas,buscaminas,reversi,tuberías,bloques,cartas,arcade,sin conexión

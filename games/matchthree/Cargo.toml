@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+[package]
+name = "matchthree"
+version.workspace = true
+edition = "2024"
+license = "AGPL-3.0-only WITH App-Fair-Distribution-Exception"
+[dependencies]
+day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }
+gamekit = { path = "../../gamekit" }
+serde = { version = "1", features = ["derive"] }
+[dev-dependencies]
+serde_json = "1"

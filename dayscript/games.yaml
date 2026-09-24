@@ -4,7 +4,7 @@
 name: games
 flow:
   - wait_for: { id: home }
-  - screenshot: { store: 1, name: home, title: Home, caption: "Every game is one tap away, and every tile is drawn by the game it opens.", source: src/lib.rs }
+  - screenshot: { name: home, title: Home, caption: "Every game is one tap away, and every tile is drawn by the game it opens.", source: src/lib.rs }
   # Every game opens its rules by itself the first time it is played; opening each once
   # first makes the sweep below the same from any saved state.
   - navigate: { route: breakout }
@@ -87,7 +87,7 @@ flow:
   - screenshot: blockblast-lift
   - key: { id: bb-canvas, key: "2" }
   - pause: { secs: 0.35 }
-  - screenshot: { store: 2, name: blockblast, title: Block Blast, caption: "Drag pieces onto the board; full rows and columns clear, and back-to-back clears build a combo.", source: games/blockblast/src/lib.rs }
+  - screenshot: { name: blockblast, title: Block Blast, caption: "Drag pieces onto the board; full rows and columns clear, and back-to-back clears build a combo.", source: games/blockblast/src/lib.rs }
   - nav_back: {}
   - pause: { secs: 0.6 }
   # Solitaire: a fresh Turn One deal, proven winnable before it is dealt, and 9 sending its aces
@@ -106,14 +106,14 @@ flow:
   - pause: { secs: 1.0 }
   - key: { id: sol-canvas, key: "9" }
   - pause: { secs: 1.0 }
-  - screenshot: { store: 3, name: solitaire, title: Solitaire, caption: "Klondike, one card at a time or three; with Winnable Deals Only on, a solver proves every deal before it reaches the table.", source: games/solitaire/src/lib.rs }
+  - screenshot: { name: solitaire, title: Solitaire, caption: "Klondike, one card at a time or three; with Winnable Deals Only on, a solver proves every deal before it reaches the table.", source: games/solitaire/src/lib.rs }
   - nav_back: {}
   - pause: { secs: 0.6 }
   # Charades: the decks, then a card from a round started by hand (dayscript/charades.yaml
   # explains why tilting goes off first).
   - navigate: { route: charades }
   - pause: { secs: 0.6 }
-  - screenshot: { store: 8, name: charades, title: Charades, caption: "Hold the phone to your forehead, let your friends give clues, and nod when you guess right.", source: games/charades/src/lib.rs }
+  - screenshot: { name: charades, title: Charades, caption: "Hold the phone to your forehead, let your friends give clues, and nod when you guess right.", source: games/charades/src/lib.rs }
   - tap: { id: ch-settings }
   - pause: { secs: 0.4 }
   - toggle: { id: ch-tilt, value: false }
@@ -140,14 +140,14 @@ flow:
   - key: { id: mi-board, key: "ArrowDown" }
   - key: { id: mi-board, key: " " }
   - pause: { secs: 0.6 }
-  - screenshot: { store: 5, name: mines, title: Mines, caption: "The classic sweeper: your first tap is always safe, hold a square to flag it, and the board turns with the window.", source: games/mines/src/lib.rs }
+  - screenshot: { name: mines, title: Mines, caption: "The classic sweeper: your first tap is always safe, hold a square to flag it, and the board turns with the window.", source: games/mines/src/lib.rs }
   - nav_back: {}
   - pause: { secs: 0.6 }
   - navigate: { route: breakout }
   - pause: { secs: 0.6 }
   - tap: { id: bk-canvas }
   - pause: { secs: 0.9 }
-  - screenshot: { store: 7, name: breakout-a, title: Breakout, caption: "The paddle glides under your finger or pointer; combos, power-ups, and armored bricks follow.", source: games/breakout/src/lib.rs }
+  - screenshot: { name: breakout-a, title: Breakout, caption: "The paddle glides under your finger or pointer; combos, power-ups, and armored bricks follow.", source: games/breakout/src/lib.rs }
   - pause: { secs: 0.7 }
   - screenshot: breakout-b
   - nav_back: {}
@@ -164,7 +164,7 @@ flow:
   - pause: { secs: 0.6 }
   - navigate: { route: twentyfortyeight }
   - pause: { secs: 0.6 }
-  - screenshot: { store: 6, name: g2048, title: "2048", caption: "Slide, merge, and chase your best score.", source: games/twentyfortyeight/src/lib.rs }
+  - screenshot: { name: g2048, title: "2048", caption: "Slide, merge, and chase your best score.", source: games/twentyfortyeight/src/lib.rs }
   # New Game asks for the rules; Easy adds the undo button beside pause.
   - tap: { id: tf-pause }
   - pause: { secs: 0.4 }
@@ -187,7 +187,7 @@ flow:
   - tap: { id: su-cell-40 }
   - tap: { id: su-key-5 }
   - pause: { secs: 0.4 }
-  - screenshot: { store: 4, name: sudoku, title: Sudoku, caption: "Pencil marks, a checkpoint you can commit or revert, and a best time per difficulty.", source: games/sudoku/src/lib.rs }
+  - screenshot: { name: sudoku, title: Sudoku, caption: "Pencil marks, a checkpoint you can commit or revert, and a best time per difficulty.", source: games/sudoku/src/lib.rs }
   - nav_back: {}
 
   - navigate: { route: reversi }

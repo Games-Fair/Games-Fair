@@ -53,7 +53,8 @@ jobs:
       themes: light dark
       # Android captures on a 9:16 phone rather than the default 20:9 one: Google Play takes a
       # screenshot whose long side is at most twice its short, and the listing's screenshots
-      # are these captures. The tablet is the default.
+      # are these captures. The tablet is the default: captured halved (1280x800) and scaled
+      # up x2 by `day store stage` for Play's tablet slots.
       android-devices: |
         device=pixel,          os=36, orientation=portrait,  slug=phone
         device=medium_tablet,  os=36, orientation=landscape, slug=tablet

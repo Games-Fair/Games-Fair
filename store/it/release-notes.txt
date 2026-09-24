@@ -1,6 +1,0 @@
-Dieci giochi in un'unica app: Solitario, Block Blast, Breakout, blocchi che cadono, Sudoku, 2048,
-Campo minato, Mimi, Reversi e Tubi.
-
-Ogni schermata è disegnata con i controlli nativi della piattaforma. Le partite si salvano e si
-ripristinano da sole, anche a metà turno, e tutta l'app funziona offline, senza pubblicità, senza
-acquisti e senza account.

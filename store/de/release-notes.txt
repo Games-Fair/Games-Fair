@@ -1,6 +1,0 @@
-Zehn Spiele in einer App: Solitär, Block Blast, Breakout, fallende Blöcke, Sudoku, 2048, Minen,
-Scharade, Reversi und Rohre.
-
-Jeder Bildschirm wird mit den nativen Bedienelementen der Plattform gezeichnet. Spiele speichern
-und laden sich automatisch, auch mitten in einer Runde, und die ganze App läuft offline, ohne
-Werbung, ohne Käufe und ohne Konto.

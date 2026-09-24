@@ -1,0 +1,95 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# Run with --env DAY_GAMES_SEED=15 --locale en. Uses the real rules and normal controls.
+# Level moves are checked by model::tests::deterministic_levels_are_winnable.
+name: matchthree
+flow:
+  - {"wait_for": {"id": "home"}}
+  - {"navigate": {"route": "matchthree"}}
+  - {"pause": {"secs": 0.4}}
+  - {"nav_back": {}}
+  - {"pause": {"secs": 0.4}}
+  - {"navigate": {"route": "matchthree"}}
+  - {"pause": {"secs": 0.4}}
+  - {"tap": {"id": "mt-map"}}
+  - {"tap": {"id": "mt-stage-1"}}
+  - {"assert_text": {"id": "mt-score", "text": "0"}}
+  - {"assert_text": {"id": "mt-moves", "text": "22"}}
+  - {"screenshot": "match-three-opening"}
+  - {"key": {"id": "mt-board", "key": "Home"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-moves", "text": "22"}}
+  - {"assert_text": {"id": "mt-score", "text": "0"}}
+  - {"tap": {"id": "mt-pause"}}
+  - {"key": {"id": "mt-board", "key": "h"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt-moves", "text": "22"}}
+  - {"tap": {"id": "mt-resume"}}
+  - {"key": {"id": "mt-board", "key": "Home"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt-score", "text": "12540"}}
+  - {"assert_text": {"id": "mt-moves", "text": "21"}}
+  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"wait_for": {"id": "mt-result", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-final-score", "text": "12540"}}
+  - {"screenshot": "match-three-victory"}
+  - {"tap": {"id": "mt-next"}}
+  - {"assert_text": {"id": "mt-moves", "text": "26"}}
+  - {"key": {"id": "mt-board", "key": "Home"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt-board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt-score", "text": "600"}}
+  - {"assert_text": {"id": "mt-moves", "text": "25"}}
+  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"nav_back": {}}
+  - {"pause": {"secs": 0.4}}
+  - {"navigate": {"route": "matchthree"}}
+  - {"pause": {"secs": 0.4}}
+  - {"assert_text": {"id": "mt-score", "text": "600"}}
+  - {"assert_text": {"id": "mt-moves", "text": "25"}}
+  - {"tap": {"id": "mt-pause"}}
+  - {"tap": {"id": "mt-settings"}}
+  - {"toggle": {"id": "mt-sounds", "value": false}}
+  - {"toggle": {"id": "mt-vibrations", "value": false}}
+  - {"toggle": {"id": "mt-reduced", "value": true}}
+  - {"assert_value": {"id": "mt-sounds", "value": false}}
+  - {"assert_value": {"id": "mt-vibrations", "value": false}}
+  - {"assert_value": {"id": "mt-reduced", "value": true}}
+  - {"tap": {"id": "mt-settings-done"}}
+  - {"tap": {"id": "mt-resume"}}
+  - {"tap": {"id": "mt-pause"}}
+  - {"tap": {"id": "mt-settings"}}
+  - {"toggle": {"id": "mt-sounds", "value": true}}
+  - {"toggle": {"id": "mt-vibrations", "value": true}}
+  - {"toggle": {"id": "mt-reduced", "value": false}}
+  - {"tap": {"id": "mt-settings-done"}}
+  - {"tap": {"id": "mt-instructions"}}
+  - {"assert_visible": {"id": "mt-help"}}
+  - {"tap": {"id": "mt-help-done"}}
+  - {"tap": {"id": "mt-resume"}}
+  - {"assert_no_placeholders": {}}
+  - {"screenshot": "match-three-ready"}
