@@ -51,5 +51,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>DayPieces_DayPieces.bundle/fonts/B612-Regular.ttf</string>
+	</array>
 </dict>
 </plist>

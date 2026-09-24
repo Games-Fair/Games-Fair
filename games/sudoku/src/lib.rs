@@ -30,8 +30,9 @@ const SETTINGS_KEY: &str = "sudoku.settings";
 const CELL: f64 = 38.0;
 const BOARD_PAD: f64 = 4.0;
 const BOARD: f64 = CELL * 9.0 + BOARD_PAD * 2.0;
+/// Keys are square: as tall as they are wide.
 const KEY_W: f64 = 64.0;
-const KEY_H: f64 = 56.0;
+const KEY_H: f64 = KEY_W;
 const KEY_GAP: f64 = 6.0;
 const ACTION_W: f64 = 64.0;
 /// Two action buttons stacked with an 8pt gap span the keypad's height.
@@ -111,6 +112,20 @@ fn difficulty_id(d: Difficulty) -> &'static str {
         Difficulty::Medium => "su-diff-medium",
         Difficulty::Hard => "su-diff-hard",
         Difficulty::Expert => "su-diff-expert",
+    }
+}
+
+/// The family every digit is drawn in: B612, bundled under `resource/fonts/`
+/// (`resource/font-licenses/README.md` says why).
+const DIGIT_FAMILY: &str = "B612";
+
+/// The digits' face: B612 at its regular weight, so each numeral keeps its distinguishing
+/// shape instead of thickening toward its neighbors.
+fn digit_font() -> CanvasFont {
+    CanvasFont {
+        family: Some(DIGIT_FAMILY.to_string()),
+        weight: None,
+        italic: false,
     }
 }
 
@@ -351,7 +366,6 @@ fn draw_cell(
     notes: u16,
     bg: Color,
     ink: Color,
-    given: bool,
     provisional: bool,
 ) {
     let (w, h) = (sz.width, sz.height);
@@ -382,11 +396,7 @@ fn draw_cell(
                 size: h * 0.55,
                 color: ink,
                 anchor: TextAnchor::CENTERED,
-                font: canvas_font(if given {
-                    FontWeight::Black
-                } else {
-                    FontWeight::Semibold
-                }),
+                font: digit_font(),
             },
         );
     } else if notes != 0 {
@@ -401,7 +411,7 @@ fn draw_cell(
                         size: h * 0.24,
                         color,
                         anchor: TextAnchor::CENTERED,
-                        font: canvas_font(FontWeight::Medium),
+                        font: digit_font(),
                     },
                 );
             }
@@ -468,7 +478,7 @@ pub fn sudoku_preview() -> AnyPiece {
                         size: cell * 0.72,
                         color: palette[(b + digit) % palette.len()],
                         anchor: TextAnchor::CENTERED,
-                        font: canvas_font(FontWeight::Heavy),
+                        font: digit_font(),
                     },
                 );
             }
@@ -693,24 +703,26 @@ pub fn sudoku_page() -> AnyPiece {
             pu.cue(&cues::SELECT);
         }
     });
-    let content = chrome::game_frame(
+    // Not `chrome::game_frame`, which centers the play area between the readouts and the
+    // footer: the board is pinned under the readouts, the keypad to the foot of the page, and
+    // the spacer between them takes whatever height is left over.
+    let content = column((
         header,
-        Some(status_bar(ui.clone()).any()),
-        board_grid(ui.clone()).any(),
-        Some(
-            control_pad(ui.clone())
-                .padding(Insets {
-                    top: 0.0,
-                    leading: 12.0,
-                    bottom: 16.0,
-                    trailing: 12.0,
-                })
-                .any(),
-        ),
-    );
-    // The scroll gives its content at least the window's height, so the stack centers the column
-    // both ways: mid-window on a desktop, with even space above and below the board, and from
-    // the top once the column is taller than the window and scrolls.
+        status_bar(ui.clone()),
+        board_grid(ui.clone()),
+        spacer(),
+        control_pad(ui.clone()).padding(Insets {
+            top: 12.0,
+            leading: 12.0,
+            bottom: 16.0,
+            trailing: 12.0,
+        }),
+    ))
+    .align(HAlign::Center)
+    .grow();
+    // The scroll gives its content at least the window's height, so the growing column spans
+    // it: the board at the top, the keypad at the bottom, the slack between them. Once the
+    // column is taller than the window it scrolls instead.
     let page = scroll(zstack((content,)).align(Alignment::Center))
         .grow()
         .id("su-page");
@@ -858,7 +870,6 @@ fn cell_piece(ui: Rc<Ui>, r: usize, c: usize) -> AnyPiece {
             g.notes[i],
             cell_background(&g, i),
             cell_ink(&g, i),
-            g.original[i],
             g.provisional[i],
         );
     })
@@ -1107,20 +1118,20 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
             &digit.to_string(),
             Point::new(w / 2.0, h / 2.0 - 5.0 + offset),
             TextStyle {
-                size: 26.0,
+                size: 28.0,
                 color: digit_color,
                 anchor: TextAnchor::CENTERED,
-                font: canvas_font(FontWeight::Heavy),
+                font: digit_font(),
             },
         );
         d.text(
             &remaining.to_string(),
             Point::new(w / 2.0, h - 10.0 + offset),
             TextStyle {
-                size: 9.0,
+                size: 10.0,
                 color: count_color,
                 anchor: TextAnchor::CENTERED,
-                font: canvas_font(FontWeight::Medium),
+                font: digit_font(),
             },
         );
     })
