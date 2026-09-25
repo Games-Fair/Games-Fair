@@ -59,12 +59,10 @@ jobs:
         device=pixel,          os=36, orientation=portrait,  slug=phone
         device=medium_tablet,  os=36, orientation=landscape, slug=tablet
         device=medium_phone,   os=24, optional=true
-      # On a tag, the App Fair identity (Day-appfair.toml) gets a leg per target: that is the
-      # build the publishing queue rebuilds, and a break under those ids (HarmonyOS refuses a
-      # hyphen in a bundle name, for one) shows up here first. An ordinary push builds the base
-      # app alone, and appfair-lint checks the flavor's ids on every one. Release assets, Pages
-      # and the store uploads stay with the base build, which the queue compares against.
-      flavors: ${{ startsWith(github.ref, 'refs/tags/v') && 'appfair' || '' }}
+      # One build per target, the base app, on every push and tag. Day-appfair.toml changes
+      # only the ids, and the App Fair queue builds that flavor itself from the tag; appfair-lint
+      # checks its ids on every push. Release assets, Pages and the website come from this
+      # build, which is what the queue compares its own against.
       # A tagged build attaches its packages to the release. The App Fair queue compares its
       # own build against these, so leave them on.
       release-assets: true
