@@ -1777,9 +1777,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "bb-instructions",
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "bb-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "bb-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -1832,9 +1830,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 "bb-play-again",
                 move || u.pick_difficulty(),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "bb-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "bb-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

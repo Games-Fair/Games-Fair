@@ -1182,9 +1182,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "ch-pause-instructions",
                 move || u4.push(Overlay::Instructions),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "ch-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "ch-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

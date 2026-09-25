@@ -955,9 +955,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "st-instructions",
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "st-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "st-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -1022,9 +1020,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 "st-play-again",
                 move || u.new_game(),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "st-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "st-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

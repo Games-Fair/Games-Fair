@@ -570,14 +570,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 chrome::INDIGO,
                 Overlay::Help,
             ));
-            items.push(chrome::menu_button(
-                tr("gk_quit"),
-                chrome::RED,
-                "rv-quit",
-                || {
-                    nav_back();
-                },
-            ));
+            items.push(chrome::quit_button(chrome::RED, "rv-quit"));
         }
         Overlay::NewGame => {
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
@@ -657,14 +650,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 chrome::GREEN,
                 Overlay::NewGame,
             ));
-            items.push(chrome::menu_button(
-                tr("gk_quit"),
-                chrome::SLATE,
-                "rv-result-quit",
-                || {
-                    nav_back();
-                },
-            ));
+            items.push(chrome::quit_button(chrome::SLATE, "rv-result-quit"));
         }
         _ => {}
     }

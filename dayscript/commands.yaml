@@ -1,0 +1,25 @@
+name: shared-close-command
+description: Header close and pause-menu Quit share the shell's leave-game command.
+flow:
+  - wait_for: { id: home }
+  - navigate: { route: reversi }
+  - wait_for: { id: rv-pause }
+  - tap: { id: rv-pause }
+  - wait_for: { id: rv-quit }
+  - screenshot: command-reversi-quit
+  - tap: { id: rv-quit }
+  - wait_for: { id: home }
+  - assert_missing: { id: rv-pause }
+  - navigate: { route: reversi }
+  - wait_for: { id: close-game }
+  - tap: { id: close-game }
+  - wait_for: { id: home }
+  - assert_missing: { id: rv-pause }
+  - navigate: { route: mines }
+  - wait_for: { id: mi-pause }
+  - tap: { id: mi-pause }
+  - wait_for: { id: mi-quit }
+  - screenshot: command-mines-quit
+  - tap: { id: mi-quit }
+  - wait_for: { id: home }
+  - assert_missing: { id: mi-pause }

@@ -1227,9 +1227,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "mi-instructions",
                 move || u4.push(Overlay::Instructions),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "mi-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "mi-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -1371,9 +1369,7 @@ fn end_card(ui: Rc<Ui>, won: bool) -> AnyPiece {
                 "mi-end-new-game",
                 move || nu.push(Overlay::Picker),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "mi-end-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "mi-end-quit"),
         ))
         .spacing(12.0)
         .align(HAlign::Center),

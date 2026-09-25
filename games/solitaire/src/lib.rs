@@ -3213,9 +3213,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "sol-instructions",
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "sol-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "sol-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -3297,9 +3295,7 @@ fn win_card(ui: Rc<Ui>) -> AnyPiece {
                 "sol-play-again",
                 move || u.pick_draw(),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "sol-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "sol-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -3326,9 +3322,7 @@ fn stuck_card(ui: Rc<Ui>) -> AnyPiece {
                 "sol-stuck-new",
                 move || u2.pick_draw(),
             ),
-            chrome::menu_button(tr("gk_quit"), chrome::RED, "sol-quit", || {
-                nav_back();
-            }),
+            chrome::quit_button(chrome::RED, "sol-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

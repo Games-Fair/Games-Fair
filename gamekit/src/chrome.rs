@@ -406,6 +406,7 @@ pub fn pause_button(
 /// The 44-point close button (a circled cross) that opens a game's header row: the one way out
 /// of a game. Tapping it runs what the shell registered with [`crate::on_close`].
 pub fn close_button() -> AnyPiece {
+    let close = close_command();
     canvas(|d, sz| {
         // The circle sits a little inside the 44pt touch target, as it did when the shell drew
         // this on top of the game.
@@ -417,7 +418,9 @@ pub fn close_button() -> AnyPiece {
         );
         draw_cross_glyph(d, c, r * 1.2, ink_at(0.92));
     })
-    .on_tap(crate::close)
+    .on_tap(move || {
+        close.invoke();
+    })
     .a11y(|a| {
         a.label(day_fluent::tr("gk_close").format())
             .role(Role::Button)
@@ -657,4 +660,25 @@ pub fn instructions_card(
         )
         .height(440.0),
     )
+}
+
+/// The shell's leave-game operation, shared by the canvas header and every pause/results card.
+pub fn close_command() -> CommandHandle {
+    Command {
+        id: "close-game",
+        label: day_fluent::tr("gk_quit"),
+        action: crate::close,
+    }
+    .build()
+}
+
+/// A pause/results-card presentation of the same command as the header's close glyph.
+pub fn quit_button(tint: Color, id: &'static str) -> AnyPiece {
+    close_command()
+        .button()
+        .prominent()
+        .tint(tint)
+        .id(id)
+        .width(MENU_W)
+        .any()
 }
