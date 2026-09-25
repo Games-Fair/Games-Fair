@@ -318,7 +318,17 @@ pub fn reversi_page() -> AnyPiece {
         move || c.overlay.get() == Overlay::None,
         move || {
             let u = t.clone();
-            frame_clock(move |dt| u.tick(dt.as_secs_f64().min(0.05)))
+            let step = u.clone();
+            gamekit::animation::clock(
+                move || {
+                    u.repaint.track();
+                    u.overlay.get() == Overlay::None
+                        && (u.age.get() < 0.4
+                            || !u.human_turn()
+                            || u.game.borrow().board.finished())
+                },
+                move |dt| step.tick(dt.as_secs_f64().min(0.1)),
+            )
         },
     );
     zstack((content, overlays(ui), clock))

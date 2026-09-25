@@ -15,6 +15,7 @@
 //! [`chrome`] is the shell every game shares: the pause menu, the results cards, the
 //! settings and how-to-play sheets, the pause button, and the haptic gate.
 
+pub mod animation;
 pub mod chrome;
 
 use std::cell::{Cell, RefCell};

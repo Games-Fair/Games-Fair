@@ -27,7 +27,7 @@ targets = [
   "ios-uikit",
   "android-mdc",
   "harmony-arkui",
-  "web-dom",
+  "web-dom", "macos-gtk", "macos-qt",
 ]
 
 # The live listings, which the website turns into each store's localized badge

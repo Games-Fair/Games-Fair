@@ -335,10 +335,15 @@ pub fn pipes_page() -> AnyPiece {
         move || c.overlay.get() == Overlay::None,
         move || {
             let u = t.clone();
-            // No second clamp here: day-core already caps a frame delta at 0.1 s
-            // (day-core/src/frame.rs), and clamping again to 0.05 made every timer below count
-            // frames rather than seconds.
-            frame_clock(move |dt| u.tick(dt.as_secs_f64()))
+            let step = u.clone();
+            gamekit::animation::clock(
+                move || {
+                    u.repaint.track();
+                    u.overlay.get() == Overlay::None
+                        && (u.spinning.get().is_some() || u.network.borrow().solved())
+                },
+                move |dt| step.tick(dt.as_secs_f64().min(0.1)),
+            )
         },
     );
     zstack((content, overlays(ui), clock))

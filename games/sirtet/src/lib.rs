@@ -885,11 +885,12 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
 
 /// The game's frame consumer: gravity, clears, and the haptics and card a tick earns.
 fn sirtet_clock(ui: Rc<Ui>) -> impl Piece {
-    frame_clock({
+    let demand = ui.clone();
+    gamekit::animation::clock(move || demand.overlay.get() == Overlay::None, {
         move |dt| {
             let happenings = {
                 let mut g = ui.game.borrow_mut();
-                g.step(dt.as_secs_f64());
+                g.step(dt.as_secs_f64().min(0.1));
                 std::mem::take(&mut g.happenings)
             };
             for h in happenings {

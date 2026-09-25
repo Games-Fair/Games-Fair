@@ -690,112 +690,123 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
 /// The frame consumer: motion into gestures, the countdown, the round's clock, and the flashes.
 fn charades_clock(ui: Rc<Ui>) -> impl Piece {
     let sample_dt = day_part_sensors::SAMPLE_MS as f64 / 1000.0;
-    frame_clock(move |dt| {
-        let dt = dt.as_secs_f64().min(0.1);
-        let phase = ui.phase.get_untracked();
-        ui.stage.borrow_mut().in_phase += dt;
+    let demand = ui.clone();
+    gamekit::animation::clock(
+        move || {
+            demand.overlay.get() == Overlay::None
+                && match demand.phase.get() {
+                    Phase::Ready => demand.tilting.get(),
+                    Phase::Countdown | Phase::Play | Phase::TimeUp => true,
+                    Phase::Decks | Phase::Results => false,
+                }
+        },
+        move |dt| {
+            let dt = dt.as_secs_f64();
+            let phase = ui.phase.get_untracked();
+            ui.stage.borrow_mut().in_phase += dt;
 
-        // Motion first, so this frame acts on the newest pose.
-        let samples = ui
-            .motion
-            .lock()
-            .map(|mut m| std::mem::take(&mut m.queue))
-            .unwrap_or_default();
-        let mut gestures = Vec::new();
-        if ui.tilting.get_untracked() {
-            let mut tilt = ui.tilt.borrow_mut();
-            for s in &samples {
-                gestures.extend(tilt.feed(*s, sample_dt));
-            }
-            if !samples.is_empty() {
-                let mut stage = ui.stage.borrow_mut();
-                stage.heard_motion = true;
-                if let Some(q) = tilt.screen_down() {
-                    stage.quarter = q;
+            // Motion first, so this frame acts on the newest pose.
+            let samples = ui
+                .motion
+                .lock()
+                .map(|mut m| std::mem::take(&mut m.queue))
+                .unwrap_or_default();
+            let mut gestures = Vec::new();
+            if ui.tilting.get_untracked() {
+                let mut tilt = ui.tilt.borrow_mut();
+                for s in &samples {
+                    gestures.extend(tilt.feed(*s, sample_dt));
+                }
+                if !samples.is_empty() {
+                    let mut stage = ui.stage.borrow_mut();
+                    stage.heard_motion = true;
+                    if let Some(q) = tilt.screen_down() {
+                        stage.quarter = q;
+                    }
                 }
             }
-        }
 
-        match phase {
-            Phase::Ready => {
-                if ui.tilting.get_untracked() {
-                    let (upright, heard, waited) = {
-                        let stage = ui.stage.borrow();
-                        (
-                            ui.tilt.borrow().upright(),
-                            stage.heard_motion,
-                            stage.in_phase,
-                        )
-                    };
-                    if !heard && waited >= NO_MOTION_AFTER {
-                        // A sensor that never reports: this round uses the buttons.
-                        ui.tilting.set(false);
-                    }
-                    let mut stage = ui.stage.borrow_mut();
-                    stage.upright_for = if upright { stage.upright_for + dt } else { 0.0 };
-                    if stage.upright_for >= UPRIGHT_HOLD {
-                        drop(stage);
-                        ui.begin_countdown();
-                    }
-                }
-            }
-            Phase::Countdown => {
-                let left = COUNTDOWN - ui.stage.borrow().in_phase;
-                if left <= 0.0 {
-                    ui.begin_play();
-                } else {
-                    let whole = left.ceil() as u32;
-                    let mut stage = ui.stage.borrow_mut();
-                    if whole < stage.count_shown {
-                        stage.count_shown = whole;
-                        drop(stage);
-                        ui.cue(&cues::TICK);
-                    }
-                }
-            }
-            Phase::Play => {
-                let flashing = {
-                    let mut stage = ui.stage.borrow_mut();
-                    if let Some((_, t)) = stage.flash.as_mut() {
-                        *t -= dt;
-                        if *t <= 0.0 {
-                            stage.flash = None;
+            match phase {
+                Phase::Ready => {
+                    if ui.tilting.get_untracked() {
+                        let (upright, heard, waited) = {
+                            let stage = ui.stage.borrow();
+                            (
+                                ui.tilt.borrow().upright(),
+                                stage.heard_motion,
+                                stage.in_phase,
+                            )
+                        };
+                        if !heard && waited >= NO_MOTION_AFTER {
+                            // A sensor that never reports: this round uses the buttons.
+                            ui.tilting.set(false);
+                        }
+                        let mut stage = ui.stage.borrow_mut();
+                        stage.upright_for = if upright { stage.upright_for + dt } else { 0.0 };
+                        if stage.upright_for >= UPRIGHT_HOLD {
+                            drop(stage);
+                            ui.begin_countdown();
                         }
                     }
-                    stage.flash.is_some()
-                };
-                if !flashing {
-                    for g in gestures {
-                        ui.answer(match g {
-                            Gesture::Down => Mark::Correct,
-                            Gesture::Up => Mark::Pass,
-                        });
+                }
+                Phase::Countdown => {
+                    let left = COUNTDOWN - ui.stage.borrow().in_phase;
+                    if left <= 0.0 {
+                        ui.begin_play();
+                    } else {
+                        let whole = left.ceil() as u32;
+                        let mut stage = ui.stage.borrow_mut();
+                        if whole < stage.count_shown {
+                            stage.count_shown = whole;
+                            drop(stage);
+                            ui.cue(&cues::TICK);
+                        }
                     }
                 }
-                let (beat, over) = {
-                    let mut round = ui.round.borrow_mut();
-                    match round.as_mut() {
-                        Some(r) => (r.tick(dt), r.over()),
-                        None => (None, false),
+                Phase::Play => {
+                    let flashing = {
+                        let mut stage = ui.stage.borrow_mut();
+                        if let Some((_, t)) = stage.flash.as_mut() {
+                            *t -= dt;
+                            if *t <= 0.0 {
+                                stage.flash = None;
+                            }
+                        }
+                        stage.flash.is_some()
+                    };
+                    if !flashing {
+                        for g in gestures {
+                            ui.answer(match g {
+                                Gesture::Down => Mark::Correct,
+                                Gesture::Up => Mark::Pass,
+                            });
+                        }
                     }
-                };
-                match beat {
-                    Some(Beat::TimeUp) => ui.time_up(),
-                    Some(Beat::Warning(_)) => ui.cue(&CLOCK),
-                    // The deck ran out: end once the last answer's flash has shown.
-                    None if over && ui.stage.borrow().flash.is_none() => ui.time_up(),
-                    None => {}
+                    let (beat, over) = {
+                        let mut round = ui.round.borrow_mut();
+                        match round.as_mut() {
+                            Some(r) => (r.tick(dt), r.over()),
+                            None => (None, false),
+                        }
+                    };
+                    match beat {
+                        Some(Beat::TimeUp) => ui.time_up(),
+                        Some(Beat::Warning(_)) => ui.cue(&CLOCK),
+                        // The deck ran out: end once the last answer's flash has shown.
+                        None if over && ui.stage.borrow().flash.is_none() => ui.time_up(),
+                        None => {}
+                    }
                 }
-            }
-            Phase::TimeUp => {
-                if ui.stage.borrow().in_phase >= TIME_UP_HOLD {
-                    ui.finish();
+                Phase::TimeUp => {
+                    if ui.stage.borrow().in_phase >= TIME_UP_HOLD {
+                        ui.finish();
+                    }
                 }
+                Phase::Decks | Phase::Results => {}
             }
-            Phase::Decks | Phase::Results => {}
-        }
-        ui.repaint.notify();
-    })
+            ui.repaint.notify();
+        },
+    )
 }
 
 /// The size that fits `text` across `w`, no taller than `max`: on one line, or on two when that

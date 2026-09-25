@@ -1776,7 +1776,8 @@ impl Play {
     }
 
     /// Advance everything by `dt`.
-    fn step(&mut self, dt: f64) -> Tick {
+    fn step(&mut self, elapsed: f64) -> Tick {
+        let dt = elapsed.min(0.1);
         let mut tick = Tick {
             busy: self.active(),
             ..Tick::default()
@@ -1784,7 +1785,7 @@ impl Play {
         let sig = self.table_sig();
         let secs = self.model.elapsed as u64;
         if self.fx.shuffle.is_none() && self.fx.cascade.is_none() {
-            self.model.tick(dt);
+            self.model.tick(elapsed);
         }
         let fx = &mut self.fx;
         fx.t += dt;
@@ -2706,6 +2707,8 @@ impl Ui {
             Solver::new(&p.model.table, p.model.mode, HINT_LIMITS)
         };
         *self.hint.borrow_mut() = Some(solver);
+        // A hint can start before the first move, while both the game clock and effects sleep.
+        self.moving.notify();
         self.cue(&cues::HINT);
     }
     /// The sounds and haptics for what a move did: the strongest moment leads, a card turning
@@ -3097,48 +3100,63 @@ fn tools(ui: Rc<Ui>) -> AnyPiece {
 /// The frame consumer: the deal and hint searches, every tween and effect, the HUD, and the
 /// cards that come up when the game ends.
 fn solitaire_clock(ui: Rc<Ui>) -> impl Piece {
-    frame_clock(move |dt| {
-        let dt = dt.as_secs_f64().min(0.05);
-        let verdict = ui
-            .hint
-            .borrow_mut()
-            .as_mut()
-            .and_then(|s| s.run(SEARCH_BUDGET).cloned());
-        if let Some(v) = verdict {
-            *ui.hint.borrow_mut() = None;
-            ui.play.borrow_mut().show_hint(v);
-        }
-        let tick = ui.play.borrow_mut().step(dt);
-        if tick.dealt {
-            ui.dealt();
-            ui.hud.notify();
-        }
-        if tick.finished_one {
-            ui.finished_one();
-        }
-        if tick.won {
-            ui.won();
-        }
-        if tick.bumped {
-            ui.haptic(Haptic::Light);
-            chrome::sound(ui.sounds.get_untracked(), &BOUNCE, BOUNCE_VOLUME);
-        }
-        if tick.hud {
-            ui.hud.notify();
-        }
-        if tick.table {
-            ui.table.notify();
-        }
-        if tick.busy {
-            ui.moving.notify();
-        }
-        if tick.cascade_over {
-            ui.show(Overlay::Win);
-        } else if tick.stuck {
-            ui.cue(&cues::LETDOWN);
-            ui.show(Overlay::Stuck);
-        }
-    })
+    let demand = ui.clone();
+    gamekit::animation::clock(
+        move || {
+            demand.moving.track();
+            demand.table.track();
+            demand.overlay.get() == Overlay::None && {
+                let p = demand.play.borrow();
+                p.active()
+                    || p.model.started()
+                    || demand.hint.borrow().is_some()
+                    || p.fx.stuck.is_some_and(|t| t < STUCK_DELAY)
+                    || p.checked != p.version
+            }
+        },
+        move |dt| {
+            let dt = dt.as_secs_f64();
+            let verdict = ui
+                .hint
+                .borrow_mut()
+                .as_mut()
+                .and_then(|s| s.run(SEARCH_BUDGET).cloned());
+            if let Some(v) = verdict {
+                *ui.hint.borrow_mut() = None;
+                ui.play.borrow_mut().show_hint(v);
+            }
+            let tick = ui.play.borrow_mut().step(dt);
+            if tick.dealt {
+                ui.dealt();
+                ui.hud.notify();
+            }
+            if tick.finished_one {
+                ui.finished_one();
+            }
+            if tick.won {
+                ui.won();
+            }
+            if tick.bumped {
+                ui.haptic(Haptic::Light);
+                chrome::sound(ui.sounds.get_untracked(), &BOUNCE, BOUNCE_VOLUME);
+            }
+            if tick.hud {
+                ui.hud.notify();
+            }
+            if tick.table {
+                ui.table.notify();
+            }
+            if tick.busy {
+                ui.moving.notify();
+            }
+            if tick.cascade_over {
+                ui.show(Overlay::Win);
+            } else if tick.stuck {
+                ui.cue(&cues::LETDOWN);
+                ui.show(Overlay::Stuck);
+            }
+        },
+    )
 }
 
 fn overlays(ui: Rc<Ui>) -> impl Piece {
@@ -3534,6 +3552,16 @@ mod tests {
 
     fn top(t: &Table, col: usize) -> Card {
         *t.tableau[col].last().unwrap()
+    }
+
+    #[test]
+    fn slow_frame_keeps_elapsed_time_but_bounds_animation_catch_up() {
+        let mut p = play_with(Table::deal(15), DrawMode::One);
+        assert!(matches!(p.key("0"), Action::Drew(_)));
+        let animation_time = p.fx.t;
+        p.step(0.75);
+        assert_eq!(p.model.elapsed, 0.75);
+        assert!((p.fx.t - animation_time - 0.1).abs() < 1e-9);
     }
 
     #[test]

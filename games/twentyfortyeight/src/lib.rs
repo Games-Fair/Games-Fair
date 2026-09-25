@@ -1072,38 +1072,48 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
 
 /// The game's frame consumer: the slide and pop tweens, and the haptics and cards a move earns.
 fn twentyfortyeight_clock(ui: Rc<Ui>) -> impl Piece {
-    frame_clock({
-        move |dt| {
-            let phase_before = ui.game.borrow().anim.phase;
-            let (happenings, best, phase) = {
-                let mut g = ui.game.borrow_mut();
-                g.step(dt.as_secs_f64());
-                (std::mem::take(&mut g.happenings), g.best, g.anim.phase)
-            };
-            for h in happenings {
-                match h {
-                    Happening::Moved(0) => ui.cue(&SLIDE),
-                    Happening::Moved(v) if v < 64 => ui.cue(&MERGE_S),
-                    Happening::Moved(v) if v < 512 => ui.cue(&MERGE_M),
-                    Happening::Moved(_) => ui.cue(&MERGE_L),
-                    Happening::Won => {
-                        gamekit::save(RECORD_KEY, &best);
-                        ui.cue(&WON);
-                        ui.show(Overlay::Won);
-                    }
-                    Happening::GameOver => {
-                        gamekit::save(RECORD_KEY, &best);
-                        ui.cue(&cues::OVER_PUZZLE);
-                        ui.show(Overlay::GameOver);
+    let demand = ui.clone();
+    gamekit::animation::clock(
+        move || {
+            demand.repaint.track();
+            demand.overlay.get() == Overlay::None && {
+                let g = demand.game.borrow();
+                g.anim.phase != Phase::Idle || !g.happenings.is_empty()
+            }
+        },
+        {
+            move |dt| {
+                let phase_before = ui.game.borrow().anim.phase;
+                let (happenings, best, phase) = {
+                    let mut g = ui.game.borrow_mut();
+                    g.step(dt.as_secs_f64().min(0.1));
+                    (std::mem::take(&mut g.happenings), g.best, g.anim.phase)
+                };
+                for h in happenings {
+                    match h {
+                        Happening::Moved(0) => ui.cue(&SLIDE),
+                        Happening::Moved(v) if v < 64 => ui.cue(&MERGE_S),
+                        Happening::Moved(v) if v < 512 => ui.cue(&MERGE_M),
+                        Happening::Moved(_) => ui.cue(&MERGE_L),
+                        Happening::Won => {
+                            gamekit::save(RECORD_KEY, &best);
+                            ui.cue(&WON);
+                            ui.show(Overlay::Won);
+                        }
+                        Happening::GameOver => {
+                            gamekit::save(RECORD_KEY, &best);
+                            ui.cue(&cues::OVER_PUZZLE);
+                            ui.show(Overlay::GameOver);
+                        }
                     }
                 }
+                // Turn-based: only repaint while an animation is in flight (idle frames do no work).
+                if phase_before != Phase::Idle || phase != Phase::Idle {
+                    ui.repaint.notify();
+                }
             }
-            // Turn-based: only repaint while an animation is in flight (idle frames do no work).
-            if phase_before != Phase::Idle || phase != Phase::Idle {
-                ui.repaint.notify();
-            }
-        }
-    })
+        },
+    )
 }
 
 fn overlays(ui: Rc<Ui>) -> impl Piece {

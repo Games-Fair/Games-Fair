@@ -664,19 +664,26 @@ pub fn sudoku_page() -> AnyPiece {
         }
     });
 
-    let ticker = frame_clock({
-        let ui = ui.clone();
-        move |dt| {
-            let mut g = ui.game.borrow_mut();
-            let before = g.elapsed as u64;
-            g.tick(dt.as_secs_f64());
-            let after = g.elapsed as u64;
-            drop(g);
-            if before != after {
-                ui.clock.notify();
+    let demand = ui.clone();
+    let ticker = gamekit::animation::clock(
+        move || {
+            demand.board.track();
+            demand.overlay.get() == Overlay::None && !demand.game.borrow().busy()
+        },
+        {
+            let ui = ui.clone();
+            move |dt| {
+                let mut g = ui.game.borrow_mut();
+                let before = g.elapsed as u64;
+                g.tick(dt.as_secs_f64());
+                let after = g.elapsed as u64;
+                drop(g);
+                if before != after {
+                    ui.clock.notify();
+                }
             }
-        }
-    });
+        },
+    );
 
     // The keyboard's home: the backdrop takes focus as the page mounts and again whenever a
     // card closes, and every canvas a press can land on hears the same keys, so a click

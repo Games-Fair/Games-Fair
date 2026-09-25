@@ -199,6 +199,17 @@ impl Ui {
             self.repaint.notify();
         }
     }
+    fn needs_frame(&self) -> bool {
+        !self.frames.borrow().is_empty()
+            || self.settling.get().is_some()
+            || self.drag.get().is_some()
+            || self.selected.get().is_some()
+            || self.hint.get().is_some()
+            // Keep the gesture's duplicate-tap guard advancing even after a reduced-motion
+            // return has already settled; otherwise an idle board could suppress taps forever.
+            || self.time.get() < self.suppress_tap_until.get()
+            || self.save.borrow().game.over()
+    }
     fn tick(&self, dt: f64) {
         if self.overlay.get_untracked() != Overlay::None {
             return;
@@ -513,7 +524,14 @@ pub fn matchthree_page() -> AnyPiece {
         move || u.overlay.get() == Overlay::None,
         move || {
             let u = v.clone();
-            frame_clock(move |dt| u.tick(dt.as_secs_f64()))
+            let step = u.clone();
+            gamekit::animation::clock(
+                move || {
+                    u.repaint.track();
+                    u.overlay.get() == Overlay::None && u.needs_frame()
+                },
+                move |dt| step.tick(dt.as_secs_f64().min(0.1)),
+            )
         },
     );
     zstack((content, overlays(ui), clock))
@@ -1196,7 +1214,12 @@ fn celebration(reduced: bool) -> AnyPiece {
         art,
         when(
             move || !reduced,
-            move || frame_clock(move |dt| time.set(time.get_untracked() + dt.as_secs_f64())),
+            move || {
+                gamekit::animation::clock(
+                    || true,
+                    move |dt| time.set(time.get_untracked() + dt.as_secs_f64().min(0.1)),
+                )
+            },
         ),
     ))
     .any()

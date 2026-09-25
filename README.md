@@ -130,12 +130,29 @@ day launch -p ios-uikit --script dayscript/games.yaml
 - `games/blockblast`, `games/breakout`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/reversi`, `games/pipes`, and
   `games/twentyfortyeight` are one crate per game: canvas or grid-layout UI, physics on the
   frame clock, and a serde save state.
-- `gamekit/` is the shared persistence layer: each game's state is saved when its cover closes
+- `gamekit/src/animation.rs` adapts Day's native display callbacks to game demand. Each mounted
+  loop tracks a predicate, sleeps when its work settles, wakes on input, and cancels on scope
+  disposal. No game owns a frame timer. Elapsed clocks use raw frame deltas; physics and
+  cosmetic integration explicitly cap catch-up at 100 ms. First/resumed frames have zero delta.
+  Match Three (including gesture settling and tap suppression), 2048, Block Blast, Pipes, and
+  Reversi stop between moves; AI turns, held-piece pulses, pending feedback, and result delays
+  keep the relevant loop awake. Arcade play, live game clocks, and animated celebrations keep
+  frames while needed. Pause/help screens and closed covers release demand. Mines only
+  repaints its board for effects/input, even while its elapsed-time readout is running.
+- `gamekit/` is also the shared persistence layer: each game's state is saved when its cover closes
   or the app is backgrounded, and restored the next time it opens. A game that keeps a clock
   can also hook the backgrounding itself, which is how Sudoku pauses.
 - `resource/locales/en/app.ftl` carries every user-facing string.
 - `platform/` holds the thin native host projects the Apple, Android, and HarmonyOS targets
   build through.
+
+`dayscript/frame-sync.yaml` exercises repeated moves after idle periods, pause/resume, and
+closing/reopening animated covers. Run with `--env DAY_GAMES_SEED=15 --locale en`.
+`cargo test --workspace` includes a manual-frame regression for zero work while idle, wakeup,
+settling without an extra frame, raw deltas, pause/resume baselines, and late delivery after
+scope cancellation. `tests/frame_sync.rs` mounts six real game pages and verifies native
+request counts across input, idle, AI responses, pause, held-piece pulses, hint searches, and
+scope disposal; it preserves and restores the preferences it exercises.
 
 `day lint` checks routes, element ids, and locale coverage.
 

@@ -835,7 +835,7 @@ impl Play {
     /// Anything still moving.
     fn active(&self) -> bool {
         let fx = &self.fx;
-        fx.held.is_some_and(|h| h.grow < GROW_DUR)
+        fx.held.is_some()
             || !fx.flights.is_empty()
             || !fx.squash.is_empty()
             || !fx.ghosts.is_empty()
@@ -1701,22 +1701,31 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
 /// The frame consumer: every tween and effect, the HUD count-up, and the results card once the
 /// gray sweep has run.
 fn blockblast_clock(ui: Rc<Ui>) -> impl Piece {
-    frame_clock(move |dt| {
-        let (busy, hud, over) = {
-            let mut p = ui.play.borrow_mut();
-            let (busy, hud) = p.step(dt.as_secs_f64());
-            (busy, hud, p.over_ready())
-        };
-        if hud {
-            ui.hud.notify();
-        }
-        if busy {
-            ui.repaint.notify();
-        }
-        if over && !ui.over_shown.replace(true) {
-            ui.game_over();
-        }
-    })
+    let demand = ui.clone();
+    gamekit::animation::clock(
+        move || {
+            demand.repaint.track();
+            demand.overlay.get() == Overlay::None
+                && (demand.play.borrow().active()
+                    || (demand.play.borrow().over_ready() && !demand.over_shown.get()))
+        },
+        move |dt| {
+            let (busy, hud, over) = {
+                let mut p = ui.play.borrow_mut();
+                let (busy, hud) = p.step(dt.as_secs_f64().min(0.1));
+                (busy, hud, p.over_ready())
+            };
+            if hud {
+                ui.hud.notify();
+            }
+            if busy {
+                ui.repaint.notify();
+            }
+            if over && !ui.over_shown.replace(true) {
+                ui.game_over();
+            }
+        },
+    )
 }
 
 fn overlays(ui: Rc<Ui>) -> impl Piece {

@@ -175,6 +175,14 @@ impl Fx {
             .map(|(_, age)| (age / 0.26).min(1.0))
     }
 
+    fn active(&self) -> bool {
+        !self.pops.is_empty()
+            || !self.flags.is_empty()
+            || !self.sparks.is_empty()
+            || self.boom.is_some()
+            || self.win.is_some()
+    }
+
     fn step(&mut self, dt: f64) {
         for p in &mut self.pops {
             p.2 += dt;
@@ -748,48 +756,65 @@ fn board_canvas(ui: Rc<Ui>) -> impl Piece {
 /// The frame consumer: the clock, the effects, the press that becomes a flag, and the card a
 /// finished board earns.
 fn mines_clock(ui: Rc<Ui>) -> impl Piece {
-    frame_clock(move |dt| {
-        let dt = dt.as_secs_f64().min(0.05);
-        {
-            let mut b = ui.board.borrow_mut();
-            b.tick(dt);
-            let whole = b.elapsed.floor() as u32;
-            drop(b);
-            if ui.seen_second.replace(whole) != whole {
-                ui.hud.notify();
-            }
-        }
-        ui.fx.borrow_mut().step(dt);
-        // A press held in place plants a flag, and says so, without waiting for the finger.
-        let held = {
-            let mut press = ui.press.borrow_mut();
-            match press.as_mut() {
-                Some(p) if !p.handled && !p.moved => {
-                    p.age += dt;
-                    (p.age >= HOLD).then(|| {
-                        p.handled = true;
-                        p.cell
-                    })
+    let demand = ui.clone();
+    gamekit::animation::clock(
+        move || {
+            demand.repaint.track();
+            demand.overlay.get() == Overlay::None
+                && (demand.board.borrow().live()
+                    || demand.fx.borrow().active()
+                    || demand
+                        .press
+                        .borrow()
+                        .as_ref()
+                        .is_some_and(|p| !p.handled && !p.moved))
+        },
+        move |dt| {
+            let dt = dt.as_secs_f64();
+            let repaint = ui.fx.borrow().active();
+            {
+                let mut b = ui.board.borrow_mut();
+                b.tick(dt);
+                let whole = b.elapsed.floor() as u32;
+                drop(b);
+                if ui.seen_second.replace(whole) != whole {
+                    ui.hud.notify();
                 }
-                _ => None,
             }
-        };
-        if let Some(i) = held {
-            ui.hold(i);
-        }
-        let (boom, win) = {
-            let fx = ui.fx.borrow();
-            (fx.boom.map(|(_, age)| age), fx.win)
-        };
-        if ui.overlay.get_untracked() == Overlay::None {
-            if boom.is_some_and(|age| age >= BOOM_HOLD) {
-                ui.show(Overlay::Lost);
-            } else if win.is_some_and(|age| age >= WIN_HOLD) {
-                ui.show(Overlay::Won);
+            ui.fx.borrow_mut().step(dt.min(0.1));
+            // A press held in place plants a flag, and says so, without waiting for the finger.
+            let held = {
+                let mut press = ui.press.borrow_mut();
+                match press.as_mut() {
+                    Some(p) if !p.handled && !p.moved => {
+                        p.age += dt;
+                        (p.age >= HOLD).then(|| {
+                            p.handled = true;
+                            p.cell
+                        })
+                    }
+                    _ => None,
+                }
+            };
+            if let Some(i) = held {
+                ui.hold(i);
             }
-        }
-        ui.repaint.notify();
-    })
+            let (boom, win) = {
+                let fx = ui.fx.borrow();
+                (fx.boom.map(|(_, age)| age), fx.win)
+            };
+            if ui.overlay.get_untracked() == Overlay::None {
+                if boom.is_some_and(|age| age >= BOOM_HOLD) {
+                    ui.show(Overlay::Lost);
+                } else if win.is_some_and(|age| age >= WIN_HOLD) {
+                    ui.show(Overlay::Won);
+                }
+            }
+            if repaint || ui.fx.borrow().active() {
+                ui.repaint.notify();
+            }
+        },
+    )
 }
 
 // ---------------------------------------------------------------------------

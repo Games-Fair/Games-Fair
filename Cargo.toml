@@ -52,6 +52,11 @@ solitaire = { path = "games/solitaire" }
 sudoku = { path = "games/sudoku" }
 twentyfortyeight = { path = "games/twentyfortyeight" }
 
+[dev-dependencies]
+day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-mock = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-spec = { git = "https://github.com/daybrite/day.git", branch = "main" }
+
 [build-dependencies]
 day-build = { git = "https://github.com/daybrite/day.git", branch = "main" }
 

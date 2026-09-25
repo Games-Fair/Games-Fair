@@ -1929,52 +1929,56 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
 /// The game's frame consumer: paddle easing, the physics step, then the haptics and cards
 /// the tick earned, then the layers that changed.
 fn breakout_clock(ui: Rc<Ui>) -> impl Piece {
-    frame_clock(move |dt| {
-        let dt = dt.as_secs_f64();
-        let happenings = {
-            let mut g = ui.game.borrow_mut();
-            g.step_paddle(dt);
-            g.update(dt);
-            std::mem::take(&mut g.happenings)
-        };
-        for h in happenings {
-            match h {
-                Happening::Launched => ui.cue(&cues::PLUCK),
-                // A break in a combo lands harder the longer the run.
-                Happening::BrickBroken(combo) => ui.cue(match combo {
-                    1 => &BRICK_1,
-                    2 | 3 => &BRICK_2,
-                    _ => &BRICK_4,
-                }),
-                // A flat bounce thuds and rings loudest; a sharp deflection is the lightest tick.
-                Happening::PaddleHit(deflection) => {
-                    let (h, volume) = if deflection < 0.15 {
-                        (Haptic::Heavy, 1.0)
-                    } else if deflection < 0.5 {
-                        (Haptic::Medium, 0.75)
-                    } else {
-                        (Haptic::Light, 0.5)
-                    };
-                    ui.haptic(h);
-                    chrome::sound(ui.sounds.get_untracked(), &PADDLE, volume);
-                }
-                Happening::Caught(Power::ExtraLife) => ui.cue(&LIFE),
-                Happening::Caught(Power::Smash) => ui.cue(&SMASH),
-                Happening::Caught(_) => ui.cue(&POWER),
-                Happening::LifeLost => ui.cue(&cues::LETDOWN),
-                Happening::LevelComplete => {
-                    ui.cue(&LEVEL);
-                    ui.show(Overlay::LevelComplete);
-                }
-                Happening::GameOver => {
-                    ui.cue(&cues::OVER_ARCADE);
-                    ui.show(Overlay::GameOver);
+    let demand = ui.clone();
+    gamekit::animation::clock(
+        move || demand.overlay.get() == Overlay::None,
+        move |dt| {
+            let dt = dt.as_secs_f64().min(0.1);
+            let happenings = {
+                let mut g = ui.game.borrow_mut();
+                g.step_paddle(dt);
+                g.update(dt);
+                std::mem::take(&mut g.happenings)
+            };
+            for h in happenings {
+                match h {
+                    Happening::Launched => ui.cue(&cues::PLUCK),
+                    // A break in a combo lands harder the longer the run.
+                    Happening::BrickBroken(combo) => ui.cue(match combo {
+                        1 => &BRICK_1,
+                        2 | 3 => &BRICK_2,
+                        _ => &BRICK_4,
+                    }),
+                    // A flat bounce thuds and rings loudest; a sharp deflection is the lightest tick.
+                    Happening::PaddleHit(deflection) => {
+                        let (h, volume) = if deflection < 0.15 {
+                            (Haptic::Heavy, 1.0)
+                        } else if deflection < 0.5 {
+                            (Haptic::Medium, 0.75)
+                        } else {
+                            (Haptic::Light, 0.5)
+                        };
+                        ui.haptic(h);
+                        chrome::sound(ui.sounds.get_untracked(), &PADDLE, volume);
+                    }
+                    Happening::Caught(Power::ExtraLife) => ui.cue(&LIFE),
+                    Happening::Caught(Power::Smash) => ui.cue(&SMASH),
+                    Happening::Caught(_) => ui.cue(&POWER),
+                    Happening::LifeLost => ui.cue(&cues::LETDOWN),
+                    Happening::LevelComplete => {
+                        ui.cue(&LEVEL);
+                        ui.show(Overlay::LevelComplete);
+                    }
+                    Happening::GameOver => {
+                        ui.cue(&cues::OVER_ARCADE);
+                        ui.show(Overlay::GameOver);
+                    }
                 }
             }
-        }
-        ui.repaint.notify();
-        ui.sync_layers();
-    })
+            ui.repaint.notify();
+            ui.sync_layers();
+        },
+    )
 }
 
 fn overlays(ui: Rc<Ui>) -> impl Piece {

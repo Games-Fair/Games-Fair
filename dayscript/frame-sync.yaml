@@ -1,0 +1,92 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# Run with --env DAY_GAMES_SEED=15 --locale en.
+# Rules screens are consumed by the first open; each board is then reset via normal controls.
+name: frame-sync
+description: Animations wake after idle, survive pause/resume, and release closed covers.
+flow:
+  - wait_for: { id: home }
+  - navigate: { route: reversi }
+  - pause: { secs: 0.4 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: reversi }
+  - tap: { id: rv-pause }
+  - tap: { id: rv-new-game }
+  - select: { id: rv-mode, index: 1 }
+  - tap: { id: rv-start }
+  - pause: { secs: 1.0 }
+  - key: { id: rv-board, key: Enter }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: rv-black-score, text: "4" }
+  - assert_text: { id: rv-white-score, text: "1" }
+  - key: { id: rv-board, key: ArrowLeft }
+  - key: { id: rv-board, key: Enter }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: rv-black-score, text: "3" }
+  - assert_text: { id: rv-white-score, text: "3" }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: pipes }
+  - pause: { secs: 0.4 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: pipes }
+  - tap: { id: pp-pause }
+  - tap: { id: pp-new-game }
+  - select: { id: pp-size, index: 0 }
+  - tap: { id: pp-start }
+  - pause: { secs: 1.0 }
+  - key: { id: pp-board, key: Enter }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: pp-moves, text: "1" }
+  - tap: { id: pp-pause }
+  - pause: { secs: 0.5 }
+  - key: { id: pp-board, key: Enter }
+  - assert_text: { id: pp-moves, text: "1" }
+  - tap: { id: pp-resume }
+  - key: { id: pp-board, key: Enter }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: pp-moves, text: "2" }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: matchthree }
+  - pause: { secs: 0.4 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: matchthree }
+  - tap: { id: mt-map }
+  - tap: { id: mt-stage-1 }
+  - pause: { secs: 1.0 }
+  # Invalid swaps animate out and back without spending a move. Repeat after settling.
+  - key: { id: mt-board, key: Home }
+  - key: { id: mt-board, key: Enter }
+  - key: { id: mt-board, key: ArrowRight }
+  - key: { id: mt-board, key: Enter }
+  - assert_text: { id: mt-status, key: mt_swap_hint, timeout_secs: 10 }
+  - pause: { secs: 1.0 }
+  - key: { id: mt-board, key: Home }
+  - key: { id: mt-board, key: Enter }
+  - key: { id: mt-board, key: ArrowRight }
+  - key: { id: mt-board, key: Enter }
+  - assert_text: { id: mt-status, key: mt_swap_hint, timeout_secs: 10 }
+  - assert_text: { id: mt-moves, text: "22" }
+  - tap: { id: mt-pause }
+  - pause: { secs: 0.5 }
+  - tap: { id: mt-resume }
+  # Hint selects one half and places the cursor on its neighbor: Enter commits a valid move.
+  - tap: { id: mt-hint }
+  - key: { id: mt-board, key: Enter }
+  - assert_text: { id: mt-moves, text: "21" }
+  # Close during a cascade, then restore the committed game and wake again.
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - navigate: { route: matchthree }
+  - tap: { id: mt-map }
+  - tap: { id: mt-stage-1 }
+  - pause: { secs: 1.0 }
+  - tap: { id: mt-hint }
+  - key: { id: mt-board, key: Enter }
+  - assert_text: { id: mt-moves, text: "21" }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
+  - assert_visible: { id: home }
