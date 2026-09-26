@@ -184,7 +184,7 @@ impl Game {
                 && (if g.level == 4 {
                     i / N % 2 == 1 && i % N % 2 == 1
                 } else {
-                    (i / N + i % N) % 2 == 0
+                    (i / N + i % N).is_multiple_of(2)
                 })
             {
                 g.frost[i] = if g.level == 4 { 2 } else { 1 };
@@ -375,7 +375,7 @@ impl Game {
             if runs.is_empty() && forced.is_empty() {
                 break;
             }
-            let mut hit = vec![false; LEN];
+            let mut hit = [false; LEN];
             for i in forced.drain(..) {
                 hit[i] = true;
             }
@@ -444,13 +444,13 @@ impl Game {
                 ));
             }
             // Queue special explosions; each existing special fires at most once.
-            let mut fired = vec![false; LEN];
+            let mut fired = [false; LEN];
             loop {
                 let next = (0..LEN).find(|&i| hit[i] && !fired[i] && self.grid[i].is_some());
                 let Some(i) = next else { break };
                 fired[i] = true;
                 let c = self.grid[i].unwrap();
-                for j in 0..LEN {
+                for (j, hit) in hit.iter_mut().enumerate() {
                     let blast = match c.special {
                         Special::Plain => false,
                         Special::Row => j / N == i / N,
@@ -461,7 +461,7 @@ impl Game {
                         Special::Rainbow => self.grid[j].is_some_and(|x| x.color == c.color),
                     };
                     if blast {
-                        hit[j] = true;
+                        *hit = true;
                     }
                 }
             }
@@ -698,7 +698,7 @@ mod tests {
     fn deterministic_levels_are_winnable() {
         // A greedy objective-aware player proves every authored stage can be completed.
         // The printed moves are also the source of the native DayScript level fixture.
-        for level in 0..LEVELS {
+        for (level, stage) in STAGES.iter().enumerate() {
             let mut g = Game::new(level, 15);
             let mut moves = vec![];
             while !g.over() {
@@ -714,8 +714,7 @@ mod tests {
                             continue;
                         }
                         let gain = (g.frosting() - next.frosting()) as u64 * 10000
-                            + (next.collected.min(STAGES[level].collect)
-                                - g.collected.min(STAGES[level].collect))
+                            + (next.collected.min(stage.collect) - g.collected.min(stage.collect))
                                 as u64
                                 * 2000
                             + (next.score - g.score) as u64;

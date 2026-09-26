@@ -735,7 +735,7 @@ fn render(
         1.0,
     );
     let (grid, frost) = frame.map_or((&g.grid, &g.frost), |f| (&f.grid, &f.frost));
-    for i in 0..LEN {
+    for (i, &ice) in frost.iter().enumerate() {
         let (x, y) = (ox + (i % N) as f64 * c, oy + (i / N) as f64 * c);
         if !active(g.level, i) {
             d.fill(
@@ -747,13 +747,13 @@ fn render(
         let tile = Shape::RoundedRect(Rect::new(x + 1.5, y + 1.5, c - 3.0, c - 3.0), c * 0.16);
         d.fill(
             tile.clone(),
-            if (i / N + i % N) % 2 == 0 {
+            if (i / N + i % N).is_multiple_of(2) {
                 Color::hex(0x28223E)
             } else {
                 Color::hex(0x302742)
             },
         );
-        if frost[i] > 0 {
+        if ice > 0 {
             d.fill(
                 tile.clone(),
                 LinearGradient::vertical(
@@ -764,9 +764,9 @@ fn render(
             d.stroke(
                 tile.clone(),
                 Color::hex(0xDCEBFF).with_alpha(0.7),
-                if frost[i] == 2 { 3.0 } else { 1.0 },
+                if ice == 2 { 3.0 } else { 1.0 },
             );
-            for k in 0..frost[i] {
+            for k in 0..ice {
                 d.fill(
                     star(x + c * (0.2 + k as f64 * 0.6), y + c * 0.8, c * 0.09, 6),
                     Color::WHITE.with_alpha(0.6),
@@ -800,64 +800,62 @@ fn render(
             oy + (i / N) as f64 * c + c / 2.0,
         );
         let mut scale = 1.0;
-        if !reduced {
-            if let Some(f) = frame {
-                match f.phase {
-                    Phase::Swap | Phase::Return | Phase::Fall => {
-                        let dur = if f.phase == Phase::Fall { 0.32 } else { 0.18 };
-                        let t = (elapsed / dur).clamp(0.0, 1.0);
-                        let p = 1.0 - (1.0 - t).powi(3);
-                        if let Some(&(from, _)) = f.motion.iter().find(|&&(_, to)| to == i) {
-                            let (mut fx, mut fy) = if from >= LEN {
-                                (x, y - c * (from - LEN) as f64)
-                            } else {
-                                (
-                                    ox + (from % N) as f64 * c + c / 2.0,
-                                    oy + (from / N) as f64 * c + c / 2.0,
-                                )
-                            };
-                            if f.phase == Phase::Swap {
-                                if let Some(preview) = settling {
-                                    let offset = preview.offset(from);
-                                    fx += offset.x * c;
-                                    fy += offset.y * c;
-                                }
-                            }
-                            x = fx + (x - fx) * p;
-                            y = fy + (y - fy) * p;
-                            if f.phase == Phase::Fall {
-                                scale = 1.0 + 0.08 * (t * std::f64::consts::PI * 2.0).sin();
-                            }
+        if !reduced && let Some(f) = frame {
+            match f.phase {
+                Phase::Swap | Phase::Return | Phase::Fall => {
+                    let dur = if f.phase == Phase::Fall { 0.32 } else { 0.18 };
+                    let t = (elapsed / dur).clamp(0.0, 1.0);
+                    let p = 1.0 - (1.0 - t).powi(3);
+                    if let Some(&(from, _)) = f.motion.iter().find(|&&(_, to)| to == i) {
+                        let (mut fx, mut fy) = if from >= LEN {
+                            (x, y - c * (from - LEN) as f64)
+                        } else {
+                            (
+                                ox + (from % N) as f64 * c + c / 2.0,
+                                oy + (from / N) as f64 * c + c / 2.0,
+                            )
+                        };
+                        if f.phase == Phase::Swap
+                            && let Some(preview) = settling
+                        {
+                            let offset = preview.offset(from);
+                            fx += offset.x * c;
+                            fy += offset.y * c;
+                        }
+                        x = fx + (x - fx) * p;
+                        y = fy + (y - fy) * p;
+                        if f.phase == Phase::Fall {
+                            scale = 1.0 + 0.08 * (t * std::f64::consts::PI * 2.0).sin();
                         }
                     }
-                    Phase::Burst => {
-                        if f.cleared.contains(&i) {
-                            let t = (elapsed / 0.28).clamp(0.0, 1.0);
-                            scale = (1.0 - t) * (1.0 + 0.5 * (t * std::f64::consts::PI).sin());
-                            for k in 0..7 {
-                                let a = k as f64 * std::f64::consts::TAU / 7.0 + i as f64;
-                                let r = c * t * 0.85;
-                                d.fill(
-                                    star(x + r * a.cos(), y + r * a.sin(), c * 0.07 * (1.0 - t), 4),
-                                    Color::hex(PALETTE[cv.color as usize]).with_alpha(1.0 - t),
-                                );
-                            }
-                            if cv.special == Special::Row || cv.special == Special::Column {
-                                let (a, b) = if cv.special == Special::Row {
-                                    (Point::new(ox, y), Point::new(ox + side, y))
-                                } else {
-                                    (Point::new(x, oy), Point::new(x, oy + side))
-                                };
-                                d.stroke(
-                                    Shape::Line(a, b),
-                                    Color::WHITE.with_alpha(1.0 - t),
-                                    c * 0.12 * (1.0 - t),
-                                );
-                            }
-                        }
-                    }
-                    Phase::Shuffle => scale = (elapsed / 0.4).clamp(0.1, 1.0),
                 }
+                Phase::Burst => {
+                    if f.cleared.contains(&i) {
+                        let t = (elapsed / 0.28).clamp(0.0, 1.0);
+                        scale = (1.0 - t) * (1.0 + 0.5 * (t * std::f64::consts::PI).sin());
+                        for k in 0..7 {
+                            let a = k as f64 * std::f64::consts::TAU / 7.0 + i as f64;
+                            let r = c * t * 0.85;
+                            d.fill(
+                                star(x + r * a.cos(), y + r * a.sin(), c * 0.07 * (1.0 - t), 4),
+                                Color::hex(PALETTE[cv.color as usize]).with_alpha(1.0 - t),
+                            );
+                        }
+                        if cv.special == Special::Row || cv.special == Special::Column {
+                            let (a, b) = if cv.special == Special::Row {
+                                (Point::new(ox, y), Point::new(ox + side, y))
+                            } else {
+                                (Point::new(x, oy), Point::new(x, oy + side))
+                            };
+                            d.stroke(
+                                Shape::Line(a, b),
+                                Color::WHITE.with_alpha(1.0 - t),
+                                c * 0.12 * (1.0 - t),
+                            );
+                        }
+                    }
+                }
+                Phase::Shuffle => scale = (elapsed / 0.4).clamp(0.1, 1.0),
             }
         }
         if let Some(preview) = preview {
@@ -873,31 +871,31 @@ fn render(
             |d| draw_piece(d, *cv, x, y, c, scale),
         );
     }
-    if let Some(f) = frame {
-        if f.phase == Phase::Burst {
-            let at = Point::new(size.width / 2.0, oy + side * 0.42 - elapsed * 20.0);
-            let text = format!("+{}", f.points);
-            d.text(
-                &text,
-                Point::new(at.x + 1.0, at.y + 2.0),
-                TextStyle {
-                    size: c * 0.65,
-                    color: SURFACE,
-                    anchor: TextAnchor::CENTERED,
-                    font: chrome::canvas_font(FontWeight::Black),
-                },
-            );
-            d.text(
-                &text,
-                at,
-                TextStyle {
-                    size: c * 0.65,
-                    color: Color::WHITE,
-                    anchor: TextAnchor::CENTERED,
-                    font: chrome::canvas_font(FontWeight::Black),
-                },
-            );
-        }
+    if let Some(f) = frame
+        && f.phase == Phase::Burst
+    {
+        let at = Point::new(size.width / 2.0, oy + side * 0.42 - elapsed * 20.0);
+        let text = format!("+{}", f.points);
+        d.text(
+            &text,
+            Point::new(at.x + 1.0, at.y + 2.0),
+            TextStyle {
+                size: c * 0.65,
+                color: SURFACE,
+                anchor: TextAnchor::CENTERED,
+                font: chrome::canvas_font(FontWeight::Black),
+            },
+        );
+        d.text(
+            &text,
+            at,
+            TextStyle {
+                size: c * 0.65,
+                color: Color::WHITE,
+                anchor: TextAnchor::CENTERED,
+                font: chrome::canvas_font(FontWeight::Black),
+            },
+        );
     }
 }
 fn overlays(ui: Rc<Ui>) -> AnyPiece {
