@@ -150,7 +150,8 @@ enum Overlay {
 
 // Sounds, each with the haptic it plays beside (gamekit::chrome::Cue).
 static PLACE: Cue = with("sounds/sudoku/place.wav", cues::MEDIUM_BEAT);
-/// A digit taken back out, by the keypad, a repeated digit, or the delete keys.
+/// A digit taken back out, by the keypad, a repeated digit, or the delete keys: PLACE's key
+/// clicking back up.
 static CLEAR: Cue = with("sounds/sudoku/clear.wav", cues::LIGHT_BEAT);
 static NOTES: Cue = with("sounds/sudoku/notes.wav", cues::TICK_BEAT);
 static HINT: Cue = with("sounds/shared/hint.wav", cues::MEDIUM_BEAT);

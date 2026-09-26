@@ -33,6 +33,15 @@ ffmpeg -i in.ogg -af "$trim,volume=<target − peak>dB" -ac 1 -ar 44100 -c:a pcm
   -map_metadata -1 -fflags +bitexact -flags:a +bitexact out.wav
 ```
 
+`sudoku/clear` is the release of the `sudoku/place` key: it is made from `sudoku/place` itself,
+pitched up by five semitones (which also shortens it), thinned with a high-pass, faded out after
+30 ms, and set 3 dB under the press at −12 dBFS.
+
+```sh
+ffmpeg -i sudoku/place.wav -af "asetrate=44100*1.335,aresample=44100,highpass=f=900,afade=t=out:st=0.03:d=0.03,volume=1.82dB" \
+  -ac 1 -ar 44100 -c:a pcm_s16le -map_metadata -1 -fflags +bitexact -flags:a +bitexact sudoku/clear.wav
+```
+
 ## Where each clip came from
 
 | Clip | Pack | Original file |
@@ -69,7 +78,7 @@ ffmpeg -i in.ogg -af "$trim,volume=<target − peak>dB" -ac 1 -ar 44100 -c:a pcm
 | 2048/undo | UI Audio | switch27 |
 | 2048/won | Music Jingles | Steel jingles/jingles_STEEL02 |
 | sudoku/place | UI Audio | click1 |
-| sudoku/clear | Interface Sounds | back_002 |
+| sudoku/clear | UI Audio | click1, derived (see above) |
 | sudoku/notes | Interface Sounds | toggle_001 |
 | sudoku/undo | Interface Sounds | back_003 |
 | sudoku/redo | UI Audio | rollover5 |
