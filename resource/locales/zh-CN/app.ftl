@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = 打砖块
+nav_sirtet = 方块下落
 nav_sudoku = 数独
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = 方块爆破
 nav_solitaire = 纸牌接龙
 
 gk_close = 关闭游戏
@@ -106,7 +106,7 @@ tf_help_tips_2 = • 尽量沿同一方向合并，让较小的数字排在大�
 tf_help_tips_3 = • 简单模式可用**撤销**来纠正失误。
 
 # Block Blast
-bb_board_a11y = 方块消除棋盘及待放方块
+bb_board_a11y = 方块爆破棋盘及待放方块
 bb_no_moves = 待放区没有任何方块能放入棋盘。
 bb_combo = 连击 ×{ $n }
 bb_lines = { $n } 行
@@ -324,36 +324,36 @@ mi_help_play_4 = • 点击已插足旗的数字，可同时打开其余邻格�
 mi_help_keys = 键盘
 mi_help_keys_1 = • 方向键移动光标，**空格**或**回车**翻开，**F** 插旗或移除。
 
-# Reversi
-nav_reversi = 黑白棋
-rv_black = 黑方
-rv_white = 白方
-rv_black_turn = 黑方落子
-rv_white_turn = 白方落子
-rv_thinking = 白方思考中…
-rv_passed = 对方无合法走法，跳过回合。{ $turn }
-rv_black_wins = 黑方获胜！
-rv_white_wins = 白方获胜！
-rv_draw = 平局！
-rv_final_score = 黑 { $black } · 白 { $white }
-rv_board_hint = 圆点表示合法走法，金点表示上一步。
-rv_board_a11y = 黑白棋棋盘。方向键选格，回车落子。
-rv_mode = 对手
-rv_solo = 电脑
-rv_two_players = 双人
-rv_difficulty = 电脑难度
-rv_easy = 简单
-rv_medium = 中等
-rv_hard = 困难
-rv_start = 开始对局
-rv_help_rules = 黑方先行。在圆点处落子，与己方棋子夹住一条对方棋子。横、竖或斜线上所有被夹住的棋子都会翻为己方颜色。
-rv_help_pass = 无合法走法时自动跳过。双方都不能落子时，即使还有空格也结束。棋子较多的一方获胜。
-rv_help_solo = 执黑对战电脑，或在新游戏中选择双人。简单随机落子，中等和困难会预判。角落棋子无法被翻转，尽量占领！
-rv_help_keys = 点击圆点落子，或用方向键移动金框，按空格或回车。P 或 Esc 暂停，同时冻结电脑与动画。离开时自动保存。
+# Flipside
+nav_flipside = 翻转棋
+fs_black = 黑方
+fs_white = 白方
+fs_black_turn = 黑方落子
+fs_white_turn = 白方落子
+fs_thinking = 白方思考中…
+fs_passed = 对方无合法走法，跳过回合。{ $turn }
+fs_black_wins = 黑方获胜！
+fs_white_wins = 白方获胜！
+fs_draw = 平局！
+fs_final_score = 黑 { $black } · 白 { $white }
+fs_board_hint = 圆点表示合法走法，金点表示上一步。
+fs_board_a11y = 翻转棋棋盘。方向键选格，回车落子。
+fs_mode = 对手
+fs_solo = 电脑
+fs_two_players = 双人
+fs_difficulty = 电脑难度
+fs_easy = 简单
+fs_medium = 中等
+fs_hard = 困难
+fs_start = 开始对局
+fs_help_rules = 黑方先行。在圆点处落子，与己方棋子夹住一条对方棋子。横、竖或斜线上所有被夹住的棋子都会翻为己方颜色。
+fs_help_pass = 无合法走法时自动跳过。双方都不能落子时，即使还有空格也结束。棋子较多的一方获胜。
+fs_help_solo = 执黑对战电脑，或在新游戏中选择双人。简单随机落子，中等和困难会预判。角落棋子无法被翻转，尽量占领！
+fs_help_keys = 点击圆点落子，或用方向键移动金框，按空格或回车。P 或 Esc 暂停，同时冻结电脑与动画。离开时自动保存。
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = 合法走法
-rv_empty = 空格
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = 合法走法
+fs_empty = 空格
 
 # Pipes
 nav_pipes = 水管
@@ -384,3 +384,42 @@ pp_help_keys = 键盘方向键选择，空格或回车旋转，L 锁定，P 或 
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = 你说我猜读取手机的倾斜角度，将点头记为答对。
+
+## Match Three
+nav_matchthree = 三消
+mt_moves = 剩余步数
+mt_goal = 目标
+mt_classic = 经典
+mt_corners = 四角
+mt_bridges = 桥梁
+mt_diamond = 菱形
+mt_windows = 窗格
+mt_mixed = 混合
+mt_goal_score = 达到目标分数
+mt_goal_collect = 红色圆圈：{ $berries } / { $target } · 达到目标分数
+mt_goal_frost = 剩余层数：{ $frost } · 达到目标分数
+mt_goal_final = 圆圈：{ $berries } / { $target } · 层数：{ $frost } · 达成目标
+mt_swap_hint = 交换相邻方块，连成三个或以上
+mt_shuffling = 无可用步数，正在重新洗牌…
+mt_cascade = 连消 ×{ $n }
+mt_hint = 提示
+mt_levels = 关卡
+mt_map_intro = 完成每一关即可解锁下一关。
+mt_locked = 已锁定
+mt_retry = 重玩本关
+mt_reduced = 减弱动态效果
+mt_win = 过关
+mt_complete = 全部通关
+mt_out = 步数用尽
+mt_win_detail = 分数已保存。准备好后继续。
+mt_retry_detail = 再试一次，完成剩余目标。
+mt_next = 下一关
+mt_board_a11y = 三消棋盘。方向键移动光标，回车选择或交换，H 显示可行交换。
+mt_help_swap = 按住并拖动宝石可预览交换。尝试不同的相邻方块，松手即确认。拖回起始格或拖出棋盘可取消。也可以依次点击两个相邻方块。将三个或以上相同形状连成一线即可消除，连消会提高得分。未形成消除的交换不消耗步数。
+mt_help_special_title = 特殊方块
+mt_help_special = 四连消生成条纹方块，可消除所在行或列。T 形或 L 形消除生成爆炸方块，可消除 3 × 3 区域。五个连成一线生成万能方块：与任意方块交换即可消除该颜色的全部方块。
+mt_help_combo = 交换两个特殊方块可大范围消除。两个条纹方块消除十字；含爆炸方块的组合消除三行三列。万能方块加特殊方块会把该颜色的所有方块变为特殊方块。两个万能方块清空整个棋盘。
+mt_help_goals = 在步数用完前达到目标分数。之后的关卡还需收集红色圆圈或消除方块下方的底层。双层需要消除两次。空洞会把棋盘分成各自独立下落的区域。剩余 10 步获得三星，剩余 5 步获得两星。已完成的关卡可以重玩。
+mt_help_keys = 用方向键和回车选择并交换。H 高亮一个可行交换，回车执行。暂停可打开设置、规则和重玩。音效、振动和减弱动态效果均可调整。棋盘和进度会自动保存。
+mt_complete_detail = 可重玩任意关卡，提高得分和星级。
+mt_matching = 消除中…

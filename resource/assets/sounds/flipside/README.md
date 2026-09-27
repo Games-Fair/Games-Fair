@@ -1,4 +1,4 @@
-# Reversi sounds
+# Flipside sounds
 
 `place.wav`: original procedurally synthesized disc click created for Day Games.
 Two damped tones (720 Hz and 1130 Hz) with a short noise transient; no sampled material.

@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
-//! Reversi: shared canvas drawing, pure rules, and the standard gamekit shell.
+//! Flipside: shared canvas drawing, pure rules, and the standard gamekit shell.
 use day_fluent::tr;
 use day_pieces::prelude::*;
 use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
+use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -10,10 +11,13 @@ mod model;
 use model::{Board, SaveState};
 
 pub const SURFACE: Color = Color::hex(0x102822);
-const SAVE: &str = "reversi.v1";
-const SETTINGS: &str = "reversi.settings";
-const PLACE: chrome::Cue = cues::with("sounds/reversi/place.wav", cues::LIGHT_BEAT);
-pub const SOUNDS: &[Sfx] = &[sfx("sounds/reversi/place.wav")];
+const SAVE: &str = "flipside.v1";
+const SETTINGS: &str = "flipside.settings";
+/// Where the game and its settings were saved before the game took its current name.
+const OLD_SAVE: &str = "reversi.v1";
+const OLD_SETTINGS: &str = "reversi.settings";
+const PLACE: chrome::Cue = cues::with("sounds/flipside/place.wav", cues::LIGHT_BEAT);
+pub const SOUNDS: &[Sfx] = &[sfx("sounds/flipside/place.wav")];
 
 #[derive(Clone, Serialize, Deserialize, Default)]
 struct Settings {
@@ -167,15 +171,15 @@ impl Ui {
         let i = self.cursor.get();
         let b = self.game.borrow().board;
         let state = if b.black & (1 << i) != 0 {
-            tr("rv_black")
+            tr("fs_black")
         } else if b.white & (1 << i) != 0 {
-            tr("rv_white")
+            tr("fs_white")
         } else if b.flips(i, b.turn) != 0 {
-            tr("rv_legal")
+            tr("fs_legal")
         } else {
-            tr("rv_empty")
+            tr("fs_empty")
         };
-        tr("rv_selection")
+        tr("fs_selection")
             .arg("column", ((b'A' + (i % 8) as u8) as char).to_string())
             .arg("row", (i / 8 + 1) as f64)
             .arg("state", state.format())
@@ -188,14 +192,14 @@ impl Ui {
             return result(b).format();
         }
         let turn = if !self.human_turn() {
-            tr("rv_thinking")
+            tr("fs_thinking")
         } else if b.turn {
-            tr("rv_black_turn")
+            tr("fs_black_turn")
         } else {
-            tr("rv_white_turn")
+            tr("fs_white_turn")
         };
         if self.passed.get() {
-            tr("rv_passed").arg("turn", turn.format()).format()
+            tr("fs_passed").arg("turn", turn.format()).format()
         } else {
             turn.format()
         }
@@ -203,15 +207,26 @@ impl Ui {
 }
 fn result(b: Board) -> day_fluent::LocalizedText {
     match b.count(true).cmp(&b.count(false)) {
-        std::cmp::Ordering::Greater => tr("rv_black_wins"),
-        std::cmp::Ordering::Less => tr("rv_white_wins"),
-        std::cmp::Ordering::Equal => tr("rv_draw"),
+        std::cmp::Ordering::Greater => tr("fs_black_wins"),
+        std::cmp::Ordering::Less => tr("fs_white_wins"),
+        std::cmp::Ordering::Equal => tr("fs_draw"),
     }
 }
 
-pub fn reversi_page() -> AnyPiece {
-    let settings = gamekit::restore::<Settings>(SETTINGS).unwrap_or_default();
-    let game = gamekit::restore::<SaveState>(SAVE)
+/// The save under `key`, or, the first time, the one under the name it had before: moved to
+/// `key` and deleted, so a game in progress survives the rename.
+fn restore_renamed<T: Serialize + DeserializeOwned>(key: &str, old: &str) -> Option<T> {
+    gamekit::restore(key).or_else(|| {
+        let state = gamekit::restore::<T>(old)?;
+        gamekit::save(key, &state);
+        gamekit::clear(old);
+        Some(state)
+    })
+}
+
+pub fn flipside_page() -> AnyPiece {
+    let settings = restore_renamed::<Settings>(SETTINGS, OLD_SETTINGS).unwrap_or_default();
+    let game = restore_renamed::<SaveState>(SAVE, OLD_SAVE)
         .and_then(SaveState::apply_save)
         .unwrap_or_else(|| SaveState::new(0, 1, gamekit::seed()));
     let ui = Rc::new(Ui {
@@ -261,28 +276,28 @@ pub fn reversi_page() -> AnyPiece {
         ui.push(Overlay::Help);
     }
     let (p, s, b, w) = (ui.clone(), ui.clone(), ui.clone(), ui.clone());
-    let header = chrome::game_header(tr("nav_reversi"), "rv-pause", move || p.pause());
+    let header = chrome::game_header(tr("nav_flipside"), "fs-pause", move || p.pause());
     let info = column((
         chrome::info_row(vec![
             chrome::info_stat(
-                tr("rv_black"),
+                tr("fs_black"),
                 move || {
                     b.repaint.track();
                     b.game.borrow().board.count(true).to_string()
                 },
                 Color::WHITE,
-                "rv-black-score",
+                "fs-black-score",
             )
             .min_width(72.0)
             .any(),
             chrome::info_stat(
-                tr("rv_white"),
+                tr("fs_white"),
                 move || {
                     w.repaint.track();
                     w.game.borrow().board.count(false).to_string()
                 },
                 Color::WHITE,
-                "rv-white-score",
+                "fs-white-score",
             )
             .min_width(72.0)
             .any(),
@@ -290,7 +305,7 @@ pub fn reversi_page() -> AnyPiece {
         label(move || s.status())
             .color(chrome::TEXT)
             .align(TextAlign::Center)
-            .id("rv-status"),
+            .id("fs-status"),
     ))
     .spacing(6.0)
     .align(HAlign::Center)
@@ -302,8 +317,8 @@ pub fn reversi_page() -> AnyPiece {
             .font(Font::Caption)
             .color(chrome::TEXT)
             .align(TextAlign::Center)
-            .id("rv-selection"),
-        label(tr("rv_board_hint"))
+            .id("fs-selection"),
+        label(tr("fs_board_hint"))
             .font(Font::Caption)
             .color(chrome::TEXT_DIM)
             .align(TextAlign::Center),
@@ -369,8 +384,8 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     })
     .on_key(move |event| k.key(&event.key))
     .focused(ui.focus)
-    .a11y(|a| a.label(tr("rv_board_a11y").format()))
-    .id("rv-board")
+    .a11y(|a| a.label(tr("fs_board_a11y").format()))
+    .id("fs-board")
     .grow()
     .any()
 }
@@ -524,17 +539,17 @@ fn overlays(ui: Rc<Ui>) -> AnyPiece {
 fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
     if kind == Overlay::Help {
         return chrome::instructions_card(
-            tr("nav_reversi"),
+            tr("nav_flipside"),
             vec![
-                Help::Para(tr("rv_help_rules")),
-                Help::Para(tr("rv_help_pass")),
-                Help::Para(tr("rv_help_solo")),
-                Help::Para(tr("rv_help_keys")),
+                Help::Para(tr("fs_help_rules")),
+                Help::Para(tr("fs_help_pass")),
+                Help::Para(tr("fs_help_solo")),
+                Help::Para(tr("fs_help_keys")),
             ],
-            "rv-help-done",
+            "fs-help-done",
             move || ui.pop(),
         )
-        .id("rv-help")
+        .id("fs-help")
         .any();
     }
     let mut items: Vec<AnyPiece> = Vec::new();
@@ -549,67 +564,67 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::menu_button(
                 tr("gk_resume"),
                 chrome::GREEN,
-                "rv-resume",
+                "fs-resume",
                 move || u.show(Overlay::None),
             ));
             items.push(action(
                 "gk_new_game",
-                "rv-new-game",
+                "fs-new-game",
                 chrome::BLUE,
                 Overlay::NewGame,
             ));
             items.push(action(
                 "gk_settings",
-                "rv-settings",
+                "fs-settings",
                 chrome::SLATE,
                 Overlay::Settings,
             ));
             items.push(action(
                 "gk_instructions",
-                "rv-instructions",
+                "fs-instructions",
                 chrome::INDIGO,
                 Overlay::Help,
             ));
-            items.push(chrome::quit_button(chrome::RED, "rv-quit"));
+            items.push(chrome::quit_button(chrome::RED, "fs-quit"));
         }
         Overlay::NewGame => {
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
-            items.push(label(tr("rv_mode")).color(chrome::TEXT).any());
+            items.push(label(tr("fs_mode")).color(chrome::TEXT).any());
             items.push(
                 picker(
-                    vec![tr("rv_solo").format(), tr("rv_two_players").format()],
+                    vec![tr("fs_solo").format(), tr("fs_two_players").format()],
                     ui.mode,
                 )
                 .segmented()
-                .id("rv-mode")
+                .id("fs-mode")
                 .any(),
             );
-            items.push(label(tr("rv_difficulty")).color(chrome::TEXT).any());
+            items.push(label(tr("fs_difficulty")).color(chrome::TEXT).any());
             items.push(
                 picker(
                     vec![
-                        tr("rv_easy").format(),
-                        tr("rv_medium").format(),
-                        tr("rv_hard").format(),
+                        tr("fs_easy").format(),
+                        tr("fs_medium").format(),
+                        tr("fs_hard").format(),
                     ],
                     ui.difficulty,
                 )
                 .segmented()
-                .id("rv-difficulty")
+                .id("fs-difficulty")
                 .any(),
             );
             let u = ui.clone();
             items.push(chrome::menu_button(
-                tr("rv_start"),
+                tr("fs_start"),
                 chrome::GREEN,
-                "rv-start",
+                "fs-start",
                 move || u.start(),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("gk_cancel"),
                 chrome::SLATE,
-                "rv-cancel",
+                "fs-cancel",
                 move || u.pop(),
             ));
         }
@@ -617,17 +632,17 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::card_title(tr("gk_settings"), Color::WHITE));
             items.push(chrome::setting_row(
                 tr("gk_sounds"),
-                toggle(ui.sounds).id("rv-sounds").any(),
+                toggle(ui.sounds).id("fs-sounds").any(),
             ));
             items.push(chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("rv-vibrations").any(),
+                toggle(ui.vibrations).id("fs-vibrations").any(),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("gk_done"),
                 chrome::GREEN,
-                "rv-done",
+                "fs-done",
                 move || u.pop(),
             ));
         }
@@ -636,36 +651,36 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::card_title(result(b), chrome::GOLD));
             items.push(
                 label(
-                    tr("rv_final_score")
+                    tr("fs_final_score")
                         .arg("black", f64::from(b.count(true)))
                         .arg("white", f64::from(b.count(false))),
                 )
                 .color(chrome::TEXT)
-                .id("rv-result-score")
+                .id("fs-result-score")
                 .any(),
             );
             items.push(action(
                 "gk_new_game",
-                "rv-play-again",
+                "fs-play-again",
                 chrome::GREEN,
                 Overlay::NewGame,
             ));
-            items.push(chrome::quit_button(chrome::SLATE, "rv-result-quit"));
+            items.push(chrome::quit_button(chrome::SLATE, "fs-result-quit"));
         }
         _ => {}
     }
     let id = match kind {
-        Overlay::Pause => "rv-pause-menu",
-        Overlay::NewGame => "rv-new-card",
-        Overlay::Settings => "rv-settings-card",
-        _ => "rv-result",
+        Overlay::Pause => "fs-pause-menu",
+        Overlay::NewGame => "fs-new-card",
+        Overlay::Settings => "fs-settings-card",
+        _ => "fs-result",
     };
     chrome::card(column(PieceVec(items)).spacing(14.0).align(HAlign::Center))
         .id(id)
         .any()
 }
 
-pub fn reversi_preview() -> AnyPiece {
+pub fn flipside_preview() -> AnyPiece {
     let mut g = SaveState::new(1, 0, 15);
     for _ in 0..20 {
         if let Some(i) = g.computer_move() {

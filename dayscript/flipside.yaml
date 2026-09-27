@@ -1,0 +1,69 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# Deterministic rules, keyboard input, pass-and-play, pause gating, restore and solo play.
+name: flipside
+flow:
+  - wait_for: { id: home }
+  - navigate: { route: flipside }
+  - pause: { secs: 0.5 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: flipside }
+  - pause: { secs: 0.5 }
+  - tap: { id: fs-pause }
+  - tap: { id: fs-new-game }
+  - select: { id: fs-mode, index: 1 }
+  - tap: { id: fs-start }
+  - assert_text: { id: fs-black-score, text: "2" }
+  - assert_text: { id: fs-white-score, text: "2" }
+  - screenshot: flipside-opening
+  # Cursor starts at D3: legal opening captures D4.
+  - key: { id: fs-board, key: Enter }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: fs-black-score, text: "4" }
+  - assert_text: { id: fs-white-score, text: "1" }
+  # White replies at C3, capturing D4 back.
+  - key: { id: fs-board, key: ArrowLeft }
+  - key: { id: fs-board, key: Enter }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: fs-black-score, text: "3" }
+  - assert_text: { id: fs-white-score, text: "3" }
+  - screenshot: flipside-two-players
+  # C4 is legal for Black; pausing must block this otherwise valid move.
+  - key: { id: fs-board, key: ArrowDown }
+  - tap: { id: fs-pause }
+  - key: { id: fs-board, key: Enter }
+  - assert_text: { id: fs-black-score, text: "3" }
+  - tap: { id: fs-settings }
+  - assert_visible: { id: fs-sounds }
+  - screenshot: flipside-settings
+  - tap: { id: fs-done }
+  - tap: { id: fs-resume }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: flipside }
+  - pause: { secs: 0.5 }
+  - assert_text: { id: fs-black-score, text: "3" }
+  - assert_text: { id: fs-white-score, text: "3" }
+  - tap: { id: fs-pause }
+  - tap: { id: fs-new-game }
+  - select: { id: fs-mode, index: 0 }
+  - select: { id: fs-difficulty, index: 2 }
+  - tap: { id: fs-start }
+  - key: { id: fs-board, key: Enter }
+  - tap: { id: fs-pause }
+  - pause: { secs: 1.0 }
+  - assert_text: { id: fs-black-score, text: "4" }
+  - assert_text: { id: fs-white-score, text: "1" }
+  - tap: { id: fs-resume }
+  - pause: { secs: 1.8 }
+  - assert_text: { id: fs-status, key: fs_black_turn }
+  - assert_text: { id: fs-black-score, text: "3" }
+  - assert_text: { id: fs-white-score, text: "3" }
+  - screenshot: flipside-computer
+  - tap: { id: fs-pause }
+  - tap: { id: fs-instructions }
+  - assert_visible: { id: fs-help-done }
+  - screenshot: flipside-rules
+  - tap: { id: fs-help-done }
+  - tap: { id: fs-resume }
+  - nav_back: {}

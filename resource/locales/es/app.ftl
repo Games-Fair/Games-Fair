@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = Rompeladrillos
+nav_sirtet = Bloques que caen
 nav_sudoku = Sudoku
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = Revientabloques
 nav_solitaire = Solitario
 
 gk_close = Cerrar juego
@@ -64,7 +64,7 @@ st_game_over = Fin del juego
 st_clear_single = SIMPLE
 st_clear_double = DOBLE
 st_clear_triple = TRIPLE
-st_clear_sirtet = ¡SIRTET!
+st_clear_sirtet = ¡CUÁDRUPLE!
 st_help_intro = Apila las piezas que caen y completa filas antes de llenar el tablero.
 st_help_play = Cómo jugar
 st_help_play_1 = • **Arrastra a izquierda o derecha** para mover la pieza, o usa las flechas del teclado.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • Fusiona en una sola dirección para ordenar las fichas pequ
 tf_help_tips_3 = • En Fácil puedes **deshacer** para corregir errores.
 
 # Block Blast
-bb_board_a11y = Tablero y bandeja de piezas de Block Blast
+bb_board_a11y = Tablero y bandeja de piezas de Revientabloques
 bb_no_moves = Ninguna pieza de la bandeja cabe en el tablero.
 bb_combo = Combo ×{ $n }
 bb_lines = { $n } líneas
@@ -324,36 +324,36 @@ mi_help_play_4 = • Toca un número con todas sus banderas para abrir las demá
 mi_help_keys = Teclado
 mi_help_keys_1 = • Las flechas mueven el cursor; **Espacio** o **Intro** descubre; **F** pone o quita una bandera.
 
-# Reversi
-nav_reversi = Reversi
-rv_black = Negras
-rv_white = Blancas
-rv_black_turn = Turno de negras
-rv_white_turn = Turno de blancas
-rv_thinking = Las blancas están pensando…
-rv_passed = El rival no puede mover y pasa. { $turn }
-rv_black_wins = ¡Ganan las negras!
-rv_white_wins = ¡Ganan las blancas!
-rv_draw = ¡Empate!
-rv_final_score = Negras { $black } · Blancas { $white }
-rv_board_hint = Los puntos marcan jugadas válidas. El dorado marca la última.
-rv_board_a11y = Tablero de Reversi. Las flechas seleccionan y Intro coloca una ficha.
-rv_mode = Rival
-rv_solo = Ordenador
-rv_two_players = Dos jugadores
-rv_difficulty = Dificultad del ordenador
-rv_easy = Fácil
-rv_medium = Media
-rv_hard = Difícil
-rv_start = Iniciar partida
-rv_help_rules = Empiezan las negras. Coloca una ficha en un punto para encerrar una línea rival entre dos tuyas. Las fichas encerradas cambian de color en horizontal, vertical o diagonal.
-rv_help_pass = Si no puedes mover, pasas automáticamente. Cuando nadie puede mover, termina la partida aunque queden huecos. Gana quien tenga más fichas.
-rv_help_solo = Juega con negras contra el ordenador o elige Dos jugadores. Fácil juega al azar; Medio y Difícil anticipan. Las esquinas no cambian de color: ¡consíguelas!
-rv_help_keys = Toca un punto o mueve el marco dorado con las flechas y coloca con Espacio o Intro. P o Escape pausa también al ordenador y las animaciones. La partida se guarda al salir.
+# Flipside
+nav_flipside = Volteafichas
+fs_black = Negras
+fs_white = Blancas
+fs_black_turn = Turno de negras
+fs_white_turn = Turno de blancas
+fs_thinking = Las blancas están pensando…
+fs_passed = El rival no puede mover y pasa. { $turn }
+fs_black_wins = ¡Ganan las negras!
+fs_white_wins = ¡Ganan las blancas!
+fs_draw = ¡Empate!
+fs_final_score = Negras { $black } · Blancas { $white }
+fs_board_hint = Los puntos marcan jugadas válidas. El dorado marca la última.
+fs_board_a11y = Tablero de Volteafichas. Las flechas seleccionan y Intro coloca una ficha.
+fs_mode = Rival
+fs_solo = Ordenador
+fs_two_players = Dos jugadores
+fs_difficulty = Dificultad del ordenador
+fs_easy = Fácil
+fs_medium = Media
+fs_hard = Difícil
+fs_start = Iniciar partida
+fs_help_rules = Empiezan las negras. Coloca una ficha en un punto para encerrar una línea rival entre dos tuyas. Las fichas encerradas cambian de color en horizontal, vertical o diagonal.
+fs_help_pass = Si no puedes mover, pasas automáticamente. Cuando nadie puede mover, termina la partida aunque queden huecos. Gana quien tenga más fichas.
+fs_help_solo = Juega con negras contra el ordenador o elige Dos jugadores. Fácil juega al azar; Medio y Difícil anticipan. Las esquinas no cambian de color: ¡consíguelas!
+fs_help_keys = Toca un punto o mueve el marco dorado con las flechas y coloca con Espacio o Intro. P o Escape pausa también al ordenador y las animaciones. La partida se guarda al salir.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = Jugada válida
-rv_empty = Vacía
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = Jugada válida
+fs_empty = Vacía
 
 # Pipes
 nav_pipes = Tuberías
@@ -384,3 +384,42 @@ pp_help_keys = Usa flechas para seleccionar, Espacio o Intro para girar, L para 
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Charadas detecta la inclinación del teléfono para contar un asentimiento como acierto.
+
+## Match Three
+nav_matchthree = Junta tres
+mt_moves = Movimientos restantes
+mt_goal = Objetivo
+mt_classic = Clásico
+mt_corners = Esquinas
+mt_bridges = Puentes
+mt_diamond = Diamante
+mt_windows = Ventanas
+mt_mixed = Mixto
+mt_goal_score = Alcanza la puntuación objetivo
+mt_goal_collect = Círculos rojos: { $berries } / { $target } · Alcanza la puntuación objetivo
+mt_goal_frost = Capas restantes: { $frost } · Alcanza la puntuación objetivo
+mt_goal_final = Círculos: { $berries } / { $target } · Capas: { $frost } · Alcanza el objetivo
+mt_swap_hint = Intercambia piezas vecinas para juntar tres o más
+mt_shuffling = No hay movimientos. Mezclando de nuevo…
+mt_cascade = Cascada ×{ $n }
+mt_hint = Pista
+mt_levels = Niveles
+mt_map_intro = Completa cada nivel para desbloquear el siguiente.
+mt_locked = Bloqueado
+mt_retry = Repetir nivel
+mt_reduced = Reducir movimiento
+mt_win = Nivel completado
+mt_complete = Todos los niveles completados
+mt_out = Sin movimientos
+mt_win_detail = Tu puntuación se ha guardado. Continúa cuando quieras.
+mt_retry_detail = Vuelve a intentarlo para completar los objetivos restantes.
+mt_next = Siguiente nivel
+mt_board_a11y = Tablero de Junta tres. Las flechas mueven el cursor, Intro selecciona o intercambia y H muestra un intercambio válido.
+mt_help_swap = Mantén pulsada una gema y arrástrala para previsualizar un intercambio. Prueba con distintas vecinas y suelta para confirmar. Vuelve a la casilla inicial o sal del tablero para cancelar. También puedes tocar dos vecinas. Junta tres o más de la misma forma; las cascadas aumentan tu puntuación. Los intercambios sin combinación no cuestan nada.
+mt_help_special_title = Piezas especiales
+mt_help_special = Junta cuatro para obtener una pieza rayada que despeja su fila o columna. Una T o una L crea una pieza explosiva que despeja un área de 3 × 3. Junta cinco en línea para obtener un comodín: intercámbialo con cualquier pieza para eliminar ese color.
+mt_help_combo = Combina dos especiales para despejar más. Dos rayadas despejan una cruz; una combinación explosiva despeja tres filas y tres columnas. Un comodín con una especial convierte todas las piezas de ese color en especiales. Dos comodines despejan todo el tablero.
+mt_help_goals = Alcanza la puntuación objetivo antes de quedarte sin movimientos. Los niveles posteriores también piden recoger círculos rojos o eliminar capas bajo las piezas. Las capas dobles necesitan dos golpes. Los huecos dividen el tablero en carriles de caída separados. Termina con 10 movimientos para tres estrellas o con 5 para dos. Puedes repetir los niveles completados.
+mt_help_keys = Usa las flechas e Intro para seleccionar e intercambiar. H resalta un intercambio válido; Intro lo juega. Pausar abre la configuración, las reglas y la opción de repetir. Puedes ajustar sonidos, vibraciones y movimiento reducido. El tablero y el progreso se guardan automáticamente.
+mt_complete_detail = Puedes repetir cualquier nivel para mejorar tu puntuación y tus estrellas.
+mt_matching = Combinando…

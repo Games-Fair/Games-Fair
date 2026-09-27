@@ -44,7 +44,7 @@ breakout = { path = "games/breakout" }
 charades = { path = "games/charades" }
 matchthree = { path = "games/matchthree" }
 mines = { path = "games/mines" }
-reversi = { path = "games/reversi" }
+flipside = { path = "games/flipside" }
 pipes = { path = "games/pipes" }
 gamekit = { path = "gamekit" }
 sirtet = { path = "games/sirtet" }
@@ -75,7 +75,7 @@ members = [
     "games/charades",
     "games/matchthree",
     "games/mines",
-    "games/reversi",
+    "games/flipside",
     "games/pipes",
     "games/sirtet",
     "games/solitaire",

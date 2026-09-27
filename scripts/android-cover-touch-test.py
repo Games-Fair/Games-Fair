@@ -59,7 +59,7 @@ def main():
         time.sleep(0.4)
 
     # Dismiss first-run help deterministically, regardless of saved settings.
-    for route in ("reversi", "pipes", "twentyfortyeight"):
+    for route in ("flipside", "pipes", "twentyfortyeight"):
         drive({"navigate": {"route": route}}, {"nav_back": {}}, {"pause": {"secs": 0.4}})
     def swipe(y1, y2):
         adb("shell", "input", "swipe", str(round(100 * density)), str(round(y1 * density)),
@@ -76,7 +76,7 @@ def main():
     drive({"assert_route": {"route": "twentyfortyeight"}}, {"nav_back": {}},
           {"pause": {"secs": 0.4}})
 
-    for route, prefix in (("reversi", "rv"), ("pipes", "pp"), ("twentyfortyeight", "tf")):
+    for route, prefix in (("flipside", "fs"), ("pipes", "pp"), ("twentyfortyeight", "tf")):
         drive({"navigate": {"route": route}}, {"pause": {"secs": 0.4}})
         tap(75, 30)  # passive header beside X, above the hidden 2048 tile
         drive({"assert_route": {"route": route}})

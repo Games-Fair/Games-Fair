@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = Spaccamattoni
+nav_sirtet = Blocchi che cadono
 nav_sudoku = Sudoku
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = Scoppiablocchi
 nav_solitaire = Solitario
 
 gk_close = Chiudi gioco
@@ -64,7 +64,7 @@ st_game_over = Partita finita
 st_clear_single = SINGOLA
 st_clear_double = DOPPIA
 st_clear_triple = TRIPLA
-st_clear_sirtet = SIRTET!
+st_clear_sirtet = QUADRUPLA!
 st_help_intro = Impila i pezzi e completa le righe prima che il campo si riempia.
 st_help_play = Come giocare
 st_help_play_1 = • **Trascina a sinistra o destra** per muovere il pezzo, oppure usa i tasti freccia.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • Unisci in una direzione per allineare le tessere piccole so
 tf_help_tips_3 = • In Facile puoi **annullare** per correggere un errore.
 
 # Block Blast
-bb_board_a11y = Griglia e vassoio dei pezzi di Block Blast
+bb_board_a11y = Griglia e vassoio dei pezzi di Scoppiablocchi
 bb_no_moves = Nessun pezzo del vassoio entra nella griglia.
 bb_combo = Combo ×{ $n }
 bb_lines = { $n } righe
@@ -324,36 +324,36 @@ mi_help_play_4 = • Tocca un numero con tutte le bandiere per aprire gli altri 
 mi_help_keys = Tastiera
 mi_help_keys_1 = • Le frecce muovono il cursore; **Spazio** o **Invio** scopre; **F** mette o toglie una bandiera.
 
-# Reversi
-nav_reversi = Reversi
-rv_black = Nero
-rv_white = Bianco
-rv_black_turn = Tocca al nero
-rv_white_turn = Tocca al bianco
-rv_thinking = Il bianco sta pensando…
-rv_passed = L'avversario non può muovere e passa. { $turn }
-rv_black_wins = Vince il nero!
-rv_white_wins = Vince il bianco!
-rv_draw = Pareggio!
-rv_final_score = Nero { $black } · Bianco { $white }
-rv_board_hint = I punti indicano mosse valide. Quello dorato segna l'ultima.
-rv_board_a11y = Tabellone di Reversi. Le frecce selezionano, Invio posa una pedina.
-rv_mode = Avversario
-rv_solo = Computer
-rv_two_players = Due giocatori
-rv_difficulty = Difficoltà del computer
-rv_easy = Facile
-rv_medium = Medio
-rv_hard = Difficile
-rv_start = Inizia partita
-rv_help_rules = Il nero inizia. Posa su un punto per chiudere una fila avversaria tra due tue pedine. Le pedine racchiuse cambiano colore in orizzontale, verticale o diagonale.
-rv_help_pass = Senza mosse valide passi automaticamente. Quando nessuno può muovere, la partita finisce anche con caselle vuote. Vince chi ha più pedine.
-rv_help_solo = Gioca col nero contro il computer o scegli Due giocatori. Facile muove a caso; Medio e Difficile guardano avanti. Gli angoli non si possono ribaltare: conquistali!
-rv_help_keys = Tocca un punto o sposta il bordo dorato con le frecce e posa con Spazio o Invio. P o Esc mette in pausa anche computer e animazioni. La partita si salva all'uscita.
+# Flipside
+nav_flipside = Voltapedine
+fs_black = Nero
+fs_white = Bianco
+fs_black_turn = Tocca al nero
+fs_white_turn = Tocca al bianco
+fs_thinking = Il bianco sta pensando…
+fs_passed = L'avversario non può muovere e passa. { $turn }
+fs_black_wins = Vince il nero!
+fs_white_wins = Vince il bianco!
+fs_draw = Pareggio!
+fs_final_score = Nero { $black } · Bianco { $white }
+fs_board_hint = I punti indicano mosse valide. Quello dorato segna l'ultima.
+fs_board_a11y = Tabellone di Voltapedine. Le frecce selezionano, Invio posa una pedina.
+fs_mode = Avversario
+fs_solo = Computer
+fs_two_players = Due giocatori
+fs_difficulty = Difficoltà del computer
+fs_easy = Facile
+fs_medium = Medio
+fs_hard = Difficile
+fs_start = Inizia partita
+fs_help_rules = Il nero inizia. Posa su un punto per chiudere una fila avversaria tra due tue pedine. Le pedine racchiuse cambiano colore in orizzontale, verticale o diagonale.
+fs_help_pass = Senza mosse valide passi automaticamente. Quando nessuno può muovere, la partita finisce anche con caselle vuote. Vince chi ha più pedine.
+fs_help_solo = Gioca col nero contro il computer o scegli Due giocatori. Facile muove a caso; Medio e Difficile guardano avanti. Gli angoli non si possono ribaltare: conquistali!
+fs_help_keys = Tocca un punto o sposta il bordo dorato con le frecce e posa con Spazio o Invio. P o Esc mette in pausa anche computer e animazioni. La partita si salva all'uscita.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = Mossa valida
-rv_empty = Vuota
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = Mossa valida
+fs_empty = Vuota
 
 # Pipes
 nav_pipes = Tubi
@@ -384,3 +384,42 @@ pp_help_keys = Usa frecce per scegliere, Spazio o Invio per ruotare, L per blocc
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Mimi rileva l’inclinazione del telefono per contare un cenno del capo come risposta corretta.
+
+## Match Three
+nav_matchthree = Allinea tre
+mt_moves = Mosse rimaste
+mt_goal = Obiettivo
+mt_classic = Classico
+mt_corners = Angoli
+mt_bridges = Ponti
+mt_diamond = Diamante
+mt_windows = Finestre
+mt_mixed = Misto
+mt_goal_score = Raggiungi il punteggio obiettivo
+mt_goal_collect = Cerchi rossi: { $berries } / { $target } · Raggiungi il punteggio obiettivo
+mt_goal_frost = Strati rimasti: { $frost } · Raggiungi il punteggio obiettivo
+mt_goal_final = Cerchi: { $berries } / { $target } · Strati: { $frost } · Raggiungi l'obiettivo
+mt_swap_hint = Scambia pezzi vicini per allinearne tre o più
+mt_shuffling = Nessuna mossa possibile. Rimescolamento…
+mt_cascade = Cascata ×{ $n }
+mt_hint = Aiuto
+mt_levels = Livelli
+mt_map_intro = Completa ogni livello per sbloccare il successivo.
+mt_locked = Bloccato
+mt_retry = Rigioca livello
+mt_reduced = Riduci movimento
+mt_win = Livello completato
+mt_complete = Tutti i livelli completati
+mt_out = Mosse esaurite
+mt_win_detail = Il punteggio è salvato. Continua quando vuoi.
+mt_retry_detail = Riprova per completare gli obiettivi rimanenti.
+mt_next = Livello successivo
+mt_board_a11y = Tabellone di Allinea tre. Le frecce muovono il cursore, Invio seleziona o scambia, H mostra uno scambio valido.
+mt_help_swap = Tieni premuta una gemma e trascinala per vedere l'anteprima dello scambio. Prova vicini diversi, poi solleva il dito per confermare. Per annullare, torna alla casella iniziale o trascina fuori dal tabellone. Puoi anche toccare due pezzi vicini. Allinea tre o più forme uguali; le cascate aumentano il punteggio. Gli scambi senza combinazione non costano nulla.
+mt_help_special_title = Pezzi speciali
+mt_help_special = Allineane quattro per un pezzo a strisce che elimina la sua riga o colonna. Una T o una L crea un pezzo esplosivo che elimina un'area 3 × 3. Allineane cinque in fila per un jolly: scambialo con un pezzo qualsiasi per eliminare quel colore.
+mt_help_combo = Combina due pezzi speciali per un'eliminazione più ampia. Due strisce eliminano una croce; una combinazione esplosiva elimina tre righe e tre colonne. Un jolly con un pezzo speciale trasforma in speciali tutti i pezzi di quel colore. Due jolly svuotano l'intero tabellone.
+mt_help_goals = Raggiungi il punteggio obiettivo prima di finire le mosse. I livelli successivi chiedono anche di raccogliere cerchi rossi o eliminare gli strati sotto i pezzi. Gli strati doppi richiedono due colpi. I buchi dividono il tabellone in corsie di caduta separate. Finisci con 10 mosse per tre stelle, o con 5 per due. I livelli completati si possono rigiocare.
+mt_help_keys = Usa frecce e Invio per selezionare e scambiare. H evidenzia uno scambio valido; Invio lo esegue. Pausa apre impostazioni, regole e rigioca. Suoni, vibrazioni e movimento ridotto sono regolabili. Tabellone e progressi si salvano automaticamente.
+mt_complete_detail = Puoi rigiocare qualsiasi livello per migliorare punteggio e stelle.
+mt_matching = Combinazione…

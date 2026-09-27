@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
-//! Pure Reversi rules and a bounded, deterministic computer opponent.
+//! Pure Flipside rules and a bounded, deterministic computer opponent.
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]

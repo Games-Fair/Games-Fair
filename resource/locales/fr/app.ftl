@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = Casse-briques
+nav_sirtet = Blocs qui tombent
 nav_sudoku = Sudoku
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = Explose-blocs
 nav_solitaire = Solitaire
 
 gk_close = Fermer le jeu
@@ -64,7 +64,7 @@ st_game_over = Partie terminée
 st_clear_single = SIMPLE
 st_clear_double = DOUBLE
 st_clear_triple = TRIPLE
-st_clear_sirtet = SIRTET !
+st_clear_sirtet = QUADRUPLE !
 st_help_intro = Empilez les pièces et complétez des lignes avant que le puits ne se remplisse.
 st_help_play = Comment jouer
 st_help_play_1 = • **Glissez à gauche ou à droite** pour déplacer la pièce, ou utilisez les flèches du clavier.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • Fusionnez dans une même direction pour aligner les petites
 tf_help_tips_3 = • En mode Facile, **Annuler** permet de corriger une erreur.
 
 # Block Blast
-bb_board_a11y = Grille et réserve de pièces de Block Blast
+bb_board_a11y = Grille et réserve de pièces d’Explose-blocs
 bb_no_moves = Aucune pièce de la réserve ne tient sur la grille.
 bb_combo = Combo ×{ $n }
 bb_lines = { $n } lignes
@@ -324,36 +324,36 @@ mi_help_play_4 = • Touchez un chiffre ayant tous ses drapeaux pour ouvrir ses 
 mi_help_keys = Clavier
 mi_help_keys_1 = • Les flèches déplacent le curseur ; **Espace** ou **Entrée** découvre une case ; **F** pose ou retire un drapeau.
 
-# Reversi
-nav_reversi = Reversi
-rv_black = Noirs
-rv_white = Blancs
-rv_black_turn = Aux noirs de jouer
-rv_white_turn = Aux blancs de jouer
-rv_thinking = Les blancs réfléchissent…
-rv_passed = L'adversaire ne peut pas jouer et passe. { $turn }
-rv_black_wins = Les noirs gagnent !
-rv_white_wins = Les blancs gagnent !
-rv_draw = Égalité !
-rv_final_score = Noirs { $black } · Blancs { $white }
-rv_board_hint = Les points indiquent les coups possibles. Le point doré marque le dernier coup.
-rv_board_a11y = Plateau de Reversi. Les flèches choisissent une case ; Entrée pose un pion.
-rv_mode = Adversaire
-rv_solo = Ordinateur
-rv_two_players = Deux joueurs
-rv_difficulty = Difficulté de l'ordinateur
-rv_easy = Facile
-rv_medium = Moyen
-rv_hard = Difficile
-rv_start = Commencer la partie
-rv_help_rules = Les noirs commencent. Posez un pion sur une case pointée pour encadrer une ligne adverse. Tous les pions encadrés, horizontalement, verticalement ou en diagonale, prennent votre couleur.
-rv_help_pass = Sans coup possible, vous passez automatiquement. Quand personne ne peut jouer, même s'il reste des cases vides, le plus grand nombre de pions gagne.
-rv_help_solo = Jouez les noirs contre l'ordinateur ou choisissez Deux joueurs. Facile joue au hasard ; Moyen et Difficile anticipent. Les coins ne peuvent pas être retournés : prenez-les !
-rv_help_keys = Touchez un point, ou déplacez le cadre doré avec les flèches et posez avec Espace ou Entrée. P ou Échap met en pause, y compris l'ordinateur et les animations. La partie se sauvegarde en quittant.
+# Flipside
+nav_flipside = Retourne-pions
+fs_black = Noirs
+fs_white = Blancs
+fs_black_turn = Aux noirs de jouer
+fs_white_turn = Aux blancs de jouer
+fs_thinking = Les blancs réfléchissent…
+fs_passed = L'adversaire ne peut pas jouer et passe. { $turn }
+fs_black_wins = Les noirs gagnent !
+fs_white_wins = Les blancs gagnent !
+fs_draw = Égalité !
+fs_final_score = Noirs { $black } · Blancs { $white }
+fs_board_hint = Les points indiquent les coups possibles. Le point doré marque le dernier coup.
+fs_board_a11y = Plateau de Retourne-pions. Les flèches choisissent une case ; Entrée pose un pion.
+fs_mode = Adversaire
+fs_solo = Ordinateur
+fs_two_players = Deux joueurs
+fs_difficulty = Difficulté de l'ordinateur
+fs_easy = Facile
+fs_medium = Moyen
+fs_hard = Difficile
+fs_start = Commencer la partie
+fs_help_rules = Les noirs commencent. Posez un pion sur une case pointée pour encadrer une ligne adverse. Tous les pions encadrés, horizontalement, verticalement ou en diagonale, prennent votre couleur.
+fs_help_pass = Sans coup possible, vous passez automatiquement. Quand personne ne peut jouer, même s'il reste des cases vides, le plus grand nombre de pions gagne.
+fs_help_solo = Jouez les noirs contre l'ordinateur ou choisissez Deux joueurs. Facile joue au hasard ; Moyen et Difficile anticipent. Les coins ne peuvent pas être retournés : prenez-les !
+fs_help_keys = Touchez un point, ou déplacez le cadre doré avec les flèches et posez avec Espace ou Entrée. P ou Échap met en pause, y compris l'ordinateur et les animations. La partie se sauvegarde en quittant.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = Coup possible
-rv_empty = Vide
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = Coup possible
+fs_empty = Vide
 
 # Pipes
 nav_pipes = Tuyaux
@@ -384,3 +384,42 @@ pp_help_keys = Au clavier : flèches pour choisir, Espace ou Entrée pour tourne
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Le jeu Devinettes utilise l’inclinaison du téléphone pour compter un hochement de tête comme une bonne réponse.
+
+## Match Three
+nav_matchthree = Aligne-trois
+mt_moves = Coups restants
+mt_goal = Objectif
+mt_classic = Classique
+mt_corners = Coins
+mt_bridges = Ponts
+mt_diamond = Losange
+mt_windows = Fenêtres
+mt_mixed = Mixte
+mt_goal_score = Atteignez le score cible
+mt_goal_collect = Cercles rouges : { $berries } / { $target } · Atteignez le score cible
+mt_goal_frost = Couches restantes : { $frost } · Atteignez le score cible
+mt_goal_final = Cercles : { $berries } / { $target } · Couches : { $frost } · Atteignez l'objectif
+mt_swap_hint = Échangez deux voisins pour en aligner trois ou plus
+mt_shuffling = Aucun coup possible. Nouveau mélange…
+mt_cascade = Cascade ×{ $n }
+mt_hint = Indice
+mt_levels = Niveaux
+mt_map_intro = Terminez chaque niveau pour débloquer le suivant.
+mt_locked = Verrouillé
+mt_retry = Rejouer le niveau
+mt_reduced = Réduire les animations
+mt_win = Niveau terminé
+mt_complete = Tous les niveaux terminés
+mt_out = Plus de coups
+mt_win_detail = Votre score est enregistré. Continuez quand vous voulez.
+mt_retry_detail = Réessayez pour remplir les objectifs restants.
+mt_next = Niveau suivant
+mt_board_a11y = Grille d'Aligne-trois. Les flèches déplacent le curseur ; Entrée sélectionne ou échange ; H montre un échange possible.
+mt_help_swap = Maintenez une gemme et faites-la glisser pour prévisualiser un échange. Essayez différents voisins, puis relâchez pour valider. Revenez à la case de départ ou sortez de la grille pour annuler. Vous pouvez aussi toucher deux voisins. Alignez au moins trois formes identiques ; les cascades augmentent votre score. Un échange sans alignement ne coûte rien.
+mt_help_special_title = Pièces spéciales
+mt_help_special = Alignez-en quatre pour une pièce rayée qui efface sa ligne ou sa colonne. Un T ou un L crée une pièce explosive qui efface une zone de 3 × 3. Alignez-en cinq pour un joker : échangez-le avec n'importe quelle pièce pour effacer cette couleur.
+mt_help_combo = Combinez deux pièces spéciales pour un effet plus large. Deux rayées effacent une croix ; une combinaison explosive efface trois lignes et trois colonnes. Un joker avec une pièce spéciale transforme toutes les pièces de cette couleur en pièces spéciales. Deux jokers effacent toute la grille.
+mt_help_goals = Atteignez le score cible avant d'épuiser vos coups. Les niveaux suivants demandent aussi de collecter des cercles rouges ou d'effacer des couches sous les pièces. Les couches doubles demandent deux impacts. Les trous divisent la grille en couloirs de chute séparés. Finissez avec 10 coups restants pour trois étoiles, ou 5 pour deux. Les niveaux terminés peuvent être rejoués.
+mt_help_keys = Au clavier : flèches et Entrée pour sélectionner et échanger. H met en évidence un échange possible ; Entrée le joue. Pause ouvre les paramètres, les règles et l'option Rejouer. Sons, vibrations et animations réduites sont réglables. La grille et la progression se sauvegardent automatiquement.
+mt_complete_detail = Vous pouvez rejouer n'importe quel niveau pour améliorer votre score et vos étoiles.
+mt_matching = Alignement…

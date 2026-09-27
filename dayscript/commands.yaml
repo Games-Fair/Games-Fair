@@ -2,19 +2,29 @@ name: shared-close-command
 description: Header close and pause-menu Quit share the shell's leave-game command.
 flow:
   - wait_for: { id: home }
-  - navigate: { route: reversi }
-  - wait_for: { id: rv-pause }
-  - tap: { id: rv-pause }
-  - wait_for: { id: rv-quit }
-  - screenshot: command-reversi-quit
-  - tap: { id: rv-quit }
+  # A fresh install opens each game on its rules, which hold the pause menu shut: open and leave
+  # each game once so the rules are consumed (as frame-sync.yaml does).
+  - navigate: { route: flipside }
+  - pause: { secs: 0.4 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: mines }
+  - pause: { secs: 0.4 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - navigate: { route: flipside }
+  - wait_for: { id: fs-pause }
+  - tap: { id: fs-pause }
+  - wait_for: { id: fs-quit }
+  - screenshot: command-flipside-quit
+  - tap: { id: fs-quit }
   - wait_for: { id: home }
-  - assert_missing: { id: rv-pause }
-  - navigate: { route: reversi }
+  - assert_missing: { id: fs-pause }
+  - navigate: { route: flipside }
   - wait_for: { id: close-game }
   - tap: { id: close-game }
   - wait_for: { id: home }
-  - assert_missing: { id: rv-pause }
+  - assert_missing: { id: fs-pause }
   - navigate: { route: mines }
   - wait_for: { id: mi-pause }
   - tap: { id: mi-pause }

@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = ブロック崩し
+nav_sirtet = 落ちものブロック
 nav_sudoku = 数独
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = ブロック爆破
 nav_solitaire = ソリティア
 
 gk_close = ゲームを閉じる
@@ -64,7 +64,7 @@ st_game_over = ゲームオーバー
 st_clear_single = シングル
 st_clear_double = ダブル
 st_clear_triple = トリプル
-st_clear_sirtet = SIRTET！
+st_clear_sirtet = 4ライン！
 st_help_intro = 落ちてくるブロックを積み、画面が埋まる前に横一列をそろえましょう。
 st_help_play = 遊び方
 st_help_play_1 = • **左右にドラッグ**するか、キーボードの矢印キーで移動します。
@@ -106,7 +106,7 @@ tf_help_tips_2 = • 一方向に合体させ、小さい数字を大きい数�
 tf_help_tips_3 = • かんたんでは**戻す**を使ってミスを修正できます。
 
 # Block Blast
-bb_board_a11y = ブロックブラストの盤面と手持ちブロック
+bb_board_a11y = ブロック爆破の盤面と手持ちブロック
 bb_no_moves = 置けるブロックがありません。
 bb_combo = コンボ ×{ $n }
 bb_lines = { $n } ライン
@@ -324,36 +324,36 @@ mi_help_play_4 = • 必要な旗がそろった数字をタップすると残�
 mi_help_keys = キーボード
 mi_help_keys_1 = • 矢印で移動、**Space**か**Enter**で開き、**F**で旗を付け外しします。
 
-# Reversi
-nav_reversi = リバーシ
-rv_black = 黒
-rv_white = 白
-rv_black_turn = 黒の番
-rv_white_turn = 白の番
-rv_thinking = 白が考えています…
-rv_passed = 相手は置けないためパスします。{ $turn }
-rv_black_wins = 黒の勝ち！
-rv_white_wins = 白の勝ち！
-rv_draw = 引き分け！
-rv_final_score = 黒 { $black } · 白 { $white }
-rv_board_hint = 点は置ける場所、金色の点は直前の手です。
-rv_board_a11y = リバーシの盤面。矢印でマスを選び、Enterで石を置きます。
-rv_mode = 対戦相手
-rv_solo = コンピューター
-rv_two_players = 2人対戦
-rv_difficulty = コンピューターの強さ
-rv_easy = やさしい
-rv_medium = ふつう
-rv_hard = むずかしい
-rv_start = 対局開始
-rv_help_rules = 黒から始めます。点のあるマスに置き、自分の石で相手の列を挟みます。縦・横・斜めに挟んだ石が自分の色になります。
-rv_help_pass = 置けないと自動でパスします。両者とも置けなくなると空きマスがあっても終了し、石の多い側が勝ちます。
-rv_help_solo = 黒でコンピューターに挑むか、新しいゲームで2人対戦を選びます。かんたんはランダム、ふつうとむずかしいは先読みします。角の石は返せないので狙いましょう。
-rv_help_keys = 点をタップするか、矢印で金枠を動かしSpaceかEnterで置きます。PかEscapeでコンピューターとアニメーションも一時停止。離れると保存します。
+# Flipside
+nav_flipside = 裏返し
+fs_black = 黒
+fs_white = 白
+fs_black_turn = 黒の番
+fs_white_turn = 白の番
+fs_thinking = 白が考えています…
+fs_passed = 相手は置けないためパスします。{ $turn }
+fs_black_wins = 黒の勝ち！
+fs_white_wins = 白の勝ち！
+fs_draw = 引き分け！
+fs_final_score = 黒 { $black } · 白 { $white }
+fs_board_hint = 点は置ける場所、金色の点は直前の手です。
+fs_board_a11y = 裏返しの盤面。矢印でマスを選び、Enterで石を置きます。
+fs_mode = 対戦相手
+fs_solo = コンピューター
+fs_two_players = 2人対戦
+fs_difficulty = コンピューターの強さ
+fs_easy = やさしい
+fs_medium = ふつう
+fs_hard = むずかしい
+fs_start = 対局開始
+fs_help_rules = 黒から始めます。点のあるマスに置き、自分の石で相手の列を挟みます。縦・横・斜めに挟んだ石が自分の色になります。
+fs_help_pass = 置けないと自動でパスします。両者とも置けなくなると空きマスがあっても終了し、石の多い側が勝ちます。
+fs_help_solo = 黒でコンピューターに挑むか、新しいゲームで2人対戦を選びます。かんたんはランダム、ふつうとむずかしいは先読みします。角の石は返せないので狙いましょう。
+fs_help_keys = 点をタップするか、矢印で金枠を動かしSpaceかEnterで置きます。PかEscapeでコンピューターとアニメーションも一時停止。離れると保存します。
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = 置ける場所
-rv_empty = 空き
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = 置ける場所
+fs_empty = 空き
 
 # Pipes
 nav_pipes = パイプ
@@ -384,3 +384,42 @@ pp_help_keys = 矢印で選択、SpaceかEnterで回転、Lで固定、PかEscap
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = ジェスチャーゲームは端末の傾きを読み取り、うなずきを正解として記録します。
+
+## Match Three
+nav_matchthree = 3つそろえ
+mt_moves = 残り手数
+mt_goal = 目標
+mt_classic = クラシック
+mt_corners = コーナー
+mt_bridges = ブリッジ
+mt_diamond = ダイヤ
+mt_windows = ウィンドウ
+mt_mixed = ミックス
+mt_goal_score = 目標スコアを達成
+mt_goal_collect = 赤い丸：{ $berries } / { $target } · 目標スコアを達成
+mt_goal_frost = 残りの層：{ $frost } · 目標スコアを達成
+mt_goal_final = 丸：{ $berries } / { $target } · 層：{ $frost } · 目標を達成
+mt_swap_hint = 隣どうしを入れ替えて3つ以上そろえよう
+mt_shuffling = 動かせる手がありません。シャッフル中…
+mt_cascade = 連鎖 ×{ $n }
+mt_hint = ヒント
+mt_levels = レベル
+mt_map_intro = 各レベルをクリアすると次のレベルが解放されます。
+mt_locked = ロック中
+mt_retry = レベルをやり直す
+mt_reduced = 動きを減らす
+mt_win = レベルクリア
+mt_complete = 全レベルクリア
+mt_out = 手数切れ
+mt_win_detail = スコアは保存されました。準備ができたら続けましょう。
+mt_retry_detail = もう一度挑戦して、残りの目標を達成しましょう。
+mt_next = 次のレベル
+mt_board_a11y = 3つそろえの盤面。矢印でカーソル移動、Enterで選択または入れ替え、Hで入れ替えられる場所を表示。
+mt_help_swap = 宝石を長押ししてドラッグすると、入れ替えをプレビューできます。隣のいろいろなマスを試し、指を離すと確定します。元のマスに戻すか盤面の外へドラッグするとキャンセルします。隣り合う2つをタップしても入れ替えられます。同じ形を3つ以上そろえましょう。連鎖するとスコアが増えます。そろわない入れ替えはペナルティなしです。
+mt_help_special_title = 特殊ピース
+mt_help_special = 4つそろえると、その行か列を消すストライプピースができます。T字やL字にそろえると、3 × 3の範囲を消すボムピースができます。一列に5つそろえるとワイルドカードができ、どれかのピースと入れ替えるとその色をすべて消します。
+mt_help_combo = 特殊ピースどうしを組み合わせると、より広く消せます。ストライプ2つで十字に消え、ボムとの組み合わせでは3行と3列を消します。ワイルドカードと特殊ピースで、その色のピースがすべて特殊ピースに変わります。ワイルドカード2つで盤面全体を消します。
+mt_help_goals = 手数がなくなる前に目標スコアを達成しましょう。後半のレベルでは、赤い丸を集めたり、ピースの下の層を消したりする必要もあります。二重の層は2回当てると消えます。穴があると、盤面は別々の落下レーンに分かれます。残り10手でクリアすると星3つ、5手なら星2つ。クリアしたレベルは何度でも遊べます。
+mt_help_keys = 矢印とEnterで選択・入れ替え。Hで入れ替えられる場所を強調し、Enterで実行します。一時停止から設定、ルール、やり直しを開けます。効果音、振動、動きを減らす設定は変更できます。盤面と進行状況は自動で保存されます。
+mt_complete_detail = どのレベルもやり直して、スコアと星の評価を上げられます。
+mt_matching = そろえています…

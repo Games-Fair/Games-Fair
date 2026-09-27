@@ -93,8 +93,8 @@ impl SavedPreferences {
             "pipes.v1",
             "pipes.settings",
             "pipes.records",
-            "reversi.v1",
-            "reversi.settings",
+            "flipside.v1",
+            "flipside.settings",
             "twentyfortyeight.v1",
             "twentyfortyeight.settings",
             "twentyfortyeight.best",
@@ -145,7 +145,7 @@ fn real_boards_sleep_wake_and_cancel_on_cover_disposal() {
     day_core::launch_with(mock, dayapp::window(), move || {
         zstack((
             when(move || selected.get() == 1, pipes::pipes_page),
-            when(move || selected.get() == 2, reversi::reversi_page),
+            when(move || selected.get() == 2, flipside::flipside_page),
             when(
                 move || selected.get() == 3,
                 twentyfortyeight::twentyfortyeight_page,
@@ -180,8 +180,8 @@ fn real_boards_sleep_wake_and_cancel_on_cover_disposal() {
     }
     close();
 
-    open(2, "rv-help-done");
-    key("rv-board", "Enter"); // D3, followed by the computer's reply.
+    open(2, "fs-help-done");
+    key("fs-board", "Enter"); // D3, followed by the computer's reply.
     frames.awake();
     frames.advance(3.0);
     frames.idle();

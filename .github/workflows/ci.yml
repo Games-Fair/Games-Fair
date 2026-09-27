@@ -43,7 +43,7 @@ jobs:
       day-version: main
       # The walkthroughs beside the app: the navigation sweep, every game's screenshots, and the
       # two games whose input needs its own script.
-      scripts: dayscript/smoke.yaml dayscript/games.yaml dayscript/reversi.yaml dayscript/pipes.yaml
+      scripts: dayscript/smoke.yaml dayscript/games.yaml dayscript/flipside.yaml dayscript/pipes.yaml
       # Pins every game's RNG, so a scripted run meets the same puzzle and layout everywhere.
       launch-env: DAY_GAMES_SEED=15
       # Every language the app ships, read from resource/locales/, so a language added to the app

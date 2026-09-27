@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = Quebra-Tijolos
+nav_sirtet = Blocos que Caem
 nav_sudoku = Sudoku
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = Explode-Blocos
 nav_solitaire = Paciência
 
 gk_close = Fechar jogo
@@ -64,7 +64,7 @@ st_game_over = Fim de jogo
 st_clear_single = SIMPLES
 st_clear_double = DUPLA
 st_clear_triple = TRIPLA
-st_clear_sirtet = SIRTET!
+st_clear_sirtet = QUÁDRUPLA!
 st_help_intro = Empilhe as peças e complete linhas antes que o campo fique cheio.
 st_help_play = Como jogar
 st_help_play_1 = • **Arraste para os lados** para mover a peça, ou use as setas do teclado.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • Junte em uma direção para alinhar as peças pequenas abai
 tf_help_tips_3 = • No Fácil, use **Desfazer** para corrigir erros.
 
 # Block Blast
-bb_board_a11y = Tabuleiro e bandeja de peças do Block Blast
+bb_board_a11y = Tabuleiro e bandeja de peças do Explode-Blocos
 bb_no_moves = Nenhuma peça da bandeja cabe no tabuleiro.
 bb_combo = Combo ×{ $n }
 bb_lines = { $n } linhas
@@ -324,36 +324,36 @@ mi_help_play_4 = • Toque num número com todas as bandeiras para abrir os outr
 mi_help_keys = Teclado
 mi_help_keys_1 = • As setas movem o cursor; **Espaço** ou **Enter** revela; **F** coloca ou remove uma bandeira.
 
-# Reversi
-nav_reversi = Reversi
-rv_black = Pretas
-rv_white = Brancas
-rv_black_turn = Vez das pretas
-rv_white_turn = Vez das brancas
-rv_thinking = As brancas estão pensando…
-rv_passed = O adversário não pode jogar e passa. { $turn }
-rv_black_wins = As pretas venceram!
-rv_white_wins = As brancas venceram!
-rv_draw = Empate!
-rv_final_score = Pretas { $black } · Brancas { $white }
-rv_board_hint = Os pontos indicam jogadas válidas. O dourado indica a última.
-rv_board_a11y = Tabuleiro de Reversi. As setas selecionam e Enter coloca uma peça.
-rv_mode = Adversário
-rv_solo = Computador
-rv_two_players = Dois jogadores
-rv_difficulty = Dificuldade do computador
-rv_easy = Fácil
-rv_medium = Médio
-rv_hard = Difícil
-rv_start = Iniciar partida
-rv_help_rules = As pretas começam. Coloque num ponto para cercar uma linha rival entre duas peças suas. Peças cercadas na horizontal, vertical ou diagonal mudam para sua cor.
-rv_help_pass = Sem jogadas válidas, você passa automaticamente. Quando ninguém pode jogar, a partida termina mesmo com casas vazias. Quem tem mais peças vence.
-rv_help_solo = Jogue com as pretas contra o computador ou escolha Dois jogadores. Fácil joga ao acaso; Médio e Difícil antecipam. Cantos não podem ser virados: conquiste-os!
-rv_help_keys = Toque num ponto ou mova a borda dourada com as setas e coloque com Espaço ou Enter. P ou Escape pausa também o computador e as animações. A partida é salva ao sair.
+# Flipside
+nav_flipside = Vira-Peças
+fs_black = Pretas
+fs_white = Brancas
+fs_black_turn = Vez das pretas
+fs_white_turn = Vez das brancas
+fs_thinking = As brancas estão pensando…
+fs_passed = O adversário não pode jogar e passa. { $turn }
+fs_black_wins = As pretas venceram!
+fs_white_wins = As brancas venceram!
+fs_draw = Empate!
+fs_final_score = Pretas { $black } · Brancas { $white }
+fs_board_hint = Os pontos indicam jogadas válidas. O dourado indica a última.
+fs_board_a11y = Tabuleiro do Vira-Peças. As setas selecionam e Enter coloca uma peça.
+fs_mode = Adversário
+fs_solo = Computador
+fs_two_players = Dois jogadores
+fs_difficulty = Dificuldade do computador
+fs_easy = Fácil
+fs_medium = Médio
+fs_hard = Difícil
+fs_start = Iniciar partida
+fs_help_rules = As pretas começam. Coloque num ponto para cercar uma linha rival entre duas peças suas. Peças cercadas na horizontal, vertical ou diagonal mudam para sua cor.
+fs_help_pass = Sem jogadas válidas, você passa automaticamente. Quando ninguém pode jogar, a partida termina mesmo com casas vazias. Quem tem mais peças vence.
+fs_help_solo = Jogue com as pretas contra o computador ou escolha Dois jogadores. Fácil joga ao acaso; Médio e Difícil antecipam. Cantos não podem ser virados: conquiste-os!
+fs_help_keys = Toque num ponto ou mova a borda dourada com as setas e coloque com Espaço ou Enter. P ou Escape pausa também o computador e as animações. A partida é salva ao sair.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = Jogada válida
-rv_empty = Vazia
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = Jogada válida
+fs_empty = Vazia
 
 # Pipes
 nav_pipes = Canos
@@ -384,3 +384,42 @@ pp_help_keys = Use setas para selecionar, Espaço ou Enter para girar, L para tr
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Mímica detecta a inclinação do celular para contar um aceno de cabeça como acerto.
+
+## Match Three
+nav_matchthree = Combine Três
+mt_moves = Jogadas restantes
+mt_goal = Meta
+mt_classic = Clássico
+mt_corners = Cantos
+mt_bridges = Pontes
+mt_diamond = Diamante
+mt_windows = Janelas
+mt_mixed = Misto
+mt_goal_score = Alcance a pontuação-alvo
+mt_goal_collect = Círculos vermelhos: { $berries } / { $target } · Alcance a pontuação-alvo
+mt_goal_frost = Camadas restantes: { $frost } · Alcance a pontuação-alvo
+mt_goal_final = Círculos: { $berries } / { $target } · Camadas: { $frost } · Alcance a meta
+mt_swap_hint = Troque peças vizinhas para combinar três ou mais
+mt_shuffling = Sem jogadas possíveis. Embaralhando…
+mt_cascade = Cascata ×{ $n }
+mt_hint = Dica
+mt_levels = Níveis
+mt_map_intro = Conclua cada nível para liberar o próximo.
+mt_locked = Bloqueado
+mt_retry = Jogar nível de novo
+mt_reduced = Reduzir movimento
+mt_win = Nível concluído
+mt_complete = Todos os níveis concluídos
+mt_out = Sem jogadas
+mt_win_detail = Sua pontuação foi salva. Continue quando quiser.
+mt_retry_detail = Tente de novo para cumprir os objetivos restantes.
+mt_next = Próximo nível
+mt_board_a11y = Tabuleiro de Combine Três. As setas movem o cursor, Enter seleciona ou troca e H mostra uma troca válida.
+mt_help_swap = Segure e arraste uma gema para ver a troca antes de fazê-la. Experimente vizinhas diferentes e solte para confirmar. Arraste de volta à casa inicial ou para fora do tabuleiro para cancelar. Você também pode tocar em duas vizinhas. Combine três ou mais da mesma forma; cascatas aumentam sua pontuação. Trocas sem combinação não gastam jogadas.
+mt_help_special_title = Peças especiais
+mt_help_special = Combine quatro para uma peça listrada que limpa sua linha ou coluna. Um T ou L cria uma peça explosiva que limpa uma área 3 × 3. Combine cinco em linha para um curinga: troque-o com qualquer peça para limpar aquela cor.
+mt_help_combo = Junte duas especiais para uma limpeza maior. Duas listradas limpam uma cruz; uma combinação com explosiva limpa três linhas e três colunas. Curinga mais especial transforma todas as peças daquela cor em especiais. Dois curingas limpam o tabuleiro inteiro.
+mt_help_goals = Alcance a pontuação-alvo antes que as jogadas acabem. Níveis posteriores também pedem coletar círculos vermelhos ou limpar camadas sob as peças. Camadas duplas precisam de dois acertos. Buracos dividem o tabuleiro em colunas de queda separadas. Termine com 10 jogadas para três estrelas ou 5 para duas. Níveis concluídos podem ser jogados de novo.
+mt_help_keys = Use as setas e Enter para selecionar e trocar. H destaca uma troca válida; Enter a executa. Pausar abre ajustes, regras e a opção de jogar de novo. Sons, vibrações e movimento reduzido são ajustáveis. O tabuleiro e o progresso são salvos automaticamente.
+mt_complete_detail = Jogue qualquer nível de novo para melhorar sua pontuação e suas estrelas.
+mt_matching = Combinando…

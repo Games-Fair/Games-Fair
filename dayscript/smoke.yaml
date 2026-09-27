@@ -52,9 +52,9 @@ flow:
   - nav_back:
   - pause: { secs: 0.6 }
 
-  - navigate: { route: reversi }
+  - navigate: { route: flipside }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: rv-board }
+  - assert_visible: { id: fs-board }
   - nav_back: {}
   - pause: { secs: 0.6 }
 

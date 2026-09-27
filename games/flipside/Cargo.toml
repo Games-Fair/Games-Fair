@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 [package]
-name = "reversi"
+name = "flipside"
 version.workspace = true
 edition = "2024"
 license = "Apache-2.0"

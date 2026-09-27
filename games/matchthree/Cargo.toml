@@ -7,6 +7,7 @@ license = "AGPL-3.0-only WITH App-Fair-Distribution-Exception"
 [dependencies]
 day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-part-haptics = { git = "https://github.com/daybrite/day.git", branch = "main" }
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
 [dev-dependencies]

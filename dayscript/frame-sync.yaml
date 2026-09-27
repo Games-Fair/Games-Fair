@@ -5,25 +5,25 @@ name: frame-sync
 description: Animations wake after idle, survive pause/resume, and release closed covers.
 flow:
   - wait_for: { id: home }
-  - navigate: { route: reversi }
+  - navigate: { route: flipside }
   - pause: { secs: 0.4 }
   - nav_back: {}
   - pause: { secs: 0.4 }
-  - navigate: { route: reversi }
-  - tap: { id: rv-pause }
-  - tap: { id: rv-new-game }
-  - select: { id: rv-mode, index: 1 }
-  - tap: { id: rv-start }
+  - navigate: { route: flipside }
+  - tap: { id: fs-pause }
+  - tap: { id: fs-new-game }
+  - select: { id: fs-mode, index: 1 }
+  - tap: { id: fs-start }
   - pause: { secs: 1.0 }
-  - key: { id: rv-board, key: Enter }
+  - key: { id: fs-board, key: Enter }
   - pause: { secs: 1.0 }
-  - assert_text: { id: rv-black-score, text: "4" }
-  - assert_text: { id: rv-white-score, text: "1" }
-  - key: { id: rv-board, key: ArrowLeft }
-  - key: { id: rv-board, key: Enter }
+  - assert_text: { id: fs-black-score, text: "4" }
+  - assert_text: { id: fs-white-score, text: "1" }
+  - key: { id: fs-board, key: ArrowLeft }
+  - key: { id: fs-board, key: Enter }
   - pause: { secs: 1.0 }
-  - assert_text: { id: rv-black-score, text: "3" }
-  - assert_text: { id: rv-white-score, text: "3" }
+  - assert_text: { id: fs-black-score, text: "3" }
+  - assert_text: { id: fs-white-score, text: "3" }
   - nav_back: {}
   - pause: { secs: 0.4 }
   - navigate: { route: pipes }

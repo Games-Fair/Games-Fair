@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = 벽돌깨기
+nav_sirtet = 떨어지는 블록
 nav_sudoku = 스도쿠
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = 블록 폭파
 nav_solitaire = 솔리테어
 
 gk_close = 게임 닫기
@@ -64,7 +64,7 @@ st_game_over = 게임 오버
 st_clear_single = 한 줄
 st_clear_double = 두 줄
 st_clear_triple = 세 줄
-st_clear_sirtet = SIRTET!
+st_clear_sirtet = 네 줄!
 st_help_intro = 떨어지는 블록을 쌓아 가로줄을 채우세요. 화면이 가득 차면 안 됩니다.
 st_help_play = 게임 방법
 st_help_play_1 = • **좌우로 드래그**하거나 방향키로 블록을 움직이세요.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • 한 방향으로 합쳐 작은 타일을 큰 타일 아래�
 tf_help_tips_3 = • 쉬움에서는 **되돌리기**로 실수를 고칠 수 있습니다.
 
 # Block Blast
-bb_board_a11y = 블록 블라스트 보드와 대기 블록
+bb_board_a11y = 블록 폭파 보드와 대기 블록
 bb_no_moves = 놓을 수 있는 블록이 없습니다.
 bb_combo = 콤보 ×{ $n }
 bb_lines = { $n }줄
@@ -324,36 +324,36 @@ mi_help_play_4 = • 필요한 깃발이 모두 있는 숫자를 누르면 다�
 mi_help_keys = 키보드
 mi_help_keys_1 = • 방향키로 이동하고 **Space**나 **Enter**로 열며 **F**로 깃발을 놓거나 지웁니다.
 
-# Reversi
-nav_reversi = 리버시
-rv_black = 흑
-rv_white = 백
-rv_black_turn = 흑의 차례
-rv_white_turn = 백의 차례
-rv_thinking = 백이 생각 중…
-rv_passed = 상대가 둘 수 없어 차례를 넘깁니다. { $turn }
-rv_black_wins = 흑 승리!
-rv_white_wins = 백 승리!
-rv_draw = 무승부!
-rv_final_score = 흑 { $black } · 백 { $white }
-rv_board_hint = 점은 둘 수 있는 곳이며 금색 점은 마지막 수입니다.
-rv_board_a11y = 리버시 보드. 방향키로 선택하고 Enter로 돌을 놓습니다.
-rv_mode = 상대
-rv_solo = 컴퓨터
-rv_two_players = 두 명
-rv_difficulty = 컴퓨터 난이도
-rv_easy = 쉬움
-rv_medium = 보통
-rv_hard = 어려움
-rv_start = 대국 시작
-rv_help_rules = 흑이 먼저 둡니다. 점이 있는 곳에 놓아 내 돌 사이에 상대 돌의 줄을 가두세요. 가로, 세로, 대각선으로 갇힌 돌이 내 색으로 뒤집힙니다.
-rv_help_pass = 둘 곳이 없으면 자동으로 차례를 넘깁니다. 둘 다 못 두면 빈칸이 있어도 끝나며 돌이 많은 쪽이 이깁니다.
-rv_help_solo = 흑으로 컴퓨터와 겨루거나 새 게임에서 두 명을 고르세요. 쉬움은 무작위, 보통과 어려움은 앞을 내다봅니다. 모서리는 뒤집을 수 없으니 차지하세요!
-rv_help_keys = 점을 탭하거나 방향키로 금색 테두리를 움직이고 Space나 Enter로 놓으세요. P나 Escape로 컴퓨터와 애니메이션도 일시 정지합니다. 나갈 때 저장됩니다.
+# Flipside
+nav_flipside = 뒤집기
+fs_black = 흑
+fs_white = 백
+fs_black_turn = 흑의 차례
+fs_white_turn = 백의 차례
+fs_thinking = 백이 생각 중…
+fs_passed = 상대가 둘 수 없어 차례를 넘깁니다. { $turn }
+fs_black_wins = 흑 승리!
+fs_white_wins = 백 승리!
+fs_draw = 무승부!
+fs_final_score = 흑 { $black } · 백 { $white }
+fs_board_hint = 점은 둘 수 있는 곳이며 금색 점은 마지막 수입니다.
+fs_board_a11y = 뒤집기 보드. 방향키로 선택하고 Enter로 돌을 놓습니다.
+fs_mode = 상대
+fs_solo = 컴퓨터
+fs_two_players = 두 명
+fs_difficulty = 컴퓨터 난이도
+fs_easy = 쉬움
+fs_medium = 보통
+fs_hard = 어려움
+fs_start = 대국 시작
+fs_help_rules = 흑이 먼저 둡니다. 점이 있는 곳에 놓아 내 돌 사이에 상대 돌의 줄을 가두세요. 가로, 세로, 대각선으로 갇힌 돌이 내 색으로 뒤집힙니다.
+fs_help_pass = 둘 곳이 없으면 자동으로 차례를 넘깁니다. 둘 다 못 두면 빈칸이 있어도 끝나며 돌이 많은 쪽이 이깁니다.
+fs_help_solo = 흑으로 컴퓨터와 겨루거나 새 게임에서 두 명을 고르세요. 쉬움은 무작위, 보통과 어려움은 앞을 내다봅니다. 모서리는 뒤집을 수 없으니 차지하세요!
+fs_help_keys = 점을 탭하거나 방향키로 금색 테두리를 움직이고 Space나 Enter로 놓으세요. P나 Escape로 컴퓨터와 애니메이션도 일시 정지합니다. 나갈 때 저장됩니다.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = 가능한 수
-rv_empty = 빈칸
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = 가능한 수
+fs_empty = 빈칸
 
 # Pipes
 nav_pipes = 파이프
@@ -384,3 +384,42 @@ pp_help_keys = 방향키로 선택, Space나 Enter로 회전, L로 잠금, P나 
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = 몸으로 말해요는 휴대전화의 기울기를 감지하여 고개를 끄덕이면 정답으로 기록합니다.
+
+## Match Three
+nav_matchthree = 셋 맞추기
+mt_moves = 남은 이동
+mt_goal = 목표
+mt_classic = 클래식
+mt_corners = 모서리
+mt_bridges = 다리
+mt_diamond = 다이아몬드
+mt_windows = 창문
+mt_mixed = 혼합
+mt_goal_score = 목표 점수에 도달하세요
+mt_goal_collect = 빨간 원: { $berries } / { $target } · 목표 점수에 도달하세요
+mt_goal_frost = 남은 층: { $frost } · 목표 점수에 도달하세요
+mt_goal_final = 원: { $berries } / { $target } · 층: { $frost } · 목표에 도달하세요
+mt_swap_hint = 이웃한 조각을 바꿔 셋 이상 맞추세요
+mt_shuffling = 가능한 이동이 없습니다. 다시 섞는 중…
+mt_cascade = 연쇄 ×{ $n }
+mt_hint = 힌트
+mt_levels = 레벨
+mt_map_intro = 레벨을 완료하면 다음 레벨이 열립니다.
+mt_locked = 잠김
+mt_retry = 레벨 다시 하기
+mt_reduced = 동작 줄이기
+mt_win = 레벨 완료
+mt_complete = 모든 레벨 완료
+mt_out = 이동 횟수 소진
+mt_win_detail = 점수가 저장되었습니다. 준비되면 계속하세요.
+mt_retry_detail = 다시 도전해 남은 목표를 완료하세요.
+mt_next = 다음 레벨
+mt_board_a11y = 셋 맞추기 보드. 방향키로 커서를 옮기고 Enter로 선택하거나 바꾸며 H로 가능한 교환을 표시합니다.
+mt_help_swap = 보석을 길게 눌러 끌면 교환을 미리 볼 수 있습니다. 여러 이웃을 시도해 보고 손을 떼면 확정됩니다. 처음 칸으로 되돌리거나 보드 밖으로 끌면 취소됩니다. 이웃한 두 조각을 차례로 탭해도 됩니다. 같은 모양을 셋 이상 맞추세요. 연쇄가 일어나면 점수가 올라갑니다. 맞춰지지 않는 교환은 이동으로 세지 않습니다.
+mt_help_special_title = 특수 조각
+mt_help_special = 넷을 맞추면 가로줄이나 세로줄을 없애는 줄무늬 조각이 생깁니다. T자나 L자로 맞추면 3 × 3 범위를 없애는 폭탄 조각이 생깁니다. 한 줄로 다섯을 맞추면 만능 조각이 생기며, 아무 조각과 바꾸면 그 색을 모두 없앱니다.
+mt_help_combo = 특수 조각 둘을 합치면 더 넓게 없앱니다. 줄무늬 둘은 십자 모양으로, 폭탄 조합은 세 줄과 세 열을 없앱니다. 만능 조각과 특수 조각을 합치면 그 색의 모든 조각이 특수 조각이 됩니다. 만능 조각 둘은 보드 전체를 없앱니다.
+mt_help_goals = 이동 횟수가 다 떨어지기 전에 목표 점수에 도달하세요. 이후 레벨에서는 빨간 원을 모으거나 조각 아래의 층을 없애야 합니다. 이중 층은 두 번 맞혀야 합니다. 구멍은 보드를 조각이 따로 떨어지는 칸으로 나눕니다. 이동이 10번 남으면 별 셋, 5번 남으면 별 둘입니다. 완료한 레벨은 다시 할 수 있습니다.
+mt_help_keys = 방향키와 Enter로 선택하고 바꿉니다. H는 가능한 교환을 표시하고 Enter로 실행합니다. 일시정지에서 설정, 규칙, 다시 하기를 열 수 있습니다. 효과음, 진동, 동작 줄이기를 조정할 수 있습니다. 보드와 진행 상황은 자동으로 저장됩니다.
+mt_complete_detail = 레벨을 다시 플레이해 점수와 별점을 올릴 수 있습니다.
+mt_matching = 맞추는 중…

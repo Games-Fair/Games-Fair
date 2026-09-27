@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = Pemecah Bata
+nav_sirtet = Balok Jatuh
 nav_sudoku = Sudoku
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = Ledakan Balok
 nav_solitaire = Solitaire
 
 gk_close = Tutup permainan
@@ -64,7 +64,7 @@ st_game_over = Permainan berakhir
 st_clear_single = SATU
 st_clear_double = DUA
 st_clear_triple = TIGA
-st_clear_sirtet = SIRTET!
+st_clear_sirtet = EMPAT!
 st_help_intro = Susun balok jatuh dan lengkapi baris sebelum arena penuh.
 st_help_play = Cara bermain
 st_help_play_1 = • **Seret ke kiri atau kanan** untuk menggerakkan balok, atau gunakan tombol panah.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • Gabungkan ke satu arah agar ubin kecil tersusun di bawah ya
 tf_help_tips_3 = • Pada Mudah, gunakan **Urungkan** untuk memperbaiki kesalahan.
 
 # Block Blast
-bb_board_a11y = Papan dan baki balok Block Blast
+bb_board_a11y = Papan dan baki balok Ledakan Balok
 bb_no_moves = Tidak ada balok di baki yang muat di papan.
 bb_combo = Kombo ×{ $n }
 bb_lines = { $n } baris
@@ -324,36 +324,36 @@ mi_help_play_4 = • Ketuk angka yang semua benderanya terpasang untuk membuka t
 mi_help_keys = Papan ketik
 mi_help_keys_1 = • Panah memindahkan kursor; **Spasi** atau **Enter** membuka; **F** memasang atau melepas bendera.
 
-# Reversi
-nav_reversi = Reversi
-rv_black = Hitam
-rv_white = Putih
-rv_black_turn = Giliran hitam
-rv_white_turn = Giliran putih
-rv_thinking = Putih sedang berpikir…
-rv_passed = Lawan tidak bisa bergerak dan melewati giliran. { $turn }
-rv_black_wins = Hitam menang!
-rv_white_wins = Putih menang!
-rv_draw = Seri!
-rv_final_score = Hitam { $black } · Putih { $white }
-rv_board_hint = Titik menunjukkan langkah sah. Titik emas menandai langkah terakhir.
-rv_board_a11y = Papan Reversi. Panah memilih petak dan Enter meletakkan keping.
-rv_mode = Lawan
-rv_solo = Komputer
-rv_two_players = Dua pemain
-rv_difficulty = Kesulitan komputer
-rv_easy = Mudah
-rv_medium = Sedang
-rv_hard = Sulit
-rv_start = Mulai permainan
-rv_help_rules = Hitam bergerak lebih dulu. Letakkan keping pada titik untuk menjepit deretan lawan di antara kepingmu. Keping terjepit berbalik warna secara mendatar, tegak, atau diagonal.
-rv_help_pass = Tanpa langkah sah, giliran dilewati otomatis. Jika keduanya tidak bisa bergerak, permainan berakhir meski ada petak kosong. Pemilik keping terbanyak menang.
-rv_help_solo = Mainkan hitam melawan komputer atau pilih Dua pemain. Mudah bergerak acak; Sedang dan Sulit memperhitungkan langkah berikutnya. Sudut tidak bisa dibalik: kuasailah!
-rv_help_keys = Ketuk titik atau gerakkan bingkai emas dengan panah, lalu Spasi atau Enter untuk meletakkan. P atau Escape menjeda komputer dan animasi juga. Permainan tersimpan saat keluar.
+# Flipside
+nav_flipside = Balik Keping
+fs_black = Hitam
+fs_white = Putih
+fs_black_turn = Giliran hitam
+fs_white_turn = Giliran putih
+fs_thinking = Putih sedang berpikir…
+fs_passed = Lawan tidak bisa bergerak dan melewati giliran. { $turn }
+fs_black_wins = Hitam menang!
+fs_white_wins = Putih menang!
+fs_draw = Seri!
+fs_final_score = Hitam { $black } · Putih { $white }
+fs_board_hint = Titik menunjukkan langkah sah. Titik emas menandai langkah terakhir.
+fs_board_a11y = Papan Balik Keping. Panah memilih petak dan Enter meletakkan keping.
+fs_mode = Lawan
+fs_solo = Komputer
+fs_two_players = Dua pemain
+fs_difficulty = Kesulitan komputer
+fs_easy = Mudah
+fs_medium = Sedang
+fs_hard = Sulit
+fs_start = Mulai permainan
+fs_help_rules = Hitam bergerak lebih dulu. Letakkan keping pada titik untuk menjepit deretan lawan di antara kepingmu. Keping terjepit berbalik warna secara mendatar, tegak, atau diagonal.
+fs_help_pass = Tanpa langkah sah, giliran dilewati otomatis. Jika keduanya tidak bisa bergerak, permainan berakhir meski ada petak kosong. Pemilik keping terbanyak menang.
+fs_help_solo = Mainkan hitam melawan komputer atau pilih Dua pemain. Mudah bergerak acak; Sedang dan Sulit memperhitungkan langkah berikutnya. Sudut tidak bisa dibalik: kuasailah!
+fs_help_keys = Ketuk titik atau gerakkan bingkai emas dengan panah, lalu Spasi atau Enter untuk meletakkan. P atau Escape menjeda komputer dan animasi juga. Permainan tersimpan saat keluar.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = Langkah sah
-rv_empty = Kosong
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = Langkah sah
+fs_empty = Kosong
 
 # Pipes
 nav_pipes = Pipa
@@ -384,3 +384,42 @@ pp_help_keys = Panah memilih, Spasi atau Enter memutar, L mengunci, P atau Escap
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Tebak Kata membaca kemiringan ponsel untuk menghitung anggukan sebagai jawaban benar.
+
+## Match Three
+nav_matchthree = Cocok Tiga
+mt_moves = Sisa langkah
+mt_goal = Target
+mt_classic = Klasik
+mt_corners = Sudut
+mt_bridges = Jembatan
+mt_diamond = Berlian
+mt_windows = Jendela
+mt_mixed = Campuran
+mt_goal_score = Capai skor target
+mt_goal_collect = Lingkaran merah: { $berries } / { $target } · Capai skor target
+mt_goal_frost = Sisa lapisan: { $frost } · Capai skor target
+mt_goal_final = Lingkaran: { $berries } / { $target } · Lapisan: { $frost } · Capai target
+mt_swap_hint = Tukar keping bersebelahan untuk mencocokkan tiga atau lebih
+mt_shuffling = Tidak ada langkah tersisa. Mengocok ulang…
+mt_cascade = Beruntun ×{ $n }
+mt_hint = Petunjuk
+mt_levels = Level
+mt_map_intro = Selesaikan setiap level untuk membuka level berikutnya.
+mt_locked = Terkunci
+mt_retry = Ulangi level
+mt_reduced = Kurangi gerakan
+mt_win = Level selesai
+mt_complete = Semua level selesai
+mt_out = Langkah habis
+mt_win_detail = Skormu sudah tersimpan. Lanjutkan kapan pun kamu siap.
+mt_retry_detail = Coba lagi untuk menyelesaikan sisa target.
+mt_next = Level berikutnya
+mt_board_a11y = Papan Cocok Tiga. Panah memindahkan kursor; Enter memilih atau menukar; H menunjukkan tukaran yang sah.
+mt_help_swap = Tahan dan seret permata untuk melihat pratinjau tukaran. Coba tetangga yang berbeda, lalu angkat jari untuk menukar. Seret kembali ke petak awal atau keluar papan untuk membatalkan. Kamu juga bisa mengetuk dua keping bersebelahan. Cocokkan tiga atau lebih bentuk yang sama; rentetan beruntun menambah skor. Tukaran yang tidak membentuk kecocokan tidak dihitung.
+mt_help_special_title = Keping spesial
+mt_help_special = Cocokkan empat untuk keping bergaris yang menghapus baris atau kolomnya. Bentuk T atau L menghasilkan keping ledakan yang menghapus area 3 × 3. Cocokkan lima dalam satu garis untuk wildcard: tukar dengan keping apa pun untuk menghapus warna itu.
+mt_help_combo = Gabungkan dua keping spesial untuk hapusan lebih besar. Dua keping bergaris menghapus pola silang; kombinasi ledakan menghapus tiga baris dan tiga kolom. Wildcard dengan keping spesial mengubah semua keping warna itu menjadi spesial. Dua wildcard menghapus seluruh papan.
+mt_help_goals = Capai skor target sebelum langkah habis. Level berikutnya juga meminta mengumpulkan lingkaran merah atau menghapus lapisan di bawah keping. Lapisan ganda perlu dua pukulan. Lubang membagi papan menjadi jalur jatuh terpisah. Selesaikan dengan sisa 10 langkah untuk tiga bintang, atau 5 untuk dua. Level yang selesai bisa dimainkan ulang.
+mt_help_keys = Gunakan panah dan Enter untuk memilih dan menukar. H menyorot tukaran yang sah; Enter memainkannya. Jeda membuka pengaturan, aturan, dan ulangi level. Suara, getaran, dan pengurangan gerakan bisa diatur. Papan dan progresmu tersimpan otomatis.
+mt_complete_detail = Kamu bisa mengulang level mana pun untuk memperbaiki skor dan bintangmu.
+mt_matching = Mencocokkan…

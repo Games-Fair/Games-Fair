@@ -9,8 +9,10 @@ use std::{
     collections::VecDeque,
     rc::Rc,
 };
+mod fx;
 mod gesture;
 mod model;
+use day_part_haptics::Haptic;
 use gesture::{Hold, Preview};
 use model::*;
 pub const SURFACE: Color = Color::hex(0x18132E);
@@ -31,6 +33,33 @@ static BLOOM: chrome::Cue = cues::with("sounds/matchthree/bloom.wav", cues::MEDI
 static CASCADE: chrome::Cue = cues::with("sounds/matchthree/cascade.wav", chrome::CELEBRATE);
 static MAGIC: chrome::Cue = cues::with("sounds/matchthree/magic.wav", chrome::THUD);
 static VICTORY: chrome::Cue = cues::with("sounds/matchthree/victory.wav", chrome::BIG_CELEBRATE);
+/// Three chains or more: the cascade clip over a phrase that keeps climbing.
+static SURGE: chrome::Cue = cues::with(
+    "sounds/matchthree/cascade.wav",
+    &[
+        (0, Haptic::Heavy),
+        (70, Haptic::Medium),
+        (140, Haptic::Medium),
+        (230, Haptic::Success),
+    ],
+);
+/// Felt, not heard: a gem lifted, gems landing, the board reshuffling.
+static PICK: chrome::Cue = felt(cues::LIGHT_BEAT);
+static LAND: chrome::Cue = felt(&[(0, Haptic::Light)]);
+static RIPPLE: chrome::Cue = felt(&[
+    (0, Haptic::Selection),
+    (90, Haptic::Selection),
+    (180, Haptic::Selection),
+    (270, Haptic::Light),
+]);
+const fn felt(haptic: chrome::Pattern) -> chrome::Cue {
+    chrome::Cue {
+        sound: None,
+        sound_at: 0,
+        volume: 0.0,
+        haptic,
+    }
+}
 #[derive(Clone, Default, Serialize, Deserialize)]
 struct Settings {
     shell: chrome::GameSettings,
@@ -65,6 +94,40 @@ struct Ui {
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
     reduced: Signal<bool>,
+    sparks: RefCell<fx::Sparks>,
+    /// Board shake in points and a full-board flash (0..1, and its tint), both decaying; set in
+    /// the same tick as the haptic they go with.
+    shake: Cell<f64>,
+    flash: Cell<(f64, Color)>,
+}
+/// Where each moving gem is `elapsed` into `f`, in board cells, with its color.
+fn gliding(f: &Frame, elapsed: f64) -> Vec<(f64, f64, u8)> {
+    let dur = match f.phase {
+        Phase::Fall => 0.32,
+        Phase::Swap | Phase::Return => 0.18,
+        _ => return vec![],
+    };
+    let t = (elapsed / dur).clamp(0.0, 1.0);
+    let p = 1.0 - (1.0 - t).powi(3);
+    f.motion
+        .iter()
+        .filter_map(|&(from, to)| {
+            let cv = f.grid[to]?;
+            let (tx, ty) = cell_center(to);
+            let (fx, fy) = if from >= LEN {
+                (tx, ty - (from - LEN) as f64)
+            } else {
+                cell_center(from)
+            };
+            Some((fx + (tx - fx) * p, fy + (ty - fy) * p, cv.color))
+        })
+        .collect()
+}
+fn cell_center(i: usize) -> (f64, f64) {
+    ((i % N) as f64 + 0.5, (i / N) as f64 + 0.5)
+}
+fn gem_color(i: u8) -> Color {
+    Color::hex(PALETTE[i as usize])
 }
 impl Ui {
     fn cue(&self, c: &chrome::Cue) {
@@ -108,6 +171,9 @@ impl Ui {
         self.cursor
             .set((0..LEN).find(|&i| active(level, i)).unwrap());
         self.elapsed.set(0.0);
+        self.sparks.borrow_mut().clear();
+        self.shake.set(0.0);
+        self.flash.set((0.0, Color::WHITE));
         self.show(Overlay::None);
         self.repaint.notify();
         self.cue(&cues::START);
@@ -209,12 +275,104 @@ impl Ui {
             // return has already settled; otherwise an idle board could suppress taps forever.
             || self.time.get() < self.suppress_tap_until.get()
             || self.save.borrow().game.over()
+            || !self.sparks.borrow().is_empty()
+            || self.shake.get() > 0.0
+            || self.flash.get().0 > 0.0
+    }
+    /// Age the sparks, the shake and the flash. True while any of them was still showing, so the
+    /// tick that retires the last one still repaints it away.
+    fn step_fx(&self, dt: f64) -> bool {
+        let live =
+            !self.sparks.borrow().is_empty() || self.shake.get() > 0.0 || self.flash.get().0 > 0.0;
+        self.sparks.borrow_mut().step(dt);
+        let shake = self.shake.get() * (-9.0 * dt).exp();
+        self.shake.set(if shake < 0.2 { 0.0 } else { shake });
+        let (flash, tint) = self.flash.get();
+        let flash = flash * (-6.0 * dt).exp();
+        self.flash
+            .set((if flash < 0.02 { 0.0 } else { flash }, tint));
+        live
+    }
+    /// A burst frame starting: its sparks, shake and flash, and the cue whose haptic they match.
+    fn burst(&self, f: &Frame) -> &'static chrome::Cue {
+        let specials: Vec<Special> = f
+            .cleared
+            .iter()
+            .filter_map(|&i| f.grid[i].map(|c| c.special))
+            .filter(|&s| s != Special::Plain)
+            .collect();
+        let rainbow = specials.contains(&Special::Rainbow);
+        if !self.reduced.get_untracked() {
+            let power = 1.0
+                + 0.35 * f.chain.saturating_sub(1) as f64
+                + if specials.is_empty() { 0.0 } else { 0.8 };
+            let mut sparks = self.sparks.borrow_mut();
+            for &i in &f.cleared {
+                let Some(cv) = f.grid[i] else { continue };
+                let (x, y) = cell_center(i);
+                let color = gem_color(cv.color);
+                sparks.burst(x, y, color, power);
+                match cv.special {
+                    Special::Row => sparks.beam(x, y, true, color),
+                    Special::Column => sparks.beam(x, y, false, color),
+                    Special::Wrapped => sparks.burst(x, y, Color::WHITE, power + 1.0),
+                    Special::Rainbow => {
+                        for k in 0..6 {
+                            sparks.burst(x, y, gem_color(k), 0.8);
+                        }
+                    }
+                    Special::Plain => {}
+                }
+            }
+            let shake = if !specials.is_empty() {
+                6.0
+            } else if f.chain >= 3 {
+                4.0
+            } else if f.chain == 2 || f.cleared.len() >= 5 {
+                2.0
+            } else {
+                0.0
+            };
+            self.shake.set(self.shake.get().max(shake));
+            let flash = if rainbow {
+                0.55
+            } else if !specials.is_empty() {
+                0.35
+            } else if f.chain >= 3 {
+                0.22
+            } else {
+                0.0
+            };
+            if flash > 0.0 {
+                self.flash.set((flash, Color::WHITE));
+            }
+        }
+        if !specials.is_empty() {
+            &MAGIC
+        } else if f.chain >= 3 {
+            &SURGE
+        } else if f.chain > 1 {
+            &CASCADE
+        } else {
+            &BLOOM
+        }
     }
     fn tick(&self, dt: f64) {
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
         self.time.set(self.time.get() + dt);
+        let reduced = self.reduced.get_untracked();
+        let fx_live = self.step_fx(dt);
+        if !reduced && let Some(hold) = self.drag.get().filter(|h| h.moved) {
+            let (x, y) = cell_center(hold.preview.from);
+            let at = hold.preview.offset(hold.preview.from);
+            if let Some(cv) = self.save.borrow().game.grid[hold.preview.from] {
+                self.sparks
+                    .borrow_mut()
+                    .trail(x + at.x, y + at.y, gem_color(cv.color), 20.0 * dt);
+            }
+        }
         let duration = self.frames.borrow().front().map(|f| match f.phase {
             Phase::Swap | Phase::Return => 0.18,
             Phase::Burst => 0.28,
@@ -224,33 +382,48 @@ impl Ui {
         if let Some(duration) = duration {
             let t = self.elapsed.get() + dt;
             self.elapsed.set(t);
-            if t >= if self.reduced.get_untracked() {
-                0.04
-            } else {
-                duration
-            } {
-                self.frames.borrow_mut().pop_front();
+            if !reduced && let Some(f) = self.frames.borrow().front() {
+                // Moving gems shed sparkles: a swap's pair brightly, a fall's many more lightly.
+                let rate = if f.phase == Phase::Fall { 5.0 } else { 16.0 };
+                let mut sparks = self.sparks.borrow_mut();
+                for (x, y, color) in gliding(f, t) {
+                    sparks.trail(x, y, gem_color(color), rate * dt);
+                }
+            }
+            if t >= if reduced { 0.04 } else { duration } {
+                let done = self.frames.borrow_mut().pop_front();
                 self.settling.set(None);
                 self.elapsed.set(0.0);
-                let cue = self.frames.borrow().front().and_then(|f| {
+                let next = self.frames.borrow().front().map(|f| {
                     if f.phase == Phase::Burst {
-                        Some(
-                            if f.cleared
-                                .iter()
-                                .any(|&i| f.grid[i].is_some_and(|c| c.special != Special::Plain))
-                            {
-                                &MAGIC
-                            } else if f.chain > 1 {
-                                &CASCADE
-                            } else {
-                                &BLOOM
-                            },
-                        )
+                        Some(self.burst(f))
+                    } else if f.phase == Phase::Shuffle {
+                        if !reduced {
+                            let mut sparks = self.sparks.borrow_mut();
+                            for i in (0..LEN).filter(|&i| f.grid[i].is_some()) {
+                                let (x, y) = cell_center(i);
+                                sparks.trail(x, y, Color::WHITE, 0.6);
+                            }
+                        }
+                        Some(&RIPPLE)
                     } else {
                         None
                     }
                 });
-                if let Some(c) = cue {
+                // Gems that just landed click down, unless a burst's own haptic fires this tick.
+                if let Some(done) = done.filter(|d| d.phase == Phase::Fall) {
+                    if !reduced {
+                        let mut sparks = self.sparks.borrow_mut();
+                        for &(_, to) in &done.motion {
+                            let (x, y) = cell_center(to);
+                            sparks.land(x, y);
+                        }
+                    }
+                    if !matches!(next, Some(Some(_))) {
+                        self.cue(&LAND);
+                    }
+                }
+                if let Some(Some(c)) = next {
                     self.cue(c);
                 }
             }
@@ -272,6 +445,7 @@ impl Ui {
         }
         if duration.is_some()
             || returning
+            || fx_live
             || self.drag.get().is_some()
             || self.selected.get().is_some()
             || self.hint.get().is_some()
@@ -321,6 +495,15 @@ impl Ui {
             self.drag.set(Some(Hold::new(from, start)));
             self.hint.set(None);
             self.cursor.set(from);
+            self.cue(&PICK);
+            if !self.reduced.get_untracked()
+                && let Some(cv) = self.save.borrow().game.grid[from]
+            {
+                let (x, y) = cell_center(from);
+                self.sparks
+                    .borrow_mut()
+                    .trail(x, y, gem_color(cv.color), 6.0);
+            }
         }
         let Some(mut hold) = self.drag.get() else {
             return;
@@ -349,8 +532,16 @@ impl Ui {
             }
         } else {
             self.drag.set(Some(hold));
-            if hold.preview.to.is_some() && hold.preview.to != old {
+            if let Some(to) = hold.preview.to.filter(|&to| Some(to) != old) {
                 self.cue(&cues::TICK);
+                if !self.reduced.get_untracked()
+                    && let Some(cv) = self.save.borrow().game.grid[to]
+                {
+                    let (x, y) = cell_center(to);
+                    self.sparks
+                        .borrow_mut()
+                        .trail(x, y, gem_color(cv.color), 4.0);
+                }
             }
         }
         self.repaint.notify();
@@ -388,6 +579,9 @@ pub fn matchthree_page() -> AnyPiece {
         sounds: Signal::new(settings.shell.sounds),
         vibrations: Signal::new(settings.shell.vibrations),
         reduced: Signal::new(settings.reduced),
+        sparks: RefCell::new(fx::Sparks::new()),
+        shake: Cell::new(0.0),
+        flash: Cell::new((0.0, Color::WHITE)),
     });
     gamekit::sounds(SOUNDS);
     let u = ui.clone();
@@ -566,6 +760,11 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
             d.reduced.get_untracked(),
             d.preview(),
             d.settling.get(),
+            &Effects {
+                sparks: Some(&d.sparks.borrow()),
+                shake: d.shake.get(),
+                flash: d.flash.get(),
+            },
         );
     })
     .on_tap_at(move |p| {
@@ -607,65 +806,18 @@ fn star(x: f64, y: f64, r: f64, points: usize) -> Shape {
             .collect(),
     )
 }
-/// Subtle bevels and highlights give each geometric gem depth without a candy finish.
-fn draw_piece(d: &mut Draw, c: Candy, x: f64, y: f64, s: f64, scale: f64) {
+/// A faceted jewel for each shape (fx::gem), with a special's mark worn over the stone.
+fn draw_piece(d: &mut Draw, c: Candy, x: f64, y: f64, s: f64, scale: f64, look: fx::Look) {
     let r = s * 0.36 * scale;
-    let color = Color::hex(PALETTE[c.color as usize]);
-    let shape = |x: f64, y: f64| match c.color {
-        0 => ellipse(x - r * 0.88, y - r * 0.88, r * 1.76, r * 1.76),
-        1 => Shape::Polygon(vec![
-            Point::new(x, y - r),
-            Point::new(x + r * 0.85, y),
-            Point::new(x, y + r),
-            Point::new(x - r * 0.85, y),
-        ]),
-        2 => star(x, y, r * 1.08, 5),
-        3 => Shape::RoundedRect(Rect::new(x - r * 0.85, y - r, r * 1.7, r * 2.0), r * 0.4),
-        4 => ellipse(x - r, y - r * 0.72, r * 2.0, r * 1.44),
-        _ => Shape::Polygon(
-            (0..6)
-                .map(|i| {
-                    let a = i as f64 * std::f64::consts::TAU / 6.0;
-                    Point::new(x + r * a.cos(), y + r * a.sin())
-                })
-                .collect(),
-        ),
-    };
-    d.fill(shape(x, y + 2.0), Color::rgba(0.02, 0.01, 0.06, 0.32));
-    if c.special == Special::Rainbow {
-        d.fill(
-            ellipse(x - r, y - r, r * 2.0, r * 2.0),
-            Color::hex(0x596377),
-        );
-        for i in 0..12 {
-            let a = i as f64 * std::f64::consts::TAU / 12.0;
-            d.fill(
-                ellipse(
-                    x + a.cos() * r * 0.66 - r * 0.15,
-                    y + a.sin() * r * 0.66 - r * 0.15,
-                    r * 0.3,
-                    r * 0.3,
-                ),
-                Color::hex(PALETTE[i % 6]),
-            );
-        }
-        d.fill(star(x, y, r * 0.5, 4), Color::WHITE);
+    if r < 0.5 {
         return;
     }
-    let light = Color::rgb(
-        color.r * 0.88 + 0.12,
-        color.g * 0.88 + 0.12,
-        color.b * 0.88 + 0.12,
-    );
-    let shade = Color::rgb(color.r * 0.76, color.g * 0.76, color.b * 0.76);
-    d.fill(shape(x, y), LinearGradient::vertical(light, shade));
-    d.stroke(shape(x, y), color.with_alpha(0.8), 1.0);
-    d.clipped(shape(x, y), |d| {
-        d.fill(
-            ellipse(x - r * 0.52, y - r * 0.64, r * 0.76, r * 0.24),
-            Color::WHITE.with_alpha(0.23),
-        );
-    });
+    if c.special == Special::Rainbow {
+        prism(d, x, y, r, look);
+        return;
+    }
+    let color = gem_color(c.color);
+    fx::gem(d, c.color, color, x, y, r, look);
     match c.special {
         Special::Row | Special::Column => {
             for offset in [-0.28, 0.0, 0.28] {
@@ -680,21 +832,84 @@ fn draw_piece(d: &mut Draw, c: Candy, x: f64, y: f64, s: f64, scale: f64) {
                         Point::new(x + r * offset, y + r * 0.65),
                     )
                 };
-                d.stroke(Shape::Line(a, b), Color::WHITE.with_alpha(0.9), r * 0.12);
+                d.stroke(Shape::Line(a, b), color.with_alpha(0.55), r * 0.26);
+                d.stroke(Shape::Line(a, b), Color::WHITE.with_alpha(0.95), r * 0.11);
             }
         }
         Special::Wrapped => {
-            d.stroke(
-                Shape::RoundedRect(
-                    Rect::new(x - r * 0.58, y - r * 0.58, r * 1.16, r * 1.16),
-                    r * 0.2,
-                ),
-                Color::WHITE,
-                2.0,
+            let pulse = 0.65 + 0.35 * (look.time * 6.0).sin();
+            let frame = Shape::RoundedRect(
+                Rect::new(x - r * 0.62, y - r * 0.62, r * 1.24, r * 1.24),
+                r * 0.22,
             );
-            d.fill(star(x, y, r * 0.36, 4), Color::WHITE);
+            d.stroke(frame.clone(), color.with_alpha(0.5 * pulse), r * 0.22);
+            d.stroke(frame, Color::WHITE, 2.0);
+            fx::glint(d, x, y, r * 0.55, look.time * 2.0, 1.0);
         }
         _ => {}
+    }
+}
+/// The wildcard: turning wedges of every color under a glass dome.
+fn prism(d: &mut Draw, x: f64, y: f64, r: f64, look: fx::Look) {
+    use std::f64::consts::TAU;
+    d.fill(
+        ellipse(x - r * 1.5, y - r * 1.5, r * 3.0, r * 3.0),
+        RadialGradient::centered(
+            Color::WHITE.with_alpha(0.3 + 0.3 * look.glow),
+            Color::WHITE.with_alpha(0.0),
+        ),
+    );
+    d.fill(
+        ellipse(x - r, y - r + r * 0.1, r * 2.0, r * 2.0),
+        Color::rgba(0.02, 0.01, 0.06, 0.38),
+    );
+    let turn = look.time * 1.4;
+    for k in 0..12 {
+        let (a0, a1) = (
+            turn + k as f64 * TAU / 12.0,
+            turn + (k + 1) as f64 * TAU / 12.0,
+        );
+        d.fill(
+            Shape::Polygon(vec![
+                Point::new(x, y),
+                Point::new(x + r * a0.cos(), y + r * a0.sin()),
+                Point::new(x + r * a1.cos(), y + r * a1.sin()),
+            ]),
+            gem_color((k % 6) as u8),
+        );
+    }
+    d.fill(
+        ellipse(x - r, y - r, r * 2.0, r * 2.0),
+        RadialGradient::new(
+            UnitPoint::new(0.35, 0.3),
+            0.75,
+            vec![
+                (0.0, Color::WHITE.with_alpha(0.85)),
+                (0.45, Color::WHITE.with_alpha(0.12)),
+                (1.0, Color::BLACK.with_alpha(0.3)),
+            ],
+        ),
+    );
+    d.stroke(
+        ellipse(x - r, y - r, r * 2.0, r * 2.0),
+        Color::WHITE.with_alpha(0.8),
+        1.2,
+    );
+    fx::glint(d, x, y, r * 0.75, turn, 1.0);
+}
+/// What the board draws over the gems: the live sparks, the shake and the flash.
+struct Effects<'a> {
+    sparks: Option<&'a fx::Sparks>,
+    shake: f64,
+    flash: (f64, Color),
+}
+impl Default for Effects<'_> {
+    fn default() -> Self {
+        Self {
+            sparks: None,
+            shake: 0.0,
+            flash: (0.0, Color::WHITE),
+        }
     }
 }
 #[allow(clippy::too_many_arguments)]
@@ -711,10 +926,15 @@ fn render(
     reduced: bool,
     preview: Option<Preview>,
     settling: Option<Preview>,
+    fx: &Effects,
 ) {
-    let (ox, oy, c) = layout(size);
+    let (mut ox, mut oy, c) = layout(size);
     if c < 2.0 {
         return;
+    }
+    if fx.shake > 0.0 {
+        ox += (time * 73.0).sin() * fx.shake;
+        oy += (time * 61.0).cos() * fx.shake;
     }
     let side = c * N as f64;
     // A quiet board frame keeps attention on the moving pieces.
@@ -800,6 +1020,18 @@ fn render(
             oy + (i / N) as f64 * c + c / 2.0,
         );
         let mut scale = 1.0;
+        let mut look = fx::Look {
+            glint: if reduced { 0.0 } else { fx::twinkle(time, i) },
+            glow: 0.0,
+            time: if reduced { 0.0 } else { time },
+        };
+        if selected == Some(i) {
+            look.glow = if reduced {
+                0.7
+            } else {
+                0.7 + 0.3 * (time * 5.0).sin()
+            };
+        }
         if !reduced && let Some(f) = frame {
             match f.phase {
                 Phase::Swap | Phase::Return | Phase::Fall => {
@@ -832,21 +1064,29 @@ fn render(
                 Phase::Burst => {
                     if f.cleared.contains(&i) {
                         let t = (elapsed / 0.28).clamp(0.0, 1.0);
-                        scale = (1.0 - t) * (1.0 + 0.5 * (t * std::f64::consts::PI).sin());
-                        for k in 0..7 {
-                            let a = k as f64 * std::f64::consts::TAU / 7.0 + i as f64;
-                            let r = c * t * 0.85;
-                            d.fill(
-                                star(x + r * a.cos(), y + r * a.sin(), c * 0.07 * (1.0 - t), 4),
-                                Color::hex(PALETTE[cv.color as usize]).with_alpha(1.0 - t),
-                            );
-                        }
+                        // Swell and flare, then collapse into the flash.
+                        scale = (1.0 - t) * (1.0 + 0.6 * (t * std::f64::consts::PI).sin());
+                        look.glint = 1.0 - t;
+                        look.glow = 1.0 - t;
+                        let bloom = c * (0.35 + 0.55 * t);
+                        d.fill(
+                            ellipse(x - bloom, y - bloom, bloom * 2.0, bloom * 2.0),
+                            RadialGradient::centered(
+                                Color::WHITE.with_alpha(0.85 * (1.0 - t)),
+                                gem_color(cv.color).with_alpha(0.0),
+                            ),
+                        );
                         if cv.special == Special::Row || cv.special == Special::Column {
                             let (a, b) = if cv.special == Special::Row {
                                 (Point::new(ox, y), Point::new(ox + side, y))
                             } else {
                                 (Point::new(x, oy), Point::new(x, oy + side))
                             };
+                            d.stroke(
+                                Shape::Line(a, b),
+                                gem_color(cv.color).with_alpha(0.6 * (1.0 - t)),
+                                c * 0.34 * (1.0 - t),
+                            );
                             d.stroke(
                                 Shape::Line(a, b),
                                 Color::WHITE.with_alpha(1.0 - t),
@@ -863,24 +1103,51 @@ fn render(
             x += offset.x * c;
             y += offset.y * c;
             if i == preview.from {
-                scale = 1.04;
+                scale = 1.1;
+                look.glow = 1.0;
+                look.glint = look.glint.max(0.6 + 0.4 * (time * 7.0).sin().abs());
             }
         }
         d.clipped(
             Shape::RoundedRect(Rect::new(ox, oy, side, side), 12.0),
-            |d| draw_piece(d, *cv, x, y, c, scale),
+            |d| draw_piece(d, *cv, x, y, c, scale, look),
         );
+    }
+    if fx.flash.0 > 0.0 {
+        d.fill(
+            Shape::RoundedRect(
+                Rect::new(ox - 8.0, oy - 8.0, side + 16.0, side + 16.0),
+                20.0,
+            ),
+            fx.flash.1.with_alpha(0.4 * fx.flash.0),
+        );
+    }
+    if let Some(sparks) = fx.sparks {
+        sparks.draw(d, ox, oy, c);
     }
     if let Some(f) = frame
         && f.phase == Phase::Burst
     {
         let at = Point::new(size.width / 2.0, oy + side * 0.42 - elapsed * 20.0);
         let text = format!("+{}", f.points);
+        // The score punches in, bigger and warmer the longer the chain.
+        let t = (elapsed / 0.28).clamp(0.0, 1.0);
+        let pop = if reduced {
+            1.0
+        } else {
+            1.0 + 0.45 * (1.0 - t).powi(2)
+        };
+        let size_pt = c * 0.65 * (1.0 + 0.15 * f.chain.saturating_sub(1) as f64).min(1.6) * pop;
+        let ink = match f.chain {
+            0 | 1 => Color::WHITE,
+            2 => chrome::GOLD,
+            _ => MINT,
+        };
         d.text(
             &text,
             Point::new(at.x + 1.0, at.y + 2.0),
             TextStyle {
-                size: c * 0.65,
+                size: size_pt,
                 color: SURFACE,
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Black),
@@ -890,8 +1157,8 @@ fn render(
             &text,
             at,
             TextStyle {
-                size: c * 0.65,
-                color: Color::WHITE,
+                size: size_pt,
+                color: ink,
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Black),
             },
@@ -1229,7 +1496,19 @@ pub fn matchthree_preview() -> AnyPiece {
     g.grid[32].as_mut().unwrap().special = Special::Wrapped;
     canvas(move |d, size| {
         render(
-            d, size, &g, None, 0.0, 0.0, None, None, None, true, None, None,
+            d,
+            size,
+            &g,
+            None,
+            0.0,
+            0.0,
+            None,
+            None,
+            None,
+            true,
+            None,
+            None,
+            &Effects::default(),
         )
     })
     .background(SURFACE)

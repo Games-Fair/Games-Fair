@@ -35,7 +35,7 @@ flow:
   - pause: { secs: 0.6 }
   - nav_back: {}
   - pause: { secs: 0.5 }
-  - navigate: { route: reversi }
+  - navigate: { route: flipside }
   - pause: { secs: 0.6 }
   - nav_back: {}
   - pause: { secs: 0.5 }
@@ -190,10 +190,10 @@ flow:
   - screenshot: { name: sudoku, title: Sudoku, caption: "Pencil marks, a checkpoint you can commit or revert, and a best time per difficulty.", source: games/sudoku/src/lib.rs }
   - nav_back: {}
 
-  - navigate: { route: reversi }
+  - navigate: { route: flipside }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: rv-board }
-  - screenshot: reversi
+  - assert_visible: { id: fs-board }
+  - screenshot: flipside
   - nav_back: {}
 
   - navigate: { route: pipes }

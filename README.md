@@ -1,6 +1,6 @@
 # Games Fair
 
-Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Reversi, Pipes, and
+Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Flipside, Pipes, and
 Match Three in one app. Built with
 [Day](https://daybrite.dev) in one Rust codebase and rendered with the platform's own widgets on
 iPhone, Android, HarmonyOS, macOS, Windows, Linux, and the web. Every game runs entirely on the
@@ -54,7 +54,7 @@ the App Fair publishes this app under are separate, and live in `Day-appfair.tom
   or 9×9 generated puzzle; lock tiles to protect them, and watch a wave of light cross the
   completed network. Every puzzle is solvable. Saves include rotations and locks, and each
   board size keeps its fewest-rotation record. Arrows select, Space/Enter rotates, and L locks.
-- **Reversi.** Trap and flip opposing discs on an 8×8 board. Play Black against three
+- **Flipside.** Trap and flip opposing discs on an 8×8 board. Play Black against three
   computer difficulties or share the board in pass-and-play. Legal moves are marked, flips
   animate, and a side with no move passes automatically. Use arrows and Space/Enter on a
   keyboard. The game ends when neither side can move; the larger disc count wins.
@@ -65,7 +65,8 @@ the App Fair publishes this app under are separate, and live in `Day-appfair.tom
   use Correct and Pass buttons. The word lists live in `games/charades/words/`, one folder per
   language; its README explains the format and how another language gets its own lists.
 
-- **Match Three.** Six levels of shape matching with animated swaps, clears, and cascades.
+- **Match Three.** Six levels of matching faceted gems, with sparkle trails behind moving pieces,
+  bursts where matches clear, and haptics timed to picks, landings, and cascades.
   Hold and drag to preview neighboring swaps; lift to commit or drag home to cancel. You can
   also tap neighbors. Match four for stripes, T/L shapes for area bursts, and five for a
   wildcard. Combine specials, collect red circles, and clear single/double layers on boards
@@ -112,7 +113,7 @@ To build from plain cargo, pass the backend feature yourself, for example
 
 [Dayscripts](https://daybrite.dev/docs/dayscript) drive the app: `smoke.yaml` opens each
 game, `sudoku.yaml` walks every Sudoku surface, `blockblast.yaml` places Block Blast pieces
-from the keyboard and walks its menus, `reversi.yaml` checks captures, solo play, menus, and save restoration;
+from the keyboard and walks its menus, `flipside.yaml` checks captures, solo play, menus, and save restoration;
 `pipes.yaml` checks locks, saves, all board sizes, and a complete seeded solution;
 `matchthree.yaml` checks invalid swaps, a win, progression, settings, and save restoration;
 `matchthree-levels.yaml` completes all six levels (both use `--env DAY_GAMES_SEED=15 --locale en`);
@@ -127,7 +128,7 @@ day launch -p ios-uikit --script dayscript/games.yaml
 
 - `src/lib.rs` is `root()`: the home grid and the fullscreen cover each game opens in, with typed
   routes so deep links and dayscript can open a game by name.
-- `games/blockblast`, `games/breakout`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/reversi`, `games/pipes`, and
+- `games/blockblast`, `games/breakout`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/flipside`, `games/pipes`, and
   `games/twentyfortyeight` are one crate per game: canvas or grid-layout UI, physics on the
   frame clock, and a serde save state.
 - `gamekit/src/animation.rs` adapts Day's native display callbacks to game demand. Each mounted
@@ -135,10 +136,11 @@ day launch -p ios-uikit --script dayscript/games.yaml
   disposal. No game owns a frame timer. Elapsed clocks use raw frame deltas; physics and
   cosmetic integration explicitly cap catch-up at 100 ms. First/resumed frames have zero delta.
   Match Three (including gesture settling and tap suppression), 2048, Block Blast, Pipes, and
-  Reversi stop between moves; AI turns, held-piece pulses, pending feedback, and result delays
-  keep the relevant loop awake. Arcade play, live game clocks, and animated celebrations keep
-  frames while needed. Pause/help screens and closed covers release demand. Mines only
-  repaints its board for effects/input, even while its elapsed-time readout is running.
+  Flipside stop between moves; AI turns, held-piece pulses, pending feedback, and result delays
+  keep the relevant loop awake, as do Match Three's sparkles until the last one fades. Arcade
+  play, live game clocks, and animated celebrations keep frames while needed. Pause/help screens
+  and closed covers release demand. Mines only repaints its board for effects/input, even while
+  its elapsed-time readout is running.
 - `gamekit/` is also the shared persistence layer: each game's state is saved when its cover closes
   or the app is backgrounded, and restored the next time it opens. A game that keeps a clock
   can also hook the backgrounding itself, which is how Sudoku pauses.

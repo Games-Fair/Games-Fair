@@ -5,11 +5,11 @@
 # The name comes from app metadata; translations can place it without duplicating the brand.
 app_title = { $title }
 
-nav_breakout = Breakout
-nav_sirtet = Sirtet
+nav_breakout = Mauerbrecher
+nav_sirtet = Fallende Blöcke
 nav_sudoku = Sudoku
 nav_2048 = 2048
-nav_blockblast = Block Blast
+nav_blockblast = Blocksprenger
 nav_solitaire = Solitär
 
 gk_close = Spiel schließen
@@ -64,7 +64,7 @@ st_game_over = Spiel vorbei
 st_clear_single = EINFACH
 st_clear_double = DOPPELT
 st_clear_triple = DREIFACH
-st_clear_sirtet = SIRTET!
+st_clear_sirtet = VIERFACH!
 st_help_intro = Stapele fallende Steine und fülle Reihen, bevor das Spielfeld voll ist.
 st_help_play = Spielanleitung
 st_help_play_1 = • **Ziehe nach links oder rechts**, um den Stein zu bewegen, oder nutze die Pfeiltasten.
@@ -106,7 +106,7 @@ tf_help_tips_2 = • Verbinde in eine Richtung, sodass kleine Kacheln unter der 
 tf_help_tips_3 = • Auf Einfach hilft **Rückgängig**, Fehler zu korrigieren.
 
 # Block Blast
-bb_board_a11y = Block-Blast-Spielfeld und Steinvorrat
+bb_board_a11y = Blocksprenger-Spielfeld und Steinvorrat
 bb_no_moves = Kein Stein aus dem Vorrat passt ins Feld.
 bb_combo = Kombo ×{ $n }
 bb_lines = { $n } Reihen
@@ -324,36 +324,36 @@ mi_help_play_4 = • Tippe eine Zahl mit allen gesetzten Flaggen an, um die übr
 mi_help_keys = Tastatur
 mi_help_keys_1 = • Pfeile bewegen die Auswahl. **Leertaste** oder **Eingabe** deckt auf, **F** setzt oder entfernt eine Flagge.
 
-# Reversi
-nav_reversi = Reversi
-rv_black = Schwarz
-rv_white = Weiß
-rv_black_turn = Schwarz ist am Zug
-rv_white_turn = Weiß ist am Zug
-rv_thinking = Weiß überlegt…
-rv_passed = Die Gegenseite kann nicht ziehen und passt. { $turn }
-rv_black_wins = Schwarz gewinnt!
-rv_white_wins = Weiß gewinnt!
-rv_draw = Unentschieden!
-rv_final_score = Schwarz { $black } · Weiß { $white }
-rv_board_hint = Punkte markieren mögliche Züge. Der goldene Punkt zeigt den letzten Zug.
-rv_board_a11y = Reversi-Brett. Pfeile wählen ein Feld, Eingabe setzt einen Stein.
-rv_mode = Gegner
-rv_solo = Computer
-rv_two_players = Zwei Personen
-rv_difficulty = Computerstärke
-rv_easy = Leicht
-rv_medium = Mittel
-rv_hard = Schwer
-rv_start = Spiel starten
-rv_help_rules = Schwarz beginnt. Setze auf einen Punkt und schließe eine Reihe gegnerischer Steine ein. Eingeschlossene Steine werden waagerecht, senkrecht und diagonal zu deiner Farbe gedreht.
-rv_help_pass = Ohne gültigen Zug passt du automatisch. Kann niemand ziehen, endet das Spiel auch bei freien Feldern. Wer mehr Steine hat, gewinnt.
-rv_help_solo = Spiele Schwarz gegen den Computer oder wähle Zwei Personen. Einfach zieht zufällig, Mittel und Schwer planen voraus. Ecken sind nicht umdrehbar: sichere sie dir!
-rv_help_keys = Tippe einen Punkt an oder bewege den goldenen Rahmen mit Pfeilen und setze mit Leertaste oder Eingabe. P oder Escape pausiert auch Computer und Animationen. Beim Verlassen wird gespeichert.
+# Flipside
+nav_flipside = Wendespiel
+fs_black = Schwarz
+fs_white = Weiß
+fs_black_turn = Schwarz ist am Zug
+fs_white_turn = Weiß ist am Zug
+fs_thinking = Weiß überlegt…
+fs_passed = Die Gegenseite kann nicht ziehen und passt. { $turn }
+fs_black_wins = Schwarz gewinnt!
+fs_white_wins = Weiß gewinnt!
+fs_draw = Unentschieden!
+fs_final_score = Schwarz { $black } · Weiß { $white }
+fs_board_hint = Punkte markieren mögliche Züge. Der goldene Punkt zeigt den letzten Zug.
+fs_board_a11y = Wendespiel-Brett. Pfeile wählen ein Feld, Eingabe setzt einen Stein.
+fs_mode = Gegner
+fs_solo = Computer
+fs_two_players = Zwei Personen
+fs_difficulty = Computerstärke
+fs_easy = Leicht
+fs_medium = Mittel
+fs_hard = Schwer
+fs_start = Spiel starten
+fs_help_rules = Schwarz beginnt. Setze auf einen Punkt und schließe eine Reihe gegnerischer Steine ein. Eingeschlossene Steine werden waagerecht, senkrecht und diagonal zu deiner Farbe gedreht.
+fs_help_pass = Ohne gültigen Zug passt du automatisch. Kann niemand ziehen, endet das Spiel auch bei freien Feldern. Wer mehr Steine hat, gewinnt.
+fs_help_solo = Spiele Schwarz gegen den Computer oder wähle Zwei Personen. Einfach zieht zufällig, Mittel und Schwer planen voraus. Ecken sind nicht umdrehbar: sichere sie dir!
+fs_help_keys = Tippe einen Punkt an oder bewege den goldenen Rahmen mit Pfeilen und setze mit Leertaste oder Eingabe. P oder Escape pausiert auch Computer und Animationen. Beim Verlassen wird gespeichert.
 
-rv_selection = { $column }{ $row }: { $state }
-rv_legal = Gültiger Zug
-rv_empty = Leer
+fs_selection = { $column }{ $row }: { $state }
+fs_legal = Gültiger Zug
+fs_empty = Leer
 
 # Pipes
 nav_pipes = Rohre
@@ -384,3 +384,42 @@ pp_help_keys = Pfeile wählen, Leertaste oder Eingabe dreht, L sperrt, P oder Es
 
 # The reason HarmonyOS shows when Charades asks for the accelerometer.
 permission_ohos_permission_ACCELEROMETER = Scharade erkennt die Neigung des Telefons, um ein Nicken als richtige Antwort zu werten.
+
+## Match Three
+nav_matchthree = Drei gewinnt
+mt_moves = Verbleibende Züge
+mt_goal = Ziel
+mt_classic = Klassisch
+mt_corners = Ecken
+mt_bridges = Brücken
+mt_diamond = Raute
+mt_windows = Fenster
+mt_mixed = Gemischt
+mt_goal_score = Erreiche die Zielpunktzahl
+mt_goal_collect = Rote Kreise: { $berries } / { $target } · Erreiche die Zielpunktzahl
+mt_goal_frost = Übrige Schichten: { $frost } · Erreiche die Zielpunktzahl
+mt_goal_final = Kreise: { $berries } / { $target } · Schichten: { $frost } · Erreiche das Ziel
+mt_swap_hint = Tausche Nachbarn, um drei oder mehr gleiche zu verbinden
+mt_shuffling = Keine Züge möglich. Neu mischen…
+mt_cascade = Kaskade ×{ $n }
+mt_hint = Hinweis
+mt_levels = Level
+mt_map_intro = Schließe jedes Level ab, um das nächste freizuschalten.
+mt_locked = Gesperrt
+mt_retry = Level wiederholen
+mt_reduced = Bewegung reduzieren
+mt_win = Level geschafft
+mt_complete = Alle Level geschafft
+mt_out = Keine Züge mehr
+mt_win_detail = Deine Punkte sind gespeichert. Mach weiter, wann du willst.
+mt_retry_detail = Versuch es noch einmal, um die restlichen Ziele zu erfüllen.
+mt_next = Nächstes Level
+mt_board_a11y = Drei-gewinnt-Spielfeld. Pfeile bewegen den Cursor, Eingabe wählt oder tauscht, H zeigt einen gültigen Tausch.
+mt_help_swap = Halte einen Stein gedrückt und ziehe ihn, um einen Tausch vorzuschauen. Probiere verschiedene Nachbarn und lass los, um zu tauschen. Ziehe zurück aufs Startfeld oder vom Feld weg, um abzubrechen. Du kannst auch zwei Nachbarn antippen. Verbinde drei oder mehr gleiche Formen; Kaskaden erhöhen deine Punkte. Tausche ohne Treffer kosten nichts.
+mt_help_special_title = Spezialsteine
+mt_help_special = Vier in einer Reihe ergeben einen Streifenstein, der seine Reihe oder Spalte räumt. Ein T oder L erzeugt einen Bombenstein, der einen Bereich von 3 × 3 räumt. Fünf in einer Linie ergeben einen Joker: Tausche ihn mit einem beliebigen Stein, um diese Farbe zu räumen.
+mt_help_combo = Kombiniere zwei Spezialsteine für eine größere Räumung. Zwei Streifen räumen ein Kreuz; eine Bombenkombination räumt drei Reihen und Spalten. Ein Joker mit einem Spezialstein macht jeden Stein dieser Farbe zum Spezialstein. Zwei Joker räumen das ganze Feld.
+mt_help_goals = Erreiche die Zielpunktzahl, bevor dir die Züge ausgehen. Spätere Level verlangen außerdem, rote Kreise zu sammeln oder Schichten unter den Steinen zu entfernen. Doppelte Schichten brauchen zwei Treffer. Löcher teilen das Feld in getrennte Fallbahnen. Mit 10 übrigen Zügen gibt es drei Sterne, mit 5 zwei. Abgeschlossene Level lassen sich wiederholen.
+mt_help_keys = Mit Pfeilen und Eingabe wählst und tauschst du. H markiert einen gültigen Tausch, Eingabe führt ihn aus. Pause öffnet Einstellungen, Regeln und Wiederholen. Töne, Vibrationen und reduzierte Bewegung sind einstellbar. Spielfeld und Fortschritt werden automatisch gespeichert.
+mt_complete_detail = Du kannst jedes Level wiederholen, um Punkte und Sterne zu verbessern.
+mt_matching = Wird kombiniert…
