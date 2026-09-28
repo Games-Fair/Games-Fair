@@ -17,10 +17,11 @@ on:
     types: [released]
   workflow_dispatch:
 
+# The repository's own jobs run this checkout's code with a read-only token. The write grants
+# sit on the job that calls the shared workflow, whose release and Pages jobs alone use them;
+# its build legs, which run this code too, narrow their token to read-only themselves.
 permissions:
-  contents: write # release assets on a tag build
-  pages: write    # web-dom → GitHub Pages (deploy-web)
-  id-token: write # deploy-pages OIDC token (deploy-web)
+  contents: read
 
 jobs:
   # The catalog's rules: the licence texts, the licence notice in every source file, and the
@@ -35,6 +36,10 @@ jobs:
 
   app:
     uses: daybrite/actions/.github/workflows/dayapp.yml@main
+    permissions:
+      contents: write # release assets on a tag build
+      pages: write    # web-dom → GitHub Pages (deploy-web)
+      id-token: write # deploy-pages OIDC token (deploy-web)
     secrets: inherit
     with:
       # The targets this app was scaffolded with. Add one with `day project add-target`, and
