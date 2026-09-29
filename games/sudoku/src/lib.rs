@@ -20,7 +20,9 @@ use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Sfx, sfx};
 
 mod model;
-use model::{DIFFICULTIES, Difficulty, Model, Records, Settings, fmt_time, idx};
+use model::{
+    DIFFICULTIES, DIGIT_FONTS, Difficulty, DigitFont, Model, Records, Settings, fmt_time, idx,
+};
 
 /// The prefs keys this game persists under (gamekit; bump the puzzle key on schema change).
 const SAVE_KEY: &str = "sudoku.v2";
@@ -115,15 +117,31 @@ fn difficulty_id(d: Difficulty) -> &'static str {
     }
 }
 
-/// The family every digit is drawn in: B612, bundled under `resource/fonts/`
-/// (`resource/font-licenses/README.md` says why).
-const DIGIT_FAMILY: &str = "B612";
+/// The digit font the player chose in settings, as an index into [`DIGIT_FONTS`]. One for the
+/// app, read from the saved settings the first time anything draws a digit, so the home-screen
+/// tile uses the chosen face before the game has been opened, and every canvas that draws
+/// digits follows a change at once: reading it is what subscribes them.
+fn digit_choice() -> Signal<usize> {
+    thread_local! {
+        static CHOICE: Signal<usize> = Signal::global(
+            gamekit::restore::<Settings>(SETTINGS_KEY)
+                .unwrap_or_default()
+                .digit_font
+                .index(),
+        );
+    }
+    CHOICE.with(|s| *s)
+}
 
-/// The digits' face: B612 at its regular weight, so each numeral keeps its distinguishing
-/// shape instead of thickening toward its neighbors.
+/// The digits' face: the chosen bundled font at its regular weight, so each numeral keeps its
+/// distinguishing shape instead of thickening toward its neighbors. A tracked read.
 fn digit_font() -> CanvasFont {
     CanvasFont {
-        family: Some(DIGIT_FAMILY.to_string()),
+        family: Some(
+            DigitFont::from_index(digit_choice().get())
+                .family()
+                .to_string(),
+        ),
         weight: None,
         italic: false,
     }
@@ -315,6 +333,7 @@ impl Ui {
             vibrations: self.vibrations.get_untracked(),
             default_difficulty: Difficulty::from_index(self.default_difficulty.get_untracked()),
             instructions_shown: true,
+            digit_font: DigitFont::from_index(digit_choice().get_untracked()),
         }
     }
 }
@@ -648,6 +667,7 @@ pub fn sudoku_page() -> AnyPiece {
             ui.sounds.track();
             ui.vibrations.track();
             ui.default_difficulty.track();
+            digit_choice().track();
             gamekit::save(SETTINGS_KEY, &ui.settings());
         }
     });
@@ -1623,6 +1643,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
         .iter()
         .map(|&d| difficulty_label(d).format())
         .collect();
+    // Font names are the fonts' own, the same in every language.
+    let font_names: Vec<String> = DIGIT_FONTS.iter().map(|f| f.family().to_string()).collect();
     let done = ui.clone();
     card_frame(
         scroll(
@@ -1644,6 +1666,30 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                         .id("su-default-difficulty")
                         .any(),
                 ),
+                setting_row(
+                    tr("su_digit_font"),
+                    picker(font_names, digit_choice())
+                        .menu()
+                        .id("su-digit-font")
+                        .any(),
+                ),
+                // The nine digits in the chosen face, so a choice can be judged before the
+                // board is back in view.
+                canvas(|d, size| {
+                    d.text(
+                        "123456789",
+                        Point::new(size.width / 2.0, size.height / 2.0),
+                        TextStyle {
+                            size: 30.0,
+                            color: TEXT,
+                            anchor: TextAnchor::CENTERED,
+                            font: digit_font(),
+                        },
+                    );
+                })
+                .id("su-digit-font-sample")
+                .width(300.0)
+                .height(44.0),
                 heading(tr("su_records")),
                 column(PieceVec(record_rows)).spacing(8.0),
                 solved,

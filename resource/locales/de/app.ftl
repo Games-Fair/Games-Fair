@@ -224,6 +224,7 @@ su_new_best = Neue Bestzeit!
 su_best = Bestzeit: { $time }
 su_choose_difficulty = Schwierigkeit wählen
 su_default_difficulty = Standardschwierigkeit
+su_digit_font = Ziffernschrift
 su_records = Rekorde
 su_puzzles_solved = Gelöste Rätsel
 su_reset_records = Sudoku-Rekorde zurücksetzen
@@ -399,6 +400,15 @@ mt_goal_score = Erreiche die Zielpunktzahl
 mt_goal_collect = Rote Kreise: { $berries } / { $target } · Erreiche die Zielpunktzahl
 mt_goal_frost = Übrige Schichten: { $frost } · Erreiche die Zielpunktzahl
 mt_goal_final = Kreise: { $berries } / { $target } · Schichten: { $frost } · Erreiche das Ziel
+mt_points_to_go = { $points ->
+    [one] Noch 1 Punkt
+   *[other] Noch { $points } Punkte
+}
+mt_target_reached = Zielpunktzahl erreicht!
+mt_moves_low = { $n ->
+    [one] Letzter Zug!
+   *[other] Nur noch { $n } Züge!
+}
 mt_swap_hint = Tausche Nachbarn, um drei oder mehr gleiche zu verbinden
 mt_shuffling = Keine Züge möglich. Neu mischen…
 mt_cascade = Kaskade ×{ $n }
@@ -415,7 +425,7 @@ mt_win_detail = Deine Punkte sind gespeichert. Mach weiter, wann du willst.
 mt_retry_detail = Versuch es noch einmal, um die restlichen Ziele zu erfüllen.
 mt_next = Nächstes Level
 mt_board_a11y = Drei-gewinnt-Spielfeld. Pfeile bewegen den Cursor, Eingabe wählt oder tauscht, H zeigt einen gültigen Tausch.
-mt_help_swap = Halte einen Stein gedrückt und ziehe ihn, um einen Tausch vorzuschauen. Probiere verschiedene Nachbarn und lass los, um zu tauschen. Ziehe zurück aufs Startfeld oder vom Feld weg, um abzubrechen. Du kannst auch zwei Nachbarn antippen. Verbinde drei oder mehr gleiche Formen; Kaskaden erhöhen deine Punkte. Tausche ohne Treffer kosten nichts.
+mt_help_swap = Halte einen Stein gedrückt und ziehe ihn, um einen Tausch vorzuschauen. Probiere verschiedene Nachbarn und lass los, um zu tauschen. Ziehe zurück aufs Startfeld, um abzubrechen. Du kannst auch zwei Nachbarn antippen. Verbinde drei oder mehr gleiche Formen; Kaskaden erhöhen deine Punkte. Tausche ohne Treffer kosten nichts.
 mt_help_special_title = Spezialsteine
 mt_help_special = Vier in einer Reihe ergeben einen Streifenstein, der seine Reihe oder Spalte räumt. Ein T oder L erzeugt einen Bombenstein, der einen Bereich von 3 × 3 räumt. Fünf in einer Linie ergeben einen Joker: Tausche ihn mit einem beliebigen Stein, um diese Farbe zu räumen.
 mt_help_combo = Kombiniere zwei Spezialsteine für eine größere Räumung. Zwei Streifen räumen ein Kreuz; eine Bombenkombination räumt drei Reihen und Spalten. Ein Joker mit einem Spezialstein macht jeden Stein dieser Farbe zum Spezialstein. Zwei Joker räumen das ganze Feld.

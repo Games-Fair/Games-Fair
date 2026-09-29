@@ -224,6 +224,7 @@ su_new_best = ¡Nuevo mejor tiempo!
 su_best = Récord: { $time }
 su_choose_difficulty = Elegir dificultad
 su_default_difficulty = Dificultad predeterminada
+su_digit_font = Fuente de los números
 su_records = Récords
 su_puzzles_solved = Puzles resueltos
 su_reset_records = Restablecer récords de Sudoku
@@ -399,6 +400,15 @@ mt_goal_score = Alcanza la puntuación objetivo
 mt_goal_collect = Círculos rojos: { $berries } / { $target } · Alcanza la puntuación objetivo
 mt_goal_frost = Capas restantes: { $frost } · Alcanza la puntuación objetivo
 mt_goal_final = Círculos: { $berries } / { $target } · Capas: { $frost } · Alcanza el objetivo
+mt_points_to_go = { $points ->
+    [one] Falta 1 punto
+   *[other] Faltan { $points } puntos
+}
+mt_target_reached = ¡Puntuación objetivo alcanzada!
+mt_moves_low = { $n ->
+    [one] ¡Último movimiento!
+   *[other] ¡Solo quedan { $n } movimientos!
+}
 mt_swap_hint = Intercambia piezas vecinas para juntar tres o más
 mt_shuffling = No hay movimientos. Mezclando de nuevo…
 mt_cascade = Cascada ×{ $n }
@@ -415,7 +425,7 @@ mt_win_detail = Tu puntuación se ha guardado. Continúa cuando quieras.
 mt_retry_detail = Vuelve a intentarlo para completar los objetivos restantes.
 mt_next = Siguiente nivel
 mt_board_a11y = Tablero de Junta tres. Las flechas mueven el cursor, Intro selecciona o intercambia y H muestra un intercambio válido.
-mt_help_swap = Mantén pulsada una gema y arrástrala para previsualizar un intercambio. Prueba con distintas vecinas y suelta para confirmar. Vuelve a la casilla inicial o sal del tablero para cancelar. También puedes tocar dos vecinas. Junta tres o más de la misma forma; las cascadas aumentan tu puntuación. Los intercambios sin combinación no cuestan nada.
+mt_help_swap = Mantén pulsada una gema y arrástrala para previsualizar un intercambio. Prueba con distintas vecinas y suelta para confirmar. Vuelve a la casilla inicial para cancelar. También puedes tocar dos vecinas. Junta tres o más de la misma forma; las cascadas aumentan tu puntuación. Los intercambios sin combinación no cuestan nada.
 mt_help_special_title = Piezas especiales
 mt_help_special = Junta cuatro para obtener una pieza rayada que despeja su fila o columna. Una T o una L crea una pieza explosiva que despeja un área de 3 × 3. Junta cinco en línea para obtener un comodín: intercámbialo con cualquier pieza para eliminar ese color.
 mt_help_combo = Combina dos especiales para despejar más. Dos rayadas despejan una cruz; una combinación explosiva despeja tres filas y tres columnas. Un comodín con una especial convierte todas las piezas de ese color en especiales. Dos comodines despejan todo el tablero.

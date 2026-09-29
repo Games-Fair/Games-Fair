@@ -224,6 +224,7 @@ su_new_best = Waktu Terbaik Baru!
 su_best = Terbaik: { $time }
 su_choose_difficulty = Pilih Tingkat Kesulitan
 su_default_difficulty = Kesulitan Default
+su_digit_font = Fon angka
 su_records = Rekor
 su_puzzles_solved = Teka-Teki Selesai
 su_reset_records = Atur Ulang Rekor Sudoku
@@ -399,6 +400,12 @@ mt_goal_score = Capai skor target
 mt_goal_collect = Lingkaran merah: { $berries } / { $target } · Capai skor target
 mt_goal_frost = Sisa lapisan: { $frost } · Capai skor target
 mt_goal_final = Lingkaran: { $berries } / { $target } · Lapisan: { $frost } · Capai target
+mt_points_to_go = { $points } poin lagi
+mt_target_reached = Skor target tercapai!
+mt_moves_low = { $n ->
+    [one] Langkah terakhir!
+   *[other] Tinggal { $n } langkah!
+}
 mt_swap_hint = Tukar keping bersebelahan untuk mencocokkan tiga atau lebih
 mt_shuffling = Tidak ada langkah tersisa. Mengocok ulang…
 mt_cascade = Beruntun ×{ $n }
@@ -415,7 +422,7 @@ mt_win_detail = Skormu sudah tersimpan. Lanjutkan kapan pun kamu siap.
 mt_retry_detail = Coba lagi untuk menyelesaikan sisa target.
 mt_next = Level berikutnya
 mt_board_a11y = Papan Cocok Tiga. Panah memindahkan kursor; Enter memilih atau menukar; H menunjukkan tukaran yang sah.
-mt_help_swap = Tahan dan seret permata untuk melihat pratinjau tukaran. Coba tetangga yang berbeda, lalu angkat jari untuk menukar. Seret kembali ke petak awal atau keluar papan untuk membatalkan. Kamu juga bisa mengetuk dua keping bersebelahan. Cocokkan tiga atau lebih bentuk yang sama; rentetan beruntun menambah skor. Tukaran yang tidak membentuk kecocokan tidak dihitung.
+mt_help_swap = Tahan dan seret permata untuk melihat pratinjau tukaran. Coba tetangga yang berbeda, lalu angkat jari untuk menukar. Seret kembali ke petak awal untuk membatalkan. Kamu juga bisa mengetuk dua keping bersebelahan. Cocokkan tiga atau lebih bentuk yang sama; rentetan beruntun menambah skor. Tukaran yang tidak membentuk kecocokan tidak dihitung.
 mt_help_special_title = Keping spesial
 mt_help_special = Cocokkan empat untuk keping bergaris yang menghapus baris atau kolomnya. Bentuk T atau L menghasilkan keping ledakan yang menghapus area 3 × 3. Cocokkan lima dalam satu garis untuk wildcard: tukar dengan keping apa pun untuk menghapus warna itu.
 mt_help_combo = Gabungkan dua keping spesial untuk hapusan lebih besar. Dua keping bergaris menghapus pola silang; kombinasi ledakan menghapus tiga baris dan tiga kolom. Wildcard dengan keping spesial mengubah semua keping warna itu menjadi spesial. Dua wildcard menghapus seluruh papan.

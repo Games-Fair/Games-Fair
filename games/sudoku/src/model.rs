@@ -131,6 +131,55 @@ pub struct Settings {
     pub default_difficulty: Difficulty,
     /// The instructions sheet opens by itself the first time the game is played.
     pub instructions_shown: bool,
+    /// The face the digits are drawn in. Absent from a record saved before there was a choice,
+    /// which then takes the default.
+    #[serde(default)]
+    pub digit_font: DigitFont,
+}
+
+/// The faces Sudoku can draw its digits in, all bundled under `resource/fonts/`
+/// (`resource/font-licenses/README.md` says where each came from and why it is here).
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Default, Serialize, Deserialize)]
+pub enum DigitFont {
+    /// Designed for low-vision readers to keep similar characters apart. The default.
+    #[default]
+    Atkinson,
+    /// Airbus's cockpit-display face: every numeral shaped to be unmistakable.
+    B612,
+    /// Wide, open letterforms from reading-performance research.
+    Lexend,
+    /// Rounded and friendly.
+    VarelaRound,
+    /// A classic book serif, the look of a newspaper puzzle.
+    LibreBaskerville,
+}
+
+/// Every digit font, in the order the settings picker lists them.
+pub const DIGIT_FONTS: [DigitFont; 5] = [
+    DigitFont::Atkinson,
+    DigitFont::B612,
+    DigitFont::Lexend,
+    DigitFont::VarelaRound,
+    DigitFont::LibreBaskerville,
+];
+
+impl DigitFont {
+    /// The family name the bundled font file carries, which is how a platform finds it.
+    pub fn family(self) -> &'static str {
+        match self {
+            DigitFont::Atkinson => "Atkinson Hyperlegible Next",
+            DigitFont::B612 => "B612",
+            DigitFont::Lexend => "Lexend",
+            DigitFont::VarelaRound => "Varela Round",
+            DigitFont::LibreBaskerville => "Libre Baskerville",
+        }
+    }
+    pub fn index(self) -> usize {
+        DIGIT_FONTS.iter().position(|f| *f == self).unwrap_or(0)
+    }
+    pub fn from_index(i: usize) -> Self {
+        DIGIT_FONTS.get(i).copied().unwrap_or_default()
+    }
 }
 
 impl Default for Settings {
@@ -140,6 +189,7 @@ impl Default for Settings {
             vibrations: true,
             default_difficulty: Difficulty::Medium,
             instructions_shown: false,
+            digit_font: DigitFont::default(),
         }
     }
 }

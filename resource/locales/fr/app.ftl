@@ -224,6 +224,7 @@ su_new_best = Nouveau record !
 su_best = Record : { $time }
 su_choose_difficulty = Choisir la difficulté
 su_default_difficulty = Difficulté par défaut
+su_digit_font = Police des chiffres
 su_records = Records
 su_puzzles_solved = Puzzles résolus
 su_reset_records = Réinitialiser les records Sudoku
@@ -399,6 +400,15 @@ mt_goal_score = Atteignez le score cible
 mt_goal_collect = Cercles rouges : { $berries } / { $target } · Atteignez le score cible
 mt_goal_frost = Couches restantes : { $frost } · Atteignez le score cible
 mt_goal_final = Cercles : { $berries } / { $target } · Couches : { $frost } · Atteignez l'objectif
+mt_points_to_go = { $points ->
+    [one] Encore { $points } point
+   *[other] Encore { $points } points
+}
+mt_target_reached = Score cible atteint !
+mt_moves_low = { $n ->
+    [one] Dernier coup !
+   *[other] Plus que { $n } coups !
+}
 mt_swap_hint = Échangez deux voisins pour en aligner trois ou plus
 mt_shuffling = Aucun coup possible. Nouveau mélange…
 mt_cascade = Cascade ×{ $n }
@@ -415,7 +425,7 @@ mt_win_detail = Votre score est enregistré. Continuez quand vous voulez.
 mt_retry_detail = Réessayez pour remplir les objectifs restants.
 mt_next = Niveau suivant
 mt_board_a11y = Grille d'Aligne-trois. Les flèches déplacent le curseur ; Entrée sélectionne ou échange ; H montre un échange possible.
-mt_help_swap = Maintenez une gemme et faites-la glisser pour prévisualiser un échange. Essayez différents voisins, puis relâchez pour valider. Revenez à la case de départ ou sortez de la grille pour annuler. Vous pouvez aussi toucher deux voisins. Alignez au moins trois formes identiques ; les cascades augmentent votre score. Un échange sans alignement ne coûte rien.
+mt_help_swap = Maintenez une gemme et faites-la glisser pour prévisualiser un échange. Essayez différents voisins, puis relâchez pour valider. Revenez à la case de départ pour annuler. Vous pouvez aussi toucher deux voisins. Alignez au moins trois formes identiques ; les cascades augmentent votre score. Un échange sans alignement ne coûte rien.
 mt_help_special_title = Pièces spéciales
 mt_help_special = Alignez-en quatre pour une pièce rayée qui efface sa ligne ou sa colonne. Un T ou un L crée une pièce explosive qui efface une zone de 3 × 3. Alignez-en cinq pour un joker : échangez-le avec n'importe quelle pièce pour effacer cette couleur.
 mt_help_combo = Combinez deux pièces spéciales pour un effet plus large. Deux rayées effacent une croix ; une combinaison explosive efface trois lignes et trois colonnes. Un joker avec une pièce spéciale transforme toutes les pièces de cette couleur en pièces spéciales. Deux jokers effacent toute la grille.

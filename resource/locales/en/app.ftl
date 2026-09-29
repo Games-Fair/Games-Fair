@@ -225,6 +225,7 @@ su_new_best = New Best Time!
 su_best = Best: { $time }
 su_choose_difficulty = Choose Difficulty
 su_default_difficulty = Default Difficulty
+su_digit_font = Digit font
 su_records = Records
 su_puzzles_solved = Puzzles Solved
 su_reset_records = Reset Sudoku Records
@@ -400,6 +401,15 @@ mt_goal_score = Reach the target score
 mt_goal_collect = Red circles: { $berries } / { $target } · Reach the target score
 mt_goal_frost = Layers left: { $frost } · Reach the target score
 mt_goal_final = Circles: { $berries } / { $target } · Layers: { $frost } · Reach the target
+mt_points_to_go = { $points ->
+    [one] 1 point to go
+   *[other] { $points } points to go
+}
+mt_target_reached = Target score reached!
+mt_moves_low = { $n ->
+    [one] Last move!
+   *[other] Only { $n } moves left!
+}
 mt_swap_hint = Swap neighbors to match three or more
 mt_shuffling = No moves available. Reshuffling…
 mt_cascade = Cascade ×{ $n }
@@ -416,7 +426,7 @@ mt_win_detail = Your score is saved. Continue when you're ready.
 mt_retry_detail = Try again to complete the remaining objectives.
 mt_next = Next level
 mt_board_a11y = Match Three board. Arrows move the cursor; Enter selects or swaps; H shows a legal swap.
-mt_help_swap = Hold and drag a gem to preview a swap. Try different neighbors, then lift to commit. Drag back to the starting cell or off the board to cancel. You can also tap two neighbors. Match three or more of the same shape; cascades increase your score. Swaps that make no match cost nothing.
+mt_help_swap = Hold and drag a gem to preview a swap. Try different neighbors, then lift to commit. Drag back to the starting cell to cancel. You can also tap two neighbors. Match three or more of the same shape; cascades increase your score. Swaps that make no match cost nothing.
 mt_help_special_title = Special pieces
 mt_help_special = Match four for a striped piece that clears its row or column. A T or L creates a burst piece that clears a 3 × 3 area. Match five in a line for a wildcard: swap it with any piece to clear that color.
 mt_help_combo = Combine two specials for a larger clear. Two stripes clear a cross; a burst combination clears three rows and columns. A wildcard plus a special turns every piece of that color into specials. Two wildcards clear the whole board.

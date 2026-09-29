@@ -224,6 +224,7 @@ su_new_best = 최고 기록 갱신!
 su_best = 최고: { $time }
 su_choose_difficulty = 난이도 선택
 su_default_difficulty = 기본 난이도
+su_digit_font = 숫자 글꼴
 su_records = 기록
 su_puzzles_solved = 푼 퍼즐 수
 su_reset_records = 스도쿠 기록 초기화
@@ -399,6 +400,12 @@ mt_goal_score = 목표 점수에 도달하세요
 mt_goal_collect = 빨간 원: { $berries } / { $target } · 목표 점수에 도달하세요
 mt_goal_frost = 남은 층: { $frost } · 목표 점수에 도달하세요
 mt_goal_final = 원: { $berries } / { $target } · 층: { $frost } · 목표에 도달하세요
+mt_points_to_go = { $points }점 남음
+mt_target_reached = 목표 점수 달성!
+mt_moves_low = { $n ->
+    [one] 마지막 이동!
+   *[other] { $n }번만 남았어요!
+}
 mt_swap_hint = 이웃한 조각을 바꿔 셋 이상 맞추세요
 mt_shuffling = 가능한 이동이 없습니다. 다시 섞는 중…
 mt_cascade = 연쇄 ×{ $n }
@@ -415,7 +422,7 @@ mt_win_detail = 점수가 저장되었습니다. 준비되면 계속하세요.
 mt_retry_detail = 다시 도전해 남은 목표를 완료하세요.
 mt_next = 다음 레벨
 mt_board_a11y = 셋 맞추기 보드. 방향키로 커서를 옮기고 Enter로 선택하거나 바꾸며 H로 가능한 교환을 표시합니다.
-mt_help_swap = 보석을 길게 눌러 끌면 교환을 미리 볼 수 있습니다. 여러 이웃을 시도해 보고 손을 떼면 확정됩니다. 처음 칸으로 되돌리거나 보드 밖으로 끌면 취소됩니다. 이웃한 두 조각을 차례로 탭해도 됩니다. 같은 모양을 셋 이상 맞추세요. 연쇄가 일어나면 점수가 올라갑니다. 맞춰지지 않는 교환은 이동으로 세지 않습니다.
+mt_help_swap = 보석을 길게 눌러 끌면 교환을 미리 볼 수 있습니다. 여러 이웃을 시도해 보고 손을 떼면 확정됩니다. 처음 칸으로 되돌리면 취소됩니다. 이웃한 두 조각을 차례로 탭해도 됩니다. 같은 모양을 셋 이상 맞추세요. 연쇄가 일어나면 점수가 올라갑니다. 맞춰지지 않는 교환은 이동으로 세지 않습니다.
 mt_help_special_title = 특수 조각
 mt_help_special = 넷을 맞추면 가로줄이나 세로줄을 없애는 줄무늬 조각이 생깁니다. T자나 L자로 맞추면 3 × 3 범위를 없애는 폭탄 조각이 생깁니다. 한 줄로 다섯을 맞추면 만능 조각이 생기며, 아무 조각과 바꾸면 그 색을 모두 없앱니다.
 mt_help_combo = 특수 조각 둘을 합치면 더 넓게 없앱니다. 줄무늬 둘은 십자 모양으로, 폭탄 조합은 세 줄과 세 열을 없앱니다. 만능 조각과 특수 조각을 합치면 그 색의 모든 조각이 특수 조각이 됩니다. 만능 조각 둘은 보드 전체를 없앱니다.

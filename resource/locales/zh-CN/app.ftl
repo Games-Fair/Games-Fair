@@ -224,6 +224,7 @@ su_new_best = 新最佳时间！
 su_best = 最佳：{ $time }
 su_choose_difficulty = 选择难度
 su_default_difficulty = 默认难度
+su_digit_font = 数字字体
 su_records = 记录
 su_puzzles_solved = 已解谜题
 su_reset_records = 重置数独记录
@@ -399,6 +400,12 @@ mt_goal_score = 达到目标分数
 mt_goal_collect = 红色圆圈：{ $berries } / { $target } · 达到目标分数
 mt_goal_frost = 剩余层数：{ $frost } · 达到目标分数
 mt_goal_final = 圆圈：{ $berries } / { $target } · 层数：{ $frost } · 达成目标
+mt_points_to_go = 还差 { $points } 分
+mt_target_reached = 已达到目标分数！
+mt_moves_low = { $n ->
+    [one] 最后一步！
+   *[other] 只剩 { $n } 步！
+}
 mt_swap_hint = 交换相邻方块，连成三个或以上
 mt_shuffling = 无可用步数，正在重新洗牌…
 mt_cascade = 连消 ×{ $n }
@@ -415,7 +422,7 @@ mt_win_detail = 分数已保存。准备好后继续。
 mt_retry_detail = 再试一次，完成剩余目标。
 mt_next = 下一关
 mt_board_a11y = 三消棋盘。方向键移动光标，回车选择或交换，H 显示可行交换。
-mt_help_swap = 按住并拖动宝石可预览交换。尝试不同的相邻方块，松手即确认。拖回起始格或拖出棋盘可取消。也可以依次点击两个相邻方块。将三个或以上相同形状连成一线即可消除，连消会提高得分。未形成消除的交换不消耗步数。
+mt_help_swap = 按住并拖动宝石可预览交换。尝试不同的相邻方块，松手即确认。拖回起始格可取消。也可以依次点击两个相邻方块。将三个或以上相同形状连成一线即可消除，连消会提高得分。未形成消除的交换不消耗步数。
 mt_help_special_title = 特殊方块
 mt_help_special = 四连消生成条纹方块，可消除所在行或列。T 形或 L 形消除生成爆炸方块，可消除 3 × 3 区域。五个连成一线生成万能方块：与任意方块交换即可消除该颜色的全部方块。
 mt_help_combo = 交换两个特殊方块可大范围消除。两个条纹方块消除十字；含爆炸方块的组合消除三行三列。万能方块加特殊方块会把该颜色的所有方块变为特殊方块。两个万能方块清空整个棋盘。

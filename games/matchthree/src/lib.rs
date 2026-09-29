@@ -20,6 +20,34 @@ const SAVE: &str = "matchthree.v1";
 const SETTINGS: &str = "matchthree.settings";
 const ACCENT: Color = Color::hex(0x9EBFE9);
 const MINT: Color = Color::hex(0x87F4D1);
+/// The moves count once few are left (amber), and once very few are (red, throbbing).
+const AMBER: Color = Color::hex(0xFFC46B);
+const ALARM: Color = Color::hex(0xFF4F63);
+const ALARM_BRIGHT: Color = Color::hex(0xFFB0B8);
+/// At or under this many moves the count turns amber: the three-star line (help: "Finish with 10
+/// moves for three stars").
+const FEW_MOVES: u32 = 10;
+/// At or under this many it turns red and throbs, the status line warns, and crossing it flashes
+/// the board with a warning haptic: the two-star line, and a real risk of running out.
+const LOW_MOVES: u32 = 5;
+
+/// How urgent the moves count is: what decides its color, its throb, and the warning line.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+enum Urgency {
+    Plenty,
+    Few,
+    /// The last [`LOW_MOVES`]: red, throbbing, and announced.
+    Low,
+}
+
+fn urgency(moves: u32) -> Urgency {
+    match moves {
+        0 => Urgency::Plenty, // the game is over; the results card says so
+        m if m <= LOW_MOVES => Urgency::Low,
+        m if m <= FEW_MOVES => Urgency::Few,
+        _ => Urgency::Plenty,
+    }
+}
 const PALETTE: [u32; 6] = [0xEB7889, 0x60B9D7, 0xE5BE69, 0xA594D6, 0x74BD98, 0xD89571];
 pub const SOUNDS: &[Sfx] = &[
     sfx("sounds/matchthree/swap.wav"),
@@ -186,7 +214,17 @@ impl Ui {
         if self.busy() {
             return;
         }
+        let before = self.save.borrow().game.moves;
         let turn = self.save.borrow_mut().game.swap(a, b);
+        let after = self.save.borrow().game.moves;
+        // Crossing into the last few moves is worth a moment's alarm, once: a red wash over
+        // the board and a warning haptic, on top of the count turning red.
+        if urgency(before) != Urgency::Low && urgency(after) == Urgency::Low {
+            self.cue(&cues::WARNING);
+            if !self.reduced.get_untracked() {
+                self.flash.set((0.45, ALARM));
+            }
+        }
         self.selected.set(None);
         self.hint.set(None);
         self.elapsed.set(0.0);
@@ -265,8 +303,36 @@ impl Ui {
             self.repaint.notify();
         }
     }
+    /// Whether the moves count is throbbing: few enough moves left to warn about, with motion
+    /// allowed and the game still being played.
+    fn throbbing(&self) -> bool {
+        let g = &self.save.borrow().game;
+        !self.reduced.get_untracked() && urgency(g.moves) == Urgency::Low && !g.over()
+    }
+    /// The moves count's color: plain while there are plenty, amber past the three-star line,
+    /// and red at the end, pulsing between two reds while motion is allowed.
+    fn moves_color(&self) -> Color {
+        match urgency(self.save.borrow().game.moves) {
+            Urgency::Plenty => Color::WHITE,
+            Urgency::Few => AMBER,
+            Urgency::Low if self.throbbing() => {
+                let t = 0.5 + 0.5 * (self.time.get() * std::f64::consts::TAU * 1.4).sin();
+                ALARM.lerp(ALARM_BRIGHT, t)
+            }
+            Urgency::Low => ALARM,
+        }
+    }
+    /// The moves count's size: a heartbeat while it throbs, steady otherwise.
+    fn moves_scale(&self) -> f64 {
+        if self.throbbing() {
+            1.0 + 0.12 * (0.5 + 0.5 * (self.time.get() * std::f64::consts::TAU * 1.4).sin())
+        } else {
+            1.0
+        }
+    }
     fn needs_frame(&self) -> bool {
-        !self.frames.borrow().is_empty()
+        self.throbbing()
+            || !self.frames.borrow().is_empty()
             || self.settling.get().is_some()
             || self.drag.get().is_some()
             || self.selected.get().is_some()
@@ -446,6 +512,7 @@ impl Ui {
         if duration.is_some()
             || returning
             || fx_live
+            || self.throbbing()
             || self.drag.get().is_some()
             || self.selected.get().is_some()
             || self.hint.get().is_some()
@@ -478,7 +545,13 @@ impl Ui {
     }
     fn gesture(&self, e: Drag) {
         if e.phase == DragPhase::Began {
-            if self.busy() {
+            // A swipe may start while the last one's pieces are still settling home: that
+            // snap-back is only the drawing catching up, so waiting for it dropped quick swipes.
+            if self.overlay.get_untracked() != Overlay::None
+                || !self.frames.borrow().is_empty()
+                || self.save.borrow().game.over()
+                || self.drag.get().is_some()
+            {
                 return;
             }
             // Native pan recognizers report Began after touch slop; recover the actual press.
@@ -486,9 +559,12 @@ impl Ui {
                 e.location.x - e.translation.x,
                 e.location.y - e.translation.y,
             );
-            let Some(from) = self.at(start) else {
+            // A press just outside the board, which a finger on an edge gem easily lands, takes
+            // the nearest gem rather than nothing.
+            let Some(from) = self.at(start).or_else(|| self.near(start)) else {
                 return;
             };
+            self.settling.set(None);
             if self.save.borrow().game.grid[from].is_none() {
                 return;
             }
@@ -510,12 +586,7 @@ impl Ui {
         };
         let old = hold.preview.to;
         let (_, _, cell) = layout(self.size.get());
-        hold.update(
-            &self.save.borrow().game,
-            e.location,
-            cell,
-            self.at(e.location).is_some(),
-        );
+        hold.update(&self.save.borrow().game, e.location, cell);
         if hold.moved {
             self.selected.set(None);
         }
@@ -545,6 +616,22 @@ impl Ui {
             }
         }
         self.repaint.notify();
+    }
+    /// The gem nearest `p` when it lies within half a cell outside the board's edge.
+    fn near(&self, p: Point) -> Option<usize> {
+        let (x, y, c) = layout(self.size.get());
+        let side = c * N as f64;
+        let margin = c / 2.0;
+        if c <= 0.0
+            || p.x < x - margin
+            || p.y < y - margin
+            || p.x >= x + side + margin
+            || p.y >= y + side + margin
+        {
+            return None;
+        }
+        let inside = Point::new(p.x.clamp(x, x + side - 1e-6), p.y.clamp(y, y + side - 1e-6));
+        self.at(inside)
     }
     fn at(&self, p: Point) -> Option<usize> {
         let (x, y, c) = layout(self.size.get());
@@ -620,7 +707,13 @@ pub fn matchthree_page() -> AnyPiece {
         ("mt_goal", "mt-goal", 2, MINT),
     ] {
         let u = ui.clone();
-        stats.push(chrome::info_stat(
+        // The moves count carries its urgency: amber, then red and throbbing (`moves_color`).
+        let (tint, pulse) = (ui.clone(), ui.clone());
+        let color = move || {
+            tint.repaint.track();
+            if kind == 1 { tint.moves_color() } else { color }
+        };
+        let stat = chrome::info_stat(
             tr(key),
             move || {
                 u.repaint.track();
@@ -634,7 +727,16 @@ pub fn matchthree_page() -> AnyPiece {
             },
             color,
             id,
-        ));
+        );
+        stats.push(if kind == 1 {
+            stat.scale(move || {
+                pulse.repaint.track();
+                pulse.moves_scale()
+            })
+            .any()
+        } else {
+            stat
+        });
     }
     let u = ui.clone();
     let v = ui.clone();
@@ -644,19 +746,59 @@ pub fn matchthree_page() -> AnyPiece {
         let save = progress_ui.save.borrow();
         let g = &save.game;
         let progress = (g.score as f64 / STAGES[g.level].target as f64).min(1.0);
-        d.fill(
-            Shape::RoundedRect(Rect::new(0.0, 2.0, size.width, 6.0), 3.0),
-            Color::hex(0x392E50),
-        );
+        // A track tall enough to read at a glance, with quarter marks so "nearly there" can be
+        // judged without doing arithmetic, and a glow once the target score is reached.
+        let (h, y) = (12.0, (size.height - 12.0) / 2.0);
+        let track = Rect::new(0.0, y, size.width, h);
+        d.fill(Shape::RoundedRect(track, h / 2.0), Color::hex(0x392E50));
         if progress > 0.0 {
+            let fill = Rect::new(0.0, y, (size.width * progress).max(h), h);
+            if progress >= 1.0 {
+                d.fill(
+                    Shape::RoundedRect(Rect::new(-2.0, y - 2.0, size.width + 4.0, h + 4.0), h),
+                    MINT.with_alpha(0.25),
+                );
+                d.fill(Shape::RoundedRect(fill, h / 2.0), MINT);
+            } else {
+                d.fill(
+                    Shape::RoundedRect(fill, h / 2.0),
+                    LinearGradient::horizontal(ACCENT, MINT),
+                );
+            }
+        }
+        for q in 1..4 {
+            let x = size.width * q as f64 / 4.0;
             d.fill(
-                Shape::RoundedRect(Rect::new(0.0, 2.0, size.width * progress, 6.0), 3.0),
-                LinearGradient::horizontal(ACCENT, MINT),
+                Shape::Rect(Rect::new(x - 0.5, y + 3.0, 1.0, h - 6.0)),
+                Color::WHITE.with_alpha(if x < size.width * progress {
+                    0.35
+                } else {
+                    0.15
+                }),
             );
         }
     })
-    .width(240.0)
-    .height(10.0);
+    .width(280.0)
+    .height(16.0)
+    .id("mt-progress");
+    // How far there is still to go, in words: the points left, or that the target is reached.
+    let to_go_ui = ui.clone();
+    let to_go = label(move || {
+        to_go_ui.repaint.track();
+        let g = &to_go_ui.save.borrow().game;
+        let target = STAGES[g.level].target;
+        if g.score >= target {
+            tr("mt_target_reached").format()
+        } else {
+            tr("mt_points_to_go")
+                .arg("points", (target - g.score) as f64)
+                .format()
+        }
+    })
+    .font(Font::Caption)
+    .bold()
+    .color(MINT)
+    .id("mt-to-go");
     let info = column((
         label(move || {
             u.repaint.track();
@@ -673,6 +815,7 @@ pub fn matchthree_page() -> AnyPiece {
         .id("mt-level"),
         chrome::info_row(stats),
         progress,
+        to_go,
         label(move || {
             v.repaint.track();
             let g = &v.save.borrow().game;
@@ -685,7 +828,7 @@ pub fn matchthree_page() -> AnyPiece {
     ))
     .spacing(6.0)
     .any();
-    let (h, m, s) = (ui.clone(), ui.clone(), ui.clone());
+    let (h, m, s, s2) = (ui.clone(), ui.clone(), ui.clone(), ui.clone());
     let footer = column((
         label(move || {
             s.repaint.track();
@@ -698,10 +841,25 @@ pub fn matchthree_page() -> AnyPiece {
                 }
                 return tr("mt_matching").format();
             }
+            let moves = s.save.borrow().game.moves;
+            if urgency(moves) == Urgency::Low {
+                return tr("mt_moves_low").arg("n", moves as f64).format();
+            }
             tr("mt_swap_hint").format()
         })
         .font(Font::Caption)
-        .color(Color::hex(0xC2B3D5))
+        .color({
+            let s = s2.clone();
+            move || {
+                s.repaint.track();
+                let moves = s.save.borrow().game.moves;
+                if s.frames.borrow().is_empty() && urgency(moves) == Urgency::Low {
+                    ALARM
+                } else {
+                    Color::hex(0xC2B3D5)
+                }
+            }
+        })
         .id("mt-status"),
         row((
             footer_button(tr("mt_hint"), "mt-hint", move || h.hint()),
@@ -1513,4 +1671,22 @@ pub fn matchthree_preview() -> AnyPiece {
     })
     .background(SURFACE)
     .any()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The count reads as plenty down to the three-star line, few down to the two-star line, and
+    /// low (red, throbbing, announced) for the last five; an empty count is the results card's.
+    #[test]
+    fn the_moves_count_grows_more_urgent_as_it_runs_out() {
+        assert_eq!(urgency(22), Urgency::Plenty);
+        assert_eq!(urgency(11), Urgency::Plenty);
+        assert_eq!(urgency(10), Urgency::Few);
+        assert_eq!(urgency(6), Urgency::Few);
+        assert_eq!(urgency(5), Urgency::Low);
+        assert_eq!(urgency(1), Urgency::Low);
+        assert_eq!(urgency(0), Urgency::Plenty);
+    }
 }

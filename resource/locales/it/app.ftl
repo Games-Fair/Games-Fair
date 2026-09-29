@@ -224,6 +224,7 @@ su_new_best = Nuovo record!
 su_best = Record: { $time }
 su_choose_difficulty = Scegli difficoltà
 su_default_difficulty = Difficoltà predefinita
+su_digit_font = Carattere delle cifre
 su_records = Record
 su_puzzles_solved = Puzzle risolti
 su_reset_records = Reimposta record Sudoku
@@ -399,6 +400,15 @@ mt_goal_score = Raggiungi il punteggio obiettivo
 mt_goal_collect = Cerchi rossi: { $berries } / { $target } · Raggiungi il punteggio obiettivo
 mt_goal_frost = Strati rimasti: { $frost } · Raggiungi il punteggio obiettivo
 mt_goal_final = Cerchi: { $berries } / { $target } · Strati: { $frost } · Raggiungi l'obiettivo
+mt_points_to_go = { $points ->
+    [one] Manca 1 punto
+   *[other] Mancano { $points } punti
+}
+mt_target_reached = Punteggio obiettivo raggiunto!
+mt_moves_low = { $n ->
+    [one] Ultima mossa!
+   *[other] Solo { $n } mosse rimaste!
+}
 mt_swap_hint = Scambia pezzi vicini per allinearne tre o più
 mt_shuffling = Nessuna mossa possibile. Rimescolamento…
 mt_cascade = Cascata ×{ $n }
@@ -415,7 +425,7 @@ mt_win_detail = Il punteggio è salvato. Continua quando vuoi.
 mt_retry_detail = Riprova per completare gli obiettivi rimanenti.
 mt_next = Livello successivo
 mt_board_a11y = Tabellone di Allinea tre. Le frecce muovono il cursore, Invio seleziona o scambia, H mostra uno scambio valido.
-mt_help_swap = Tieni premuta una gemma e trascinala per vedere l'anteprima dello scambio. Prova vicini diversi, poi solleva il dito per confermare. Per annullare, torna alla casella iniziale o trascina fuori dal tabellone. Puoi anche toccare due pezzi vicini. Allinea tre o più forme uguali; le cascate aumentano il punteggio. Gli scambi senza combinazione non costano nulla.
+mt_help_swap = Tieni premuta una gemma e trascinala per vedere l'anteprima dello scambio. Prova vicini diversi, poi solleva il dito per confermare. Per annullare, torna alla casella iniziale. Puoi anche toccare due pezzi vicini. Allinea tre o più forme uguali; le cascate aumentano il punteggio. Gli scambi senza combinazione non costano nulla.
 mt_help_special_title = Pezzi speciali
 mt_help_special = Allineane quattro per un pezzo a strisce che elimina la sua riga o colonna. Una T o una L crea un pezzo esplosivo che elimina un'area 3 × 3. Allineane cinque in fila per un jolly: scambialo con un pezzo qualsiasi per eliminare quel colore.
 mt_help_combo = Combina due pezzi speciali per un'eliminazione più ampia. Due strisce eliminano una croce; una combinazione esplosiva elimina tre righe e tre colonne. Un jolly con un pezzo speciale trasforma in speciali tutti i pezzi di quel colore. Due jolly svuotano l'intero tabellone.

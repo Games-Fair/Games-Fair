@@ -224,6 +224,7 @@ su_new_best = Novo recorde!
 su_best = Recorde: { $time }
 su_choose_difficulty = Escolher dificuldade
 su_default_difficulty = Dificuldade padrão
+su_digit_font = Fonte dos números
 su_records = Recordes
 su_puzzles_solved = Quebra-cabeças resolvidos
 su_reset_records = Redefinir recordes de Sudoku
@@ -399,6 +400,15 @@ mt_goal_score = Alcance a pontuação-alvo
 mt_goal_collect = Círculos vermelhos: { $berries } / { $target } · Alcance a pontuação-alvo
 mt_goal_frost = Camadas restantes: { $frost } · Alcance a pontuação-alvo
 mt_goal_final = Círculos: { $berries } / { $target } · Camadas: { $frost } · Alcance a meta
+mt_points_to_go = { $points ->
+    [one] Falta 1 ponto
+   *[other] Faltam { $points } pontos
+}
+mt_target_reached = Pontuação-alvo alcançada!
+mt_moves_low = { $n ->
+    [one] Última jogada!
+   *[other] Só restam { $n } jogadas!
+}
 mt_swap_hint = Troque peças vizinhas para combinar três ou mais
 mt_shuffling = Sem jogadas possíveis. Embaralhando…
 mt_cascade = Cascata ×{ $n }
@@ -415,7 +425,7 @@ mt_win_detail = Sua pontuação foi salva. Continue quando quiser.
 mt_retry_detail = Tente de novo para cumprir os objetivos restantes.
 mt_next = Próximo nível
 mt_board_a11y = Tabuleiro de Combine Três. As setas movem o cursor, Enter seleciona ou troca e H mostra uma troca válida.
-mt_help_swap = Segure e arraste uma gema para ver a troca antes de fazê-la. Experimente vizinhas diferentes e solte para confirmar. Arraste de volta à casa inicial ou para fora do tabuleiro para cancelar. Você também pode tocar em duas vizinhas. Combine três ou mais da mesma forma; cascatas aumentam sua pontuação. Trocas sem combinação não gastam jogadas.
+mt_help_swap = Segure e arraste uma gema para ver a troca antes de fazê-la. Experimente vizinhas diferentes e solte para confirmar. Arraste de volta à casa inicial para cancelar. Você também pode tocar em duas vizinhas. Combine três ou mais da mesma forma; cascatas aumentam sua pontuação. Trocas sem combinação não gastam jogadas.
 mt_help_special_title = Peças especiais
 mt_help_special = Combine quatro para uma peça listrada que limpa sua linha ou coluna. Um T ou L cria uma peça explosiva que limpa uma área 3 × 3. Combine cinco em linha para um curinga: troque-o com qualquer peça para limpar aquela cor.
 mt_help_combo = Junte duas especiais para uma limpeza maior. Duas listradas limpam uma cruz; uma combinação com explosiva limpa três linhas e três colunas. Curinga mais especial transforma todas as peças daquela cor em especiais. Dois curingas limpam o tabuleiro inteiro.
