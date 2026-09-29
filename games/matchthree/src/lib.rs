@@ -27,6 +27,8 @@ const ALARM_BRIGHT: Color = Color::hex(0xFFB0B8);
 /// At or under this many moves the count turns amber: the three-star line (help: "Finish with 10
 /// moves for three stars").
 const FEW_MOVES: u32 = 10;
+/// Seconds a board must rest untouched before its starlight begins.
+const IDLE_AFTER: f64 = 1.5;
 /// At or under this many it turns red and throbs, the status line warns, and crossing it flashes
 /// the board with a warning haptic: the two-star line, and a real risk of running out.
 const LOW_MOVES: u32 = 5;
@@ -123,6 +125,10 @@ struct Ui {
     vibrations: Signal<bool>,
     reduced: Signal<bool>,
     sparks: RefCell<fx::Sparks>,
+    /// The resting board's starlight, and how long the board has been still (any touch or key
+    /// resets it, and the starlight fades away).
+    idle: RefCell<fx::Idle>,
+    calm: Cell<f64>,
     /// Board shake in points and a full-board flash (0..1, and its tint), both decaying; set in
     /// the same tick as the haptic they go with.
     shake: Cell<f64>,
@@ -155,7 +161,7 @@ fn cell_center(i: usize) -> (f64, f64) {
     ((i % N) as f64 + 0.5, (i / N) as f64 + 0.5)
 }
 fn gem_color(i: u8) -> Color {
-    Color::hex(PALETTE[i as usize])
+    fx::jewel(i)
 }
 impl Ui {
     fn cue(&self, c: &chrome::Cue) {
@@ -235,6 +241,7 @@ impl Ui {
         self.repaint.notify();
     }
     fn choose(&self, i: usize) {
+        self.calm.set(0.0);
         if self.busy() || self.save.borrow().game.grid[i].is_none() {
             return;
         }
@@ -268,6 +275,7 @@ impl Ui {
         self.repaint.notify();
     }
     fn key(&self, key: &str) {
+        self.calm.set(0.0);
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
@@ -330,6 +338,20 @@ impl Ui {
             1.0
         }
     }
+    /// Whether the board is at rest: nothing moving, held, chosen or hinted, and the level still
+    /// in play. A resting board fills with slow starlight (see `fx::Idle`).
+    fn resting(&self) -> bool {
+        self.overlay.get_untracked() == Overlay::None
+            && self.frames.borrow().is_empty()
+            && self.drag.get().is_none()
+            && self.settling.get().is_none()
+            && self.selected.get().is_none()
+            && self.hint.get().is_none()
+            && !self.save.borrow().game.over()
+    }
+    fn idle_wanted(&self) -> bool {
+        !self.reduced.get_untracked() && self.resting()
+    }
     fn needs_frame(&self) -> bool {
         self.throbbing()
             || !self.frames.borrow().is_empty()
@@ -342,6 +364,8 @@ impl Ui {
             || self.time.get() < self.suppress_tap_until.get()
             || self.save.borrow().game.over()
             || !self.sparks.borrow().is_empty()
+            || self.idle_wanted()
+            || self.idle.borrow().is_live()
             || self.shake.get() > 0.0
             || self.flash.get().0 > 0.0
     }
@@ -430,6 +454,30 @@ impl Ui {
         self.time.set(self.time.get() + dt);
         let reduced = self.reduced.get_untracked();
         let fx_live = self.step_fx(dt);
+        let rest = !reduced && self.resting();
+        self.calm.set(if rest { self.calm.get() + dt } else { 0.0 });
+        let idle_live = {
+            let mut idle = self.idle.borrow_mut();
+            if self.calm.get() >= IDLE_AFTER {
+                let save = self.save.borrow();
+                let gems: Vec<fx::Resting> = (0..LEN)
+                    .filter_map(|i| {
+                        let cv = save.game.grid[i]?;
+                        let (x, y) = cell_center(i);
+                        Some(fx::Resting {
+                            cell: i,
+                            x,
+                            y,
+                            color: gem_color(cv.color),
+                        })
+                    })
+                    .collect();
+                idle.step(dt, Some(&gems), N as f64);
+            } else {
+                idle.step(dt, None, N as f64);
+            }
+            idle.is_live()
+        };
         if !reduced && let Some(hold) = self.drag.get().filter(|h| h.moved) {
             let (x, y) = cell_center(hold.preview.from);
             let at = hold.preview.offset(hold.preview.from);
@@ -512,6 +560,7 @@ impl Ui {
         if duration.is_some()
             || returning
             || fx_live
+            || idle_live
             || self.throbbing()
             || self.drag.get().is_some()
             || self.selected.get().is_some()
@@ -544,6 +593,7 @@ impl Ui {
         None
     }
     fn gesture(&self, e: Drag) {
+        self.calm.set(0.0);
         if e.phase == DragPhase::Began {
             // A swipe may start while the last one's pieces are still settling home: that
             // snap-back is only the drawing catching up, so waiting for it dropped quick swipes.
@@ -667,6 +717,8 @@ pub fn matchthree_page() -> AnyPiece {
         vibrations: Signal::new(settings.shell.vibrations),
         reduced: Signal::new(settings.reduced),
         sparks: RefCell::new(fx::Sparks::new()),
+        idle: RefCell::new(fx::Idle::new()),
+        calm: Cell::new(0.0),
         shake: Cell::new(0.0),
         flash: Cell::new((0.0, Color::WHITE)),
     });
@@ -920,6 +972,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
             d.settling.get(),
             &Effects {
                 sparks: Some(&d.sparks.borrow()),
+                idle: Some(&d.idle.borrow()),
                 shake: d.shake.get(),
                 flash: d.flash.get(),
             },
@@ -1058,6 +1111,7 @@ fn prism(d: &mut Draw, x: f64, y: f64, r: f64, look: fx::Look) {
 /// What the board draws over the gems: the live sparks, the shake and the flash.
 struct Effects<'a> {
     sparks: Option<&'a fx::Sparks>,
+    idle: Option<&'a fx::Idle>,
     shake: f64,
     flash: (f64, Color),
 }
@@ -1065,6 +1119,7 @@ impl Default for Effects<'_> {
     fn default() -> Self {
         Self {
             sparks: None,
+            idle: None,
             shake: 0.0,
             flash: (0.0, Color::WHITE),
         }
@@ -1178,10 +1233,19 @@ fn render(
             oy + (i / N) as f64 * c + c / 2.0,
         );
         let mut scale = 1.0;
+        // The quick play twinkle gives way to the idle starlight as it fades in.
+        let (still, light) = fx
+            .idle
+            .map_or((0.0, 0.0), |idle| (idle.fade(), idle.light(i)));
         let mut look = fx::Look {
-            glint: if reduced { 0.0 } else { fx::twinkle(time, i) },
-            glow: 0.0,
+            glint: if reduced {
+                0.0
+            } else {
+                fx::twinkle(time, i) * (1.0 - still)
+            },
+            glow: 0.5 * light,
             time: if reduced { 0.0 } else { time },
+            seed: i as f64,
         };
         if selected == Some(i) {
             look.glow = if reduced {
@@ -1279,6 +1343,9 @@ fn render(
             ),
             fx.flash.1.with_alpha(0.4 * fx.flash.0),
         );
+    }
+    if let Some(idle) = fx.idle {
+        idle.draw(d, ox, oy, c);
     }
     if let Some(sparks) = fx.sparks {
         sparks.draw(d, ox, oy, c);

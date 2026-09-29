@@ -483,7 +483,7 @@ flow:
   - {"key": {"id": "mt-board", "key": "Enter"}}
   - {"assert_text": {"id": "mt-score", "text": "13500"}}
   - {"assert_text": {"id": "mt-moves", "text": "5"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-status", "text": "Only 5 moves left!", "timeout_secs": 30}}
   - {"wait_for": {"id": "mt-result", "timeout_secs": 30}}
   - {"assert_text": {"id": "mt-final-score", "text": "13500"}}
   - {"tap": {"id": "mt-next"}}
@@ -836,7 +836,7 @@ flow:
   - {"key": {"id": "mt-board", "key": "Enter"}}
   - {"assert_text": {"id": "mt-score", "text": "17760"}}
   - {"assert_text": {"id": "mt-moves", "text": "5"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-status", "text": "Only 5 moves left!", "timeout_secs": 30}}
   - {"key": {"id": "mt-board", "key": "Home"}}
   - {"key": {"id": "mt-board", "key": "ArrowDown"}}
   - {"key": {"id": "mt-board", "key": "ArrowRight"}}
@@ -849,7 +849,7 @@ flow:
   - {"key": {"id": "mt-board", "key": "Enter"}}
   - {"assert_text": {"id": "mt-score", "text": "17940"}}
   - {"assert_text": {"id": "mt-moves", "text": "4"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-status", "text": "Only 4 moves left!", "timeout_secs": 30}}
   - {"key": {"id": "mt-board", "key": "Home"}}
   - {"key": {"id": "mt-board", "key": "ArrowDown"}}
   - {"key": {"id": "mt-board", "key": "ArrowRight"}}
@@ -863,7 +863,7 @@ flow:
   - {"key": {"id": "mt-board", "key": "Enter"}}
   - {"assert_text": {"id": "mt-score", "text": "18120"}}
   - {"assert_text": {"id": "mt-moves", "text": "3"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-status", "text": "Only 3 moves left!", "timeout_secs": 30}}
   - {"key": {"id": "mt-board", "key": "Home"}}
   - {"key": {"id": "mt-board", "key": "ArrowDown"}}
   - {"key": {"id": "mt-board", "key": "ArrowDown"}}
@@ -874,7 +874,7 @@ flow:
   - {"key": {"id": "mt-board", "key": "Enter"}}
   - {"assert_text": {"id": "mt-score", "text": "18300"}}
   - {"assert_text": {"id": "mt-moves", "text": "2"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-status", "text": "Only 2 moves left!", "timeout_secs": 30}}
   - {"key": {"id": "mt-board", "key": "Home"}}
   - {"key": {"id": "mt-board", "key": "ArrowDown"}}
   - {"key": {"id": "mt-board", "key": "ArrowDown"}}
@@ -886,7 +886,7 @@ flow:
   - {"key": {"id": "mt-board", "key": "Enter"}}
   - {"assert_text": {"id": "mt-score", "text": "18480"}}
   - {"assert_text": {"id": "mt-moves", "text": "1"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt-status", "text": "Last move!", "timeout_secs": 30}}
   - {"wait_for": {"id": "mt-result", "timeout_secs": 30}}
   - {"assert_text": {"id": "mt-final-score", "text": "18480"}}
   - {"tap": {"id": "mt-next"}}

@@ -12,6 +12,38 @@ pub struct Look {
     pub glint: f64,
     pub glow: f64,
     pub time: f64,
+    /// Sets each stone's facets shimmering and its fire flashing on its own beat.
+    pub seed: f64,
+}
+
+/// The six stones (ruby, sapphire, citrine, amethyst, emerald and fire opal), each as its shadow,
+/// body and light tones. They keep the hues of the game's palette, so the chrome that uses the
+/// palette still matches, but as deep, saturated jewel color.
+const JEWELS: [[u32; 3]; 6] = [
+    [0x3D0010, 0xD8002E, 0xFF5C7F],
+    [0x021A52, 0x1463E0, 0x5CB8FF],
+    [0x4F2600, 0xF09A00, 0xFFD740],
+    [0x220646, 0x8230DE, 0xC48CFF],
+    [0x01301B, 0x05A860, 0x45F0A0],
+    [0x521000, 0xFF5A0A, 0xFFA257],
+];
+
+/// The body color of stone `i`: what its sparks, trails and wildcard wedge are tinted with.
+pub fn jewel(i: u8) -> Color {
+    Color::hex(JEWELS[i as usize % 6][1])
+}
+
+/// The flashes of spectral color a real stone throws as it turns (its "fire").
+const FIRE: [u32; 5] = [0xFF5A6E, 0xFFD84A, 0x5CFF9A, 0x4AC8FF, 0xC07AFF];
+
+/// A fixed pseudo-random value in -1..1 for facet `n`, so every stone is cut the same way each
+/// frame but its facets don't shade in a smooth ramp.
+fn hash(n: u32) -> f64 {
+    let mut h = n.wrapping_mul(0x9E37_79B1);
+    h ^= h >> 15;
+    h = h.wrapping_mul(0x85EB_CA77);
+    h ^= h >> 13;
+    (h & 0xFFFF) as f64 / 65535.0 * 2.0 - 1.0
 }
 
 pub fn mix(a: Color, b: Color, t: f64) -> Color {
@@ -21,13 +53,6 @@ pub fn mix(a: Color, b: Color, t: f64) -> Color {
         a.b + (b.b - a.b) * t,
         a.a + (b.a - a.a) * t,
     )
-}
-
-/// `c` pushed away from its own gray by `k`: the palette's soft tones become gemstone color.
-fn vivid(c: Color, k: f64) -> Color {
-    let l = 0.3 * c.r + 0.59 * c.g + 0.11 * c.b;
-    let ch = |v: f64| (l + (v - l) * k).clamp(0.0, 1.0);
-    Color::rgba(ch(c.r), ch(c.g), ch(c.b), c.a)
 }
 
 fn ellipse(x: f64, y: f64, rx: f64, ry: f64) -> Shape {
@@ -102,81 +127,180 @@ pub fn outline(cut: u8, x: f64, y: f64, r: f64) -> Vec<Point> {
     }
 }
 
-/// A cut stone: a lit body, crown facets shaded against a light from the upper left, a bright
-/// table, a specular streak, and (when `look` asks) a halo and a glint.
-pub fn gem(d: &mut Draw, cut: u8, base: Color, x: f64, y: f64, r: f64, look: Look) {
-    let base = vivid(base, 1.5);
+/// A cut stone, lit from the upper left like a jewel under a lamp. A dark body with light
+/// pooling in its lower right (what a real stone's pavilion sends back out), a crown of small
+/// facets from shadow to white so the cut reads crisply, a bright table with its reflected
+/// arrows, specular highlights, and flecks of spectral fire. `look` adds a halo and a glint.
+pub fn gem(d: &mut Draw, cut: u8, _base: Color, x: f64, y: f64, r: f64, look: Look) {
+    let [deep, body, light] = JEWELS[cut as usize % 6].map(Color::hex);
     let pts = outline(cut, x, y, r);
-    if look.glow > 0.0 {
-        let g = r * (1.5 + 0.15 * look.glow);
-        d.fill(
-            ellipse(x, y, g, g),
-            RadialGradient::centered(base.with_alpha(0.55 * look.glow), base.with_alpha(0.0)),
-        );
-    }
+    let n = pts.len();
+    // Every stone glows faintly in its own color; a held or chosen one blazes.
+    let halo = r * (1.35 + 0.2 * look.glow);
     d.fill(
-        Shape::Polygon(pts.iter().map(|p| Point::new(p.x, p.y + r * 0.1)).collect()),
-        Color::rgba(0.02, 0.01, 0.06, 0.38),
+        ellipse(x, y, halo, halo),
+        RadialGradient::centered(body.with_alpha(0.2 + 0.5 * look.glow), body.with_alpha(0.0)),
     );
-    let light = mix(base, Color::WHITE, 0.6);
-    let deep = mix(base, Color::BLACK, 0.6);
+    d.fill(
+        Shape::Polygon(
+            pts.iter()
+                .map(|p| Point::new(p.x, p.y + r * 0.12))
+                .collect(),
+        ),
+        Color::rgba(0.01, 0.0, 0.04, 0.5),
+    );
+    d.fill(Shape::Polygon(pts.clone()), deep);
     d.fill(
         Shape::Polygon(pts.clone()),
         RadialGradient::new(
-            UnitPoint::new(0.36, 0.3),
-            0.85,
-            vec![(0.0, light), (0.45, base), (1.0, deep)],
+            UnitPoint::new(0.62, 0.7),
+            0.75,
+            vec![
+                (0.0, mix(light, Color::WHITE, 0.2)),
+                (0.4, body),
+                (1.0, body.with_alpha(0.0)),
+            ],
         ),
     );
-    let (cx, cy) = (x, y - r * 0.06);
+    let (cx, cy) = (x, y - r * 0.05);
     let inner: Vec<Point> = pts
         .iter()
-        .map(|p| Point::new(cx + (p.x - x) * 0.5, cy + (p.y - y) * 0.5))
+        .map(|p| Point::new(cx + (p.x - x) * 0.54, cy + (p.y - y) * 0.54))
         .collect();
-    let n = pts.len();
-    let (lx, ly) = (-0.52, -0.85);
+    let (lx, ly) = (-0.5, -0.866);
+    // From shadow through body color to white: the crown's facets span the whole range, which is
+    // what makes a stone look cut rather than molded.
+    let shade = |s: f64| -> Color {
+        if s < 0.0 {
+            mix(body, deep, (-s).min(1.0) * 0.9)
+        } else if s < 0.8 {
+            mix(body, light, s / 0.8)
+        } else {
+            mix(light, Color::WHITE, ((s - 0.8) / 0.5).min(0.85))
+        }
+    };
+    let mid = |a: Point, b: Point| Point::new((a.x + b.x) / 2.0, (a.y + b.y) / 2.0);
     for i in 0..n {
         let j = (i + 1) % n;
-        let (a, b) = (pts[i], pts[j]);
-        let (mx, my) = ((a.x + b.x) / 2.0 - x, (a.y + b.y) / 2.0 - y);
-        let len = (mx * mx + my * my).sqrt().max(1e-6);
-        // Alternate facets catch the light a little differently, which is what reads as a cut.
-        let lit = (mx * lx + my * ly) / len + if i % 2 == 0 { 0.12 } else { -0.06 };
-        let facet = Shape::Polygon(vec![a, b, inner[j], inner[i]]);
-        if lit >= 0.0 {
-            d.fill(facet, Color::WHITE.with_alpha(0.05 + 0.32 * lit.min(1.0)));
-        } else {
-            d.fill(facet, Color::BLACK.with_alpha(0.28 * (-lit).min(1.0)));
+        let (a, b, ia, ib) = (pts[i], pts[j], inner[i], inner[j]);
+        let m = mid(a, b);
+        // Each side of the crown is three facets: two upper-girdle triangles and a star facet.
+        for (k, tri) in [[a, m, ia], [m, b, ib], [m, ib, ia]]
+            .into_iter()
+            .enumerate()
+        {
+            let (tx, ty) = (
+                (tri[0].x + tri[1].x + tri[2].x) / 3.0 - x,
+                (tri[0].y + tri[1].y + tri[2].y) / 3.0 - y,
+            );
+            let len = (tx * tx + ty * ty).sqrt().max(1e-6);
+            let slope = if k == 2 { 0.6 } else { 1.0 };
+            let facet = (i * 3 + k) as u32 + cut as u32 * 97;
+            let shimmer = if look.time > 0.0 {
+                0.28 * (look.time * 1.2 + facet as f64 * 1.7 + look.seed * 2.3).sin()
+            } else {
+                0.0
+            };
+            let s = (tx * lx + ty * ly) / len * slope * 1.1 + 0.34 * hash(facet) + shimmer - 0.05;
+            d.fill(Shape::Polygon(tri.to_vec()), shade(s));
         }
     }
+    for i in 0..n {
+        let j = (i + 1) % n;
+        let m = mid(pts[i], pts[j]);
+        d.stroke(
+            Shape::Line(pts[i], inner[i]),
+            Color::WHITE.with_alpha(0.22),
+            0.6,
+        );
+        d.stroke(Shape::Line(m, inner[i]), Color::WHITE.with_alpha(0.14), 0.5);
+        d.stroke(Shape::Line(m, inner[j]), Color::WHITE.with_alpha(0.14), 0.5);
+    }
+    // The table: a window into the stone, bright where it faces the light.
     d.fill(
         Shape::Polygon(inner.clone()),
         LinearGradient::new(
             UnitPoint::TOP_LEADING,
             UnitPoint::BOTTOM_TRAILING,
             vec![
-                (0.0, mix(base, Color::WHITE, 0.5).with_alpha(0.95)),
-                (1.0, base.with_alpha(0.85)),
+                (0.0, mix(light, Color::WHITE, 0.15)),
+                (0.45, body),
+                (1.0, mix(body, deep, 0.5)),
             ],
         ),
     );
-    for (p, q) in pts.iter().zip(&inner) {
-        d.stroke(Shape::Line(*p, *q), Color::WHITE.with_alpha(0.16), 0.7);
+    // Its reflected arrows, and the smaller table mirrored in the pavilion below.
+    for p in &inner {
+        d.stroke(
+            Shape::Line(Point::new(cx, cy), *p),
+            deep.with_alpha(0.3),
+            0.7,
+        );
     }
-    d.stroke(Shape::Polygon(inner), Color::WHITE.with_alpha(0.42), 0.8);
+    let echo: Vec<Point> = inner
+        .iter()
+        .map(|p| Point::new(cx + (p.x - cx) * 0.5, cy + (p.y - cy) * 0.5))
+        .collect();
+    d.fill(
+        Shape::Polygon(echo.clone()),
+        LinearGradient::new(
+            UnitPoint::TOP_LEADING,
+            UnitPoint::BOTTOM_TRAILING,
+            vec![
+                (0.0, mix(body, deep, 0.2).with_alpha(0.6)),
+                (1.0, light.with_alpha(0.55)),
+            ],
+        ),
+    );
+    d.stroke(Shape::Polygon(echo), Color::WHITE.with_alpha(0.3), 0.6);
+    d.stroke(Shape::Polygon(inner), Color::WHITE.with_alpha(0.6), 0.9);
     d.stroke(
         Shape::Polygon(pts),
-        mix(base, Color::WHITE, 0.6).with_alpha(0.9),
-        1.2,
+        mix(light, Color::WHITE, 0.2).with_alpha(0.9),
+        1.1,
+    );
+    // Light off the polished crown: a soft wash, a streak and a hot spot, and the colored glow
+    // leaving the far side.
+    d.fill(
+        ellipse(x - r * 0.3, y - r * 0.42, r * 0.55, r * 0.45),
+        RadialGradient::centered(Color::WHITE.with_alpha(0.4), Color::WHITE.with_alpha(0.0)),
     );
     d.fill(
-        tilted(x - r * 0.4, y - r * 0.5, r * 0.34, r * 0.1, -0.62),
-        Color::WHITE.with_alpha(0.6),
+        tilted(x - r * 0.38, y - r * 0.5, r * 0.36, r * 0.09, -0.62),
+        Color::WHITE.with_alpha(0.85),
     );
     d.fill(
-        ellipse(x - r * 0.62, y - r * 0.24, r * 0.06, r * 0.06),
-        Color::WHITE.with_alpha(0.75),
+        ellipse(x - r * 0.62, y - r * 0.22, r * 0.07, r * 0.07),
+        Color::WHITE,
     );
+    d.fill(
+        tilted(x + r * 0.4, y + r * 0.48, r * 0.26, r * 0.07, -0.62),
+        mix(light, Color::WHITE, 0.4).with_alpha(0.7),
+    );
+    // Fire: now and then a fleck of spectral color flashes on the crown.
+    if look.time > 0.0 {
+        for k in 0..3 {
+            let beat = look.time * 1.9 + k as f64 * 2.1 + look.seed * 1.3;
+            let flash = beat.sin().max(0.0).powi(6);
+            if flash < 0.02 {
+                continue;
+            }
+            let a = look.seed * 2.4 + k as f64 * 2.2;
+            let (fx, fy) = (x + a.cos() * r * 0.66, y + a.sin() * r * 0.66);
+            let hue = Color::hex(FIRE[(look.seed as usize + k + (beat / TAU) as usize) % 5]);
+            let size = r * 0.3 * flash;
+            let rays: Vec<Point> = (0..8)
+                .map(|i| {
+                    let a = i as f64 * PI / 4.0 + PI / 4.0 * (k & 1) as f64;
+                    let l = if i % 2 == 0 { size } else { size * 0.12 };
+                    Point::new(fx + a.cos() * l, fy + a.sin() * l)
+                })
+                .collect();
+            d.fill(Shape::Polygon(rays), hue.with_alpha(flash));
+            let dot = size * 0.16;
+            d.fill(ellipse(fx, fy, dot, dot), Color::WHITE.with_alpha(flash));
+        }
+    }
     if look.glint > 0.0 {
         glint(
             d,
@@ -468,6 +592,219 @@ impl Sparks {
                     );
                 }
             }
+        }
+    }
+}
+
+/// A gem on a resting board: its cell, its center in board cells, and its color.
+pub struct Resting {
+    pub cell: usize,
+    pub x: f64,
+    pub y: f64,
+    pub color: Color,
+}
+
+/// A gem slowly catching the light. It waits while `age` is negative, then brightens and dims
+/// over `life` while its star turns by `turn` radians a second.
+struct Star {
+    cell: usize,
+    x: f64,
+    y: f64,
+    color: Color,
+    age: f64,
+    life: f64,
+    spin: f64,
+    turn: f64,
+}
+
+impl Star {
+    fn brightness(&self) -> f64 {
+        if self.age <= 0.0 {
+            0.0
+        } else {
+            (self.age / self.life * PI).sin().powi(2)
+        }
+    }
+}
+
+/// A mote of light drifting up over the board, twinkling as it goes.
+struct Mote {
+    x: f64,
+    y: f64,
+    vx: f64,
+    vy: f64,
+    age: f64,
+    life: f64,
+    size: f64,
+    phase: f64,
+    color: Color,
+}
+
+/// How many gems glow at once, and the most motes afloat.
+const LIT: usize = 4;
+const MAX_MOTES: usize = 140;
+
+/// The resting board's starlight. A few gems at a time slowly brighten under a turning star and
+/// fade as others take over, while motes rise from them and drift across the board like dust in
+/// a beam. It fades in over a couple of seconds and out as soon as play resumes.
+pub struct Idle {
+    stars: Vec<Star>,
+    motes: Vec<Mote>,
+    fade: f64,
+    rng: u64,
+}
+
+impl Idle {
+    pub fn new() -> Self {
+        Self {
+            stars: Vec::new(),
+            motes: Vec::new(),
+            fade: 0.0,
+            rng: 0xD1B5_4A32_D192_ED03,
+        }
+    }
+    fn rand(&mut self) -> f64 {
+        self.rng ^= self.rng << 13;
+        self.rng ^= self.rng >> 7;
+        self.rng ^= self.rng << 17;
+        (self.rng >> 11) as f64 / (1u64 << 53) as f64
+    }
+    /// Whether anything still shows, so the board keeps drawing frames.
+    pub fn is_live(&self) -> bool {
+        self.fade > 0.0
+    }
+    /// How far the starlight has faded in, 0..1.
+    pub fn fade(&self) -> f64 {
+        self.fade
+    }
+    /// How brightly the gem in `cell` glows now, 0..1.
+    pub fn light(&self, cell: usize) -> f64 {
+        self.stars
+            .iter()
+            .filter(|s| s.cell == cell)
+            .map(Star::brightness)
+            .fold(0.0, f64::max)
+            * self.fade
+    }
+    /// Advance by `dt`: `rest` holds the board's gems while it rests, or `None` once play
+    /// resumes; `side` is the board's width in cells.
+    pub fn step(&mut self, dt: f64, rest: Option<&[Resting]>, side: f64) {
+        for s in &mut self.stars {
+            s.age += dt;
+            s.spin += s.turn * dt;
+        }
+        for m in &mut self.motes {
+            m.age += dt;
+            m.x += m.vx * dt;
+            m.y += m.vy * dt;
+        }
+        self.motes.retain(|m| m.age < m.life);
+        let Some(gems) = rest else {
+            self.fade = (self.fade - dt * 3.0).max(0.0);
+            if self.fade == 0.0 {
+                self.stars.clear();
+                self.motes.clear();
+            }
+            return;
+        };
+        self.fade = (self.fade + dt / 2.5).min(1.0);
+        self.stars
+            .retain(|s| s.age < s.life && gems.iter().any(|g| g.cell == s.cell));
+        // A fresh start staggers its stars so they never swell together; afterwards each one
+        // that sets is replaced by another somewhere else after a short breath.
+        let fresh = self.stars.is_empty();
+        while self.stars.len() < LIT.min(gems.len()) {
+            let free: Vec<&Resting> = gems
+                .iter()
+                .filter(|g| self.stars.iter().all(|s| s.cell != g.cell))
+                .collect();
+            let g = free[((self.rand() * free.len() as f64) as usize).min(free.len() - 1)];
+            let (cell, x, y, color) = (g.cell, g.x, g.y, g.color);
+            let delay = if fresh {
+                self.stars.len() as f64 * 1.2 + self.rand() * 0.4
+            } else {
+                0.3 + self.rand() * 0.9
+            };
+            let star = Star {
+                cell,
+                x,
+                y,
+                color,
+                age: -delay,
+                life: 4.0 + self.rand() * 2.5,
+                spin: self.rand() * TAU,
+                turn: (0.25 + self.rand() * 0.2) * if self.rand() < 0.5 { 1.0 } else { -1.0 },
+            };
+            self.stars.push(star);
+        }
+        // Motes rise from the glowing gems, and a few more wander in anywhere.
+        let lit: Vec<(f64, f64, Color, f64)> = self
+            .stars
+            .iter()
+            .map(|s| (s.x, s.y, s.color, s.brightness()))
+            .collect();
+        for (x, y, color, b) in lit {
+            if self.rand() < 1.4 * b * dt {
+                self.mote(x, y, 0.35, mix(color, Color::WHITE, 0.55));
+            }
+        }
+        if self.rand() < 0.8 * dt {
+            let (x, y) = (self.rand() * side, self.rand() * side);
+            self.mote(x, y, 0.0, Color::WHITE);
+        }
+    }
+    fn mote(&mut self, x: f64, y: f64, spread: f64, color: Color) {
+        if self.motes.len() >= MAX_MOTES {
+            return;
+        }
+        let m = Mote {
+            x: x + (self.rand() - 0.5) * spread * 2.0,
+            y: y + (self.rand() - 0.5) * spread * 1.4,
+            vx: (self.rand() - 0.5) * 0.14,
+            vy: -(0.08 + self.rand() * 0.12),
+            age: 0.0,
+            life: 2.8 + self.rand() * 2.4,
+            size: 0.022 + self.rand() * 0.03,
+            phase: self.rand() * TAU,
+            color,
+        };
+        self.motes.push(m);
+    }
+    /// Paint the motes and stars over a board whose origin is (ox, oy) and whose cells are `c`
+    /// wide.
+    pub fn draw(&self, d: &mut Draw, ox: f64, oy: f64, c: f64) {
+        if self.fade <= 0.0 {
+            return;
+        }
+        for m in &self.motes {
+            let t = m.age / m.life;
+            let a = self.fade * (t * PI).sin() * (0.55 + 0.45 * (m.phase + m.age * 4.5).sin());
+            if a <= 0.01 {
+                continue;
+            }
+            let (x, y, r) = (ox + m.x * c, oy + m.y * c, m.size * c);
+            d.fill(
+                ellipse(x, y, r * 3.5, r * 3.5),
+                RadialGradient::centered(m.color.with_alpha(0.4 * a), m.color.with_alpha(0.0)),
+            );
+            d.fill(ellipse(x, y, r * 0.8, r * 0.8), Color::WHITE.with_alpha(a));
+        }
+        for s in &self.stars {
+            let b = s.brightness() * self.fade;
+            if b <= 0.01 {
+                continue;
+            }
+            let (x, y) = (ox + (s.x + 0.2) * c, oy + (s.y - 0.22) * c);
+            d.fill(
+                ellipse(x, y, c * 0.55 * b, c * 0.55 * b),
+                RadialGradient::centered(
+                    mix(s.color, Color::WHITE, 0.7).with_alpha(0.3 * b),
+                    s.color.with_alpha(0.0),
+                ),
+            );
+            // Long rays and short diagonals: an eight-pointed star that slowly turns.
+            glint(d, x, y, c * 0.62 * b, s.spin, b);
+            glint(d, x, y, c * 0.3 * b, s.spin + PI / 4.0, 0.8 * b);
         }
     }
 }
