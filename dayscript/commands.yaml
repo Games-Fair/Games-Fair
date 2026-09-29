@@ -1,5 +1,5 @@
 name: shared-close-command
-description: Header close and pause-menu Quit share the shell's leave-game command.
+description: Header close and pause-menu Close Game share the shell's leave-game command.
 flow:
   - wait_for: { id: home }
   # A fresh install opens each game on its rules, which hold the pause menu shut: open and leave

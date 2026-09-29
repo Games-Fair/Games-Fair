@@ -1664,6 +1664,14 @@ impl Ui {
             }
         }
     }
+    /// Escape on a keyboard: pause the game in play, or close the pause menu to resume it.
+    fn escape(&self) {
+        match self.overlay.get_untracked() {
+            Overlay::None => self.pause(),
+            Overlay::Pause => self.show(Overlay::None),
+            _ => {}
+        }
+    }
 
     fn new_game(&self) {
         self.game.borrow_mut().new_game();
@@ -1832,6 +1840,9 @@ pub fn breakout_page() -> AnyPiece {
             }
         })
         .on_key(move |k| {
+            if k.key == "Escape" {
+                return ku.escape();
+            }
             let mut g = ku.game.borrow_mut();
             match k.key.as_str() {
                 "ArrowLeft" => g.nudge_target(-KEY_STEP),
@@ -2030,7 +2041,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "bk-instructions",
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::quit_button(chrome::RED, "bk-quit"),
+            chrome::close_game_button(chrome::RED, "bk-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -2124,7 +2135,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 "bk-play-again",
                 move || u.new_game(),
             ),
-            chrome::quit_button(chrome::RED, "bk-quit"),
+            chrome::close_game_button(chrome::RED, "bk-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

@@ -617,9 +617,10 @@ pub enum Help {
     Para(LocalizedText),
 }
 
-/// The how-to-play sheet: a titled, scrolling column of headings and paragraphs with a Done
-/// button at the end. At most fifteen blocks per call (a Day tuple's arity); longer sheets
-/// split their blocks across two columns.
+/// The how-to-play sheet: a title and a Done button fixed in the card's chrome, with the
+/// headings and paragraphs scrolling between them, so Done is always in reach however long the
+/// sheet. At most fifteen blocks per call (a Day tuple's arity); longer sheets split their
+/// blocks across two columns.
 pub fn instructions_card(
     title: LocalizedText,
     blocks: Vec<Help>,
@@ -643,22 +644,23 @@ pub fn instructions_card(
         });
     }
     card(
-        scroll(
-            column((
-                label(title).font(Font::Title2).bold().color(Color::WHITE),
+        column((
+            label(title).font(Font::Title2).bold().color(Color::WHITE),
+            scroll(
                 column(PieceVec(pieces))
                     .spacing(10.0)
-                    .align(HAlign::Leading),
-                button(day_fluent::tr("gk_done"))
-                    .prominent()
-                    .action(on_done)
-                    .id(done_id),
-            ))
-            .spacing(10.0)
-            .align(HAlign::Leading)
-            .width(300.0),
-        )
-        .height(440.0),
+                    .align(HAlign::Leading)
+                    .width(300.0),
+            )
+            .height(360.0),
+            button(day_fluent::tr("gk_done"))
+                .prominent()
+                .action(on_done)
+                .id(done_id),
+        ))
+        .spacing(12.0)
+        .align(HAlign::Leading)
+        .width(300.0),
     )
 }
 
@@ -666,14 +668,15 @@ pub fn instructions_card(
 pub fn close_command() -> CommandHandle {
     Command {
         id: "close-game",
-        label: day_fluent::tr("gk_quit"),
+        label: day_fluent::tr("gk_close"),
         action: crate::close,
     }
     .build()
 }
 
-/// A pause/results-card presentation of the same command as the header's close glyph.
-pub fn quit_button(tint: Color, id: &'static str) -> AnyPiece {
+/// A pause/results-card presentation of the same command as the header's close glyph: "Close
+/// Game", since progress is always saved and nothing is lost by leaving.
+pub fn close_game_button(tint: Color, id: &'static str) -> AnyPiece {
     close_command()
         .button()
         .prominent()

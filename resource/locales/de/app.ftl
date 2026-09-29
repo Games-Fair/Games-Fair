@@ -21,7 +21,6 @@ gk_resume = Fortsetzen
 gk_new_game = Neues Spiel
 gk_settings = Einstellungen
 gk_instructions = Anleitung
-gk_quit = Spiel beenden
 gk_play_again = Erneut spielen
 gk_game_over = SPIEL VORBEI
 gk_score = Punkte
@@ -389,22 +388,32 @@ permission_ohos_permission_ACCELEROMETER = Scharade erkennt die Neigung des Tele
 ## Match Three
 nav_matchthree = Drei gewinnt
 mt_moves = Verbleibende Züge
-mt_goal = Ziel
 mt_classic = Klassisch
 mt_corners = Ecken
 mt_bridges = Brücken
 mt_diamond = Raute
 mt_windows = Fenster
 mt_mixed = Gemischt
-mt_goal_score = Erreiche die Zielpunktzahl
-mt_goal_collect = Rote Kreise: { $berries } / { $target } · Erreiche die Zielpunktzahl
-mt_goal_frost = Übrige Schichten: { $frost } · Erreiche die Zielpunktzahl
-mt_goal_final = Kreise: { $berries } / { $target } · Schichten: { $frost } · Erreiche das Ziel
-mt_points_to_go = { $points ->
-    [one] Noch 1 Punkt
-   *[other] Noch { $points } Punkte
+mt_goals = Ziele
+mt_goal_score_name = Punkte
+mt_goal_collect_name = Rote Kreise
+mt_goal_frost_name = Eisschichten
+mt_goal_count = { $have } / { $need }
+mt_goals_complete = Alle Ziele erreicht!
+mt_still_needed = Noch nötig: { $list }
+mt_score_not_enough = Punktzahl erreicht! Zum Sieg fehlen noch: { $list }
+mt_need_points = { $n ->
+    [one] 1 Punkt
+   *[other] { $n } Punkte
 }
-mt_target_reached = Zielpunktzahl erreicht!
+mt_need_circles = { $n ->
+    [one] 1 roter Kreis
+   *[other] { $n } rote Kreise
+}
+mt_need_layers = { $n ->
+    [one] 1 Eisschicht
+   *[other] { $n } Eisschichten
+}
 mt_moves_low = { $n ->
     [one] Letzter Zug!
    *[other] Nur noch { $n } Züge!
@@ -418,6 +427,9 @@ mt_map_intro = Schließe jedes Level ab, um das nächste freizuschalten.
 mt_locked = Gesperrt
 mt_retry = Level wiederholen
 mt_reduced = Bewegung reduzieren
+mt_theme = Design
+mt_theme_jewels = Juwelenglanz
+mt_theme_stones = Meeressteine
 mt_win = Level geschafft
 mt_complete = Alle Level geschafft
 mt_out = Keine Züge mehr
@@ -429,7 +441,7 @@ mt_help_swap = Halte einen Stein gedrückt und ziehe ihn, um einen Tausch vorzus
 mt_help_special_title = Spezialsteine
 mt_help_special = Vier in einer Reihe ergeben einen Streifenstein, der seine Reihe oder Spalte räumt. Ein T oder L erzeugt einen Bombenstein, der einen Bereich von 3 × 3 räumt. Fünf in einer Linie ergeben einen Joker: Tausche ihn mit einem beliebigen Stein, um diese Farbe zu räumen.
 mt_help_combo = Kombiniere zwei Spezialsteine für eine größere Räumung. Zwei Streifen räumen ein Kreuz; eine Bombenkombination räumt drei Reihen und Spalten. Ein Joker mit einem Spezialstein macht jeden Stein dieser Farbe zum Spezialstein. Zwei Joker räumen das ganze Feld.
-mt_help_goals = Erreiche die Zielpunktzahl, bevor dir die Züge ausgehen. Spätere Level verlangen außerdem, rote Kreise zu sammeln oder Schichten unter den Steinen zu entfernen. Doppelte Schichten brauchen zwei Treffer. Löcher teilen das Feld in getrennte Fallbahnen. Mit 10 übrigen Zügen gibt es drei Sterne, mit 5 zwei. Abgeschlossene Level lassen sich wiederholen.
+mt_help_goals = Jedes Level zeigt seine Ziele unter der Punktzahl: Erreiche die Zielpunktzahl, und in späteren Leveln sammle außerdem rote Kreise oder brich die Eisschichten unter den Steinen. Du gewinnst nur, wenn jedes Ziel abgehakt ist, bevor dir die Züge ausgehen; eine hohe Punktzahl allein reicht nicht. Doppelte Schichten brauchen zwei Treffer. Löcher teilen das Feld in getrennte Fallbahnen. Mit 10 übrigen Zügen gibt es drei Sterne, mit 5 zwei. Abgeschlossene Level lassen sich wiederholen.
 mt_help_keys = Mit Pfeilen und Eingabe wählst und tauschst du. H markiert einen gültigen Tausch, Eingabe führt ihn aus. Pause öffnet Einstellungen, Regeln und Wiederholen. Töne, Vibrationen und reduzierte Bewegung sind einstellbar. Spielfeld und Fortschritt werden automatisch gespeichert.
 mt_complete_detail = Du kannst jedes Level wiederholen, um Punkte und Sterne zu verbessern.
 mt_matching = Wird kombiniert…

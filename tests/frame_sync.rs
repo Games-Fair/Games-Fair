@@ -196,6 +196,19 @@ fn real_boards_sleep_wake_and_cancel_on_cover_disposal() {
     }
     close();
 
+    // Match Three's resting board keeps its ambience (starlight or tide) moving by design, so
+    // it stays awake at rest; closing the game still cancels every frame it asked for.
+    selected.set(4);
+    flush_sync();
+    tap("mt-help-done");
+    frames.advance(4.0);
+    frames.awake();
+    close();
+    // With reduced motion there is no ambience: it sleeps and wakes like every other board.
+    day::prefs::set(
+        "save.matchthree.settings",
+        r#"{"shell":{"sounds":true,"vibrations":true,"instructions_shown":false},"reduced":true}"#,
+    );
     open(4, "mt-help-done");
     for _ in 0..2 {
         for k in ["Home", "Enter", "ArrowRight", "Enter"] {

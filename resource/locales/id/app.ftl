@@ -12,7 +12,7 @@ nav_2048 = 2048
 nav_blockblast = Ledakan Balok
 nav_solitaire = Solitaire
 
-gk_close = Tutup permainan
+gk_close = Tutup Permainan
 
 # Shared game chrome (gamekit::chrome)
 gk_pause = Jeda
@@ -21,7 +21,6 @@ gk_resume = Lanjutkan
 gk_new_game = Permainan Baru
 gk_settings = Pengaturan
 gk_instructions = Petunjuk
-gk_quit = Keluar Permainan
 gk_play_again = Main Lagi
 gk_game_over = PERMAINAN BERAKHIR
 gk_score = Skor
@@ -389,19 +388,23 @@ permission_ohos_permission_ACCELEROMETER = Tebak Kata membaca kemiringan ponsel 
 ## Match Three
 nav_matchthree = Cocok Tiga
 mt_moves = Sisa langkah
-mt_goal = Target
 mt_classic = Klasik
 mt_corners = Sudut
 mt_bridges = Jembatan
 mt_diamond = Berlian
 mt_windows = Jendela
 mt_mixed = Campuran
-mt_goal_score = Capai skor target
-mt_goal_collect = Lingkaran merah: { $berries } / { $target } · Capai skor target
-mt_goal_frost = Sisa lapisan: { $frost } · Capai skor target
-mt_goal_final = Lingkaran: { $berries } / { $target } · Lapisan: { $frost } · Capai target
-mt_points_to_go = { $points } poin lagi
-mt_target_reached = Skor target tercapai!
+mt_goals = Tujuan
+mt_goal_score_name = Skor
+mt_goal_collect_name = Lingkaran merah
+mt_goal_frost_name = Lapisan es
+mt_goal_count = { $have } / { $need }
+mt_goals_complete = Semua tujuan tercapai!
+mt_still_needed = Masih perlu: { $list }
+mt_score_not_enough = Skor tercapai! Untuk menang masih perlu: { $list }
+mt_need_points = { $n } poin
+mt_need_circles = { $n } lingkaran merah
+mt_need_layers = { $n } lapisan es
 mt_moves_low = { $n ->
     [one] Langkah terakhir!
    *[other] Tinggal { $n } langkah!
@@ -415,6 +418,9 @@ mt_map_intro = Selesaikan setiap level untuk membuka level berikutnya.
 mt_locked = Terkunci
 mt_retry = Ulangi level
 mt_reduced = Kurangi gerakan
+mt_theme = Tema
+mt_theme_jewels = Bertabur Permata
+mt_theme_stones = Batu Laut
 mt_win = Level selesai
 mt_complete = Semua level selesai
 mt_out = Langkah habis
@@ -426,7 +432,7 @@ mt_help_swap = Tahan dan seret permata untuk melihat pratinjau tukaran. Coba tet
 mt_help_special_title = Keping spesial
 mt_help_special = Cocokkan empat untuk keping bergaris yang menghapus baris atau kolomnya. Bentuk T atau L menghasilkan keping ledakan yang menghapus area 3 × 3. Cocokkan lima dalam satu garis untuk wildcard: tukar dengan keping apa pun untuk menghapus warna itu.
 mt_help_combo = Gabungkan dua keping spesial untuk hapusan lebih besar. Dua keping bergaris menghapus pola silang; kombinasi ledakan menghapus tiga baris dan tiga kolom. Wildcard dengan keping spesial mengubah semua keping warna itu menjadi spesial. Dua wildcard menghapus seluruh papan.
-mt_help_goals = Capai skor target sebelum langkah habis. Level berikutnya juga meminta mengumpulkan lingkaran merah atau menghapus lapisan di bawah keping. Lapisan ganda perlu dua pukulan. Lubang membagi papan menjadi jalur jatuh terpisah. Selesaikan dengan sisa 10 langkah untuk tiga bintang, atau 5 untuk dua. Level yang selesai bisa dimainkan ulang.
+mt_help_goals = Setiap level menampilkan tujuannya di bawah skor: capai skor target, dan di level berikutnya kumpulkan juga lingkaran merah atau pecahkan lapisan es di bawah bidak. Kamu hanya menang jika semua tujuan tercentang sebelum langkahmu habis; skor tinggi saja tidak cukup. Lapisan ganda perlu dua kali kena. Lubang membagi papan menjadi jalur jatuh yang terpisah. Selesaikan dengan sisa 10 langkah untuk tiga bintang, atau 5 untuk dua. Level yang sudah selesai bisa dimainkan ulang.
 mt_help_keys = Gunakan panah dan Enter untuk memilih dan menukar. H menyorot tukaran yang sah; Enter memainkannya. Jeda membuka pengaturan, aturan, dan ulangi level. Suara, getaran, dan pengurangan gerakan bisa diatur. Papan dan progresmu tersimpan otomatis.
 mt_complete_detail = Kamu bisa mengulang level mana pun untuk memperbaiki skor dan bintangmu.
 mt_matching = Mencocokkan…

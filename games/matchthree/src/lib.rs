@@ -2,7 +2,7 @@
 //! Match Three: six levels of shape matching with native vector artwork and animated cascades.
 use day_fluent::{LocalizedText, tr};
 use day_pieces::prelude::*;
-use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
+use gamekit::chrome::{self, Feedback, Help, cues};
 use serde::{Deserialize, Serialize};
 use std::{
     cell::{Cell, RefCell},
@@ -12,9 +12,12 @@ use std::{
 mod fx;
 mod gesture;
 mod model;
+mod theme;
 use day_part_haptics::Haptic;
 use gesture::{Hold, Preview};
 use model::*;
+pub use theme::SOUNDS;
+use theme::{Style, THEMES, Theme};
 pub const SURFACE: Color = Color::hex(0x18132E);
 const SAVE: &str = "matchthree.v1";
 const SETTINGS: &str = "matchthree.settings";
@@ -51,28 +54,6 @@ fn urgency(moves: u32) -> Urgency {
     }
 }
 const PALETTE: [u32; 6] = [0xEB7889, 0x60B9D7, 0xE5BE69, 0xA594D6, 0x74BD98, 0xD89571];
-pub const SOUNDS: &[Sfx] = &[
-    sfx("sounds/matchthree/swap.wav"),
-    sfx("sounds/matchthree/bloom.wav"),
-    sfx("sounds/matchthree/cascade.wav"),
-    sfx("sounds/matchthree/magic.wav"),
-    sfx("sounds/matchthree/victory.wav"),
-];
-static SWAP: chrome::Cue = cues::with("sounds/matchthree/swap.wav", cues::LIGHT_BEAT);
-static BLOOM: chrome::Cue = cues::with("sounds/matchthree/bloom.wav", cues::MEDIUM_BEAT);
-static CASCADE: chrome::Cue = cues::with("sounds/matchthree/cascade.wav", chrome::CELEBRATE);
-static MAGIC: chrome::Cue = cues::with("sounds/matchthree/magic.wav", chrome::THUD);
-static VICTORY: chrome::Cue = cues::with("sounds/matchthree/victory.wav", chrome::BIG_CELEBRATE);
-/// Three chains or more: the cascade clip over a phrase that keeps climbing.
-static SURGE: chrome::Cue = cues::with(
-    "sounds/matchthree/cascade.wav",
-    &[
-        (0, Haptic::Heavy),
-        (70, Haptic::Medium),
-        (140, Haptic::Medium),
-        (230, Haptic::Success),
-    ],
-);
 /// Felt, not heard: a gem lifted, gems landing, the board reshuffling.
 static PICK: chrome::Cue = felt(cues::LIGHT_BEAT);
 static LAND: chrome::Cue = felt(&[(0, Haptic::Light)]);
@@ -95,6 +76,8 @@ struct Settings {
     shell: chrome::GameSettings,
     #[serde(default)]
     reduced: bool,
+    #[serde(default)]
+    theme: Theme,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum Overlay {
@@ -116,6 +99,9 @@ struct Ui {
     size: Cell<Size>,
     drag: Cell<Option<Hold>>,
     settling: Cell<Option<Preview>>,
+    /// A two-finger trackpad swipe in progress: where the pointer was when it began, and how
+    /// far the fingers have moved since.
+    swipe: Cell<Option<(Point, Point)>>,
     suppress_tap_until: Cell<f64>,
     overlay: Signal<Overlay>,
     back: Cell<Overlay>,
@@ -124,6 +110,8 @@ struct Ui {
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
     reduced: Signal<bool>,
+    /// The chosen theme, as its place in [`THEMES`].
+    theme: Signal<usize>,
     sparks: RefCell<fx::Sparks>,
     /// The resting board's starlight, and how long the board has been still (any touch or key
     /// resets it, and the starlight fades away).
@@ -160,10 +148,13 @@ fn gliding(f: &Frame, elapsed: f64) -> Vec<(f64, f64, u8)> {
 fn cell_center(i: usize) -> (f64, f64) {
     ((i % N) as f64 + 0.5, (i / N) as f64 + 0.5)
 }
-fn gem_color(i: u8) -> Color {
-    fx::jewel(i)
-}
 impl Ui {
+    fn style(&self) -> &'static Style {
+        Theme::from_index(self.theme.get_untracked()).style()
+    }
+    fn tint(&self, i: u8) -> Color {
+        (self.style().tint)(i)
+    }
     fn cue(&self, c: &chrome::Cue) {
         chrome::cue(
             Feedback {
@@ -235,7 +226,11 @@ impl Ui {
         self.hint.set(None);
         self.elapsed.set(0.0);
         *self.frames.borrow_mut() = turn.frames.into();
-        self.cue(if turn.valid { &SWAP } else { &cues::WARNING });
+        self.cue(if turn.valid {
+            self.style().cues.swap
+        } else {
+            &cues::WARNING
+        });
         self.save.borrow_mut().record();
         self.persist();
         self.repaint.notify();
@@ -276,6 +271,10 @@ impl Ui {
     }
     fn key(&self, key: &str) {
         self.calm.set(0.0);
+        // Escape pauses the game in play (below), and closes the pause menu to resume it.
+        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+            return self.show(Overlay::None);
+        }
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
@@ -400,7 +399,7 @@ impl Ui {
             for &i in &f.cleared {
                 let Some(cv) = f.grid[i] else { continue };
                 let (x, y) = cell_center(i);
-                let color = gem_color(cv.color);
+                let color = self.tint(cv.color);
                 sparks.burst(x, y, color, power);
                 match cv.special {
                     Special::Row => sparks.beam(x, y, true, color),
@@ -408,7 +407,7 @@ impl Ui {
                     Special::Wrapped => sparks.burst(x, y, Color::WHITE, power + 1.0),
                     Special::Rainbow => {
                         for k in 0..6 {
-                            sparks.burst(x, y, gem_color(k), 0.8);
+                            sparks.burst(x, y, self.tint(k), 0.8);
                         }
                     }
                     Special::Plain => {}
@@ -423,7 +422,8 @@ impl Ui {
             } else {
                 0.0
             };
-            self.shake.set(self.shake.get().max(shake));
+            self.shake
+                .set(self.shake.get().max(shake * self.style().motion.shake));
             let flash = if rainbow {
                 0.55
             } else if !specials.is_empty() {
@@ -433,18 +433,20 @@ impl Ui {
             } else {
                 0.0
             };
+            let flash = flash * self.style().motion.flash;
             if flash > 0.0 {
                 self.flash.set((flash, Color::WHITE));
             }
         }
+        let cues = &self.style().cues;
         if !specials.is_empty() {
-            &MAGIC
+            cues.magic
         } else if f.chain >= 3 {
-            &SURGE
+            cues.surge
         } else if f.chain > 1 {
-            &CASCADE
+            cues.cascade
         } else {
-            &BLOOM
+            cues.bloom
         }
     }
     fn tick(&self, dt: f64) {
@@ -468,7 +470,7 @@ impl Ui {
                             cell: i,
                             x,
                             y,
-                            color: gem_color(cv.color),
+                            color: self.tint(cv.color),
                         })
                     })
                     .collect();
@@ -484,7 +486,7 @@ impl Ui {
             if let Some(cv) = self.save.borrow().game.grid[hold.preview.from] {
                 self.sparks
                     .borrow_mut()
-                    .trail(x + at.x, y + at.y, gem_color(cv.color), 20.0 * dt);
+                    .trail(x + at.x, y + at.y, self.tint(cv.color), 20.0 * dt);
             }
         }
         let duration = self.frames.borrow().front().map(|f| match f.phase {
@@ -501,7 +503,7 @@ impl Ui {
                 let rate = if f.phase == Phase::Fall { 5.0 } else { 16.0 };
                 let mut sparks = self.sparks.borrow_mut();
                 for (x, y, color) in gliding(f, t) {
-                    sparks.trail(x, y, gem_color(color), rate * dt);
+                    sparks.trail(x, y, self.tint(color), rate * dt);
                 }
             }
             if t >= if reduced { 0.04 } else { duration } {
@@ -552,7 +554,7 @@ impl Ui {
         if self.frames.borrow().is_empty() && self.save.borrow().game.over() {
             self.show(Overlay::Result);
             self.cue(if self.save.borrow().game.won() {
-                &VICTORY
+                self.style().cues.victory
             } else {
                 &cues::LETDOWN
             });
@@ -628,7 +630,7 @@ impl Ui {
                 let (x, y) = cell_center(from);
                 self.sparks
                     .borrow_mut()
-                    .trail(x, y, gem_color(cv.color), 6.0);
+                    .trail(x, y, self.tint(cv.color), 6.0);
             }
         }
         let Some(mut hold) = self.drag.get() else {
@@ -661,11 +663,34 @@ impl Ui {
                     let (x, y) = cell_center(to);
                     self.sparks
                         .borrow_mut()
-                        .trail(x, y, gem_color(cv.color), 4.0);
+                        .trail(x, y, self.tint(cv.color), 4.0);
                 }
             }
         }
         self.repaint.notify();
+    }
+    /// A two-finger trackpad swipe (desktop): it picks up the gem under the pointer, moves it
+    /// with the fingers, and drops it when they lift, exactly as a press-drag does. Only a swipe
+    /// the platform brackets with Began and Ended counts, so a mouse wheel's lone ticks and the
+    /// momentum that follows a lifted swipe move nothing. The deltas follow the fingers under
+    /// the system's default (natural) scrolling.
+    fn swipe(&self, p: Pan) {
+        let (start, moved) = match p.phase {
+            DragPhase::Began => (p.location, Point::new(0.0, 0.0)),
+            _ => {
+                let Some((start, moved)) = self.swipe.get() else {
+                    return;
+                };
+                (start, Point::new(moved.x + p.delta.x, moved.y + p.delta.y))
+            }
+        };
+        self.swipe
+            .set((p.phase != DragPhase::Ended).then_some((start, moved)));
+        self.gesture(Drag {
+            phase: p.phase,
+            location: Point::new(start.x + moved.x, start.y + moved.y),
+            translation: moved,
+        });
     }
     /// The gem nearest `p` when it lies within half a cell outside the board's edge.
     fn near(&self, p: Point) -> Option<usize> {
@@ -708,6 +733,7 @@ pub fn matchthree_page() -> AnyPiece {
         size: Cell::new(Size::ZERO),
         drag: Cell::new(None),
         settling: Cell::new(None),
+        swipe: Cell::new(None),
         suppress_tap_until: Cell::new(0.0),
         overlay: Signal::new(Overlay::None),
         back: Cell::new(Overlay::None),
@@ -716,13 +742,24 @@ pub fn matchthree_page() -> AnyPiece {
         sounds: Signal::new(settings.shell.sounds),
         vibrations: Signal::new(settings.shell.vibrations),
         reduced: Signal::new(settings.reduced),
+        theme: Signal::new(settings.theme.index()),
         sparks: RefCell::new(fx::Sparks::new()),
         idle: RefCell::new(fx::Idle::new()),
         calm: Cell::new(0.0),
         shake: Cell::new(0.0),
         flash: Cell::new((0.0, Color::WHITE)),
     });
-    gamekit::sounds(SOUNDS);
+    gamekit::sounds(theme::SOUNDS);
+    // A new theme starts its effects afresh: particles and ambience of its own kind.
+    let u = ui.clone();
+    Effect::new(move || {
+        let motion = &Theme::from_index(u.theme.get()).style().motion;
+        let mut sparks = u.sparks.borrow_mut();
+        sparks.clear();
+        sparks.finish = motion.finish;
+        u.idle.borrow_mut().set_ambience(motion.ambience);
+        u.repaint.notify();
+    });
     let u = ui.clone();
     gamekit::autosave(SAVE, move || u.save.borrow().clone());
     let u = ui.clone();
@@ -742,6 +779,7 @@ pub fn matchthree_page() -> AnyPiece {
                     instructions_shown: true,
                 },
                 reduced: u.reduced.get(),
+                theme: Theme::from_index(u.theme.get()),
             },
         )
     });
@@ -756,7 +794,7 @@ pub fn matchthree_page() -> AnyPiece {
     for (key, id, kind, color) in [
         ("gk_score", "mt-score", 0, ACCENT),
         ("mt_moves", "mt-moves", 1, Color::WHITE),
-        ("mt_goal", "mt-goal", 2, MINT),
+        ("mt_goals", "mt-goal", 2, MINT),
     ] {
         let u = ui.clone();
         // The moves count carries its urgency: amber, then red and throbbing (`moves_color`).
@@ -774,7 +812,11 @@ pub fn matchthree_page() -> AnyPiece {
                 match kind {
                     0 => g.score.to_string(),
                     1 => g.moves.to_string(),
-                    _ => STAGES[g.level].target.to_string(),
+                    _ => {
+                        let goals = g.goals();
+                        let done = goals.iter().filter(|x| x.done()).count();
+                        format!("{done} / {}", goals.len())
+                    }
                 }
             },
             color,
@@ -791,65 +833,21 @@ pub fn matchthree_page() -> AnyPiece {
         });
     }
     let u = ui.clone();
-    let v = ui.clone();
-    let progress_ui = ui.clone();
-    let progress = canvas(move |d, size| {
-        progress_ui.repaint.track();
-        let save = progress_ui.save.borrow();
-        let g = &save.game;
-        let progress = (g.score as f64 / STAGES[g.level].target as f64).min(1.0);
-        // A track tall enough to read at a glance, with quarter marks so "nearly there" can be
-        // judged without doing arithmetic, and a glow once the target score is reached.
-        let (h, y) = (12.0, (size.height - 12.0) / 2.0);
-        let track = Rect::new(0.0, y, size.width, h);
-        d.fill(Shape::RoundedRect(track, h / 2.0), Color::hex(0x392E50));
-        if progress > 0.0 {
-            let fill = Rect::new(0.0, y, (size.width * progress).max(h), h);
-            if progress >= 1.0 {
-                d.fill(
-                    Shape::RoundedRect(Rect::new(-2.0, y - 2.0, size.width + 4.0, h + 4.0), h),
-                    MINT.with_alpha(0.25),
-                );
-                d.fill(Shape::RoundedRect(fill, h / 2.0), MINT);
-            } else {
-                d.fill(
-                    Shape::RoundedRect(fill, h / 2.0),
-                    LinearGradient::horizontal(ACCENT, MINT),
-                );
-            }
-        }
-        for q in 1..4 {
-            let x = size.width * q as f64 / 4.0;
-            d.fill(
-                Shape::Rect(Rect::new(x - 0.5, y + 3.0, 1.0, h - 6.0)),
-                Color::WHITE.with_alpha(if x < size.width * progress {
-                    0.35
-                } else {
-                    0.15
-                }),
-            );
-        }
-    })
-    .width(280.0)
-    .height(16.0)
-    .id("mt-progress");
-    // How far there is still to go, in words: the points left, or that the target is reached.
+    // What is still missing, in words. Once the score is reached but other goals are not, it
+    // says so plainly, since the score alone does not win those levels.
     let to_go_ui = ui.clone();
+    let to_go_tint = ui.clone();
     let to_go = label(move || {
         to_go_ui.repaint.track();
-        let g = &to_go_ui.save.borrow().game;
-        let target = STAGES[g.level].target;
-        if g.score >= target {
-            tr("mt_target_reached").format()
-        } else {
-            tr("mt_points_to_go")
-                .arg("points", (target - g.score) as f64)
-                .format()
-        }
+        still_needed(&to_go_ui.save.borrow().game).0
     })
     .font(Font::Caption)
     .bold()
-    .color(MINT)
+    .color(move || {
+        to_go_tint.repaint.track();
+        still_needed(&to_go_tint.save.borrow().game).1
+    })
+    .align(TextAlign::Center)
     .id("mt-to-go");
     let info = column((
         label(move || {
@@ -866,17 +864,8 @@ pub fn matchthree_page() -> AnyPiece {
         .color(MINT)
         .id("mt-level"),
         chrome::info_row(stats),
-        progress,
+        goal_list(ui.clone(), "mt-goal"),
         to_go,
-        label(move || {
-            v.repaint.track();
-            let g = &v.save.borrow().game;
-            objective(g)
-        })
-        .font(Font::Caption)
-        .color(Color::hex(0xD4C8E9))
-        .align(TextAlign::Center)
-        .id("mt-objective"),
     ))
     .spacing(6.0)
     .any();
@@ -942,16 +931,189 @@ pub fn matchthree_page() -> AnyPiece {
         .background(SURFACE)
         .any()
 }
-fn objective(g: &Game) -> String {
-    let level = STAGES[g.level];
-    tr(level.detail)
-        .arg("berries", g.collected.min(level.collect) as f64)
-        .arg("target", level.collect as f64)
-        .arg("frost", g.frosting() as f64)
-        .format()
+/// The line under the goals: what is still missing, and its color. Amber when the score is
+/// reached but other goals are not, mint once everything is done.
+fn still_needed(g: &Game) -> (String, Color) {
+    let goals = g.goals();
+    let missing: Vec<String> = goals
+        .iter()
+        .filter(|x| !x.done())
+        .map(|x| {
+            tr(match x.kind {
+                GoalKind::Score => "mt_need_points",
+                GoalKind::Collect => "mt_need_circles",
+                GoalKind::Frost => "mt_need_layers",
+            })
+            .arg("n", x.left() as f64)
+            .format()
+        })
+        .collect();
+    if missing.is_empty() {
+        return (tr("mt_goals_complete").format(), MINT);
+    }
+    let list = missing.join(", ");
+    if goals[0].done() {
+        (
+            tr("mt_score_not_enough")
+                .arg("list", list.as_str())
+                .format(),
+            AMBER,
+        )
+    } else {
+        (
+            tr("mt_still_needed").arg("list", list.as_str()).format(),
+            Color::hex(0xD4C8E9),
+        )
+    }
+}
+/// The level's goals as a checklist, one row each (see [`goal_row`]). `prefix` keeps the ids of
+/// the results card's copy apart from the one on the game screen.
+fn goal_list(ui: Rc<Ui>, prefix: &'static str) -> AnyPiece {
+    let rows: Vec<AnyPiece> = (0..3)
+        .map(|slot| {
+            let u = ui.clone();
+            let shown = ui.clone();
+            when(
+                move || {
+                    shown.repaint.track();
+                    shown.save.borrow().game.goals().len() > slot
+                },
+                move || goal_row(u.clone(), slot, prefix),
+            )
+            .any()
+        })
+        .collect();
+    column(PieceVec(rows)).spacing(4.0).any()
+}
+/// One goal: its icon (checked off once done), its name, a bar filling toward it, and its
+/// count, "1,450 / 1,600".
+fn goal_row(ui: Rc<Ui>, slot: usize, prefix: &'static str) -> AnyPiece {
+    let goal = {
+        let ui = ui.clone();
+        move || {
+            ui.repaint.track();
+            ui.save.borrow().game.goals().get(slot).copied()
+        }
+    };
+    let (icon_goal, bar_goal, name_goal, count_goal, tint_goal) = (
+        goal.clone(),
+        goal.clone(),
+        goal.clone(),
+        goal.clone(),
+        goal.clone(),
+    );
+    let theme = ui.clone();
+    let icon = canvas(move |d, size| {
+        let Some(goal) = icon_goal() else { return };
+        let style = Theme::from_index(theme.theme.get()).style();
+        let (x, y) = (size.width / 2.0, size.height / 2.0);
+        match goal.kind {
+            GoalKind::Score => d.fill(star(x, y, 8.5, 5), chrome::GOLD),
+            GoalKind::Collect => (style.piece)(d, Candy::plain(0), x, y, 7.5, fx::Look::default()),
+            GoalKind::Frost => {
+                let tile = Shape::RoundedRect(Rect::new(x - 8.0, y - 8.0, 16.0, 16.0), 4.0);
+                d.fill(
+                    tile.clone(),
+                    LinearGradient::vertical(Color::hex(0xBDDDF3), Color::hex(0x8A6DBD)),
+                );
+                d.stroke(tile, Color::hex(0xDCEBFF), 1.0);
+                d.fill(star(x, y, 4.5, 6), Color::WHITE.with_alpha(0.85));
+            }
+        }
+        if goal.done() {
+            // A check badge on the icon's corner.
+            let (bx, by, r) = (x + 6.0, y + 6.0, 5.5);
+            d.fill(ellipse(bx - r, by - r, r * 2.0, r * 2.0), MINT);
+            d.stroke(
+                Shape::Polygon(vec![
+                    Point::new(bx - 2.6, by + 0.2),
+                    Point::new(bx - 0.6, by + 2.2),
+                    Point::new(bx + 2.8, by - 2.0),
+                    Point::new(bx - 0.6, by + 2.2),
+                ]),
+                SURFACE,
+                1.6,
+            );
+        }
+    })
+    .frame(22.0, 22.0);
+    let name = label(move || {
+        let key = match name_goal().map(|g| g.kind) {
+            Some(GoalKind::Collect) => "mt_goal_collect_name",
+            Some(GoalKind::Frost) => "mt_goal_frost_name",
+            _ => "mt_goal_score_name",
+        };
+        tr(key).format()
+    })
+    .font(Font::Caption)
+    .bold()
+    .color(Color::hex(0xD4C8E9))
+    .align(TextAlign::Leading)
+    .width(86.0);
+    let bar = canvas(move |d, size| {
+        let Some(goal) = bar_goal() else { return };
+        let (h, y) = (8.0, (size.height - 8.0) / 2.0);
+        d.fill(
+            Shape::RoundedRect(Rect::new(0.0, y, size.width, h), h / 2.0),
+            Color::hex(0x392E50),
+        );
+        let p = goal.fraction();
+        if goal.done() {
+            d.fill(
+                Shape::RoundedRect(Rect::new(-2.0, y - 2.0, size.width + 4.0, h + 4.0), h),
+                MINT.with_alpha(0.25),
+            );
+            d.fill(
+                Shape::RoundedRect(Rect::new(0.0, y, size.width, h), h / 2.0),
+                MINT,
+            );
+        } else if p > 0.0 {
+            let tint = match goal.kind {
+                GoalKind::Score => LinearGradient::horizontal(ACCENT, MINT),
+                GoalKind::Collect => {
+                    LinearGradient::horizontal(Color::hex(0xB0344E), Color::hex(0xFF7A93))
+                }
+                GoalKind::Frost => {
+                    LinearGradient::horizontal(Color::hex(0x8A6DBD), Color::hex(0xBDDDF3))
+                }
+            };
+            d.fill(
+                Shape::RoundedRect(Rect::new(0.0, y, (size.width * p).max(h), h), h / 2.0),
+                tint,
+            );
+        }
+    })
+    .width(110.0)
+    .height(12.0);
+    let count = label(move || {
+        let Some(goal) = count_goal() else {
+            return String::new();
+        };
+        tr("mt_goal_count")
+            .arg("have", goal.have as f64)
+            .arg("need", goal.need as f64)
+            .format()
+    })
+    .font(Font::Caption)
+    .bold()
+    .tabular()
+    .color(move || {
+        if tint_goal().is_some_and(|g| g.done()) {
+            MINT
+        } else {
+            Color::WHITE
+        }
+    })
+    .align(TextAlign::Trailing)
+    .width(78.0)
+    .id(format!("{prefix}-{slot}"));
+    row((icon, name, bar, count))
+        .spacing(8.0)
+        .align(VAlign::Center)
+        .any()
 }
 fn board(ui: Rc<Ui>) -> AnyPiece {
-    let (d, t, g, k) = (ui.clone(), ui.clone(), ui.clone(), ui.clone());
+    let (d, t, g, k, s) = (ui.clone(), ui.clone(), ui.clone(), ui.clone(), ui.clone());
     canvas(move |draw, size| {
         d.repaint.track();
         d.size.set(size);
@@ -971,6 +1133,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
             d.preview(),
             d.settling.get(),
             &Effects {
+                style: Theme::from_index(d.theme.get()).style(),
                 sparks: Some(&d.sparks.borrow()),
                 idle: Some(&d.idle.borrow()),
                 shake: d.shake.get(),
@@ -987,6 +1150,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
         }
     })
     .on_drag(move |e| g.gesture(e))
+    .on_pan(move |p| s.swipe(p))
     .on_key(move |e| k.key(&e.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mt_board_a11y").format()))
@@ -1017,107 +1181,37 @@ fn star(x: f64, y: f64, r: f64, points: usize) -> Shape {
             .collect(),
     )
 }
-/// A faceted jewel for each shape (fx::gem), with a special's mark worn over the stone.
-fn draw_piece(d: &mut Draw, c: Candy, x: f64, y: f64, s: f64, scale: f64, look: fx::Look) {
+/// One piece at `scale`, drawn the way the theme draws it.
+#[allow(clippy::too_many_arguments)]
+fn draw_piece(
+    d: &mut Draw,
+    style: &Style,
+    c: Candy,
+    x: f64,
+    y: f64,
+    s: f64,
+    scale: f64,
+    look: fx::Look,
+) {
     let r = s * 0.36 * scale;
-    if r < 0.5 {
-        return;
-    }
-    if c.special == Special::Rainbow {
-        prism(d, x, y, r, look);
-        return;
-    }
-    let color = gem_color(c.color);
-    fx::gem(d, c.color, color, x, y, r, look);
-    match c.special {
-        Special::Row | Special::Column => {
-            for offset in [-0.28, 0.0, 0.28] {
-                let (a, b) = if c.special == Special::Row {
-                    (
-                        Point::new(x - r * 0.65, y + r * offset),
-                        Point::new(x + r * 0.65, y + r * offset),
-                    )
-                } else {
-                    (
-                        Point::new(x + r * offset, y - r * 0.65),
-                        Point::new(x + r * offset, y + r * 0.65),
-                    )
-                };
-                d.stroke(Shape::Line(a, b), color.with_alpha(0.55), r * 0.26);
-                d.stroke(Shape::Line(a, b), Color::WHITE.with_alpha(0.95), r * 0.11);
-            }
-        }
-        Special::Wrapped => {
-            let pulse = 0.65 + 0.35 * (look.time * 6.0).sin();
-            let frame = Shape::RoundedRect(
-                Rect::new(x - r * 0.62, y - r * 0.62, r * 1.24, r * 1.24),
-                r * 0.22,
-            );
-            d.stroke(frame.clone(), color.with_alpha(0.5 * pulse), r * 0.22);
-            d.stroke(frame, Color::WHITE, 2.0);
-            fx::glint(d, x, y, r * 0.55, look.time * 2.0, 1.0);
-        }
-        _ => {}
+    if r >= 0.5 {
+        (style.piece)(d, c, x, y, r, look);
     }
 }
-/// The wildcard: turning wedges of every color under a glass dome.
-fn prism(d: &mut Draw, x: f64, y: f64, r: f64, look: fx::Look) {
-    use std::f64::consts::TAU;
-    d.fill(
-        ellipse(x - r * 1.5, y - r * 1.5, r * 3.0, r * 3.0),
-        RadialGradient::centered(
-            Color::WHITE.with_alpha(0.3 + 0.3 * look.glow),
-            Color::WHITE.with_alpha(0.0),
-        ),
-    );
-    d.fill(
-        ellipse(x - r, y - r + r * 0.1, r * 2.0, r * 2.0),
-        Color::rgba(0.02, 0.01, 0.06, 0.38),
-    );
-    let turn = look.time * 1.4;
-    for k in 0..12 {
-        let (a0, a1) = (
-            turn + k as f64 * TAU / 12.0,
-            turn + (k + 1) as f64 * TAU / 12.0,
-        );
-        d.fill(
-            Shape::Polygon(vec![
-                Point::new(x, y),
-                Point::new(x + r * a0.cos(), y + r * a0.sin()),
-                Point::new(x + r * a1.cos(), y + r * a1.sin()),
-            ]),
-            gem_color((k % 6) as u8),
-        );
-    }
-    d.fill(
-        ellipse(x - r, y - r, r * 2.0, r * 2.0),
-        RadialGradient::new(
-            UnitPoint::new(0.35, 0.3),
-            0.75,
-            vec![
-                (0.0, Color::WHITE.with_alpha(0.85)),
-                (0.45, Color::WHITE.with_alpha(0.12)),
-                (1.0, Color::BLACK.with_alpha(0.3)),
-            ],
-        ),
-    );
-    d.stroke(
-        ellipse(x - r, y - r, r * 2.0, r * 2.0),
-        Color::WHITE.with_alpha(0.8),
-        1.2,
-    );
-    fx::glint(d, x, y, r * 0.75, turn, 1.0);
-}
-/// What the board draws over the gems: the live sparks, the shake and the flash.
+/// How the board is dressed and what it draws over the pieces: the theme, the live sparks, the
+/// resting ambience, the shake and the flash.
 struct Effects<'a> {
+    style: &'a Style,
     sparks: Option<&'a fx::Sparks>,
     idle: Option<&'a fx::Idle>,
     shake: f64,
     flash: (f64, Color),
 }
-impl Default for Effects<'_> {
-    fn default() -> Self {
+impl<'a> Effects<'a> {
+    /// A still board in `style`: nothing flying, nothing shaking.
+    fn still(style: &'a Style) -> Self {
         Self {
+            style,
             sparks: None,
             idle: None,
             shake: 0.0,
@@ -1150,14 +1244,15 @@ fn render(
         oy += (time * 61.0).cos() * fx.shake;
     }
     let side = c * N as f64;
+    let (board, motion) = (&fx.style.board, &fx.style.motion);
     // A quiet board frame keeps attention on the moving pieces.
-    let accent = Color::hex([0x8298B8, 0x719C9F, 0x99A8BB, 0xAC9B82, 0x9A91B1, 0x9D929E][g.level]);
+    let accent = Color::hex(board.edges[g.level]);
     d.fill(
         Shape::RoundedRect(
             Rect::new(ox - 8.0, oy - 8.0, side + 16.0, side + 16.0),
             20.0,
         ),
-        Color::hex(0x292738),
+        board.frame,
     );
     d.stroke(
         Shape::RoundedRect(
@@ -1173,19 +1268,12 @@ fn render(
         if !active(g.level, i) {
             d.fill(
                 ellipse(x + c * 0.47, y + c * 0.47, c * 0.06, c * 0.06),
-                ACCENT.with_alpha(0.2),
+                board.dot.with_alpha(0.2),
             );
             continue;
         }
         let tile = Shape::RoundedRect(Rect::new(x + 1.5, y + 1.5, c - 3.0, c - 3.0), c * 0.16);
-        d.fill(
-            tile.clone(),
-            if (i / N + i % N).is_multiple_of(2) {
-                Color::hex(0x28223E)
-            } else {
-                Color::hex(0x302742)
-            },
-        );
+        d.fill(tile.clone(), board.tiles[(i / N + i % N) % 2]);
         if ice > 0 {
             d.fill(
                 tile.clone(),
@@ -1212,17 +1300,20 @@ fn render(
         {
             d.stroke(
                 tile.clone(),
-                MINT,
+                board.mark,
                 if reduced {
                     2.5
                 } else {
-                    2.5 + 0.35 * (time * 4.0).sin()
+                    2.5 + motion.pulse * (time * motion.pulse_rate).sin()
                 },
             );
-            d.fill(tile.clone(), MINT.with_alpha(0.12));
+            d.fill(tile.clone(), board.mark.with_alpha(0.12));
         } else if cursor == Some(i) {
-            d.stroke(tile, Color::hex(0xB99ACF).with_alpha(0.6), 1.0);
+            d.stroke(tile, board.cursor.with_alpha(0.6), 1.0);
         }
+    }
+    if let Some(idle) = fx.idle {
+        idle.draw_back(d, ox, oy, c);
     }
     // The held gem paints last so it follows the finger above every neighbor.
     let held = preview.map(|p| p.from);
@@ -1238,12 +1329,13 @@ fn render(
             .idle
             .map_or((0.0, 0.0), |idle| (idle.fade(), idle.light(i)));
         let mut look = fx::Look {
-            glint: if reduced {
+            glint: if reduced || !motion.twinkle {
                 0.0
             } else {
                 fx::twinkle(time, i) * (1.0 - still)
             },
-            glow: 0.5 * light,
+            glow: 0.0,
+            shine: light,
             time: if reduced { 0.0 } else { time },
             seed: i as f64,
         };
@@ -1251,7 +1343,7 @@ fn render(
             look.glow = if reduced {
                 0.7
             } else {
-                0.7 + 0.3 * (time * 5.0).sin()
+                0.7 + 0.3 * (time * motion.pulse_rate * 1.25).sin()
             };
         }
         if !reduced && let Some(f) = frame {
@@ -1279,23 +1371,26 @@ fn render(
                         x = fx + (x - fx) * p;
                         y = fy + (y - fy) * p;
                         if f.phase == Phase::Fall {
-                            scale = 1.0 + 0.08 * (t * std::f64::consts::PI * 2.0).sin();
+                            scale = 1.0 + motion.bounce * (t * std::f64::consts::PI * 2.0).sin();
                         }
                     }
                 }
                 Phase::Burst => {
                     if f.cleared.contains(&i) {
                         let t = (elapsed / 0.28).clamp(0.0, 1.0);
-                        // Swell and flare, then collapse into the flash.
-                        scale = (1.0 - t) * (1.0 + 0.6 * (t * std::f64::consts::PI).sin());
-                        look.glint = 1.0 - t;
+                        // Swell and flare, then collapse into the flash (or, calmer, just sink
+                        // away).
+                        scale = (1.0 - t) * (1.0 + motion.swell * (t * std::f64::consts::PI).sin());
+                        if motion.twinkle {
+                            look.glint = 1.0 - t;
+                        }
                         look.glow = 1.0 - t;
                         let bloom = c * (0.35 + 0.55 * t);
                         d.fill(
                             ellipse(x - bloom, y - bloom, bloom * 2.0, bloom * 2.0),
                             RadialGradient::centered(
-                                Color::WHITE.with_alpha(0.85 * (1.0 - t)),
-                                gem_color(cv.color).with_alpha(0.0),
+                                Color::WHITE.with_alpha(motion.bloom * (1.0 - t)),
+                                (fx.style.tint)(cv.color).with_alpha(0.0),
                             ),
                         );
                         if cv.special == Special::Row || cv.special == Special::Column {
@@ -1306,12 +1401,13 @@ fn render(
                             };
                             d.stroke(
                                 Shape::Line(a, b),
-                                gem_color(cv.color).with_alpha(0.6 * (1.0 - t)),
+                                (fx.style.tint)(cv.color)
+                                    .with_alpha(0.7 * motion.bloom * (1.0 - t)),
                                 c * 0.34 * (1.0 - t),
                             );
                             d.stroke(
                                 Shape::Line(a, b),
-                                Color::WHITE.with_alpha(1.0 - t),
+                                Color::WHITE.with_alpha(1.2 * motion.bloom * (1.0 - t)),
                                 c * 0.12 * (1.0 - t),
                             );
                         }
@@ -1327,12 +1423,14 @@ fn render(
             if i == preview.from {
                 scale = 1.1;
                 look.glow = 1.0;
-                look.glint = look.glint.max(0.6 + 0.4 * (time * 7.0).sin().abs());
+                if motion.twinkle {
+                    look.glint = look.glint.max(0.6 + 0.4 * (time * 7.0).sin().abs());
+                }
             }
         }
         d.clipped(
             Shape::RoundedRect(Rect::new(ox, oy, side, side), 12.0),
-            |d| draw_piece(d, *cv, x, y, c, scale, look),
+            |d| draw_piece(d, fx.style, *cv, x, y, c, scale, look),
         );
     }
     if fx.flash.0 > 0.0 {
@@ -1360,14 +1458,10 @@ fn render(
         let pop = if reduced {
             1.0
         } else {
-            1.0 + 0.45 * (1.0 - t).powi(2)
+            1.0 + motion.pop * (1.0 - t).powi(2)
         };
         let size_pt = c * 0.65 * (1.0 + 0.15 * f.chain.saturating_sub(1) as f64).min(1.6) * pop;
-        let ink = match f.chain {
-            0 | 1 => Color::WHITE,
-            2 => chrome::GOLD,
-            _ => MINT,
-        };
+        let ink = board.ink[f.chain.clamp(1, 3) as usize - 1];
         d.text(
             &text,
             Point::new(at.x + 1.0, at.y + 2.0),
@@ -1496,6 +1590,12 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             ));
             items.push(nav("gk_settings", "mt-settings", Overlay::Settings));
             items.push(nav("gk_instructions", "mt-instructions", Overlay::Help));
+            items.push(menu_button(
+                tr("gk_close"),
+                chrome::RED,
+                "mt-close",
+                gamekit::close,
+            ));
         }
         Overlay::Map => {
             items.push(chrome::card_title(tr("mt_levels"), ACCENT));
@@ -1574,6 +1674,11 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 tr("mt_reduced"),
                 toggle(ui.reduced).id("mt-reduced").any(),
             ));
+            let names: Vec<String> = THEMES.iter().map(|t| tr(t.style().name).format()).collect();
+            items.push(chrome::setting_row(
+                tr("mt_theme"),
+                picker(names, ui.theme).menu().id("mt-theme").any(),
+            ));
             let u = ui.clone();
             items.push(menu_button(
                 tr("gk_done"),
@@ -1635,6 +1740,10 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 .align(TextAlign::Center)
                 .any(),
             );
+            if !won {
+                // What was missing, so a lost level with a high score explains itself.
+                items.push(goal_list(ui.clone(), "mt-result-goal"));
+            }
             if won && level + 1 < LEVELS {
                 let u = ui.clone();
                 items.push(menu_button(
@@ -1719,6 +1828,8 @@ pub fn matchthree_preview() -> AnyPiece {
     g.grid[16].as_mut().unwrap().special = Special::Row;
     g.grid[24].as_mut().unwrap().special = Special::Rainbow;
     g.grid[32].as_mut().unwrap().special = Special::Wrapped;
+    // The thumbnail is the game's icon: always the default theme.
+    let style = Theme::default().style();
     canvas(move |d, size| {
         render(
             d,
@@ -1733,7 +1844,7 @@ pub fn matchthree_preview() -> AnyPiece {
             true,
             None,
             None,
-            &Effects::default(),
+            &Effects::still(style),
         )
     })
     .background(SURFACE)

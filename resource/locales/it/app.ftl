@@ -21,7 +21,6 @@ gk_resume = Riprendi
 gk_new_game = Nuova partita
 gk_settings = Impostazioni
 gk_instructions = Istruzioni
-gk_quit = Esci dal gioco
 gk_play_again = Gioca ancora
 gk_game_over = PARTITA FINITA
 gk_score = Punteggio
@@ -389,22 +388,32 @@ permission_ohos_permission_ACCELEROMETER = Mimi rileva l’inclinazione del tele
 ## Match Three
 nav_matchthree = Allinea tre
 mt_moves = Mosse rimaste
-mt_goal = Obiettivo
 mt_classic = Classico
 mt_corners = Angoli
 mt_bridges = Ponti
 mt_diamond = Diamante
 mt_windows = Finestre
 mt_mixed = Misto
-mt_goal_score = Raggiungi il punteggio obiettivo
-mt_goal_collect = Cerchi rossi: { $berries } / { $target } · Raggiungi il punteggio obiettivo
-mt_goal_frost = Strati rimasti: { $frost } · Raggiungi il punteggio obiettivo
-mt_goal_final = Cerchi: { $berries } / { $target } · Strati: { $frost } · Raggiungi l'obiettivo
-mt_points_to_go = { $points ->
-    [one] Manca 1 punto
-   *[other] Mancano { $points } punti
+mt_goals = Obiettivi
+mt_goal_score_name = Punteggio
+mt_goal_collect_name = Cerchi rossi
+mt_goal_frost_name = Strati di ghiaccio
+mt_goal_count = { $have } / { $need }
+mt_goals_complete = Tutti gli obiettivi completati!
+mt_still_needed = Ancora da fare: { $list }
+mt_score_not_enough = Punteggio raggiunto! Per vincere mancano ancora: { $list }
+mt_need_points = { $n ->
+    [one] 1 punto
+   *[other] { $n } punti
 }
-mt_target_reached = Punteggio obiettivo raggiunto!
+mt_need_circles = { $n ->
+    [one] 1 cerchio rosso
+   *[other] { $n } cerchi rossi
+}
+mt_need_layers = { $n ->
+    [one] 1 strato di ghiaccio
+   *[other] { $n } strati di ghiaccio
+}
 mt_moves_low = { $n ->
     [one] Ultima mossa!
    *[other] Solo { $n } mosse rimaste!
@@ -418,6 +427,9 @@ mt_map_intro = Completa ogni livello per sbloccare il successivo.
 mt_locked = Bloccato
 mt_retry = Rigioca livello
 mt_reduced = Riduci movimento
+mt_theme = Tema
+mt_theme_jewels = Tutto gioielli
+mt_theme_stones = Sassi di mare
 mt_win = Livello completato
 mt_complete = Tutti i livelli completati
 mt_out = Mosse esaurite
@@ -429,7 +441,7 @@ mt_help_swap = Tieni premuta una gemma e trascinala per vedere l'anteprima dello
 mt_help_special_title = Pezzi speciali
 mt_help_special = Allineane quattro per un pezzo a strisce che elimina la sua riga o colonna. Una T o una L crea un pezzo esplosivo che elimina un'area 3 × 3. Allineane cinque in fila per un jolly: scambialo con un pezzo qualsiasi per eliminare quel colore.
 mt_help_combo = Combina due pezzi speciali per un'eliminazione più ampia. Due strisce eliminano una croce; una combinazione esplosiva elimina tre righe e tre colonne. Un jolly con un pezzo speciale trasforma in speciali tutti i pezzi di quel colore. Due jolly svuotano l'intero tabellone.
-mt_help_goals = Raggiungi il punteggio obiettivo prima di finire le mosse. I livelli successivi chiedono anche di raccogliere cerchi rossi o eliminare gli strati sotto i pezzi. Gli strati doppi richiedono due colpi. I buchi dividono il tabellone in corsie di caduta separate. Finisci con 10 mosse per tre stelle, o con 5 per due. I livelli completati si possono rigiocare.
+mt_help_goals = Ogni livello mostra i suoi obiettivi sotto il punteggio: raggiungi il punteggio obiettivo e, nei livelli successivi, raccogli anche cerchi rossi o rompi gli strati di ghiaccio sotto i pezzi. Vinci solo quando ogni obiettivo è spuntato prima di esaurire le mosse; un punteggio alto da solo non basta. Gli strati doppi richiedono due colpi. I buchi dividono il tabellone in corsie di caduta separate. Finisci con 10 mosse per tre stelle, o con 5 per due. I livelli completati si possono rigiocare.
 mt_help_keys = Usa frecce e Invio per selezionare e scambiare. H evidenzia uno scambio valido; Invio lo esegue. Pausa apre impostazioni, regole e rigioca. Suoni, vibrazioni e movimento ridotto sono regolabili. Tabellone e progressi si salvano automaticamente.
 mt_complete_detail = Puoi rigiocare qualsiasi livello per migliorare punteggio e stelle.
 mt_matching = Combinazione…

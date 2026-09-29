@@ -655,6 +655,14 @@ impl Ui {
             self.show(Overlay::Pause);
         }
     }
+    /// Escape on a keyboard: pause the game in play, or close the pause menu to resume it.
+    fn escape(&self) {
+        match self.overlay.get_untracked() {
+            Overlay::None => self.pause(),
+            Overlay::Pause => self.show(Overlay::None),
+            _ => {}
+        }
+    }
     fn new_game(&self) {
         self.game.borrow_mut().restart();
         gamekit::clear(SAVE_KEY);
@@ -769,6 +777,9 @@ pub fn sirtet_page() -> AnyPiece {
             dr.repaint.notify();
         })
         .on_key(move |k| {
+            if k.key == "Escape" {
+                return ku.escape();
+            }
             if ku.overlay.get_untracked() != Overlay::None {
                 return;
             }
@@ -955,7 +966,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "st-instructions",
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::quit_button(chrome::RED, "st-quit"),
+            chrome::close_game_button(chrome::RED, "st-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -1020,7 +1031,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 "st-play-again",
                 move || u.new_game(),
             ),
-            chrome::quit_button(chrome::RED, "st-quit"),
+            chrome::close_game_button(chrome::RED, "st-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

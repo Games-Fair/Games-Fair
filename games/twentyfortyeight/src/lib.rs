@@ -825,6 +825,14 @@ impl Ui {
             self.show(Overlay::Pause);
         }
     }
+    /// Escape on a keyboard: pause the game in play, or close the pause menu to resume it.
+    fn escape(&self) {
+        match self.overlay.get_untracked() {
+            Overlay::None => self.pause(),
+            Overlay::Pause => self.show(Overlay::None),
+            _ => {}
+        }
+    }
     /// New Game asks for the rules first; the picker starts the game.
     fn pick_difficulty(&self) {
         self.return_to.set(self.overlay.get_untracked());
@@ -945,6 +953,9 @@ pub fn twentyfortyeight_page() -> AnyPiece {
             dr.repaint.notify();
         })
         .on_key(move |k| {
+            if k.key == "Escape" {
+                return ku.escape();
+            }
             if ku.overlay.get_untracked() != Overlay::None {
                 return;
             }
@@ -1173,7 +1184,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "tf-instructions",
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::quit_button(chrome::RED, "tf-quit"),
+            chrome::close_game_button(chrome::RED, "tf-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
@@ -1255,7 +1266,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 "tf-play-again",
                 move || u.pick_difficulty(),
             ),
-            chrome::quit_button(chrome::RED, "tf-quit"),
+            chrome::close_game_button(chrome::RED, "tf-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

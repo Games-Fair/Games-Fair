@@ -168,6 +168,10 @@ impl Ui {
         }
     }
     fn key(&self, key: &str) {
+        // Escape pauses the game in play (below), and closes the pause menu to resume it.
+        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+            return self.show(Overlay::None);
+        }
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
@@ -608,7 +612,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 chrome::INDIGO,
                 Overlay::Help,
             ));
-            items.push(chrome::quit_button(chrome::RED, "pp-quit"));
+            items.push(chrome::close_game_button(chrome::RED, "pp-quit"));
         }
         Overlay::NewGame => {
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
@@ -683,7 +687,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 chrome::GREEN,
                 Overlay::NewGame,
             ));
-            items.push(chrome::quit_button(chrome::SLATE, "pp-result-quit"));
+            items.push(chrome::close_game_button(chrome::SLATE, "pp-result-quit"));
         }
         _ => {}
     }

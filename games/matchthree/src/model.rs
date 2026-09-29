@@ -28,7 +28,6 @@ impl Candy {
 #[derive(Clone, Copy)]
 pub struct Level {
     pub name: &'static str,
-    pub detail: &'static str,
     pub moves: u32,
     pub target: u32,
     pub collect: u32,
@@ -37,7 +36,6 @@ pub struct Level {
 pub const STAGES: [Level; LEVELS] = [
     Level {
         name: "mt_classic",
-        detail: "mt_goal_score",
         moves: 22,
         target: 1200,
         collect: 0,
@@ -45,7 +43,6 @@ pub const STAGES: [Level; LEVELS] = [
     },
     Level {
         name: "mt_corners",
-        detail: "mt_goal_collect",
         moves: 26,
         target: 1600,
         collect: 18,
@@ -53,7 +50,6 @@ pub const STAGES: [Level; LEVELS] = [
     },
     Level {
         name: "mt_bridges",
-        detail: "mt_goal_frost",
         moves: 28,
         target: 1600,
         collect: 0,
@@ -61,7 +57,6 @@ pub const STAGES: [Level; LEVELS] = [
     },
     Level {
         name: "mt_diamond",
-        detail: "mt_goal_collect",
         moves: 28,
         target: 2200,
         collect: 24,
@@ -69,7 +64,6 @@ pub const STAGES: [Level; LEVELS] = [
     },
     Level {
         name: "mt_windows",
-        detail: "mt_goal_frost",
         moves: 32,
         target: 2600,
         collect: 0,
@@ -77,13 +71,53 @@ pub const STAGES: [Level; LEVELS] = [
     },
     Level {
         name: "mt_mixed",
-        detail: "mt_goal_final",
         moves: 34,
         target: 3200,
         collect: 28,
         colors: 6,
     },
 ];
+/// The layers under cell `i` when level `level` starts: every level lays them the same way.
+fn starting_frost(level: usize, i: usize) -> u8 {
+    let laid = active(level, i)
+        && matches!(level, 2 | 4 | 5)
+        && if level == 4 {
+            i / N % 2 == 1 && i % N % 2 == 1
+        } else {
+            (i / N + i % N).is_multiple_of(2)
+        };
+    match (laid, level) {
+        (false, _) => 0,
+        (true, 4) => 2,
+        (true, _) => 1,
+    }
+}
+/// What a level asks for besides moves: its score, its red circles, its layers.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum GoalKind {
+    Score,
+    Collect,
+    Frost,
+}
+/// One goal and how far along it is: `have` of `need` (layers count as cleared).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Goal {
+    pub kind: GoalKind,
+    pub have: u32,
+    pub need: u32,
+}
+impl Goal {
+    pub fn done(&self) -> bool {
+        self.have >= self.need
+    }
+    pub fn fraction(&self) -> f64 {
+        (self.have as f64 / self.need.max(1) as f64).min(1.0)
+    }
+    /// How much is still missing: points, circles or layers.
+    pub fn left(&self) -> u32 {
+        self.need.saturating_sub(self.have)
+    }
+}
 pub fn active(level: usize, i: usize) -> bool {
     let (r, c) = (i / N, i % N);
     match level {
@@ -179,16 +213,7 @@ impl Game {
             rng: seed | 1,
         };
         for i in 0..LEN {
-            if active(g.level, i)
-                && matches!(g.level, 2 | 4 | 5)
-                && (if g.level == 4 {
-                    i / N % 2 == 1 && i % N % 2 == 1
-                } else {
-                    (i / N + i % N).is_multiple_of(2)
-                })
-            {
-                g.frost[i] = if g.level == 4 { 2 } else { 1 };
-            }
+            g.frost[i] = starting_frost(g.level, i);
         }
         g.redeal();
         g
@@ -225,10 +250,34 @@ impl Game {
     pub fn frosting(&self) -> u32 {
         self.frost.iter().map(|x| *x as u32).sum()
     }
+    /// Every goal the level sets, in the order the screen lists them. The level is won when all
+    /// of them are done, so reaching the score alone is not enough where there are others.
+    pub fn goals(&self) -> Vec<Goal> {
+        let stage = STAGES[self.level];
+        let mut goals = vec![Goal {
+            kind: GoalKind::Score,
+            have: self.score.min(stage.target),
+            need: stage.target,
+        }];
+        if stage.collect > 0 {
+            goals.push(Goal {
+                kind: GoalKind::Collect,
+                have: self.collected.min(stage.collect),
+                need: stage.collect,
+            });
+        }
+        let layers: u32 = (0..LEN).map(|i| starting_frost(self.level, i) as u32).sum();
+        if layers > 0 {
+            goals.push(Goal {
+                kind: GoalKind::Frost,
+                have: layers.saturating_sub(self.frosting()),
+                need: layers,
+            });
+        }
+        goals
+    }
     pub fn won(&self) -> bool {
-        self.score >= STAGES[self.level].target
-            && self.collected >= STAGES[self.level].collect
-            && self.frosting() == 0
+        self.goals().iter().all(Goal::done)
     }
     pub fn over(&self) -> bool {
         self.won() || self.moves == 0
@@ -539,6 +588,40 @@ impl Game {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Each level lists the goals it sets, and reaching the score alone wins only the level
+    /// that sets nothing else.
+    #[test]
+    fn a_level_is_won_only_when_every_goal_is_done() {
+        let kinds = |level| {
+            Game::new(level, 7)
+                .goals()
+                .iter()
+                .map(|g| g.kind)
+                .collect::<Vec<_>>()
+        };
+        use GoalKind::*;
+        assert_eq!(kinds(0), [Score]);
+        assert_eq!(kinds(1), [Score, Collect]);
+        assert_eq!(kinds(2), [Score, Frost]);
+        assert_eq!(kinds(5), [Score, Collect, Frost]);
+        for (level, stage) in STAGES.iter().enumerate() {
+            let mut g = Game::new(level, 7);
+            let layers = g.frosting();
+            g.score = stage.target;
+            assert_eq!(g.won(), level == 0, "level {level} won on score alone");
+            let frost = g.goals().into_iter().find(|x| x.kind == Frost);
+            assert_eq!(frost.map_or(0, |f| f.need), layers);
+            g.collected = stage.collect;
+            g.frost.fill(0);
+            assert!(g.won(), "level {level} not won with every goal done");
+            assert!(
+                g.goals()
+                    .iter()
+                    .all(|x| x.fraction() == 1.0 && x.left() == 0)
+            );
+        }
+    }
     fn blank() -> Game {
         let mut g = Game::new(0, 15);
         g.grid = (0..LEN)

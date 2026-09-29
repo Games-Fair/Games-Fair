@@ -298,6 +298,18 @@ impl Ui {
     /// selection. Menu-bar platforms keep Delete and Backspace for their menus, so 0 is the
     /// clear key every keyboard delivers.
     fn key(&self, k: &KeyEvent) {
+        // Escape pauses the game, and closes the pause menu to resume it.
+        if k.key == "Escape" {
+            match self.overlay.get_untracked() {
+                Overlay::None => {
+                    self.show(Overlay::Pause);
+                    self.cue(&cues::SELECT);
+                }
+                Overlay::Pause => self.show(Overlay::None),
+                _ => {}
+            }
+            return;
+        }
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
@@ -1377,17 +1389,12 @@ fn menu_button(
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     let live = !ui.game.borrow().locked();
+    // Resume is always offered: over a finished puzzle it just puts the menu away.
     let resume = {
         let u = ui.clone();
-        when(
-            move || live,
-            move || {
-                let u = u.clone();
-                menu_button(tr("gk_resume"), GREEN, "su-resume", move || {
-                    u.show(Overlay::None);
-                })
-            },
-        )
+        menu_button(tr("gk_resume"), GREEN, "su-resume", move || {
+            u.show(Overlay::None);
+        })
     };
     let give_up = {
         let u = ui.clone();
@@ -1435,7 +1442,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 move || u3.push(Overlay::Instructions),
             ),
             give_up,
-            menu_button(tr("gk_quit"), RED, "su-quit", || {
+            menu_button(tr("gk_close"), RED, "su-quit", || {
                 nav_back();
             }),
         ))
@@ -1493,7 +1500,7 @@ fn solved_card(ui: Rc<Ui>) -> AnyPiece {
             menu_button(tr("gk_play_again"), KEY_BLUE, "su-play-again", move || {
                 u.push(Overlay::Difficulty)
             }),
-            menu_button(tr("gk_quit"), RED, "su-quit", || {
+            menu_button(tr("gk_close"), RED, "su-quit", || {
                 nav_back();
             }),
         ))
@@ -1751,25 +1758,28 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
     ))
     .spacing(10.0)
     .align(HAlign::Leading);
+    // The title and Done stay in the card's chrome; only the text between them scrolls.
     card_frame(
-        scroll(
-            column((
-                label(tr("nav_sudoku"))
-                    .font(Font::Title2)
-                    .bold()
-                    .color(Color::WHITE),
-                body,
-                tail,
-                button(tr("gk_done"))
-                    .prominent()
-                    .action(move || done.pop())
-                    .id("su-help-done"),
-            ))
-            .spacing(10.0)
-            .align(HAlign::Leading)
-            .width(300.0),
-        )
-        .height(440.0),
+        column((
+            label(tr("nav_sudoku"))
+                .font(Font::Title2)
+                .bold()
+                .color(Color::WHITE),
+            scroll(
+                column((body, tail))
+                    .spacing(10.0)
+                    .align(HAlign::Leading)
+                    .width(300.0),
+            )
+            .height(360.0),
+            button(tr("gk_done"))
+                .prominent()
+                .action(move || done.pop())
+                .id("su-help-done"),
+        ))
+        .spacing(12.0)
+        .align(HAlign::Leading)
+        .width(300.0),
     )
     .id("su-instructions-card")
     .any()

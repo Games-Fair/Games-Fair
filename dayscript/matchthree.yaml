@@ -79,13 +79,19 @@ flow:
   - {"assert_value": {"id": "mt-sounds", "value": false}}
   - {"assert_value": {"id": "mt-vibrations", "value": false}}
   - {"assert_value": {"id": "mt-reduced", "value": true}}
+  - {"select": {"id": "mt-theme", "index": 1}}
   - {"tap": {"id": "mt-settings-done"}}
   - {"tap": {"id": "mt-resume"}}
+  # A theme changes only the look: the level carries on where it was.
+  - {"assert_text": {"id": "mt-score", "text": "600"}}
+  - {"assert_text": {"id": "mt-moves", "text": "25"}}
+  - {"screenshot": "match-three-stones"}
   - {"tap": {"id": "mt-pause"}}
   - {"tap": {"id": "mt-settings"}}
   - {"toggle": {"id": "mt-sounds", "value": true}}
   - {"toggle": {"id": "mt-vibrations", "value": true}}
   - {"toggle": {"id": "mt-reduced", "value": false}}
+  - {"select": {"id": "mt-theme", "index": 0}}
   - {"tap": {"id": "mt-settings-done"}}
   - {"tap": {"id": "mt-instructions"}}
   - {"assert_visible": {"id": "mt-help"}}

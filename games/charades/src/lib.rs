@@ -373,6 +373,10 @@ impl Ui {
     }
 
     fn key(&self, key: &str) {
+        // Escape pauses the game in play (below), and closes the pause menu to resume it.
+        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+            return self.show(Overlay::None);
+        }
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
@@ -1182,7 +1186,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 "ch-pause-instructions",
                 move || u4.push(Overlay::Instructions),
             ),
-            chrome::quit_button(chrome::RED, "ch-quit"),
+            chrome::close_game_button(chrome::RED, "ch-quit"),
         ))
         .spacing(14.0)
         .align(HAlign::Center),

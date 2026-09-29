@@ -21,7 +21,6 @@ gk_resume = Continuar
 gk_new_game = Partida nueva
 gk_settings = Configuración
 gk_instructions = Instrucciones
-gk_quit = Salir del juego
 gk_play_again = Jugar otra vez
 gk_game_over = FIN DEL JUEGO
 gk_score = Puntuación
@@ -389,22 +388,32 @@ permission_ohos_permission_ACCELEROMETER = Charadas detecta la inclinación del 
 ## Match Three
 nav_matchthree = Junta tres
 mt_moves = Movimientos restantes
-mt_goal = Objetivo
 mt_classic = Clásico
 mt_corners = Esquinas
 mt_bridges = Puentes
 mt_diamond = Diamante
 mt_windows = Ventanas
 mt_mixed = Mixto
-mt_goal_score = Alcanza la puntuación objetivo
-mt_goal_collect = Círculos rojos: { $berries } / { $target } · Alcanza la puntuación objetivo
-mt_goal_frost = Capas restantes: { $frost } · Alcanza la puntuación objetivo
-mt_goal_final = Círculos: { $berries } / { $target } · Capas: { $frost } · Alcanza el objetivo
-mt_points_to_go = { $points ->
-    [one] Falta 1 punto
-   *[other] Faltan { $points } puntos
+mt_goals = Objetivos
+mt_goal_score_name = Puntos
+mt_goal_collect_name = Círculos rojos
+mt_goal_frost_name = Capas de hielo
+mt_goal_count = { $have } / { $need }
+mt_goals_complete = ¡Todos los objetivos cumplidos!
+mt_still_needed = Aún falta: { $list }
+mt_score_not_enough = ¡Puntuación alcanzada! Para ganar aún falta: { $list }
+mt_need_points = { $n ->
+    [one] 1 punto
+   *[other] { $n } puntos
 }
-mt_target_reached = ¡Puntuación objetivo alcanzada!
+mt_need_circles = { $n ->
+    [one] 1 círculo rojo
+   *[other] { $n } círculos rojos
+}
+mt_need_layers = { $n ->
+    [one] 1 capa de hielo
+   *[other] { $n } capas de hielo
+}
 mt_moves_low = { $n ->
     [one] ¡Último movimiento!
    *[other] ¡Solo quedan { $n } movimientos!
@@ -418,6 +427,9 @@ mt_map_intro = Completa cada nivel para desbloquear el siguiente.
 mt_locked = Bloqueado
 mt_retry = Repetir nivel
 mt_reduced = Reducir movimiento
+mt_theme = Tema
+mt_theme_jewels = Joyas deslumbrantes
+mt_theme_stones = Piedras de mar
 mt_win = Nivel completado
 mt_complete = Todos los niveles completados
 mt_out = Sin movimientos
@@ -429,7 +441,7 @@ mt_help_swap = Mantén pulsada una gema y arrástrala para previsualizar un inte
 mt_help_special_title = Piezas especiales
 mt_help_special = Junta cuatro para obtener una pieza rayada que despeja su fila o columna. Una T o una L crea una pieza explosiva que despeja un área de 3 × 3. Junta cinco en línea para obtener un comodín: intercámbialo con cualquier pieza para eliminar ese color.
 mt_help_combo = Combina dos especiales para despejar más. Dos rayadas despejan una cruz; una combinación explosiva despeja tres filas y tres columnas. Un comodín con una especial convierte todas las piezas de ese color en especiales. Dos comodines despejan todo el tablero.
-mt_help_goals = Alcanza la puntuación objetivo antes de quedarte sin movimientos. Los niveles posteriores también piden recoger círculos rojos o eliminar capas bajo las piezas. Las capas dobles necesitan dos golpes. Los huecos dividen el tablero en carriles de caída separados. Termina con 10 movimientos para tres estrellas o con 5 para dos. Puedes repetir los niveles completados.
+mt_help_goals = Cada nivel muestra sus objetivos bajo la puntuación: alcanza la puntuación objetivo y, en niveles posteriores, recoge también círculos rojos o rompe las capas de hielo bajo las piezas. Solo ganas cuando todos los objetivos están marcados antes de quedarte sin movimientos; una puntuación alta no basta. Las capas dobles necesitan dos golpes. Los huecos dividen el tablero en carriles de caída separados. Termina con 10 movimientos para tres estrellas, o con 5 para dos. Los niveles completados se pueden repetir.
 mt_help_keys = Usa las flechas e Intro para seleccionar e intercambiar. H resalta un intercambio válido; Intro lo juega. Pausar abre la configuración, las reglas y la opción de repetir. Puedes ajustar sonidos, vibraciones y movimiento reducido. El tablero y el progreso se guardan automáticamente.
 mt_complete_detail = Puedes repetir cualquier nivel para mejorar tu puntuación y tus estrellas.
 mt_matching = Combinando…

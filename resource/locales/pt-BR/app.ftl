@@ -21,7 +21,6 @@ gk_resume = Continuar
 gk_new_game = Novo jogo
 gk_settings = Ajustes
 gk_instructions = Instruções
-gk_quit = Sair do jogo
 gk_play_again = Jogar de novo
 gk_game_over = FIM DE JOGO
 gk_score = Pontuação
@@ -389,22 +388,32 @@ permission_ohos_permission_ACCELEROMETER = Mímica detecta a inclinação do cel
 ## Match Three
 nav_matchthree = Combine Três
 mt_moves = Jogadas restantes
-mt_goal = Meta
 mt_classic = Clássico
 mt_corners = Cantos
 mt_bridges = Pontes
 mt_diamond = Diamante
 mt_windows = Janelas
 mt_mixed = Misto
-mt_goal_score = Alcance a pontuação-alvo
-mt_goal_collect = Círculos vermelhos: { $berries } / { $target } · Alcance a pontuação-alvo
-mt_goal_frost = Camadas restantes: { $frost } · Alcance a pontuação-alvo
-mt_goal_final = Círculos: { $berries } / { $target } · Camadas: { $frost } · Alcance a meta
-mt_points_to_go = { $points ->
-    [one] Falta 1 ponto
-   *[other] Faltam { $points } pontos
+mt_goals = Objetivos
+mt_goal_score_name = Pontuação
+mt_goal_collect_name = Círculos vermelhos
+mt_goal_frost_name = Camadas de gelo
+mt_goal_count = { $have } / { $need }
+mt_goals_complete = Todos os objetivos concluídos!
+mt_still_needed = Ainda falta: { $list }
+mt_score_not_enough = Pontuação alcançada! Para vencer ainda falta: { $list }
+mt_need_points = { $n ->
+    [one] { $n } ponto
+   *[other] { $n } pontos
 }
-mt_target_reached = Pontuação-alvo alcançada!
+mt_need_circles = { $n ->
+    [one] { $n } círculo vermelho
+   *[other] { $n } círculos vermelhos
+}
+mt_need_layers = { $n ->
+    [one] { $n } camada de gelo
+   *[other] { $n } camadas de gelo
+}
 mt_moves_low = { $n ->
     [one] Última jogada!
    *[other] Só restam { $n } jogadas!
@@ -418,6 +427,9 @@ mt_map_intro = Conclua cada nível para liberar o próximo.
 mt_locked = Bloqueado
 mt_retry = Jogar nível de novo
 mt_reduced = Reduzir movimento
+mt_theme = Tema
+mt_theme_jewels = Cheio de joias
+mt_theme_stones = Pedras do mar
 mt_win = Nível concluído
 mt_complete = Todos os níveis concluídos
 mt_out = Sem jogadas
@@ -429,7 +441,7 @@ mt_help_swap = Segure e arraste uma gema para ver a troca antes de fazê-la. Exp
 mt_help_special_title = Peças especiais
 mt_help_special = Combine quatro para uma peça listrada que limpa sua linha ou coluna. Um T ou L cria uma peça explosiva que limpa uma área 3 × 3. Combine cinco em linha para um curinga: troque-o com qualquer peça para limpar aquela cor.
 mt_help_combo = Junte duas especiais para uma limpeza maior. Duas listradas limpam uma cruz; uma combinação com explosiva limpa três linhas e três colunas. Curinga mais especial transforma todas as peças daquela cor em especiais. Dois curingas limpam o tabuleiro inteiro.
-mt_help_goals = Alcance a pontuação-alvo antes que as jogadas acabem. Níveis posteriores também pedem coletar círculos vermelhos ou limpar camadas sob as peças. Camadas duplas precisam de dois acertos. Buracos dividem o tabuleiro em colunas de queda separadas. Termine com 10 jogadas para três estrelas ou 5 para duas. Níveis concluídos podem ser jogados de novo.
+mt_help_goals = Cada nível mostra seus objetivos abaixo da pontuação: alcance a pontuação alvo e, em níveis posteriores, também colete círculos vermelhos ou quebre as camadas de gelo sob as peças. Você só vence quando todos os objetivos estão marcados antes de acabarem os movimentos; uma pontuação alta sozinha não basta. Camadas duplas precisam de dois golpes. Buracos dividem o tabuleiro em faixas de queda separadas. Termine com 10 movimentos para três estrelas, ou 5 para duas. Níveis concluídos podem ser jogados de novo.
 mt_help_keys = Use as setas e Enter para selecionar e trocar. H destaca uma troca válida; Enter a executa. Pausar abre ajustes, regras e a opção de jogar de novo. Sons, vibrações e movimento reduzido são ajustáveis. O tabuleiro e o progresso são salvos automaticamente.
 mt_complete_detail = Jogue qualquer nível de novo para melhorar sua pontuação e suas estrelas.
 mt_matching = Combinando…

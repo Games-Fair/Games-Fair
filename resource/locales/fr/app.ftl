@@ -21,7 +21,6 @@ gk_resume = Reprendre
 gk_new_game = Nouvelle partie
 gk_settings = Paramètres
 gk_instructions = Instructions
-gk_quit = Quitter
 gk_play_again = Rejouer
 gk_game_over = PARTIE TERMINÉE
 gk_score = Score
@@ -389,22 +388,32 @@ permission_ohos_permission_ACCELEROMETER = Le jeu Devinettes utilise l’inclina
 ## Match Three
 nav_matchthree = Aligne-trois
 mt_moves = Coups restants
-mt_goal = Objectif
 mt_classic = Classique
 mt_corners = Coins
 mt_bridges = Ponts
 mt_diamond = Losange
 mt_windows = Fenêtres
 mt_mixed = Mixte
-mt_goal_score = Atteignez le score cible
-mt_goal_collect = Cercles rouges : { $berries } / { $target } · Atteignez le score cible
-mt_goal_frost = Couches restantes : { $frost } · Atteignez le score cible
-mt_goal_final = Cercles : { $berries } / { $target } · Couches : { $frost } · Atteignez l'objectif
-mt_points_to_go = { $points ->
-    [one] Encore { $points } point
-   *[other] Encore { $points } points
+mt_goals = Objectifs
+mt_goal_score_name = Score
+mt_goal_collect_name = Cercles rouges
+mt_goal_frost_name = Couches de glace
+mt_goal_count = { $have } / { $need }
+mt_goals_complete = Tous les objectifs sont atteints !
+mt_still_needed = Encore nécessaire : { $list }
+mt_score_not_enough = Score atteint ! Pour gagner, il reste : { $list }
+mt_need_points = { $n ->
+    [one] { $n } point
+   *[other] { $n } points
 }
-mt_target_reached = Score cible atteint !
+mt_need_circles = { $n ->
+    [one] { $n } cercle rouge
+   *[other] { $n } cercles rouges
+}
+mt_need_layers = { $n ->
+    [one] { $n } couche de glace
+   *[other] { $n } couches de glace
+}
 mt_moves_low = { $n ->
     [one] Dernier coup !
    *[other] Plus que { $n } coups !
@@ -418,6 +427,9 @@ mt_map_intro = Terminez chaque niveau pour débloquer le suivant.
 mt_locked = Verrouillé
 mt_retry = Rejouer le niveau
 mt_reduced = Réduire les animations
+mt_theme = Thème
+mt_theme_jewels = Tout en joyaux
+mt_theme_stones = Galets marins
 mt_win = Niveau terminé
 mt_complete = Tous les niveaux terminés
 mt_out = Plus de coups
@@ -429,7 +441,7 @@ mt_help_swap = Maintenez une gemme et faites-la glisser pour prévisualiser un �
 mt_help_special_title = Pièces spéciales
 mt_help_special = Alignez-en quatre pour une pièce rayée qui efface sa ligne ou sa colonne. Un T ou un L crée une pièce explosive qui efface une zone de 3 × 3. Alignez-en cinq pour un joker : échangez-le avec n'importe quelle pièce pour effacer cette couleur.
 mt_help_combo = Combinez deux pièces spéciales pour un effet plus large. Deux rayées effacent une croix ; une combinaison explosive efface trois lignes et trois colonnes. Un joker avec une pièce spéciale transforme toutes les pièces de cette couleur en pièces spéciales. Deux jokers effacent toute la grille.
-mt_help_goals = Atteignez le score cible avant d'épuiser vos coups. Les niveaux suivants demandent aussi de collecter des cercles rouges ou d'effacer des couches sous les pièces. Les couches doubles demandent deux impacts. Les trous divisent la grille en couloirs de chute séparés. Finissez avec 10 coups restants pour trois étoiles, ou 5 pour deux. Les niveaux terminés peuvent être rejoués.
+mt_help_goals = Chaque niveau affiche ses objectifs sous le score : atteignez le score cible et, dans les niveaux suivants, collectez aussi des cercles rouges ou brisez les couches de glace sous les pièces. Vous ne gagnez que lorsque chaque objectif est coché avant d'épuiser vos coups ; un score élevé ne suffit pas. Les couches doubles demandent deux impacts. Les trous divisent la grille en couloirs de chute séparés. Finissez avec 10 coups restants pour trois étoiles, ou 5 pour deux. Les niveaux terminés peuvent être rejoués.
 mt_help_keys = Au clavier : flèches et Entrée pour sélectionner et échanger. H met en évidence un échange possible ; Entrée le joue. Pause ouvre les paramètres, les règles et l'option Rejouer. Sons, vibrations et animations réduites sont réglables. La grille et la progression se sauvegardent automatiquement.
 mt_complete_detail = Vous pouvez rejouer n'importe quel niveau pour améliorer votre score et vos étoiles.
 mt_matching = Alignement…
