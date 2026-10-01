@@ -44,7 +44,7 @@ jobs:
     with:
       # The targets this app was scaffolded with. Add one with `day project add-target`, and
       # add it here too.
-      targets: "windows-xaml, macos-appkit, linux-gtk, linux-qt, ios-uikit, android-mdc, harmony-arkui, web-dom"
+      targets: "windows-winui, macos-appkit, linux-gtk, linux-qt, ios-uikit, android-mdc, harmony-arkui, web-dom"
       # The walkthroughs beside the app: the navigation sweep, every game's screenshots, and the
       # two games whose input needs its own script.
       scripts: dayscript/smoke.yaml dayscript/games.yaml dayscript/flipside.yaml dayscript/pipes.yaml
