@@ -14,12 +14,14 @@ title = "Games Fair"
 # Above the 36 the stores have seen. Both order releases by version and build, and refuse one
 # that repeats or lowers them.
 build = 82
-# The 8 shipping platform-toolkit pairs. `windows-xaml`, `linux-gtk`, and `linux-qt` build in CI
-# on their native hosts; on a macOS dev box the toolkits run locally as `macos-appkit`,
+# Supported platform-toolkit pairs. `windows-winui`, `linux-gtk`, and `linux-qt` build in CI
+# on their native hosts; legacy `windows-xaml` remains available. On a macOS dev box the toolkits
+# run locally as `macos-appkit`,
 # `macos-gtk`, `macos-qt`, `ios-uikit`, `android-mdc`, `harmony-arkui`, and `web-dom` (GTK/Qt are
 # portable, so `macos-gtk`/`macos-qt` stand in for `linux-gtk`/`linux-qt`). `day build -p <target>`
 # accepts any host-buildable target regardless of this list.
 targets = [
+  "windows-winui",
   "windows-xaml",
   "macos-appkit",
   "linux-gtk",
