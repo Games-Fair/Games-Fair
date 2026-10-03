@@ -13,7 +13,7 @@ scheme = "fairegames"
 title = "Games Fair"
 # Above the 36 the stores have seen. Both order releases by version and build, and refuse one
 # that repeats or lowers them.
-build = 83
+build = 84
 # Supported platform-toolkit pairs. `windows-winui`, `linux-gtk`, and `linux-qt` build in CI
 # on their native hosts; legacy `windows-xaml` remains available. On a macOS dev box the toolkits
 # run locally as `macos-appkit`,
