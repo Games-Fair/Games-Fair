@@ -22,3 +22,9 @@ default-platform = "web"
 # The mark is a pixel heart, every pixel sitting on its own radius from the centre, which is the
 # arrangement bloom is for.
 icon-effect = "bloom"
+
+# Shared App Fair branding and Astro configuration; CI checks out this theme automatically.
+# Requires the customization-capable daysite renderer and daybrite/actions v1 release.
+[theme]
+repository = "appfair/appsite"
+ref = "main"

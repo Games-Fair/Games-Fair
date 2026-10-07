@@ -189,3 +189,19 @@ says so:
 The App Fair Project builds, signs, and submits the apps in its catalog. To publish a new
 version, tag a release and open a pull request against
 [`appfair/appfair-apps`](https://github.com/appfair/appfair-apps) naming the tag and its commit.
+
+## Website theme
+
+`website/site.toml` selects [App Fair's appsite theme](https://github.com/appfair/appsite)
+at `main`. The shared Day workflow fetches the theme and uses its Astro configuration,
+App Fair header/footer, and journal pages automatically on qualifying website deployments.
+The app keeps its own URL, accent color, platform choices, localized listings, screenshots,
+and downloads. Project customization can be added in `website/daysite.config.mjs`;
+`website/theme.css` is applied after the theme's styles.
+
+This requires the published customization-capable daysite renderer, the theme repository,
+and the updated `daybrite/actions` `v1` workflow. No separate website deployment workflow is
+needed. For local previews, clone and install daysite, clone appsite, and set `DAYSITE_THEME`
+to the appsite checkout's absolute path before installing customization dependencies or
+running the preview. See Day's [app website guide](https://daybrite.dev/docs/websites)
+for setup, customization, GitHub Pages, and custom domains.
