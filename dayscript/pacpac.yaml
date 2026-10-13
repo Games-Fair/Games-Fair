@@ -4,7 +4,9 @@
 #
 #     day launch -p macos-appkit --env DAY_GAMES_SEED=15 --env DAY_PACPAC_PAD=1 --script dayscript/pacpac.yaml
 #
-# DAY_PACPAC_PAD=1 shows the phones' joypad on a desktop, so the walkthrough photographs it.
+# DAY_PACPAC_PAD=1 shows the phones' joypad on a desktop, so the walkthrough photographs it. The
+# script steers with keys, which hides the pad wherever it is not forced, so it never taps it;
+# dayscript/pacpac-pad.yaml checks when the pad shows.
 #
 name: pacpac
 flow:
@@ -68,8 +70,6 @@ flow:
   - key: { id: pm-canvas, key: "ArrowUp" }
   - pause: { secs: 1.5 }
   - screenshot: mspacpac-play
-  - tap: { id: pm-pad }
-  - pause: { secs: 0.3 }
   - key: { id: pm-canvas, key: "Escape" }
   - pause: { secs: 0.4 }
   - assert_visible: { id: pm-pause-menu }
