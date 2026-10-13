@@ -1,0 +1,82 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# Pac-Pac walkthrough (https://daybrite.dev/docs/dayscript): the rules, the game picker, a
+# Pac-Pac round from the keyboard, the pause menu, settings, and a Ms. Pac-Pac round.
+#
+#     day launch -p macos-appkit --env DAY_GAMES_SEED=15 --env DAY_PACPAC_PAD=1 --script dayscript/pacpac.yaml
+#
+# DAY_PACPAC_PAD=1 shows the phones' joypad on a desktop, so the walkthrough photographs it.
+#
+name: pacpac
+flow:
+  - wait_for: { id: home }
+  # The rules open by themselves the first time the game is played, and lead to the picker;
+  # a later open shows a saved round's pause menu or the picker itself. Either way, New
+  # Game from the pause menu reaches the picker, so start from there.
+  - navigate: { route: pacpac }
+  - pause: { secs: 0.8 }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - navigate: { route: pacpac }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: pm-canvas }
+  - tap: { id: pm-pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: pm-new-game }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: pm-mode-picker }
+  - screenshot: pacpac-picker
+  - tap: { id: pm-mode-pacpac }
+  - pause: { secs: 1.0 }
+  - screenshot: pacpac-ready
+  # The jingle plays through READY!, then Pac-Pac sets off to the left; steer him round the
+  # bottom of the maze.
+  - pause: { secs: 4.0 }
+  - key: { id: pm-canvas, key: "ArrowDown" }
+  - pause: { secs: 1.2 }
+  - key: { id: pm-canvas, key: "ArrowLeft" }
+  - pause: { secs: 1.0 }
+  - screenshot: pacpac-play
+  - key: { id: pm-canvas, key: "ArrowDown" }
+  - pause: { secs: 1.5 }
+  - key: { id: pm-canvas, key: "ArrowRight" }
+  - pause: { secs: 1.5 }
+  - screenshot: pacpac-play-2
+  - tap: { id: pm-pause }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: pm-pause-menu }
+  - screenshot: pacpac-paused
+  - tap: { id: pm-settings }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: pm-settings-card }
+  - screenshot: pacpac-settings
+  - tap: { id: pm-done }
+  - pause: { secs: 0.3 }
+  - tap: { id: pm-instructions }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: pm-instructions-card }
+  - screenshot: pacpac-instructions
+  - tap: { id: pm-help-done }
+  - pause: { secs: 0.3 }
+  - assert_visible: { id: pm-pause-menu }
+  # Ms. Pac-Pac: a fresh round in her first maze.
+  - tap: { id: pm-new-game }
+  - pause: { secs: 0.4 }
+  - tap: { id: pm-mode-mspacpac }
+  - pause: { secs: 1.0 }
+  - screenshot: mspacpac-ready
+  - pause: { secs: 4.5 }
+  - key: { id: pm-canvas, key: "ArrowUp" }
+  - pause: { secs: 1.5 }
+  - screenshot: mspacpac-play
+  - tap: { id: pm-pad }
+  - pause: { secs: 0.3 }
+  - key: { id: pm-canvas, key: "Escape" }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: pm-pause-menu }
+  - key: { id: pm-canvas, key: "Escape" }
+  - pause: { secs: 0.4 }
+  - assert_missing: { id: pm-pause-menu }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: tile-pacpac }
+  - screenshot: home-with-pacpac

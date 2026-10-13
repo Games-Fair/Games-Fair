@@ -445,3 +445,26 @@ mt_help_goals = Jedes Level zeigt seine Ziele unter der Punktzahl: Erreiche die 
 mt_help_keys = Mit Pfeilen und Eingabe wählst und tauschst du. H markiert einen gültigen Tausch, Eingabe führt ihn aus. Pause öffnet Einstellungen, Regeln und Wiederholen. Töne, Vibrationen und reduzierte Bewegung sind einstellbar. Spielfeld und Fortschritt werden automatisch gespeichert.
 mt_complete_detail = Du kannst jedes Level wiederholen, um Punkte und Sterne zu verbessern.
 mt_matching = Wird kombiniert…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Level
+pm_mode_title = Welches Spiel?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = Das eine Labyrinth, vier Geister mit Plan und eine Frucht, die unter dem Geisterhaus wartet.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Vier Labyrinthe mit mehr Tunneln, eine Frucht, die hereinspaziert, und Geister, die erst umherstreifen, bevor sie jagen.
+pm_help_intro = Friss jeden Punkt im Labyrinth, während dich vier Geister jagen. Räume das Feld leer, um ins nächste Level zu kommen.
+pm_help_play = So wird gespielt
+pm_help_play_1 = • **Wische** irgendwo auf dem Bildschirm oder halte das Steuerkreuz unter dem Labyrinth, um abzubiegen. Auf einer Tastatur steuern die Pfeile, WASD oder HJKL, und P oder Escape pausiert. Eine früh gewünschte Abzweigung wird an der nächsten Öffnung genommen.
+pm_help_play_2 = • Die Tunnel an den Seiten des Labyrinths führen auf die andere Seite. Geister werden darin langsamer.
+pm_help_play_3 = • Friss einen großen blinkenden Punkt, und die Geister werden blau: Fang sie für 200, 400, 800 und 1.600 Punkte, bevor sie zurückblinken.
+pm_help_ghosts = Die Geister
+pm_help_ghosts_1 = Blinky folgt dir. Pinky zielt vor dich. Inky richtet sich nach Blinky. Clyde dreht ab, wenn er nahe kommt. Ab und zu ziehen sich alle in ihre Ecken zurück und kommen dann wieder.
+pm_help_ghosts_2 = Die Sirene steigt, je weniger Punkte übrig sind, und Blinky wird schneller, wenn nur noch wenige da sind.
+pm_help_games = Zwei Spiele
+pm_help_games_1 = **Pac-Pac** behält das Labyrinth, die Zeiten und die Geschwindigkeiten des Automaten für jedes Level. Die Frucht erscheint zweimal pro Feld unter dem Geisterhaus.
+pm_help_games_2 = **Ms. Pac-Pac** wechselt das Labyrinth mit den Leveln, schickt ihre Frucht hüpfend durch die Tunnel und lässt die Geister zu Beginn zufällig umherstreifen.
+pm_help_scoring = Punkte
+pm_help_scoring_1 = Ein Punkt bringt 10, eine Kraftpille 50. Die Frucht ist je nach Level 100 bis 5.000 wert. Bei 10.000 Punkten gibt es ein Extraleben. Du startest mit drei.
+pm_pad = Steuerkreuz

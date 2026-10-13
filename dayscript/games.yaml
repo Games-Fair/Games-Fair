@@ -43,6 +43,10 @@ flow:
   - pause: { secs: 0.6 }
   - nav_back: {}
   - pause: { secs: 0.5 }
+  - navigate: { route: pacpac }
+  - pause: { secs: 0.6 }
+  - nav_back: {}
+  - pause: { secs: 0.5 }
   # Block Blast from the keyboard, on a fresh Normal deal so the pieces are the seeded ones
   # (dayscript/blockblast.yaml explains the moves): three placements, then a fourth that
   # clears the top row, photographed while the preview is lit and mid-clear.
@@ -200,4 +204,18 @@ flow:
   - pause: { secs: 0.6 }
   - assert_visible: { id: pp-board }
   - screenshot: pipes
+  - nav_back: {}
+
+  # Pac-Pac: a fresh Pac-Pac round, photographed once READY! has given way to play.
+  - navigate: { route: pacpac }
+  - pause: { secs: 0.6 }
+  - tap: { id: pm-pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: pm-new-game }
+  - pause: { secs: 0.4 }
+  - tap: { id: pm-mode-pacpac }
+  - pause: { secs: 5.5 }
+  - key: { id: pm-canvas, key: "ArrowDown" }
+  - pause: { secs: 1.0 }
+  - screenshot: { name: pacpac, title: Pac-Pac, caption: "Pac-Pac and Ms. Pac-Pac at the arcade's pixels: the ghosts' real targets, the real speeds, and the sirens.", source: games/pacpac/src/lib.rs }
   - nav_back: {}

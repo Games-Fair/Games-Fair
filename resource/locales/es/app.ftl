@@ -445,3 +445,26 @@ mt_help_goals = Cada nivel muestra sus objetivos bajo la puntuación: alcanza la
 mt_help_keys = Usa las flechas e Intro para seleccionar e intercambiar. H resalta un intercambio válido; Intro lo juega. Pausar abre la configuración, las reglas y la opción de repetir. Puedes ajustar sonidos, vibraciones y movimiento reducido. El tablero y el progreso se guardan automáticamente.
 mt_complete_detail = Puedes repetir cualquier nivel para mejorar tu puntuación y tus estrellas.
 mt_matching = Combinando…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Nivel
+pm_mode_title = ¿Qué juego?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = El laberinto único, cuatro fantasmas con un plan y una fruta que espera bajo la casa de los fantasmas.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Cuatro laberintos con más túneles, una fruta que entra paseando y fantasmas que deambulan antes de cazar.
+pm_help_intro = Come todos los puntos del laberinto mientras cuatro fantasmas te persiguen. Vacía el tablero para pasar al siguiente nivel.
+pm_help_play = Cómo se juega
+pm_help_play_1 = • **Desliza** en cualquier parte de la pantalla, o mantén el mando bajo el laberinto, para girar. Con teclado, las flechas, WASD o HJKL dirigen, y P o Escape pausa. Un giro pedido con antelación se toma en la siguiente abertura.
+pm_help_play_2 = • Los túneles a los lados del laberinto llevan al otro lado. Los fantasmas van más despacio dentro.
+pm_help_play_3 = • Come un punto grande parpadeante y los fantasmas se vuelven azules: atrápalos por 200, 400, 800 y 1.600 puntos antes de que vuelvan a parpadear.
+pm_help_ghosts = Los fantasmas
+pm_help_ghosts_1 = Blinky te sigue. Pinky apunta por delante de ti. Inky se guía por Blinky. Clyde se aleja cuando se acerca. De vez en cuando todos se retiran a sus esquinas y luego vuelven.
+pm_help_ghosts_2 = La sirena sube a medida que se acaban los puntos, y Blinky acelera cuando quedan pocos.
+pm_help_games = Dos juegos
+pm_help_games_1 = **Pac-Pac** conserva el laberinto, los tiempos y las velocidades de la recreativa en cada nivel. La fruta aparece bajo la casa de los fantasmas dos veces por tablero.
+pm_help_games_2 = **Ms. Pac-Pac** cambia de laberinto con los niveles, hace rebotar su fruta por los túneles y deja que los fantasmas deambulen al azar al principio.
+pm_help_scoring = Puntuación
+pm_help_scoring_1 = Un punto vale 10 y una píldora de poder 50. La fruta vale de 100 a 5.000 según el nivel. Hay una vida extra a los 10.000 puntos. Empiezas con tres.
+pm_pad = Mando

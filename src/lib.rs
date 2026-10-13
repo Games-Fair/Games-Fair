@@ -42,6 +42,7 @@ day::routes! {
         Charades => "charades",
         MatchThree => "matchthree",
         Mines => "mines",
+        PacPac => "pacpac",
         Flipside => "flipside",
         Pipes => "pipes",
         Sirtet => "sirtet",
@@ -65,6 +66,7 @@ fn game_background(section: Section) -> Color {
         Section::Charades => charades::SURFACE,
         Section::MatchThree => matchthree::SURFACE,
         Section::Mines => mines::SURFACE,
+        Section::PacPac => pacpac::SURFACE,
         Section::Flipside => flipside::SURFACE,
         Section::Pipes => pipes::SURFACE,
         Section::Sirtet => sirtet::SURFACE,
@@ -201,6 +203,13 @@ fn home_page(open: Signal<Option<Section>>) -> impl Piece {
                     matchthree::matchthree_preview(),
                     "tile-matchthree",
                 ),
+                tile(
+                    open,
+                    Section::PacPac,
+                    res::str::nav_pacpac(),
+                    pacpac::pacpac_preview(),
+                    "tile-pacpac",
+                ),
             ))
             .spacing(16.0)
             .fit(RowFit::WrapColumns { run_spacing: 16.0 }),
@@ -229,6 +238,7 @@ fn game_cover(open: Signal<Option<Section>>) -> impl Piece {
             Section::Charades => charades::charades_page(),
             Section::MatchThree => matchthree::matchthree_page(),
             Section::Mines => mines::mines_page(),
+            Section::PacPac => pacpac::pacpac_page(),
             Section::Flipside => flipside::flipside_page(),
             Section::Pipes => pipes::pipes_page(),
             Section::Sirtet => sirtet::sirtet_page(),

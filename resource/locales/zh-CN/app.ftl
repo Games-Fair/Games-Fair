@@ -436,3 +436,26 @@ mt_help_goals = 每个关卡的目标都列在分数下方：达到目标分数�
 mt_help_keys = 用方向键和回车选择并交换。H 高亮一个可行交换，回车执行。暂停可打开设置、规则和重玩。音效、振动和减弱动态效果均可调整。棋盘和进度会自动保存。
 mt_complete_detail = 可重玩任意关卡，提高得分和星级。
 mt_matching = 消除中…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = 关卡
+pm_mode_title = 玩哪一款？
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = 唯一的迷宫、四只各有打算的幽灵，以及在幽灵屋下等待的水果。
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = 四座隧道更多的迷宫、会四处游走的水果，以及先闲逛再追击的幽灵。
+pm_help_intro = 在四只幽灵的追赶下吃光迷宫里的所有豆子。清空整张地图即可进入下一关。
+pm_help_play = 玩法
+pm_help_play_1 = • 在屏幕任意位置**滑动**，或按住迷宫下方的方向盘，即可转向。键盘上用方向键、WASD 或 HJKL 操控，P 或 Esc 暂停。提前输入的转向会在下一个路口生效。
+pm_help_play_2 = • 迷宫两侧的隧道通向另一边。幽灵在隧道里会减速。
+pm_help_play_3 = • 吃下闪烁的大豆子，幽灵会变蓝：趁它们闪回之前抓住，可得 200、400、800 和 1,600 分。
+pm_help_ghosts = 幽灵
+pm_help_ghosts_1 = Blinky 紧跟着你。Pinky 瞄准你的前方。Inky 以 Blinky 为参照。Clyde 一靠近就走开。它们时不时会退回各自的角落，然后再回来。
+pm_help_ghosts_2 = 豆子越少，警报声越急，只剩几颗时 Blinky 会加速。
+pm_help_games = 两款游戏
+pm_help_games_1 = **Pac-Pac**保留街机每一关的迷宫、节奏和速度。每张地图上水果会在幽灵屋下方出现两次。
+pm_help_games_2 = **Ms. Pac-Pac**随关卡更换迷宫，让水果在隧道间蹦跳穿行，开局时幽灵会随机闲逛。
+pm_help_scoring = 计分
+pm_help_scoring_1 = 一颗豆子 10 分，一颗能量豆 50 分。水果随关卡从 100 分升至 5,000 分。达到 10,000 分奖励一条命。开局有三条命。
+pm_pad = 方向盘

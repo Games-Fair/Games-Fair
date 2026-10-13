@@ -445,3 +445,26 @@ mt_help_goals = Cada nível mostra seus objetivos abaixo da pontuação: alcance
 mt_help_keys = Use as setas e Enter para selecionar e trocar. H destaca uma troca válida; Enter a executa. Pausar abre ajustes, regras e a opção de jogar de novo. Sons, vibrações e movimento reduzido são ajustáveis. O tabuleiro e o progresso são salvos automaticamente.
 mt_complete_detail = Jogue qualquer nível de novo para melhorar sua pontuação e suas estrelas.
 mt_matching = Combinando…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Nível
+pm_mode_title = Qual jogo?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = O labirinto único, quatro fantasmas com um plano e uma fruta que espera sob a casa dos fantasmas.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Quatro labirintos com mais túneis, uma fruta que entra passeando e fantasmas que vagam antes de caçar.
+pm_help_intro = Coma todos os pontos do labirinto enquanto quatro fantasmas perseguem você. Limpe o tabuleiro para chegar ao próximo nível.
+pm_help_play = Como jogar
+pm_help_play_1 = • **Deslize** em qualquer lugar da tela, ou segure o direcional abaixo do labirinto, para virar. No teclado, as setas, WASD ou HJKL guiam, e P ou Esc pausa. Uma curva pedida antes da hora é feita na próxima abertura.
+pm_help_play_2 = • Os túneis nas laterais do labirinto levam ao outro lado. Os fantasmas ficam mais lentos dentro deles.
+pm_help_play_3 = • Coma um ponto grande piscando e os fantasmas ficam azuis: pegue-os por 200, 400, 800 e 1.600 pontos antes que voltem a piscar.
+pm_help_ghosts = Os fantasmas
+pm_help_ghosts_1 = Blinky segue você. Pinky mira à sua frente. Inky se guia por Blinky. Clyde se afasta quando chega perto. De vez em quando todos recuam para seus cantos e depois voltam.
+pm_help_ghosts_2 = A sirene sobe conforme os pontos acabam, e Blinky acelera quando sobram poucos.
+pm_help_games = Dois jogos
+pm_help_games_1 = **Pac-Pac** mantém o labirinto, os tempos e as velocidades do fliperama em cada nível. A fruta aparece sob a casa dos fantasmas duas vezes por tabuleiro.
+pm_help_games_2 = **Ms. Pac-Pac** troca de labirinto com os níveis, manda sua fruta quicando pelos túneis e deixa os fantasmas vagarem ao acaso no começo.
+pm_help_scoring = Pontuação
+pm_help_scoring_1 = Um ponto vale 10 e uma pílula de poder, 50. A fruta vale de 100 a 5.000 conforme os níveis sobem. Uma vida extra vem aos 10.000 pontos. Você começa com três.
+pm_pad = Direcional

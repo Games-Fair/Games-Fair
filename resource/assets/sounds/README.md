@@ -33,6 +33,12 @@ ffmpeg -i in.ogg -af "$trim,volume=<target − peak>dB" -ac 1 -ar 44100 -c:a pcm
   -map_metadata -1 -fflags +bitexact -flags:a +bitexact out.wav
 ```
 
+The `pacpac/` clips are not from a pack: `scripts/pacpac-sounds.py` synthesizes them in the
+voice of the arcade's three-channel wavetable chip (32-step tables swept in pitch), and its
+`README` there says nothing more because there is nothing to credit. Rebuild them with
+`python3 scripts/pacpac-sounds.py`. The sirens, the fright warble and the eyes' retreat are each
+one second of whole cycles, restarted by the game just before they end.
+
 `sudoku/clear` is the release of the `sudoku/place` key: it is made from `sudoku/place` itself,
 pitched up by five semitones (which also shortens it), thinned with a high-pass, faded out after
 30 ms, and set 3 dB under the press at −12 dBFS.

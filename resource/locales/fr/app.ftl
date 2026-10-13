@@ -445,3 +445,26 @@ mt_help_goals = Chaque niveau affiche ses objectifs sous le score : atteignez le
 mt_help_keys = Au clavier : flèches et Entrée pour sélectionner et échanger. H met en évidence un échange possible ; Entrée le joue. Pause ouvre les paramètres, les règles et l'option Rejouer. Sons, vibrations et animations réduites sont réglables. La grille et la progression se sauvegardent automatiquement.
 mt_complete_detail = Vous pouvez rejouer n'importe quel niveau pour améliorer votre score et vos étoiles.
 mt_matching = Alignement…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Niveau
+pm_mode_title = Quel jeu ?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = Le labyrinthe unique, quatre fantômes qui ont un plan, et un fruit qui attend sous la maison des fantômes.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Quatre labyrinthes avec plus de tunnels, un fruit qui se promène, et des fantômes qui errent avant de chasser.
+pm_help_intro = Mangez chaque point du labyrinthe pendant que quatre fantômes vous poursuivent. Videz le plateau pour passer au niveau suivant.
+pm_help_play = Comment jouer
+pm_help_play_1 = • **Glissez** n'importe où sur l'écran, ou tenez le pad sous le labyrinthe, pour tourner. Au clavier, les flèches, WASD ou HJKL dirigent, et P ou Échap met en pause. Un virage demandé à l'avance est pris à la prochaine ouverture.
+pm_help_play_2 = • Les tunnels sur les côtés du labyrinthe mènent de l'autre côté. Les fantômes y ralentissent.
+pm_help_play_3 = • Mangez un gros point clignotant et les fantômes deviennent bleus : attrapez-les pour 200, 400, 800 et 1 600 points avant qu'ils ne clignotent.
+pm_help_ghosts = Les fantômes
+pm_help_ghosts_1 = Blinky vous suit. Pinky vise devant vous. Inky prend exemple sur Blinky. Clyde s'éloigne quand il s'approche. De temps en temps, ils se replient tous dans leur coin, puis reviennent.
+pm_help_ghosts_2 = La sirène monte à mesure que les points disparaissent, et Blinky accélère quand il n'en reste que quelques-uns.
+pm_help_games = Deux jeux
+pm_help_games_1 = **Pac-Pac** garde le labyrinthe, les durées et les vitesses de la borne d'arcade à chaque niveau. Le fruit apparaît sous la maison des fantômes deux fois par plateau.
+pm_help_games_2 = **Ms. Pac-Pac** change de labyrinthe au fil des niveaux, fait rebondir son fruit à travers les tunnels et laisse les fantômes errer au hasard au début.
+pm_help_scoring = Score
+pm_help_scoring_1 = Un point vaut 10, une super pastille 50. Le fruit vaut de 100 à 5 000 selon le niveau. Une vie supplémentaire arrive à 10 000 points. Vous en avez trois au départ.
+pm_pad = Pad directionnel

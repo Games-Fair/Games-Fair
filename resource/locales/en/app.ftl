@@ -446,3 +446,26 @@ mt_help_goals = Each level lists its goals under the score: reach the target sco
 mt_help_keys = Use arrows and Enter to select and swap. H highlights a legal swap; Enter plays it. Pause opens settings, rules, and replay. Sounds, vibrations, and reduced motion are adjustable. Your board and progress save automatically.
 mt_complete_detail = You can replay any level to improve your score and star rating.
 mt_matching = Matching…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Level
+pm_mode_title = Which game?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = The one maze, four ghosts with a plan, and fruit that waits under the ghost house.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Four mazes with more tunnels, fruit that wanders in, and ghosts that roam before they hunt.
+pm_help_intro = Eat every dot in the maze while four ghosts chase you. Clear the board to reach the next level.
+pm_help_play = How to play
+pm_help_play_1 = • **Swipe** anywhere on the screen, or hold the joypad under the maze, to turn. On a keyboard the arrows, WASD or HJKL steer, and P or Escape pauses. A turn asked for early is taken at the next opening.
+pm_help_play_2 = • The tunnels at the sides of the maze lead through to the other side. Ghosts slow down inside them.
+pm_help_play_3 = • Eat a large flashing dot and the ghosts turn blue: catch them for 200, 400, 800 and 1,600 points before they flash back.
+pm_help_ghosts = The ghosts
+pm_help_ghosts_1 = Blinky follows you. Pinky aims ahead of you. Inky takes his cue from Blinky. Clyde wanders off when he gets close. Every so often they all retreat to their corners, then come back.
+pm_help_ghosts_2 = The siren climbs as the dots run out, and Blinky speeds up when only a few are left.
+pm_help_games = Two games
+pm_help_games_1 = **Pac-Pac** keeps the arcade's maze, timings and speeds for every level. Fruit appears below the ghost house twice a board.
+pm_help_games_2 = **Ms. Pac-Pac** changes the maze as the levels go by, sends her fruit bouncing through the tunnels, and lets the ghosts wander at random to start.
+pm_help_scoring = Scoring
+pm_help_scoring_1 = A dot is 10 points and an energizer 50. Fruit is worth from 100 to 5,000 as the levels climb. An extra life comes at 10,000 points. You start with three.
+pm_pad = Joypad

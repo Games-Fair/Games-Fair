@@ -58,6 +58,12 @@ flow:
   - nav_back: {}
   - pause: { secs: 0.6 }
 
+  - navigate: { route: pacpac }
+  - pause: { secs: 0.6 }
+  - assert_visible: { id: pm-canvas }
+  - nav_back: {}
+  - pause: { secs: 0.6 }
+
   - navigate: { route: pipes }
   - pause: { secs: 0.6 }
   - assert_visible: { id: pp-board }

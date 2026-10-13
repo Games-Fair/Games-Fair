@@ -20,6 +20,10 @@ flow:
   - pause: { secs: 0.4 }
   - nav_back: {}
   - pause: { secs: 0.4 }
+  - navigate: { route: pacpac }
+  - pause: { secs: 0.4 }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
   - navigate: { route: matchthree }
   - pause: { secs: 0.4 }
   - nav_back: {}
@@ -112,6 +116,22 @@ flow:
   - assert_visible: { id: fs-quit }
   - key: { id: fs-board, key: Escape }
   - assert_missing: { id: fs-pause-menu }
+  - tap: { id: close-game }
+  - wait_for: { id: home }
+  # pacpac
+  - navigate: { route: pacpac }
+  - wait_for: { id: pm-pause }
+  # Start from the pause menu (a saved game may already open there, or the game picker).
+  - tap: { id: pm-pause }
+  - wait_for: { id: pm-pause-menu }
+  - key: { id: pm-canvas, key: Escape }
+  - assert_missing: { id: pm-pause-menu }
+  - key: { id: pm-canvas, key: Escape }
+  - wait_for: { id: pm-pause-menu }
+  - assert_visible: { id: pm-resume }
+  - assert_visible: { id: pm-quit }
+  - key: { id: pm-canvas, key: Escape }
+  - assert_missing: { id: pm-pause-menu }
   - tap: { id: close-game }
   - wait_for: { id: home }
   # matchthree

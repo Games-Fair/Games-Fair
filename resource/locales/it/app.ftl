@@ -445,3 +445,26 @@ mt_help_goals = Ogni livello mostra i suoi obiettivi sotto il punteggio: raggiun
 mt_help_keys = Usa frecce e Invio per selezionare e scambiare. H evidenzia uno scambio valido; Invio lo esegue. Pausa apre impostazioni, regole e rigioca. Suoni, vibrazioni e movimento ridotto sono regolabili. Tabellone e progressi si salvano automaticamente.
 mt_complete_detail = Puoi rigiocare qualsiasi livello per migliorare punteggio e stelle.
 mt_matching = Combinazione…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Livello
+pm_mode_title = Quale gioco?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = L'unico labirinto, quattro fantasmi con un piano e un frutto che aspetta sotto la casa dei fantasmi.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Quattro labirinti con più tunnel, un frutto che entra a passeggio e fantasmi che vagano prima di cacciare.
+pm_help_intro = Mangia ogni puntino del labirinto mentre quattro fantasmi ti inseguono. Svuota lo schema per passare al livello successivo.
+pm_help_play = Come si gioca
+pm_help_play_1 = • **Scorri** ovunque sullo schermo, o tieni il pad sotto il labirinto, per svoltare. Con la tastiera, le frecce, WASD o HJKL guidano, e P o Esc mette in pausa. Una svolta chiesta in anticipo viene presa alla prossima apertura.
+pm_help_play_2 = • I tunnel ai lati del labirinto portano dall'altra parte. I fantasmi rallentano al loro interno.
+pm_help_play_3 = • Mangia un puntino grande lampeggiante e i fantasmi diventano blu: prendili per 200, 400, 800 e 1.600 punti prima che tornino a lampeggiare.
+pm_help_ghosts = I fantasmi
+pm_help_ghosts_1 = Blinky ti segue. Pinky punta davanti a te. Inky prende spunto da Blinky. Clyde si allontana quando è vicino. Ogni tanto si ritirano tutti nei loro angoli, poi tornano.
+pm_help_ghosts_2 = La sirena sale man mano che i puntini finiscono, e Blinky accelera quando ne restano pochi.
+pm_help_games = Due giochi
+pm_help_games_1 = **Pac-Pac** mantiene il labirinto, i tempi e le velocità del cabinato a ogni livello. Il frutto compare sotto la casa dei fantasmi due volte per schema.
+pm_help_games_2 = **Ms. Pac-Pac** cambia labirinto col passare dei livelli, fa rimbalzare il suo frutto nei tunnel e lascia i fantasmi vagare a caso all'inizio.
+pm_help_scoring = Punteggio
+pm_help_scoring_1 = Un puntino vale 10 punti, una pillola 50. Il frutto vale da 100 a 5.000 con il salire dei livelli. A 10.000 punti arriva una vita extra. Ne hai tre all'inizio.
+pm_pad = Pad direzionale

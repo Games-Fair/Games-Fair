@@ -436,3 +436,26 @@ mt_help_goals = Setiap level menampilkan tujuannya di bawah skor: capai skor tar
 mt_help_keys = Gunakan panah dan Enter untuk memilih dan menukar. H menyorot tukaran yang sah; Enter memainkannya. Jeda membuka pengaturan, aturan, dan ulangi level. Suara, getaran, dan pengurangan gerakan bisa diatur. Papan dan progresmu tersimpan otomatis.
 mt_complete_detail = Kamu bisa mengulang level mana pun untuk memperbaiki skor dan bintangmu.
 mt_matching = Mencocokkan…
+
+## Pac-Pac
+nav_pacpac = Pac-Pac
+pm_level_caption = Level
+pm_mode_title = Mau main yang mana?
+pm_mode_pacpac = Pac-Pac
+pm_mode_pacpac_detail = Satu labirin itu, empat hantu dengan rencana, dan buah yang menunggu di bawah rumah hantu.
+pm_mode_mspacpac = Ms. Pac-Pac
+pm_mode_mspacpac_detail = Empat labirin dengan lebih banyak terowongan, buah yang berkeliaran masuk, dan hantu yang berkelana sebelum berburu.
+pm_help_intro = Makan semua titik di labirin sementara empat hantu mengejarmu. Bersihkan papan untuk naik ke level berikutnya.
+pm_help_play = Cara bermain
+pm_help_play_1 = • **Usap** di mana saja pada layar, atau tahan pad di bawah labirin, untuk berbelok. Di keyboard, panah, WASD, atau HJKL mengemudi, dan P atau Escape menjeda. Belokan yang diminta lebih awal diambil di celah berikutnya.
+pm_help_play_2 = • Terowongan di sisi labirin tembus ke sisi lain. Hantu melambat di dalamnya.
+pm_help_play_3 = • Makan titik besar yang berkedip dan hantu berubah biru: tangkap mereka untuk 200, 400, 800, dan 1.600 poin sebelum mereka berkedip kembali.
+pm_help_ghosts = Para hantu
+pm_help_ghosts_1 = Blinky mengikutimu. Pinky membidik di depanmu. Inky mengikuti isyarat Blinky. Clyde menjauh saat sudah dekat. Sesekali mereka semua mundur ke sudutnya, lalu kembali.
+pm_help_ghosts_2 = Sirene makin tinggi saat titik makin habis, dan Blinky makin cepat saat tinggal sedikit.
+pm_help_games = Dua permainan
+pm_help_games_1 = **Pac-Pac** mempertahankan labirin, waktu, dan kecepatan arkade di setiap level. Buah muncul di bawah rumah hantu dua kali per papan.
+pm_help_games_2 = **Ms. Pac-Pac** mengganti labirin seiring level, mengirim buahnya memantul lewat terowongan, dan membiarkan hantu berkelana acak di awal.
+pm_help_scoring = Skor
+pm_help_scoring_1 = Satu titik 10 poin dan satu pil kekuatan 50. Buah bernilai 100 sampai 5.000 seiring level naik. Nyawa tambahan di 10.000 poin. Kamu mulai dengan tiga.
+pm_pad = Pad arah
