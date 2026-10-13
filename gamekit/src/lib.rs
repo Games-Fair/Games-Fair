@@ -172,7 +172,8 @@ pub fn close() {
 }
 
 /// Load the shell's shared clips and `clips` while the current scope (the game's page) is alive,
-/// and release every one of them when it closes. Call once from the game's page builder.
+/// and release every one of them when it closes, which also stops any loop still sounding
+/// ([`chrome::sound_loop`]). Call once from the game's page builder.
 pub fn sounds(clips: &'static [chrome::Sfx]) {
     day_part_sound::preload(chrome::cues::SHARED);
     day_part_sound::preload(clips);

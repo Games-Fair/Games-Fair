@@ -4,9 +4,10 @@
 short tables of 32 four-bit samples, swept in pitch, with no recordings or external samples.
 Rebuild: python3 scripts/pacpac-sounds.py
 
-The looping clips (the sirens, the fright warble, the eyes' retreat) are each exactly one
-second of whole cycles with a short fade at both ends, so the game can start one again just
-before the last ends and the join is seamless.
+The looping clips (the sirens, the fright warble, the eyes' retreat) are played as loops, which
+repeat a clip from its last sample straight to its first. Each is exactly one second and a whole
+number of cycles of its wave, with no fade at either end, so the repeat lands where the wave
+already was.
 """
 from pathlib import Path
 import math, struct, wave
@@ -43,6 +44,21 @@ def render(seconds, voices):
                 continue
             phases[v] = (phases[v] + freq / RATE) % 1.0
             out[i] += amp * table_sample(table, phases[v])
+    return out
+
+
+def render_loop(voice, seconds=1.0):
+    """One voice as a clip that closes on itself. Its frequencies are scaled by a hair (well
+    under a cent) so the wave completes a whole number of cycles in the clip, which puts the
+    last sample one step before the first."""
+    n = int(seconds * RATE)
+    steps = [voice(i / RATE) for i in range(n)]
+    cycles = sum(freq for freq, _, _ in steps) / RATE
+    k = round(cycles) / cycles
+    out, phase = [], 0.0
+    for freq, amp, table in steps:
+        phase = (phase + freq * k / RATE) % 1.0
+        out.append(amp * table_sample(table, phase))
     return out
 
 
@@ -96,13 +112,13 @@ def midi(n):
 # cycles a second to begin with, a little quicker and higher each time the dots thin out.
 # It sits well under the effects, so these peak low.
 for level, (lo, hi, cycles) in enumerate([(400, 560, 2), (440, 620, 2), (480, 700, 3), (540, 780, 3), (600, 880, 4)], 1):
-    write(f'siren_{level}', render(1.0, [sweep(lo, hi, cycles, SINE, 0.6, 'tri', 0.55)]), peak=0.5, fade=0.02)
+    write(f'siren_{level}', render_loop(sweep(lo, hi, cycles, SINE, 0.6, 'tri', 0.55)), peak=0.5, fade=0)
 
 # Frightened ghosts: a quick wobbling rise, over and over.
-write('fright', render(1.0, [sweep(240, 900, 8, TRI, 0.55, 'rise')]), peak=0.5, fade=0.02)
+write('fright', render_loop(sweep(240, 900, 8, TRI, 0.55, 'rise')), peak=0.5, fade=0)
 
 # Eyes going home: a fast, thin chirp that keeps rising.
-write('eyes', render(1.0, [sweep(900, 1900, 10, SINE, 0.45, 'rise')]), peak=0.45, fade=0.02)
+write('eyes', render_loop(sweep(900, 1900, 10, SINE, 0.45, 'rise')), peak=0.45, fade=0)
 
 # The chomp, in two halves that alternate: a dip and a rise through the buzzy table.
 def chomp(name, down):
@@ -163,10 +179,10 @@ write('intro', render(t + 0.2, voices), peak=0.85)
 
 # Her sirens: a lower, quicker wobble on the same smooth table.
 for level, (lo, hi, cycles) in enumerate([(300, 420, 3), (340, 480, 3), (390, 560, 4), (450, 650, 4), (520, 760, 5)], 1):
-    write(f'ms_siren_{level}', render(1.0, [sweep(lo, hi, cycles, SINE, 0.6, 'tri', 0.5)]), peak=0.5, fade=0.02)
+    write(f'ms_siren_{level}', render_loop(sweep(lo, hi, cycles, SINE, 0.6, 'tri', 0.5)), peak=0.5, fade=0)
 
 # Her fright: a bubbling descending loop.
-write('ms_fright', render(1.0, [sweep(900, 300, 6, TRI, 0.55, 'rise')]), peak=0.5, fade=0.02)
+write('ms_fright', render_loop(sweep(900, 300, 6, TRI, 0.55, 'rise')), peak=0.5, fade=0)
 
 # Her chomp: one short rising tweet.
 write('ms_chomp', render(0.09, [lambda t: (500 + 900 * t / 0.09, 0.65 * (1 - t / 0.09) ** 0.5, SINE)]), peak=0.7)

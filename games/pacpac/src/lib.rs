@@ -99,9 +99,26 @@ pub const SOUNDS: &[Sfx] = &[
     sfx("sounds/pacpac/eyes.wav"),
 ];
 
-/// The looping clips are each exactly one second of whole cycles, and are started again this
-/// often: the small overlap crossfades one onto the next.
-const LOOP_PERIOD: f64 = 0.97;
+/// The clips played as loops, which must each close on themselves (the app's sound test checks).
+pub const LOOPS: &[Sfx] = &[
+    sfx("sounds/pacpac/siren_1.wav"),
+    sfx("sounds/pacpac/siren_2.wav"),
+    sfx("sounds/pacpac/siren_3.wav"),
+    sfx("sounds/pacpac/siren_4.wav"),
+    sfx("sounds/pacpac/siren_5.wav"),
+    sfx("sounds/pacpac/ms_siren_1.wav"),
+    sfx("sounds/pacpac/ms_siren_2.wav"),
+    sfx("sounds/pacpac/ms_siren_3.wav"),
+    sfx("sounds/pacpac/ms_siren_4.wav"),
+    sfx("sounds/pacpac/ms_siren_5.wav"),
+    sfx("sounds/pacpac/fright.wav"),
+    sfx("sounds/pacpac/ms_fright.wav"),
+    sfx("sounds/pacpac/eyes.wav"),
+];
+
+/// The siren, the fright warble and the eyes' retreat are loops: one second of whole cycles
+/// each, repeated by the sound engine until the round has something else to say. They sit well
+/// under the effects.
 const LOOP_VOLUME: f32 = 0.35;
 
 // ---------------------------------------------------------------------------
@@ -382,13 +399,6 @@ enum Overlay {
     Instructions,
 }
 
-/// The loop that is sounding and when to sound it again.
-struct Loops {
-    clip: Option<&'static Sfx>,
-    now: f64,
-    next_at: f64,
-}
-
 struct Ui {
     game: Rc<RefCell<Game>>,
     /// The play layer: every frame while the round runs.
@@ -403,7 +413,9 @@ struct Ui {
     vibrations: Signal<bool>,
     /// Where the finger last steered from, while it is down.
     swipe_from: Cell<Option<Point>>,
-    loops: RefCell<Loops>,
+    /// The loop the round wants now, and the handle that keeps it sounding (none while the
+    /// Sounds setting is off). Dropping the handle stops the loop.
+    voice: RefCell<Option<(&'static Sfx, Option<chrome::SfxLoop>)>>,
     chomp_b: Cell<bool>,
     /// No game had been saved when the page opened, so the rules lead to the mode picker.
     fresh: Cell<bool>,
@@ -441,6 +453,11 @@ impl Ui {
     }
 
     fn show(&self, kind: Overlay) {
+        // The clock that drives the loops stops behind a card, so the card silences them; the
+        // first frame after it closes starts the right one again.
+        if kind != Overlay::None {
+            self.voice.replace(None);
+        }
         self.overlay.set(kind);
         self.repaint.notify();
         self.sync_maze();
@@ -477,7 +494,7 @@ impl Ui {
             g.best = best_for(mode);
         }
         gamekit::clear(SAVE_KEY);
-        self.loops.borrow_mut().clip = None;
+        self.voice.replace(None);
         self.fresh.set(false);
         self.show(Overlay::None);
     }
@@ -539,8 +556,9 @@ impl Ui {
         self.pad_repaint.notify();
     }
 
-    /// Keep the siren, the fright warble or the eyes' retreat sounding while the round plays.
-    fn drive_loops(&self, dt: f64) {
+    /// Keep the siren, the fright warble or the eyes' retreat sounding while the round plays:
+    /// start the one the round wants when it changes, and stop it the moment play does.
+    fn drive_loops(&self) {
         let want: Option<&'static Sfx> = {
             let g = self.game.borrow();
             if g.playing() {
@@ -557,24 +575,17 @@ impl Ui {
                 None
             }
         };
-        let mut l = self.loops.borrow_mut();
-        l.now += dt;
-        let same = match (want, l.clip) {
-            (Some(a), Some(b)) => a.as_str() == b.as_str(),
+        let mut voice = self.voice.borrow_mut();
+        let same = match (want, voice.as_ref()) {
+            (Some(a), Some((b, _))) => a.as_str() == b.as_str(),
             (None, None) => true,
             _ => false,
         };
         if !same {
-            l.clip = want;
-            if let Some(c) = want {
-                self.sound(c, LOOP_VOLUME);
-                l.next_at = l.now + LOOP_PERIOD;
-            }
-        } else if let Some(c) = want
-            && l.now >= l.next_at
-        {
-            self.sound(c, LOOP_VOLUME);
-            l.next_at = l.now + LOOP_PERIOD;
+            // The new loop starts before the old handle is dropped, so one hands over to the
+            // next without a gap.
+            let sounds = self.sounds.get_untracked();
+            *voice = want.map(|clip| (clip, chrome::sound_loop(sounds, clip, LOOP_VOLUME)));
         }
     }
 
@@ -674,11 +685,7 @@ pub fn pacpac_page() -> AnyPiece {
         sounds: Signal::new(settings.sounds),
         vibrations: Signal::new(settings.vibrations),
         swipe_from: Cell::new(None),
-        loops: RefCell::new(Loops {
-            clip: None,
-            now: 0.0,
-            next_at: 0.0,
-        }),
+        voice: RefCell::new(None),
         chomp_b: Cell::new(false),
         fresh: Cell::new(fresh),
         pointer_seen: Signal::new(false),
@@ -923,7 +930,7 @@ fn pacpac_clock(ui: Rc<Ui>) -> impl Piece {
                     save_best(mode, best);
                 }
             }
-            ui.drive_loops(dt);
+            ui.drive_loops();
             ui.repaint.notify();
             ui.sync_maze();
         },

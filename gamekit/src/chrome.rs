@@ -134,6 +134,16 @@ pub fn sound(enabled: bool, clip: &Sfx, volume: f32) {
     }
 }
 
+/// A clip repeating until this is dropped: a siren, an engine, rain.
+pub type SfxLoop = day_part_sound::Loop;
+
+/// Start `clip` repeating at `volume`, when sounds are on. Keep what this returns for as long as
+/// the sound should last: the loop stops when it is dropped, which is how a pause, a new round
+/// or a closing page ends it. With sounds off there is nothing to keep.
+pub fn sound_loop(enabled: bool, clip: &Sfx, volume: f32) -> Option<SfxLoop> {
+    enabled.then(|| day_part_sound::play_loop(clip, Play::at(volume)))
+}
+
 /// Play `clip` at `volume` after `delay_ms`, when sounds are on.
 pub fn sound_after(enabled: bool, clip: &Sfx, volume: f32, delay_ms: u32) {
     if !enabled {

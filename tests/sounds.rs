@@ -107,6 +107,47 @@ fn every_bundled_clip_is_played() {
     assert!(unused.is_empty(), "bundled clips nothing plays: {unused:?}");
 }
 
+/// A clip's samples, read from the canonical layout the test below holds every clip to: the
+/// `data` chunk's 16-bit words.
+fn samples(clip: &str) -> Vec<i16> {
+    let bytes = std::fs::read(assets().join(clip)).unwrap();
+    let mut at = 12;
+    while at + 8 <= bytes.len() {
+        let len = u32::from_le_bytes(bytes[at + 4..at + 8].try_into().unwrap()) as usize;
+        if &bytes[at..at + 4] == b"data" {
+            let (words, _) = bytes[at + 8..at + 8 + len].as_chunks::<2>();
+            return words.iter().map(|w| i16::from_le_bytes(*w)).collect();
+        }
+        at += 8 + len + (len & 1);
+    }
+    panic!("{clip} has no data chunk");
+}
+
+/// A loop repeats from its last sample straight to its first, so a looped clip has to arrive
+/// back where it started: the step across the repeat is no bigger than the steps inside the clip,
+/// and neither end fades (a fade would pulse once per repeat).
+#[test]
+fn looped_clips_close_on_themselves() {
+    for clip in pacpac::LOOPS {
+        let s = samples(clip.as_str());
+        let step = |a: i16, b: i16| (i32::from(a) - i32::from(b)).abs();
+        let inside = s.windows(2).map(|w| step(w[0], w[1])).max().unwrap();
+        let across = step(s[s.len() - 1], s[0]);
+        assert!(
+            across <= inside,
+            "{clip}: the repeat jumps {across}, more than any step inside it ({inside})"
+        );
+        // 256 samples hold a whole cycle of anything above 172 Hz, so an unfaded end reaches the
+        // clip's level inside them, and a fade of even a few milliseconds does not.
+        let peak = |part: &[i16]| part.iter().map(|v| i32::from(*v).abs()).max().unwrap();
+        let (head, body, tail) = (peak(&s[..256]), peak(&s), peak(&s[s.len() - 256..]));
+        assert!(
+            head * 10 >= body * 9 && tail * 10 >= body * 9,
+            "{clip}: an end is quieter than the clip ({head}, {tail} of {body})"
+        );
+    }
+}
+
 #[test]
 fn clips_are_16_bit_mono_44k_pcm() {
     let mut files = BTreeSet::new();
