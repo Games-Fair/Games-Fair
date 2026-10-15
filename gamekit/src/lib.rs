@@ -12,6 +12,11 @@
 //! [`on_background`] rides the same lifecycle handlers for a game that wants to react to
 //! leaving the foreground (a timed game pauses its clock) before its state is saved.
 //!
+//! Records (best scores, best times, win counts) are each game's own keys, but the shell's
+//! Settings › Records › Reset all records wipes every game's at once: each game crate exposes a
+//! `reset_records()` that clears its keys, and a game that is open registers [`on_reset_records`]
+//! so the bests it holds in memory follow (otherwise its next save would write them back).
+//!
 //! [`chrome`] is the shell every game shares: the pause menu, the results cards, the
 //! settings and how-to-play sheets, the pause button, and the haptic gate.
 
@@ -103,6 +108,8 @@ thread_local! {
     /// What the close button in a game's header does, registered by the shell ([`on_close`]).
     /// One at a time: the shell shows one game at a time.
     static CLOSE: RefCell<Option<Rc<dyn Fn()>>> = const { RefCell::new(None) };
+    /// How each open game forgets the records it holds in memory ([`on_reset_records`]).
+    static RESET_RECORDS: RefCell<HashMap<String, Rc<dyn Fn()>>> = RefCell::new(HashMap::new());
     static LIFECYCLE_HOOKED: Cell<bool> = const { Cell::new(false) };
 }
 
@@ -147,6 +154,37 @@ pub fn on_background(key: &'static str, f: impl Fn() + 'static) {
             m.borrow_mut().remove(key);
         });
     });
+}
+
+/// Keep `f` registered as the way `key`'s game forgets the records it holds in memory, for as
+/// long as the current scope (the game's page) is alive. The game's own `reset_records()` runs
+/// it through [`reset_live_records`] after clearing the stored keys, so a reset from the shell's
+/// Settings while the game is open on a desktop lands on the live bests too, and the game's next
+/// save writes the reset values rather than the old ones. Call once from the game's page builder.
+pub fn on_reset_records(key: &'static str, f: impl Fn() + 'static) {
+    let hook: Rc<dyn Fn()> = Rc::new(f);
+    RESET_RECORDS.with(|m| m.borrow_mut().insert(key.to_string(), hook));
+    Scope::current().on_cleanup(move || {
+        RESET_RECORDS.with(|m| {
+            m.borrow_mut().remove(key);
+        });
+    });
+}
+
+/// Run what `key`'s game registered with [`on_reset_records`], if it is open: true when it was.
+/// A closed game has nothing in memory; its stored records are already gone by the time this is
+/// asked.
+pub fn reset_live_records(key: &str) -> bool {
+    // Cloned out first: the hook may redraw or re-show an overlay, which must not find the
+    // registry borrowed.
+    let hook = RESET_RECORDS.with(|m| m.borrow().get(key).cloned());
+    match hook {
+        Some(f) => {
+            f();
+            true
+        }
+        None => false,
+    }
 }
 
 /// Register what leaving a game does, for as long as the current scope (the shell's game cover)
@@ -194,4 +232,26 @@ pub fn autosave<T: Serialize>(key: &'static str, snapshot: impl Fn() -> T + 'sta
             m.borrow_mut().remove(key);
         });
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A game's live hook runs while its page scope is alive and is forgotten with it.
+    #[test]
+    fn reset_hook_lives_with_its_scope() {
+        let ran = Rc::new(Cell::new(0));
+        let page = Scope::detached();
+        page.enter({
+            let ran = ran.clone();
+            move || on_reset_records("test.records", move || ran.set(ran.get() + 1))
+        });
+        assert!(reset_live_records("test.records"));
+        assert_eq!(ran.get(), 1);
+        assert!(!reset_live_records("other.records"));
+        page.dispose();
+        assert!(!reset_live_records("test.records"));
+        assert_eq!(ran.get(), 1);
+    }
 }

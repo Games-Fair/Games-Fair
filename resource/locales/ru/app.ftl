@@ -37,6 +37,14 @@ gk_reset_high_score_message = Рекорд будет навсегда сбро�
 gk_reset_confirm = Сбросить
 gk_game_over_heading = Игра окончена
 
+# The app's Settings (src/lib.rs)
+settings_sound = Звук и вибрация
+settings_sound_footer = Переключатели «Звуки» и «Вибрация» в игре принимают эти значения при её первом открытии. Измените их в меню паузы игры, чтобы настроить только её.
+settings_records = Рекорды
+settings_reset_records = Сбросить все рекорды
+settings_reset_records_caption = Лучшие результаты, лучшее время и выигранные партии во всех играх.
+settings_reset_records_confirm = Лучшие результаты, лучшее время и число выигранных партий во всех играх будут сброшены до нуля. Они хранятся только на этом устройстве, и восстановить их нельзя.
+
 # Breakout
 bk_level_caption = Уровень
 bk_lives = Жизни

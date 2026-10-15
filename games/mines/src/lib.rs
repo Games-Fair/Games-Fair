@@ -607,6 +607,14 @@ impl Ui {
 // The page
 // ---------------------------------------------------------------------------
 
+/// Forget the best times and win counts per board size. An open game's live copy follows
+/// through [`gamekit::on_reset_records`]. The settings card's button and the shell's Reset all
+/// records both come here.
+pub fn reset_records() {
+    gamekit::clear(RECORDS_KEY);
+    gamekit::reset_live_records(RECORDS_KEY);
+}
+
 /// The Mines screen.
 pub fn mines_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS_KEY).unwrap_or_default();
@@ -641,6 +649,14 @@ pub fn mines_page() -> AnyPiece {
         focus: Signal::new(true),
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(RECORDS_KEY, {
+        let u = ui.clone();
+        move || {
+            *u.records.borrow_mut() = Records::default();
+            u.repaint.notify();
+            u.hud.notify();
+        }
+    });
     gamekit::autosave(SAVE_KEY, {
         let ui = ui.clone();
         move || ui.board.borrow().save_state(ui.difficulty.get())
@@ -1415,28 +1431,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
         .width(300.0)
         .any()
     };
-    let reset = {
-        let u = ui.clone();
-        button(tr("mi_reset_records"))
-            .tint(chrome::RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("mi_reset_records_title"))
-                        .message(tr("mi_reset_records_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        *u.records.borrow_mut() = Records::default();
-                        gamekit::save(RECORDS_KEY, &*u.records.borrow());
-                        u.show(Overlay::Settings);
-                    }
-                });
-            })
-            .id("mi-reset-records")
-    };
+    let reset = button(tr("mi_reset_records"))
+        .tint(chrome::RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("mi_reset_records_title"))
+                    .message(tr("mi_reset_records_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("mi-reset-records");
     let done = ui.clone();
     chrome::card(
         column((

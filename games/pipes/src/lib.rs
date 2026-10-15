@@ -216,6 +216,13 @@ impl Ui {
     }
 }
 
+/// Forget the fewest-rotation records per board size: what the shell's Reset all records runs
+/// for this game. An open game's live copy follows through [`gamekit::on_reset_records`].
+pub fn reset_records() {
+    gamekit::clear(RECORDS);
+    gamekit::reset_live_records(RECORDS);
+}
+
 pub fn pipes_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS).unwrap_or_default();
     let game = gamekit::restore::<SaveState>(SAVE)
@@ -240,6 +247,13 @@ pub fn pipes_page() -> AnyPiece {
         records: RefCell::new(gamekit::restore(RECORDS).unwrap_or_default()),
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(RECORDS, {
+        let u = ui.clone();
+        move || {
+            *u.records.borrow_mut() = Records::default();
+            u.repaint.notify();
+        }
+    });
     gamekit::autosave(SAVE, {
         let u = ui.clone();
         move || u.game.borrow().save_state()

@@ -7,6 +7,7 @@
 use day_fluent::LocalizedText;
 use day_part_haptics::Haptic;
 use day_part_sound::{AssetName, Play};
+use day_piece_settings::Pref;
 use day_pieces::prelude::*;
 use day_reactive::Scope;
 use day_spec::{LineCap, LineJoin, StrokeStyle};
@@ -67,8 +68,17 @@ pub const TITLE: f64 = 22.0;
 /// The margin the header and the rows under it keep from the edges of the page.
 pub const EDGE: f64 = 8.0;
 
+/// The app-wide Sounds default (the shell's Settings › Sound & haptics): what a game's own
+/// Sounds switch starts at the first time that game opens. A game that has saved its settings
+/// keeps them, so the shell's switch seeds games and never overrides one; the game's pause-menu
+/// settings are where a player sets one game apart.
+pub static SOUNDS: Pref<bool> = Pref::new("games.sounds", || true);
+/// The app-wide Vibrations default, the same way.
+pub static VIBRATIONS: Pref<bool> = Pref::new("games.vibrations", || true);
+
 /// The settings every game keeps: sounds and haptics on or off, and whether the how-to-play sheet
-/// has opened by itself yet. Persisted per game under its own key.
+/// has opened by itself yet. Persisted per game under its own key; [`Default`] is what a game
+/// without a saved record starts from, seeded from [`SOUNDS`] and [`VIBRATIONS`].
 #[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct GameSettings {
     /// On by default, and on for a record saved before sounds existed.
@@ -86,8 +96,8 @@ pub fn on() -> bool {
 impl Default for GameSettings {
     fn default() -> Self {
         GameSettings {
-            sounds: true,
-            vibrations: true,
+            sounds: SOUNDS.get_untracked(),
+            vibrations: VIBRATIONS.get_untracked(),
             instructions_shown: false,
         }
     }

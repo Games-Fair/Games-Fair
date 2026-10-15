@@ -37,6 +37,14 @@ gk_reset_high_score_message = 最高分将永久重置为零。
 gk_reset_confirm = 重置
 gk_game_over_heading = 游戏结束
 
+# The app's Settings (src/lib.rs)
+settings_sound = 声音与振动
+settings_sound_footer = 每个游戏的「音效」和「振动」开关在首次打开时采用这里的设置。要单独调整某个游戏，请在该游戏的暂停菜单中更改。
+settings_records = 记录
+settings_reset_records = 重置所有记录
+settings_reset_records_caption = 所有游戏的最高分、最佳时间和获胜局数。
+settings_reset_records_confirm = 所有游戏的最高分、最佳时间和获胜局数将归零。这些记录仅保存在此设备上，无法恢复。
+
 # Breakout
 bk_level_caption = 等级
 bk_lives = 生命

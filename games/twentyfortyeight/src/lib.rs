@@ -855,6 +855,20 @@ impl Ui {
     }
 }
 
+/// Forget the high score: the stored record, and the best a saved game carries (it would come
+/// back as the record otherwise). An open game's live best follows through
+/// [`gamekit::on_reset_records`]. The settings card's button and the shell's Reset all records
+/// both come here.
+pub fn reset_records() {
+    gamekit::clear(RECORD_KEY);
+    if !gamekit::reset_live_records(SAVE_KEY)
+        && let Some(mut s) = gamekit::restore::<SaveState>(SAVE_KEY)
+    {
+        s.best = 0;
+        gamekit::save(SAVE_KEY, &s);
+    }
+}
+
 /// The 2048 screen.
 pub fn twentyfortyeight_page() -> AnyPiece {
     let settings = gamekit::restore::<chrome::GameSettings>(SETTINGS_KEY).unwrap_or_default();
@@ -878,6 +892,13 @@ pub fn twentyfortyeight_page() -> AnyPiece {
         move || game.borrow().save_state()
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(SAVE_KEY, {
+        let u = ui.clone();
+        move || {
+            u.game.borrow_mut().best = 0;
+            u.repaint.notify();
+        }
+    });
     Effect::new({
         let ui = ui.clone();
         move || {
@@ -1345,28 +1366,22 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
 }
 
 fn settings_card(ui: Rc<Ui>) -> AnyPiece {
-    let reset = {
-        let u = ui.clone();
-        button(tr("gk_reset_high_score"))
-            .tint(chrome::RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("gk_reset_high_score_title"))
-                        .message(tr("gk_reset_high_score_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        u.game.borrow_mut().best = 0;
-                        gamekit::clear(RECORD_KEY);
-                        u.repaint.notify();
-                    }
-                });
-            })
-            .id("tf-reset-high-score")
-    };
+    let reset = button(tr("gk_reset_high_score"))
+        .tint(chrome::RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("gk_reset_high_score_title"))
+                    .message(tr("gk_reset_high_score_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("tf-reset-high-score");
     let done = ui.clone();
     chrome::card(
         column((

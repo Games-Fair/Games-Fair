@@ -40,6 +40,9 @@ crate-type = ["rlib"]
 # crate; the lock is not committed, so a build takes the tip. Local development against a
 # checkout goes through the gitignored .cargo/config.toml that `day patch --local ../day` writes.
 day = { git = "https://github.com/daybrite/day.git", branch = "main" }
+# Settings and About (https://daybrite.dev/docs/settings): the Preferences window and menu items
+# on the desktops, the cover the home grid's gear opens on the phones and the web.
+day-piece-settings = { git = "https://github.com/daybrite/day.git", branch = "main" }
 blockblast = { path = "games/blockblast" }
 breakout = { path = "games/breakout" }
 charades = { path = "games/charades" }
@@ -56,6 +59,8 @@ twentyfortyeight = { path = "games/twentyfortyeight" }
 
 [dev-dependencies]
 day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
+# tests/records.rs reads the saves Reset all records leaves behind.
+serde_json = "1"
 day-mock = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-spec = { git = "https://github.com/daybrite/day.git", branch = "main" }
 

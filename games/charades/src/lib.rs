@@ -390,6 +390,14 @@ impl Ui {
     }
 }
 
+/// Forget the best scores and rounds played per deck. An open game's live copy follows through
+/// [`gamekit::on_reset_records`]. The settings card's button and the shell's Reset all records
+/// both come here.
+pub fn reset_records() {
+    gamekit::clear(RECORDS_KEY);
+    gamekit::reset_live_records(RECORDS_KEY);
+}
+
 /// The Charades screen.
 pub fn charades_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS_KEY).unwrap_or_default();
@@ -426,6 +434,13 @@ pub fn charades_page() -> AnyPiece {
         focus: Signal::new(true),
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(RECORDS_KEY, {
+        let u = ui.clone();
+        move || {
+            *u.records.borrow_mut() = Records::default();
+            u.repaint.notify();
+        }
+    });
 
     // The accelerometer streams while the page is open; the frame clock reads what arrived.
     if tilt_available {
@@ -1206,28 +1221,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
     } else {
         tr("ch_tilt_missing")
     };
-    let reset = {
-        let u = ui.clone();
-        button(tr("ch_reset_records"))
-            .tint(chrome::RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("ch_reset_records_title"))
-                        .message(tr("ch_reset_records_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        *u.records.borrow_mut() = Records::default();
-                        gamekit::save(RECORDS_KEY, &*u.records.borrow());
-                        u.show(Overlay::Settings);
-                    }
-                });
-            })
-            .id("ch-reset-records")
-    };
+    let reset = button(tr("ch_reset_records"))
+        .tint(chrome::RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("ch_reset_records_title"))
+                    .message(tr("ch_reset_records_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("ch-reset-records");
     let done = ui.clone();
     chrome::card(
         column((

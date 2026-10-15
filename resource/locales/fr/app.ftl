@@ -37,6 +37,14 @@ gk_reset_high_score_message = Le meilleur score sera définitivement remis à z�
 gk_reset_confirm = Réinitialiser
 gk_game_over_heading = Partie terminée
 
+# The app's Settings (src/lib.rs)
+settings_sound = Son et vibrations
+settings_sound_footer = Les réglages Sons et Vibrations d'un jeu prennent ces valeurs la première fois qu'il s'ouvre. Changez-les dans le menu pause du jeu pour ne régler que celui-ci.
+settings_records = Records
+settings_reset_records = Réinitialiser tous les records
+settings_reset_records_caption = Meilleurs scores, meilleurs temps et parties gagnées de tous les jeux.
+settings_reset_records_confirm = Les meilleurs scores, les meilleurs temps et les parties gagnées de tous les jeux reviennent à zéro. Ils ne sont conservés que sur cet appareil et ne peuvent pas être restaurés.
+
 # Breakout
 bk_level_caption = Niveau
 bk_lives = Vies

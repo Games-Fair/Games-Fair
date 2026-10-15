@@ -2454,9 +2454,10 @@ fn yes() -> bool {
 
 impl Default for Settings {
     fn default() -> Self {
+        let shell = gamekit::chrome::GameSettings::default();
         Settings {
-            sounds: true,
-            vibrations: true,
+            sounds: shell.sounds,
+            vibrations: shell.vibrations,
             instructions_shown: false,
             winnable: true,
         }
@@ -2766,6 +2767,14 @@ impl Ui {
     }
 }
 
+/// Forget the statistics: games played and won, best times and scores, streaks. An open game's
+/// live copy follows through [`gamekit::on_reset_records`]. The settings card's button and the
+/// shell's Reset all records both come here.
+pub fn reset_records() {
+    gamekit::clear(STATS_KEY);
+    gamekit::reset_live_records(STATS_KEY);
+}
+
 /// The Solitaire screen.
 pub fn solitaire_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS_KEY).unwrap_or_default();
@@ -2807,6 +2816,13 @@ pub fn solitaire_page() -> AnyPiece {
         }
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(STATS_KEY, {
+        let u = ui.clone();
+        move || {
+            *u.stats.borrow_mut() = Stats::default();
+            u.refresh();
+        }
+    });
     Effect::new({
         let ui = ui.clone();
         move || {
@@ -3435,28 +3451,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
         .width(300.0)
         .any()
     };
-    let reset = {
-        let u = ui.clone();
-        button(tr("sol_reset_stats"))
-            .tint(chrome::RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("sol_reset_stats_title"))
-                        .message(tr("sol_reset_stats_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        *u.stats.borrow_mut() = Stats::default();
-                        u.save_stats();
-                        u.show(Overlay::Settings);
-                    }
-                });
-            })
-            .id("sol-reset-stats")
-    };
+    let reset = button(tr("sol_reset_stats"))
+        .tint(chrome::RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("sol_reset_stats_title"))
+                    .message(tr("sol_reset_stats_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("sol-reset-stats");
     let done = ui.clone();
     chrome::card(
         column((

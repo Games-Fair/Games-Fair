@@ -37,6 +37,14 @@ gk_reset_high_score_message = Skor tertinggi akan direset ke nol secara permanen
 gk_reset_confirm = Atur Ulang
 gk_game_over_heading = Permainan berakhir
 
+# The app's Settings (src/lib.rs)
+settings_sound = Suara & getaran
+settings_sound_footer = Sakelar Suara dan Getaran sebuah game mengikuti pengaturan ini saat game itu pertama dibuka. Ubah di menu jeda game tersebut untuk mengaturnya secara terpisah.
+settings_records = Rekor
+settings_reset_records = Atur ulang semua rekor
+settings_reset_records_caption = Skor terbaik, waktu terbaik, dan permainan yang dimenangkan di setiap game.
+settings_reset_records_confirm = Skor terbaik, waktu terbaik, dan jumlah permainan yang dimenangkan di semua game kembali ke nol. Data ini hanya tersimpan di perangkat ini dan tidak dapat dipulihkan.
+
 # Breakout
 bk_level_caption = Level
 bk_lives = Nyawa

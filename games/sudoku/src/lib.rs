@@ -642,6 +642,14 @@ fn draw_glyph(d: &mut Draw, glyph: Glyph, c: Point, size: f64, color: Color) {
 // The page
 // ---------------------------------------------------------------------------
 
+/// Forget the best times and solve counts per difficulty. An open game's live copy follows
+/// through [`gamekit::on_reset_records`]. The settings card's button and the shell's Reset all
+/// records both come here.
+pub fn reset_records() {
+    gamekit::clear(RECORDS_KEY);
+    gamekit::reset_live_records(RECORDS_KEY);
+}
+
 /// The Sudoku screen.
 pub fn sudoku_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS_KEY).unwrap_or_default();
@@ -670,6 +678,13 @@ pub fn sudoku_page() -> AnyPiece {
         board_focus: Signal::new(true),
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(RECORDS_KEY, {
+        let u = ui.clone();
+        move || {
+            u.game.borrow_mut().records = Records::default();
+            u.board.notify();
+        }
+    });
 
     // Settings persist as they change; the first run also records that the instructions
     // have been offered.
@@ -1624,28 +1639,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             .any(),
         )
     };
-    let reset = {
-        let u = ui.clone();
-        button(tr("su_reset_records"))
-            .tint(RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("su_reset_title"))
-                        .message(tr("su_reset_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        u.game.borrow_mut().records = Records::default();
-                        gamekit::clear(RECORDS_KEY);
-                        u.board.notify();
-                    }
-                });
-            })
-            .id("su-reset-records")
-    };
+    let reset = button(tr("su_reset_records"))
+        .tint(RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("su_reset_title"))
+                    .message(tr("su_reset_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("su-reset-records");
     let difficulty_names: Vec<String> = DIFFICULTIES
         .iter()
         .map(|&d| difficulty_label(d).format())

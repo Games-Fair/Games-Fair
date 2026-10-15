@@ -37,6 +37,14 @@ gk_reset_high_score_message = ハイスコアを永久にゼロに戻します�
 gk_reset_confirm = リセット
 gk_game_over_heading = ゲーム終了
 
+# The app's Settings (src/lib.rs)
+settings_sound = サウンドと振動
+settings_sound_footer = 各ゲームの「効果音」と「振動」のスイッチは、初めて開いたときにこの設定で始まります。ゲームごとに変えるには、そのゲームのポーズメニューで切り替えてください。
+settings_records = 記録
+settings_reset_records = すべての記録をリセット
+settings_reset_records_caption = すべてのゲームのハイスコア、ベストタイム、勝利数。
+settings_reset_records_confirm = すべてのゲームのハイスコア、ベストタイム、勝利数がゼロに戻ります。記録はこの端末にのみ保存されており、元に戻せません。
+
 # Breakout
 bk_level_caption = レベル
 bk_lives = 残りライフ

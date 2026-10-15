@@ -37,6 +37,14 @@ gk_reset_high_score_message = सर्वोच्च स्कोर हमे
 gk_reset_confirm = रीसेट करें
 gk_game_over_heading = खेल समाप्त
 
+# The app's Settings (src/lib.rs)
+settings_sound = ध्वनि और कंपन
+settings_sound_footer = किसी गेम के ध्वनियाँ और कंपन स्विच पहली बार खोलने पर इन्हीं पर शुरू होते हैं। किसी एक गेम को अलग सेट करने के लिए उसके पॉज़ मेनू में बदलें।
+settings_records = रिकॉर्ड
+settings_reset_records = सभी रिकॉर्ड रीसेट करें
+settings_reset_records_caption = हर गेम के सर्वोच्च स्कोर, सबसे अच्छे समय और जीते गए खेल।
+settings_reset_records_confirm = सभी गेम के सर्वोच्च स्कोर, सबसे अच्छे समय और जीते गए खेल शून्य हो जाएँगे। ये केवल इसी डिवाइस पर सहेजे गए हैं और इन्हें वापस नहीं लाया जा सकता।
+
 # Breakout
 bk_level_caption = स्तर
 bk_lives = जीवन

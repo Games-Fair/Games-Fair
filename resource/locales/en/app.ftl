@@ -38,6 +38,15 @@ gk_reset_high_score_message = This will permanently reset the high score to zero
 gk_reset_confirm = Reset
 gk_game_over_heading = Game over
 
+# The app's Settings (src/lib.rs, https://daybrite.dev/docs/settings). General and About take
+# Day's own strings; these are the two groups the shell adds.
+settings_sound = Sound & haptics
+settings_sound_footer = A game's own Sounds and Vibrations switches start at these the first time it opens. Change them in that game's pause menu to set it apart.
+settings_records = Records
+settings_reset_records = Reset all records
+settings_reset_records_caption = Best scores, best times, and games won, in every game.
+settings_reset_records_confirm = Every game's best scores, best times, and games won go back to zero. They are kept only on this device and cannot be restored.
+
 # Breakout
 bk_level_caption = Level
 bk_lives = Lives

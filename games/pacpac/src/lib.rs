@@ -664,6 +664,15 @@ fn save_best(mode: Mode, best: i64) {
     gamekit::save(key, &best);
 }
 
+/// Forget both games' high scores (a save carries neither). An open game's live best follows
+/// through [`gamekit::on_reset_records`]. The settings card's button and the shell's Reset all
+/// records both come here.
+pub fn reset_records() {
+    gamekit::clear(BEST_PACPAC_KEY);
+    gamekit::clear(BEST_MSPACPAC_KEY);
+    gamekit::reset_live_records(SAVE_KEY);
+}
+
 /// The Pac-Pac screen.
 pub fn pacpac_page() -> AnyPiece {
     let settings = gamekit::restore::<chrome::GameSettings>(SETTINGS_KEY).unwrap_or_default();
@@ -698,6 +707,13 @@ pub fn pacpac_page() -> AnyPiece {
         move || game.borrow().save_state()
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(SAVE_KEY, {
+        let u = ui.clone();
+        move || {
+            u.game.borrow_mut().best = 0;
+            u.repaint.notify();
+        }
+    });
     Effect::new({
         let ui = ui.clone();
         move || {
@@ -1142,29 +1158,22 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
 }
 
 fn settings_card(ui: Rc<Ui>) -> AnyPiece {
-    let reset = {
-        let u = ui.clone();
-        button(tr("gk_reset_high_score"))
-            .tint(chrome::RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("gk_reset_high_score_title"))
-                        .message(tr("gk_reset_high_score_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        u.game.borrow_mut().best = 0;
-                        gamekit::clear(BEST_PACPAC_KEY);
-                        gamekit::clear(BEST_MSPACPAC_KEY);
-                        u.repaint.notify();
-                    }
-                });
-            })
-            .id("pm-reset-high-score")
-    };
+    let reset = button(tr("gk_reset_high_score"))
+        .tint(chrome::RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("gk_reset_high_score_title"))
+                    .message(tr("gk_reset_high_score_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("pm-reset-high-score");
     let done = ui.clone();
     chrome::card(
         column((

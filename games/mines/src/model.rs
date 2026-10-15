@@ -463,9 +463,10 @@ fn on() -> bool {
 
 impl Default for Settings {
     fn default() -> Self {
+        let shell = gamekit::chrome::GameSettings::default();
         Settings {
-            sounds: true,
-            vibrations: true,
+            sounds: shell.sounds,
+            vibrations: shell.vibrations,
             instructions_shown: false,
             difficulty: Difficulty::Easy,
         }

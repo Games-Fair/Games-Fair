@@ -37,6 +37,14 @@ gk_reset_high_score_message = ستُعاد أعلى نتيجة إلى الصفر
 gk_reset_confirm = إعادة تعيين
 gk_game_over_heading = انتهت اللعبة
 
+# The app's Settings (src/lib.rs)
+settings_sound = الصوت والاهتزاز
+settings_sound_footer = تبدأ مفاتيح المؤثرات الصوتية والاهتزازات في كل لعبة بهذه القيم عند فتحها للمرة الأولى. غيّرها من قائمة الإيقاف المؤقت في اللعبة لتخصيص تلك اللعبة وحدها.
+settings_records = الأرقام القياسية
+settings_reset_records = إعادة تعيين كل الأرقام القياسية
+settings_reset_records_caption = أعلى النتائج وأفضل الأوقات وعدد الجولات المكسوبة في كل الألعاب.
+settings_reset_records_confirm = ستعود أعلى النتائج وأفضل الأوقات وعدد الجولات المكسوبة في كل الألعاب إلى الصفر. وهي محفوظة على هذا الجهاز فقط ولا يمكن استرجاعها.
+
 # Breakout
 bk_level_caption = المستوى
 bk_lives = المحاولات

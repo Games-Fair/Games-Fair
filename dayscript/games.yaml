@@ -219,3 +219,14 @@ flow:
   - pause: { secs: 1.0 }
   - screenshot: { name: pacpac, title: Pac-Pac, caption: "Pac-Pac and Ms. Pac-Pac at the arcade's pixels: the ghosts' real targets, the real speeds, and the sirens.", source: games/pacpac/src/lib.rs }
   - nav_back: {}
+
+  # Settings is the shared surface (https://daybrite.dev/docs/settings): the app menu's
+  # Settings… item opens a window on a desktop; on a phone or the web, where there is no app
+  # menu, the gear beside the home title presents it as a cover whose root lists the groups.
+  # The cover draws inside the main window, so one capture key serves both.
+  - menu: { key: day-preferences, skip_on: [uikit, mdc, arkui, dom] }
+  - tap: { id: home-settings, only_on: [uikit, mdc, arkui, dom] }
+  - tap: { id: prefs-group-general, only_on: [uikit, mdc, arkui, dom] }
+  - wait_for: { id: language-picker }
+  - screenshot: { name: settings, window: day.preferences }
+  - close_window: { window: day.preferences }

@@ -37,6 +37,14 @@ gk_reset_high_score_message = Die Bestpunktzahl wird dauerhaft auf null zurückg
 gk_reset_confirm = Zurücksetzen
 gk_game_over_heading = Spiel vorbei
 
+# The app's Settings (src/lib.rs)
+settings_sound = Ton & Haptik
+settings_sound_footer = Die Schalter Töne und Vibrationen eines Spiels stehen beim ersten Öffnen so wie hier. Im Pausenmenü des Spiels lassen sie sich für dieses Spiel anders stellen.
+settings_records = Rekorde
+settings_reset_records = Alle Rekorde zurücksetzen
+settings_reset_records_caption = Bestpunktzahlen, Bestzeiten und gewonnene Spiele in jedem Spiel.
+settings_reset_records_confirm = Die Bestpunktzahlen, Bestzeiten und gewonnenen Spiele aller Spiele werden auf null gesetzt. Sie sind nur auf diesem Gerät gespeichert und lassen sich nicht wiederherstellen.
+
 # Breakout
 bk_level_caption = Stufe
 bk_lives = Leben

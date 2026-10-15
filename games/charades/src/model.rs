@@ -502,9 +502,10 @@ pub struct Settings {
 
 impl Default for Settings {
     fn default() -> Self {
+        let shell = gamekit::chrome::GameSettings::default();
         Settings {
-            sounds: true,
-            vibrations: true,
+            sounds: shell.sounds,
+            vibrations: shell.vibrations,
             instructions_shown: false,
             round_secs: 60,
             tilt: true,

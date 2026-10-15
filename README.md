@@ -94,6 +94,15 @@ number drops it. In Solitaire, 1 to 7 pick a column and another of those digits 
 a card and ↑ passes it. In Mines, the arrows move the pointer, Space or Return uncovers, and F
 plants a flag. In Pac-Pac, the arrows (or WASD, or HJKL) steer and P pauses.
 
+The app's own Settings hold what applies to every game: Appearance, Language (any of the 13
+the app ships), the Sounds and Vibrations a game starts with the first time it opens (a game
+you have changed keeps its own), and Reset all records, which clears every game's best scores,
+best times, and games won at once. About shows the version, links to this site and the source,
+and the licenses of the five bundled fonts. On a desktop, Settings… in the app menu (⌘, on a
+Mac) and About open them as windows; on a phone or in the browser, the gear beside the home
+title presents them. The surface is Day's shared one
+([day-piece-settings](https://daybrite.dev/docs/settings)).
+
 The home screen is a grid of tiles that fills the window's width and adds a column whenever
 the window has room for another tile. Each preview is drawn by the game's own crate with the same code that renders gameplay. Tapping a tile presents the game in a fullscreen cover with an X
 to exit. On the phones the games defer the system's edge gestures and disable interactive
@@ -129,7 +138,8 @@ from the keyboard and walks its menus, `flipside.yaml` checks captures, solo pla
 `pacpac.yaml` picks each game, steers a round from the keyboard, and walks the menus;
 `pacpac-pad.yaml` checks the web build's joypad against the window's width class;
 `solitaire.yaml` plays a proven-winnable deal from the
-keyboard, and `bk.yaml` and `games.yaml` sweep gameplay for screenshots:
+keyboard, and `bk.yaml` and `games.yaml` sweep gameplay for screenshots; `games.yaml` ends in
+the Settings window:
 
 ```sh
 day launch -p ios-uikit --script dayscript/games.yaml
@@ -138,7 +148,9 @@ day launch -p ios-uikit --script dayscript/games.yaml
 ## Inside the code
 
 - `src/lib.rs` is `root()`: the home grid and the fullscreen cover each game opens in, with typed
-  routes so deep links and dayscript can open a game by name.
+  routes so deep links and dayscript can open a game by name, and the Settings and About
+  declaration: General, Sound & haptics, Records, and the font licenses `build.rs` gathers from
+  `resource/font-licenses/`.
 - `games/blockblast`, `games/breakout`, `games/pacpac`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/flipside`, `games/pipes`, and
   `games/twentyfortyeight` are one crate per game: canvas or grid-layout UI, physics on the
   frame clock, and a serde save state.
@@ -154,7 +166,10 @@ day launch -p ios-uikit --script dayscript/games.yaml
   its elapsed-time readout is running.
 - `gamekit/` is also the shared persistence layer: each game's state is saved when its cover closes
   or the app is backgrounded, and restored the next time it opens. A game that keeps a clock
-  can also hook the backgrounding itself, which is how Sudoku pauses.
+  can also hook the backgrounding itself, which is how Sudoku pauses. Its `GameSettings`
+  default reads the app-wide Sounds and Vibrations prefs, which is how the Settings switches
+  seed a game that has never saved its own, and `on_reset_records` is how an open game's
+  bests follow Reset all records.
 - `resource/locales/en/app.ftl` carries every user-facing string.
 - `platform/` holds the thin native host projects the Apple, Android, and HarmonyOS targets
   build through.
@@ -165,7 +180,8 @@ closing/reopening animated covers. Run with `--env DAY_GAMES_SEED=15 --locale en
 settling without an extra frame, raw deltas, pause/resume baselines, and late delivery after
 scope cancellation. `tests/frame_sync.rs` mounts six real game pages and verifies native
 request counts across input, idle, AI responses, pause, held-piece pulses, hint searches, and
-scope disposal; it preserves and restores the preferences it exercises.
+scope disposal; it preserves and restores the preferences it exercises. `tests/records.rs` seeds
+every game's records and checks that Reset all records clears them, the same way.
 
 `day lint` checks routes, element ids, and locale coverage.
 

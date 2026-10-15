@@ -37,6 +37,14 @@ gk_reset_high_score_message = 최고 점수가 영구적으로 0으로 초기화
 gk_reset_confirm = 초기화
 gk_game_over_heading = 게임 종료
 
+# The app's Settings (src/lib.rs)
+settings_sound = 소리 및 진동
+settings_sound_footer = 각 게임의 효과음과 진동 스위치는 처음 열 때 이 설정으로 시작합니다. 특정 게임만 바꾸려면 그 게임의 일시정지 메뉴에서 조정하세요.
+settings_records = 기록
+settings_reset_records = 모든 기록 초기화
+settings_reset_records_caption = 모든 게임의 최고 점수, 최고 기록 시간, 승리 횟수.
+settings_reset_records_confirm = 모든 게임의 최고 점수, 최고 기록 시간, 승리 횟수가 0으로 돌아갑니다. 기록은 이 기기에만 저장되며 복구할 수 없습니다.
+
 # Breakout
 bk_level_caption = 레벨
 bk_lives = 목숨

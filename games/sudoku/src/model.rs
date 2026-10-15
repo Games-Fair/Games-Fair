@@ -184,9 +184,10 @@ impl DigitFont {
 
 impl Default for Settings {
     fn default() -> Self {
+        let shell = gamekit::chrome::GameSettings::default();
         Settings {
-            sounds: true,
-            vibrations: true,
+            sounds: shell.sounds,
+            vibrations: shell.vibrations,
             default_difficulty: Difficulty::Medium,
             instructions_shown: false,
             digit_font: DigitFont::default(),

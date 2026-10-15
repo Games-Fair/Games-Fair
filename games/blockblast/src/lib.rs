@@ -1515,6 +1515,20 @@ impl Ui {
     }
 }
 
+/// Forget the high score: the stored record, and the best a saved game in progress carries (it
+/// would come back as the record otherwise); the current score is the best again, as the
+/// settings card's button has always left it. An open game's live best follows through
+/// [`gamekit::on_reset_records`]. That button and the shell's Reset all records both come here.
+pub fn reset_records() {
+    gamekit::clear(RECORD_KEY);
+    if !gamekit::reset_live_records(SAVE_KEY)
+        && let Some(mut s) = gamekit::restore::<model::SaveState>(SAVE_KEY)
+    {
+        s.best = s.score;
+        gamekit::save(SAVE_KEY, &s);
+    }
+}
+
 /// The Block Blast screen.
 pub fn blockblast_page() -> AnyPiece {
     let settings = gamekit::restore::<chrome::GameSettings>(SETTINGS_KEY).unwrap_or_default();
@@ -1547,6 +1561,18 @@ pub fn blockblast_page() -> AnyPiece {
         move || play.borrow().model.save_state()
     });
     gamekit::sounds(SOUNDS);
+    gamekit::on_reset_records(SAVE_KEY, {
+        let u = ui.clone();
+        move || {
+            {
+                let mut p = u.play.borrow_mut();
+                p.model.best = p.model.score;
+                p.fx.shown_best = p.model.score as f64;
+            }
+            u.best_before.set(0);
+            u.hud.notify();
+        }
+    });
     Effect::new({
         let ui = ui.clone();
         move || {
@@ -1920,33 +1946,22 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
 }
 
 fn settings_card(ui: Rc<Ui>) -> AnyPiece {
-    let reset = {
-        let u = ui.clone();
-        button(tr("gk_reset_high_score"))
-            .tint(chrome::RED)
-            .action(move || {
-                let u = u.clone();
-                day_core::task(async move {
-                    let sure = Alert::new(tr("gk_reset_high_score_title"))
-                        .message(tr("gk_reset_high_score_message"))
-                        .destructive(tr("gk_reset_confirm"), true)
-                        .cancel(tr("gk_cancel"))
-                        .present()
-                        .await;
-                    if sure == Some(true) {
-                        {
-                            let mut p = u.play.borrow_mut();
-                            p.model.best = p.model.score;
-                            p.fx.shown_best = p.model.score as f64;
-                        }
-                        u.best_before.set(0);
-                        gamekit::clear(RECORD_KEY);
-                        u.hud.notify();
-                    }
-                });
-            })
-            .id("bb-reset-high-score")
-    };
+    let reset = button(tr("gk_reset_high_score"))
+        .tint(chrome::RED)
+        .action(|| {
+            day_core::task(async {
+                let sure = Alert::new(tr("gk_reset_high_score_title"))
+                    .message(tr("gk_reset_high_score_message"))
+                    .destructive(tr("gk_reset_confirm"), true)
+                    .cancel(tr("gk_cancel"))
+                    .present()
+                    .await;
+                if sure == Some(true) {
+                    reset_records();
+                }
+            });
+        })
+        .id("bb-reset-high-score");
     let done = ui.clone();
     chrome::card(
         column((
