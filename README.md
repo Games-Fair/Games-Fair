@@ -99,8 +99,8 @@ the app ships), the Sounds and Vibrations a game starts with the first time it o
 you have changed keeps its own), and Reset all records, which clears every game's best scores,
 best times, and games won at once. About shows the version, links to this site and the source,
 and the licenses of the five bundled fonts. On a desktop, Settings… in the app menu (⌘, on a
-Mac) and About open them as windows; on a phone or in the browser, the gear beside the home
-title presents them. The surface is Day's shared one
+Mac) and About open them as windows. In the browser, the same two items are in the menu button
+at the top right. On a phone, the gear beside the home title presents them. The surface is Day's shared one
 ([day-piece-settings](https://daybrite.dev/docs/settings)).
 
 The home screen is a grid of tiles that fills the window's width and adds a column whenever

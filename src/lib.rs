@@ -12,8 +12,8 @@
 //!
 //! Settings and About are the shared surface (https://daybrite.dev/docs/settings): Appearance
 //! and Language, the Sounds and Vibrations a game starts with, a reset for every game's records,
-//! and the bundled fonts' licenses. A desktop reaches it from the app menu; the phones and the
-//! web from the gear above the grid.
+//! and the bundled fonts' licenses. A desktop reaches it from the app menu, the web from its menu
+//! button, and the phones from the gear above the grid.
 
 use std::f64::consts::TAU;
 
@@ -105,8 +105,9 @@ pub fn root() -> impl Piece {
 }
 
 /// Settings and About (https://daybrite.dev/docs/settings). On a desktop `install()` adds the
-/// app menu's Settings… and About items and their windows; on a phone, HarmonyOS and the web
-/// the home grid's gear ([`settings_button`]) presents the same groups as a cover.
+/// app menu's Settings… and About items and their windows. The web's menu button carries the
+/// same items, and its Settings… presents the groups as a cover. On a phone and HarmonyOS, which
+/// have no app menu, the home grid's gear ([`settings_button`]) presents that cover.
 ///
 /// Sounds and Vibrations here are the app-wide defaults: what a game's own switches start at
 /// the first time it opens. A game that has saved its settings keeps them, so the switch in its
@@ -167,7 +168,8 @@ pub fn reset_all_records() {
     twentyfortyeight::reset_records();
 }
 
-/// The gear that opens Settings where the platform gives no menu bar to reach the window from.
+/// The gear that opens Settings where the platform gives no app menu to reach it from (the
+/// phones and HarmonyOS; `Prefs::in_nav`).
 /// Drawn like the games' pause button: a stroke glyph in the home page's ink, in a 44-point
 /// touch target.
 fn settings_button() -> AnyPiece {
