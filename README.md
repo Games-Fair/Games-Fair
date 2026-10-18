@@ -15,7 +15,7 @@ cargo install day-cli
 day launch --git https://github.com/Games-Fair/Games-Fair.git
 ```
 
-With no `-p`, the CLI picks the host's own toolkit (`macos-appkit`, `windows-xaml`, `linux-gtk`).
+With no `-p`, the CLI picks the host's own toolkit (`macos-appkit`, `windows-winui`, `linux-gtk`).
 Name a target to run elsewhere: `-p ios-uikit` for a booted Simulator, `-p android-mdc` for a
 running emulator or device, `-p harmony-arkui` for HarmonyOS, `-p web-dom` to serve the browser
 build. `day doctor` lists what each toolkit needs and prints the install command for anything
@@ -123,7 +123,7 @@ day launch -p ios-uikit          # needs a booted Simulator
 day launch -p android-mdc        # needs a JDK and a running emulator or device
 day launch -p harmony-arkui      # needs the OpenHarmony SDK and an emulator
 day launch -p web-dom            # builds the wasm bundle and serves it to your browser
-day build  -p windows-xaml       # build only (Windows builds on a Windows host)
+day build  -p windows-winui      # build only (Windows builds on a Windows host)
 ```
 
 To build from plain cargo, pass the backend feature yourself, for example
