@@ -1931,7 +1931,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
                 );
             }
         })
-        .a11y(|a| a.label(tr("bk_lives").format()))
+        .a11y(|a| a.label(tr("bk_lives")))
         .id("bk-lives")
         .frame(62.0, 22.0),
     ))
@@ -2012,28 +2012,19 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
         let u = ui.clone();
         when(move || u.overlay.get() != Overlay::None, chrome::scrim)
     };
-    let (p, l, g, s, i) = (ui.clone(), ui.clone(), ui.clone(), ui.clone(), ui.clone());
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(
-            Overlay::LevelComplete,
-            Rc::new(move || level_complete_card(l.clone())),
-        ),
-        card(
-            Overlay::GameOver,
-            Rc::new(move || game_over_card(g.clone())),
-        ),
-        card(Overlay::Settings, Rc::new(move || settings_card(s.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::LevelComplete => Some(level_complete_card(ui.clone())),
+            Overlay::GameOver => Some(game_over_card(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
+    );
+    zstack((scrim, card))
 }
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
@@ -2094,7 +2085,7 @@ fn level_complete_card(ui: Rc<Ui>) -> AnyPiece {
                 },
             ),
         ))
-        .spacing(16.0)
+        .spacing(Space::L)
         .align(HAlign::Center),
     )
     .id("bk-level-complete")
@@ -2142,7 +2133,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                     "bk-best",
                 ),
             ))
-            .spacing(24.0),
+            .spacing(Space::XL),
             record,
             chrome::menu_button(
                 tr("gk_play_again"),
@@ -2196,7 +2187,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.show(Overlay::Pause))
                 .id("bk-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id("bk-settings-card")

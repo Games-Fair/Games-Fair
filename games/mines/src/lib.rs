@@ -768,7 +768,7 @@ fn board_canvas(ui: Rc<Ui>) -> impl Piece {
     })
     .on_key(move |k| ku.key(&k.key))
     .focused(ui.focus)
-    .a11y(|a| a.label(tr("mi_board_a11y").format()))
+    .a11y(|a| a.label(tr("mi_board_a11y")))
     .id("mi-board")
     .grow()
 }
@@ -1159,14 +1159,14 @@ fn flag_toggle(ui: Rc<Ui>) -> AnyPiece {
             fu.cue(&cues::TICK);
             fu.hud.notify();
         })
-        .a11y(|a| a.label(tr("mi_flag_mode_a11y").format()).role(Role::Button))
+        .a11y(|a| a.label(tr("mi_flag_mode_a11y")).role(Role::Button))
         .id("mi-flag-mode")
         .frame(44.0, 44.0)
     };
     row((label(tr("mi_flag_mode")).color(chrome::TEXT), flag))
         .spacing(10.0)
         .align(VAlign::Center)
-        .padding(8.0)
+        .padding(Space::S)
         .any()
 }
 
@@ -1201,30 +1201,20 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
         let u = ui.clone();
         when(move || u.overlay.get() != Overlay::None, chrome::scrim)
     };
-    let (p, k, w, l, s, i) = (
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::Picker => Some(picker_card(ui.clone())),
+            Overlay::Won => Some(won_card(ui.clone())),
+            Overlay::Lost => Some(lost_card(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
     );
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(Overlay::Picker, Rc::new(move || picker_card(k.clone()))),
-        card(Overlay::Won, Rc::new(move || won_card(w.clone()))),
-        card(Overlay::Lost, Rc::new(move || lost_card(l.clone()))),
-        card(Overlay::Settings, Rc::new(move || settings_card(s.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    zstack((scrim, card))
 }
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
@@ -1296,7 +1286,7 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
                     .font(Font::Caption)
                     .color(chrome::TEXT_DIM),
                 ))
-                .spacing(4.0)
+                .spacing(Space::XS)
                 .align(HAlign::Leading)
                 .grow_w(),
                 check,
@@ -1306,7 +1296,7 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
             .background(tint.with_alpha(0.18))
             .corner_radius(14.0)
             .on_tap(move || u.new_game(d))
-            .a11y(move |a| a.label(difficulty_label(d).format()).role(Role::Button))
+            .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
             .width(300.0)
             .any(),
@@ -1319,12 +1309,12 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
                 .font(Font::Title2)
                 .bold()
                 .color(Color::WHITE),
-            column(PieceVec(rows)).spacing(12.0),
+            column(rows).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || u.pop())
                 .id("mi-cancel"),
         ))
-        .spacing(16.0)
+        .spacing(Space::L)
         .align(HAlign::Center),
     )
     .id("mi-picker")
@@ -1391,7 +1381,7 @@ fn end_card(ui: Rc<Ui>, won: bool) -> AnyPiece {
             ),
             chrome::close_game_button(chrome::RED, "mi-end-quit"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id(if won { "mi-won-card" } else { "mi-lost-card" })
@@ -1474,7 +1464,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.pop())
                 .id("mi-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id("mi-settings-card")

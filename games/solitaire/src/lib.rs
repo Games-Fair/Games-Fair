@@ -2944,7 +2944,7 @@ pub fn solitaire_page() -> AnyPiece {
             let a = ku.play.borrow_mut().key(&k.key);
             ku.acted(a);
         })
-        .a11y(|a| a.label(tr("sol_table_a11y").format()))
+        .a11y(|a| a.label(tr("sol_table_a11y")))
         .id("sol-canvas")
         .grow()
     };
@@ -3047,7 +3047,7 @@ fn tool_button(
             action(&au);
         }
     })
-    .a11y(move |a| a.label(a11y.format()).role(Role::Button))
+    .a11y(move |a| a.label(a11y).role(Role::Button))
     .id(id)
     .frame(44.0, 44.0)
     .any()
@@ -3118,9 +3118,9 @@ fn tools(ui: Rc<Ui>) -> AnyPiece {
         |u| u.undo(),
     );
     row((hint, undo))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(VAlign::Center)
-        .padding(8.0)
+        .padding(Space::S)
         .any()
 }
 
@@ -3191,30 +3191,20 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
         let u = ui.clone();
         when(move || u.overlay.get() != Overlay::None, chrome::scrim)
     };
-    let (p, w, s, d, g, i) = (
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::Win => Some(win_card(ui.clone())),
+            Overlay::Stuck => Some(stuck_card(ui.clone())),
+            Overlay::Draw => Some(draw_picker(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
     );
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(Overlay::Win, Rc::new(move || win_card(w.clone()))),
-        card(Overlay::Stuck, Rc::new(move || stuck_card(s.clone()))),
-        card(Overlay::Draw, Rc::new(move || draw_picker(d.clone()))),
-        card(Overlay::Settings, Rc::new(move || settings_card(g.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    zstack((scrim, card))
 }
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
@@ -3294,7 +3284,7 @@ fn win_card(ui: Rc<Ui>) -> AnyPiece {
                     "sol-final-score",
                 ),
             ))
-            .spacing(24.0),
+            .spacing(Space::XL),
             record,
             chrome::stat(
                 tr("sol_best_time"),
@@ -3389,7 +3379,7 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
                         .font(Font::Caption)
                         .color(chrome::TEXT_DIM),
                 ))
-                .spacing(4.0)
+                .spacing(Space::XS)
                 .align(HAlign::Leading)
                 .grow_w(),
                 check,
@@ -3399,7 +3389,7 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
             .background(tint.with_alpha(0.18))
             .corner_radius(14.0)
             .on_tap(move || u.new_game(m))
-            .a11y(move |a| a.label(draw_label(m).format()).role(Role::Button))
+            .a11y(move |a| a.label(draw_label(m)).role(Role::Button))
             .id(draw_id(m))
             .width(300.0)
             .any(),
@@ -3412,7 +3402,7 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
                 .font(Font::Title2)
                 .bold()
                 .color(Color::WHITE),
-            column(PieceVec(cards)).spacing(12.0),
+            column(cards).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || {
                     let back = u.return_to.replace(Overlay::None);
@@ -3420,7 +3410,7 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
                 })
                 .id("sol-cancel"),
         ))
-        .spacing(16.0)
+        .spacing(Space::L)
         .align(HAlign::Center),
     )
     .id("sol-draw-picker")
@@ -3497,7 +3487,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.show(Overlay::Pause))
                 .id("sol-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id("sol-settings-card")

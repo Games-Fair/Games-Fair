@@ -89,9 +89,6 @@ impl Difficulty {
             Difficulty::Expert => 3,
         }
     }
-    pub fn from_index(i: usize) -> Difficulty {
-        DIFFICULTIES.get(i).copied().unwrap_or(Difficulty::Medium)
-    }
 }
 
 /// One cell's editable state, as captured in history entries.
@@ -173,12 +170,6 @@ impl DigitFont {
             DigitFont::VarelaRound => "Varela Round",
             DigitFont::LibreBaskerville => "Libre Baskerville",
         }
-    }
-    pub fn index(self) -> usize {
-        DIGIT_FONTS.iter().position(|f| *f == self).unwrap_or(0)
-    }
-    pub fn from_index(i: usize) -> Self {
-        DIGIT_FONTS.get(i).copied().unwrap_or_default()
     }
 }
 

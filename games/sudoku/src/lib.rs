@@ -117,17 +117,16 @@ fn difficulty_id(d: Difficulty) -> &'static str {
     }
 }
 
-/// The digit font the player chose in settings, as an index into [`DIGIT_FONTS`]. One for the
+/// The digit font the player chose in settings. One for the
 /// app, read from the saved settings the first time anything draws a digit, so the home-screen
 /// tile uses the chosen face before the game has been opened, and every canvas that draws
 /// digits follows a change at once: reading it is what subscribes them.
-fn digit_choice() -> Signal<usize> {
+fn digit_choice() -> Signal<DigitFont> {
     thread_local! {
-        static CHOICE: Signal<usize> = Signal::global(
+        static CHOICE: Signal<DigitFont> = Signal::global(
             gamekit::restore::<Settings>(SETTINGS_KEY)
                 .unwrap_or_default()
-                .digit_font
-                .index(),
+                .digit_font,
         );
     }
     CHOICE.with(|s| *s)
@@ -137,11 +136,7 @@ fn digit_choice() -> Signal<usize> {
 /// distinguishing shape instead of thickening toward its neighbors. A tracked read.
 fn digit_font() -> CanvasFont {
     CanvasFont {
-        family: Some(
-            DigitFont::from_index(digit_choice().get())
-                .family()
-                .to_string(),
-        ),
+        family: Some(digit_choice().get().family().to_string()),
         weight: None,
         italic: false,
     }
@@ -202,7 +197,7 @@ struct Ui {
     return_to: Cell<Overlay>,
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
-    default_difficulty: Signal<usize>,
+    default_difficulty: Signal<Difficulty>,
     /// Whether the page's backdrop holds the keyboard. It takes it as the page mounts, and
     /// `show` hands it back whenever the board is uncovered, since a card's buttons can take it.
     board_focus: Signal<bool>,
@@ -266,7 +261,7 @@ impl Ui {
     }
 
     fn new_game(&self, d: Difficulty) {
-        self.default_difficulty.set(d.index());
+        self.default_difficulty.set(d);
         self.game.borrow_mut().new_game(d);
         gamekit::save(SAVE_KEY, &self.game.borrow().save_state());
         self.return_to.set(Overlay::None);
@@ -343,9 +338,9 @@ impl Ui {
         Settings {
             sounds: self.sounds.get_untracked(),
             vibrations: self.vibrations.get_untracked(),
-            default_difficulty: Difficulty::from_index(self.default_difficulty.get_untracked()),
+            default_difficulty: self.default_difficulty.get_untracked(),
             instructions_shown: true,
-            digit_font: DigitFont::from_index(digit_choice().get_untracked()),
+            digit_font: digit_choice().get_untracked(),
         }
     }
 }
@@ -674,7 +669,7 @@ pub fn sudoku_page() -> AnyPiece {
         return_to: Cell::new(Overlay::None),
         sounds: Signal::new(settings.sounds),
         vibrations: Signal::new(settings.vibrations),
-        default_difficulty: Signal::new(settings.default_difficulty.index()),
+        default_difficulty: Signal::new(settings.default_difficulty),
         board_focus: Signal::new(true),
     });
     gamekit::sounds(SOUNDS);
@@ -767,10 +762,8 @@ pub fn sudoku_page() -> AnyPiece {
         board_grid(ui.clone()),
         spacer(),
         control_pad(ui.clone()).padding(Insets {
-            top: 12.0,
-            leading: 12.0,
             bottom: 16.0,
-            trailing: 12.0,
+            ..Insets::all(12.0)
         }),
     ))
     .align(HAlign::Center)
@@ -852,7 +845,7 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
         for c in 0..9usize {
             cells.push(cell_piece(ui.clone(), r, c));
         }
-        rows.push(grid_row(PieceVec(cells)).any());
+        rows.push(grid_row(cells).any());
     }
     // The board's fill and rim sit under the cells: a canvas above them would take every
     // press on the web, where the topmost element gets the pointer (native toolkits let a
@@ -904,7 +897,7 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
     };
     zstack((
         rim,
-        grid(PieceVec(rows)).padding(BOARD_PAD).id("su-board"),
+        grid(rows).padding(BOARD_PAD).id("su-board"),
         pause_cover,
     ))
     .frame(BOARD, BOARD)
@@ -1099,11 +1092,11 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
         })
     };
     row((
-        column((notes, hint)).spacing(8.0),
+        column((notes, hint)).spacing(Space::S),
         number_pad(ui),
-        column((undo, checkpoint)).spacing(8.0),
+        column((undo, checkpoint)).spacing(Space::S),
     ))
-    .spacing(8.0)
+    .spacing(Space::S)
     .align(VAlign::Center)
 }
 
@@ -1116,9 +1109,9 @@ fn number_pad(ui: Rc<Ui>) -> impl Piece {
         for c in 1..=3u8 {
             keys.push(number_key(ui.clone(), r * 3 + c));
         }
-        rows.push(row(PieceVec(keys)).spacing(KEY_GAP).any());
+        rows.push(row(keys).spacing(KEY_GAP).any());
     }
-    column(PieceVec(rows)).spacing(KEY_GAP).id("su-keypad")
+    column(rows).spacing(KEY_GAP).id("su-keypad")
 }
 
 fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
@@ -1193,7 +1186,7 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
     .on_tap(move || tu.enter(digit))
     .on_key(move |k| ku.key(k))
     .a11y(move |a| {
-        a.label(tr("su_key_a11y").arg("n", digit as f64).format())
+        a.label(tr("su_key_a11y").arg("n", digit as f64))
             .role(Role::Button)
     })
     .id(format!("su-key-{digit}"))
@@ -1274,7 +1267,7 @@ fn split_button(
                 id: &'static str,
                 top: bool| {
         let (du, ku) = (ui.clone(), ui.clone());
-        let a11y_title = title.format();
+        let a11y_title = title.clone();
         canvas(move |d, sz| {
             du.board.track();
             let (w, h) = (sz.width, sz.height);
@@ -1356,30 +1349,24 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
             },
         )
     };
-    let (p, s, d, t, i) = (ui.clone(), ui.clone(), ui.clone(), ui.clone(), ui.clone());
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(Overlay::Solved, Rc::new(move || solved_card(s.clone()))),
-        card(
-            Overlay::Difficulty,
-            Rc::new(move || difficulty_picker(d.clone())),
-        ),
-        card(Overlay::Settings, Rc::new(move || settings_card(t.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::Solved => Some(solved_card(ui.clone())),
+            Overlay::Difficulty => Some(difficulty_picker(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
+    );
+    zstack((scrim, card))
 }
 
 fn card_frame(content: impl Piece) -> AnyPiece {
     content
-        .padding(24.0)
+        .padding(Space::XL)
         .background(CARD)
         .corner_radius(20.0)
         .max_width(380.0)
@@ -1478,18 +1465,22 @@ fn solved_card(ui: Rc<Ui>) -> AnyPiece {
         )
     };
     let record = if new_best {
-        label(tr("su_new_best"))
-            .font(Font::Title3)
-            .bold()
-            .color(GOLD)
-            .any()
+        Some(
+            label(tr("su_new_best"))
+                .font(Font::Title3)
+                .bold()
+                .color(GOLD)
+                .any(),
+        )
     } else if best > 0 {
-        label(tr("su_best").arg("time", fmt_time(best)))
-            .font(Font::Subheadline)
-            .color(TEXT_DIM)
-            .any()
+        Some(
+            label(tr("su_best").arg("time", fmt_time(best)))
+                .font(Font::Subheadline)
+                .color(TEXT_DIM)
+                .any(),
+        )
     } else {
-        spacer().height(0.0).any()
+        None
     };
     let u = ui;
     card_frame(
@@ -1558,7 +1549,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                         .font(Font::Caption)
                         .color(TEXT_DIM),
                 ))
-                .spacing(4.0)
+                .spacing(Space::XS)
                 .align(HAlign::Leading)
                 .grow_w(),
                 check,
@@ -1568,7 +1559,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .background(tint.with_alpha(0.18))
             .corner_radius(14.0)
             .on_tap(move || u.new_game(d))
-            .a11y(move |a| a.label(difficulty_label(d).format()).role(Role::Button))
+            .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
             .width(300.0)
             .any(),
@@ -1581,12 +1572,12 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                 .font(Font::Title2)
                 .bold()
                 .color(Color::WHITE),
-            column(PieceVec(cards)).spacing(12.0),
+            column(cards).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || u.pop())
                 .id("su-cancel"),
         ))
-        .spacing(16.0)
+        .spacing(Space::L)
         .align(HAlign::Center),
     )
     .id("su-difficulty-picker")
@@ -1655,12 +1646,6 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             });
         })
         .id("su-reset-records");
-    let difficulty_names: Vec<String> = DIFFICULTIES
-        .iter()
-        .map(|&d| difficulty_label(d).format())
-        .collect();
-    // Font names are the fonts' own, the same in every language.
-    let font_names: Vec<String> = DIGIT_FONTS.iter().map(|f| f.family().to_string()).collect();
     let done = ui.clone();
     card_frame(
         scroll(
@@ -1677,14 +1662,18 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 ),
                 setting_row(
                     tr("su_default_difficulty"),
-                    picker(difficulty_names, ui.default_difficulty)
-                        .menu()
-                        .id("su-default-difficulty")
-                        .any(),
+                    picker(
+                        ui.default_difficulty,
+                        DIFFICULTIES.map(|d| (d, difficulty_label(d))),
+                    )
+                    .menu()
+                    .id("su-default-difficulty")
+                    .any(),
                 ),
                 setting_row(
                     tr("su_digit_font"),
-                    picker(font_names, digit_choice())
+                    // Font names are the fonts' own, the same in every language.
+                    picker(digit_choice(), DIGIT_FONTS.map(|f| (f, f.family())))
                         .menu()
                         .id("su-digit-font")
                         .any(),
@@ -1707,7 +1696,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .width(300.0)
                 .height(44.0),
                 heading(tr("su_records")),
-                column(PieceVec(record_rows)).spacing(8.0),
+                column(record_rows).spacing(Space::S),
                 solved,
                 heading(tr("gk_data")),
                 reset,
@@ -1716,7 +1705,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     .action(move || done.pop())
                     .id("su-done"),
             ))
-            .spacing(12.0)
+            .spacing(Space::M)
             .align(HAlign::Center),
         )
         .height(440.0),
@@ -1786,7 +1775,7 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.pop())
                 .id("su-help-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Leading)
         .width(300.0),
     )

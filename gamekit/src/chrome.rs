@@ -323,7 +323,7 @@ const LEGIBLE: f64 = 10.0;
 /// legible size. A label in that spot wraps or ellipsizes instead, one letter per line at worst.
 /// Give it `.grow_w()` so it takes what the row has left.
 pub fn fitted_title(text: LocalizedText, size: f64, weight: FontWeight, color: Color) -> AnyPiece {
-    let spoken = text.format();
+    let spoken = text.clone();
     canvas(move |d, sz| {
         let s = text.format();
         let font = canvas_font(weight);
@@ -341,7 +341,7 @@ pub fn fitted_title(text: LocalizedText, size: f64, weight: FontWeight, color: C
             );
         }
     })
-    .a11y(move |a| a.label(spoken.clone()))
+    .a11y(move |a| a.label(spoken))
     .height(size * 1.5)
     .any()
 }
@@ -417,7 +417,7 @@ pub fn pause_button(
         );
     })
     .on_tap(action)
-    .a11y(move |a| a.label(a11y.format()).role(Role::Button))
+    .a11y(move |a| a.label(a11y).role(Role::Button))
     .id(id)
     .frame(44.0, 44.0)
     .any()
@@ -441,10 +441,7 @@ pub fn close_button() -> AnyPiece {
     .on_tap(move || {
         close.invoke();
     })
-    .a11y(|a| {
-        a.label(day_fluent::tr("gk_close").format())
-            .role(Role::Button)
-    })
+    .a11y(|a| a.label(day_fluent::tr("gk_close")).role(Role::Button))
     // The id every dayscript taps to leave a game.
     .id("close-game")
     .frame(BUTTON, BUTTON)
@@ -510,14 +507,12 @@ pub fn info_stat<M, C>(
 /// The row of readouts directly under the header: the score, the clock, whatever the game
 /// counts. Built from [`info_stat`]s, evenly spaced and centered.
 pub fn info_row(stats: Vec<AnyPiece>) -> AnyPiece {
-    row(PieceVec(stats))
+    row(stats)
         .spacing(28.0)
         .align(VAlign::Center)
         .padding(Insets {
-            top: 0.0,
-            leading: EDGE,
             bottom: 4.0,
-            trailing: EDGE,
+            ..Insets::horizontal(EDGE)
         })
         .any()
 }
@@ -539,15 +534,10 @@ pub fn game_frame(
     // slack to first, which leaves a play area that grows sitting at its smallest. A growing
     // stack centres instead: one that fills takes the whole box, one with a size of its own sits
     // in the middle of it.
-    let mut kids: Vec<AnyPiece> = vec![header];
-    if let Some(info) = info {
-        kids.push(info);
-    }
-    kids.push(zstack(PieceVec(vec![play])).grow().any());
-    if let Some(footer) = footer {
-        kids.push(footer);
-    }
-    column(PieceVec(kids)).align(HAlign::Center).grow().any()
+    column((header, info, zstack([play]).grow(), footer))
+        .align(HAlign::Center)
+        .grow()
+        .any()
 }
 
 /// The dimming layer under a card. Absorbs taps so the game underneath never hears them.
@@ -563,7 +553,7 @@ pub fn scrim() -> AnyPiece {
 /// The rounded dark card an overlay's content sits on.
 pub fn card(content: impl Piece) -> AnyPiece {
     content
-        .padding(24.0)
+        .padding(Space::XL)
         .background(CARD)
         .corner_radius(20.0)
         .max_width(380.0)
@@ -667,7 +657,7 @@ pub fn instructions_card(
         column((
             label(title).font(Font::Title2).bold().color(Color::WHITE),
             scroll(
-                column(PieceVec(pieces))
+                column(pieces)
                     .spacing(10.0)
                     .align(HAlign::Leading)
                     .width(300.0),
@@ -678,20 +668,15 @@ pub fn instructions_card(
                 .action(on_done)
                 .id(done_id),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Leading)
         .width(300.0),
     )
 }
 
 /// The shell's leave-game operation, shared by the canvas header and every pause/results card.
-pub fn close_command() -> CommandHandle {
-    Command {
-        id: "close-game",
-        label: day_fluent::tr("gk_close"),
-        action: crate::close,
-    }
-    .build()
+pub fn close_command() -> Command {
+    Command::new("close-game", day_fluent::tr("gk_close"), crate::close)
 }
 
 /// A pause/results-card presentation of the same command as the header's close glyph: "Close

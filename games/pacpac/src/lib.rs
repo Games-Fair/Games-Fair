@@ -914,7 +914,7 @@ fn joypad(ui: Rc<Ui>) -> impl Piece {
         tu.pad_touch(Some(p));
         tu.pad_touch(None);
     })
-    .a11y(|a| a.label(tr("pm_pad").format()))
+    .a11y(|a| a.label(tr("pm_pad")))
     .id("pm-pad")
     .frame(PAD_W, PAD_H)
 }
@@ -958,25 +958,19 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
         let u = ui.clone();
         when(move || u.overlay.get() != Overlay::None, chrome::scrim)
     };
-    let (p, m, g, s, i) = (ui.clone(), ui.clone(), ui.clone(), ui.clone(), ui.clone());
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(Overlay::ModePicker, Rc::new(move || mode_picker(m.clone()))),
-        card(
-            Overlay::GameOver,
-            Rc::new(move || game_over_card(g.clone())),
-        ),
-        card(Overlay::Settings, Rc::new(move || settings_card(s.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::ModePicker => Some(mode_picker(ui.clone())),
+            Overlay::GameOver => Some(game_over_card(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
+    );
+    zstack((scrim, card))
 }
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
@@ -1044,14 +1038,14 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
                 .frame(24.0, 24.0)
             },
         );
-        let spoken = title.format();
+        let spoken = title.clone();
         cards.push(
             row((
                 column((
                     label(title).font(Font::Title3).bold().color(Color::WHITE),
                     label(detail).font(Font::Caption).color(chrome::TEXT_DIM),
                 ))
-                .spacing(4.0)
+                .spacing(Space::XS)
                 .align(HAlign::Leading)
                 .grow_w(),
                 check,
@@ -1077,7 +1071,7 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
                 .font(Font::Title2)
                 .bold()
                 .color(Color::WHITE),
-            column(PieceVec(cards)).spacing(12.0),
+            column(cards).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || {
                     let back = u.return_to.replace(Overlay::None);
@@ -1085,7 +1079,7 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
                 })
                 .id("pm-cancel"),
         ))
-        .spacing(16.0)
+        .spacing(Space::L)
         .align(HAlign::Center),
     )
     .id("pm-mode-picker")
@@ -1140,7 +1134,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                     "pm-best",
                 ),
             ))
-            .spacing(24.0),
+            .spacing(Space::XL),
             record,
             chrome::menu_button(
                 tr("gk_play_again"),
@@ -1194,7 +1188,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.show(Overlay::Pause))
                 .id("pm-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id("pm-settings-card")

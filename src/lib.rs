@@ -32,18 +32,15 @@ const SOURCE: &str = "https://github.com/Games-Fair/Games-Fair";
 // Entry point for the mobile, macOS, and web hosts; a desktop binary enters through src/main.rs.
 day::day_start!(options: window(), root);
 
-/// Options for every window. The locale catalog and title go to `launch`, which installs them
-/// (https://daybrite.dev/docs/localization).
+/// Options for every window. The generated options carry the locale catalog, which `launch`
+/// installs (https://daybrite.dev/docs/localization), and the version About shows when the app
+/// runs outside `day build`; the title is the app metadata's, which flavor and target overrides
+/// reach.
 pub fn window() -> day::WindowOptions {
-    day::WindowOptions {
-        locales: Some((res::locales::DEFAULT, res::locales::CATALOG)),
-        title_fn: Some(|| res::str::app_title(APP_TITLE).format()),
+    res::window_options()
+        .title_fn(|| res::str::app_title(APP_TITLE).format())
         // Desktop only; phones fill the screen. Tall enough for the Sudoku board and keypad.
-        size: day::prelude::Size::new(720.0, 780.0),
-        // What About shows when the app runs outside `day build`, which exports the manifest's.
-        version: Some(env!("CARGO_PKG_VERSION").into()),
-        ..Default::default()
-    }
+        .size(720.0, 780.0)
 }
 
 // Typed names for everything under `resource/` (https://daybrite.dev/docs/resources).
@@ -204,7 +201,7 @@ fn settings_button() -> AnyPiece {
     .on_tap(|| {
         day_piece_settings::open();
     })
-    .a11y(|a| a.label(day::tr("day-settings").format()).role(Role::Button))
+    .a11y(|a| a.label(day::tr("day-settings")).role(Role::Button))
     .id("home-settings")
     .frame(gamekit::chrome::BUTTON, gamekit::chrome::BUTTON)
     .any()
@@ -218,7 +215,7 @@ fn tile(
     preview: AnyPiece,
     id: &'static str,
 ) -> impl Piece + use<> {
-    let a11y_title = title.format();
+    let a11y_title = title.clone();
     column((
         // Square at whatever width the tile's column gets.
         preview.grow_w().aspect_ratio(1.0).corner_radius(16.0),
@@ -228,7 +225,7 @@ fn tile(
     ))
     .spacing(10.0)
     .min_width(TILE_MIN)
-    .padding(12.0)
+    .padding(Space::M)
     .background(Color::rgba(1.0, 1.0, 1.0, 0.08))
     .corner_radius(20.0)
     .on_tap(move || open.set(Some(section)))
@@ -240,21 +237,20 @@ fn tile(
 
 fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Piece {
     // The title, and the Settings gear beside it where no menu bar offers the window.
-    let mut header: Vec<AnyPiece> = vec![
+    let header = row((
         label(res::str::app_title(APP_TITLE))
             .font(Font::Title)
             .bold()
             .color(Color::WHITE)
             .id("app-title")
-            .grow_w()
-            .any(),
-    ];
-    if settings_in_chrome {
-        header.push(settings_button());
-    }
+            .grow_w(),
+        settings_in_chrome.then(settings_button),
+    ))
+    .align(VAlign::Center)
+    .grow_w();
     scroll(
         column((
-            row(PieceVec(header)).align(VAlign::Center).grow_w(),
+            header,
             // As many columns as the narrowest tile allows, stretched to the window's width and
             // re-flowed as it resizes, so a new game is one more tile and never a layout change.
             row((
@@ -343,7 +339,7 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
                     "tile-pacpac",
                 ),
             ))
-            .spacing(16.0)
+            .spacing(Space::L)
             .fit(RowFit::WrapColumns { run_spacing: 16.0 }),
         ))
         .spacing(20.0)

@@ -327,9 +327,9 @@ pub fn flipside_page() -> AnyPiece {
             .color(chrome::TEXT_DIM)
             .align(TextAlign::Center),
     ))
-    .spacing(4.0)
+    .spacing(Space::XS)
     .align(HAlign::Center)
-    .padding(12.0)
+    .padding(Space::M)
     .any();
     let content = chrome::game_frame(header, Some(info), board_canvas(ui.clone()), Some(footer));
     let (c, t) = (ui.clone(), ui.clone());
@@ -388,7 +388,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     })
     .on_key(move |event| k.key(&event.key))
     .focused(ui.focus)
-    .a11y(|a| a.label(tr("fs_board_a11y").format()))
+    .a11y(|a| a.label(tr("fs_board_a11y")))
     .id("fs-board")
     .grow()
     .any()
@@ -519,26 +519,13 @@ fn draw_board(
     }
 }
 fn overlays(ui: Rc<Ui>) -> AnyPiece {
-    let mut layers = Vec::new();
-    let u = ui.clone();
-    layers.push(when(move || u.overlay.get() != Overlay::None, chrome::scrim).any());
-    for kind in [
-        Overlay::Pause,
-        Overlay::NewGame,
-        Overlay::Settings,
-        Overlay::Help,
-        Overlay::Result,
-    ] {
-        let (u, v) = (ui.clone(), ui.clone());
-        layers.push(
-            when(
-                move || u.overlay.get() == kind,
-                move || overlay_card(v.clone(), kind),
-            )
-            .any(),
-        );
-    }
-    zstack(PieceVec(layers)).any()
+    let (u, v) = (ui.clone(), ui.clone());
+    let scrim = when(move || u.overlay.get() != Overlay::None, chrome::scrim);
+    let cards = switch(
+        move || v.overlay.get(),
+        move |kind| (*kind != Overlay::None).then(|| overlay_card(ui.clone(), *kind)),
+    );
+    zstack((scrim, cards)).any()
 }
 fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
     if kind == Overlay::Help {
@@ -595,23 +582,16 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
             items.push(label(tr("fs_mode")).color(chrome::TEXT).any());
             items.push(
-                picker(
-                    vec![tr("fs_solo").format(), tr("fs_two_players").format()],
-                    ui.mode,
-                )
-                .segmented()
-                .id("fs-mode")
-                .any(),
+                picker(ui.mode, [(0, tr("fs_solo")), (1, tr("fs_two_players"))])
+                    .segmented()
+                    .id("fs-mode")
+                    .any(),
             );
             items.push(label(tr("fs_difficulty")).color(chrome::TEXT).any());
             items.push(
                 picker(
-                    vec![
-                        tr("fs_easy").format(),
-                        tr("fs_medium").format(),
-                        tr("fs_hard").format(),
-                    ],
                     ui.difficulty,
+                    [(0, tr("fs_easy")), (1, tr("fs_medium")), (2, tr("fs_hard"))],
                 )
                 .segmented()
                 .id("fs-difficulty")
@@ -679,7 +659,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
         Overlay::Settings => "fs-settings-card",
         _ => "fs-result",
     };
-    chrome::card(column(PieceVec(items)).spacing(14.0).align(HAlign::Center))
+    chrome::card(column(items).spacing(14.0).align(HAlign::Center))
         .id(id)
         .any()
 }

@@ -174,8 +174,8 @@ struct Ui {
     card: Trigger,
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
-    /// An index into `LENGTHS`.
-    length: Signal<usize>,
+    /// The round length in seconds, one of `LENGTHS`.
+    length: Signal<u32>,
     tilt_on: Signal<bool>,
     tilt_available: bool,
     locale: &'static str,
@@ -261,7 +261,7 @@ impl Ui {
             .borrow_mut()
             .deal(self.locale, deck.id, deck.words.len(), seed);
         let words = order.into_iter().map(|i| deck.words[i].clone()).collect();
-        let secs = LENGTHS[self.length.get_untracked().min(LENGTHS.len() - 1)];
+        let secs = self.length.get_untracked();
         *self.round.borrow_mut() = Some(Round::new(words, f64::from(secs)));
         *self.deck.borrow_mut() = Some(deck);
         self.round_seed.set(seed);
@@ -402,10 +402,6 @@ pub fn reset_records() {
 pub fn charades_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS_KEY).unwrap_or_default();
     let locale = model::resolve_locale(&day_fluent::locale().get_untracked());
-    let length = LENGTHS
-        .iter()
-        .position(|l| *l == settings.round_secs)
-        .unwrap_or(1);
     let tilt_available = day_part_sensors::is_available(SensorKind::Accelerometer);
     let ui = Rc::new(Ui {
         phase: Signal::new(Phase::Decks),
@@ -415,7 +411,7 @@ pub fn charades_page() -> AnyPiece {
         card: Trigger::new(),
         sounds: Signal::new(settings.sounds),
         vibrations: Signal::new(settings.vibrations),
-        length: Signal::new(length),
+        length: Signal::new(settings.round_secs),
         tilt_on: Signal::new(settings.tilt),
         tilt_available,
         locale,
@@ -473,7 +469,7 @@ pub fn charades_page() -> AnyPiece {
                     sounds: ui.sounds.get(),
                     vibrations: ui.vibrations.get(),
                     instructions_shown: true,
-                    round_secs: LENGTHS[ui.length.get().min(LENGTHS.len() - 1)],
+                    round_secs: ui.length.get(),
                     tilt: ui.tilt_on.get(),
                 },
             );
@@ -545,7 +541,7 @@ fn deck_screen(ui: Rc<Ui>) -> AnyPiece {
             .action(move || su.push(Overlay::Settings))
             .id("ch-settings"),
     ))
-    .spacing(8.0);
+    .spacing(Space::S);
     // The header stays out of the scroll, so the close button sits where every other game keeps
     // it however far down the decks are scrolled.
     column((
@@ -554,17 +550,16 @@ fn deck_screen(ui: Rc<Ui>) -> AnyPiece {
             column((
                 label(tr("ch_pick_deck")).color(chrome::TEXT),
                 tools,
-                row(PieceVec(tiles))
-                    .spacing(12.0)
+                row(tiles)
+                    .spacing(Space::M)
                     .fit(RowFit::WrapColumns { run_spacing: 12.0 }),
             ))
-            .spacing(16.0)
+            .spacing(Space::L)
             .align(HAlign::Leading)
             .padding(Insets {
                 top: 12.0,
-                leading: 16.0,
                 bottom: 24.0,
-                trailing: 16.0,
+                ..Insets::horizontal(16.0)
             }),
         )
         .grow(),
@@ -632,7 +627,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
                 .as_ref()
                 .and_then(|r| r.current().map(str::to_string))
                 .unwrap_or_default();
-            a.label(tr("ch_card_a11y").arg("word", word).format())
+            a.label(tr("ch_card_a11y").arg("word", word))
         }
     })
     .id("ch-canvas")
@@ -658,7 +653,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
                         .action(move || s.begin_countdown())
                         .id("ch-start"),
                 ))
-                .spacing(16.0)
+                .spacing(Space::L)
             },
         )
     };
@@ -683,7 +678,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
                         .id("ch-correct")
                         .grow_w(),
                 ))
-                .spacing(16.0)
+                .spacing(Space::L)
                 .max_width(520.0)
             },
         )
@@ -692,13 +687,11 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
     let header = chrome::game_header(tr("nav_charades"), "ch-pause", move || pu.pause());
     // Under the card: whichever of the two button rows this phase shows.
     let footer = column((ready, answers))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center)
         .padding(Insets {
-            top: 0.0,
-            leading: 24.0,
             bottom: 28.0,
-            trailing: 24.0,
+            ..Insets::horizontal(24.0)
         })
         .any();
     chrome::game_frame(header, None, card.any(), Some(footer))
@@ -1108,13 +1101,7 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
                 .color(chrome::GOLD)
         },
     );
-    let list = if empty {
-        spacer().height(0.0).any()
-    } else {
-        scroll(column(PieceVec(rows)).spacing(8.0))
-            .height(240.0)
-            .any()
-    };
+    let list = (!empty).then(|| scroll(column(rows).spacing(Space::S)).height(240.0));
     let card = chrome::card(
         column((
             label(title).font(Font::Headline).color(chrome::TEXT_DIM),
@@ -1152,20 +1139,17 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
         let u = ui.clone();
         when(move || u.overlay.get() != Overlay::None, chrome::scrim)
     };
-    let (p, s, i) = (ui.clone(), ui.clone(), ui.clone());
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(Overlay::Settings, Rc::new(move || settings_card(s.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
+    );
+    zstack((scrim, card))
 }
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
@@ -1211,10 +1195,6 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
 }
 
 fn settings_card(ui: Rc<Ui>) -> AnyPiece {
-    let lengths: Vec<String> = LENGTHS
-        .iter()
-        .map(|s| tr("ch_seconds").arg("n", f64::from(*s)).format())
-        .collect();
     let played: u32 = ui.records.borrow().played.values().sum();
     let tilt_detail = if ui.tilt_available {
         tr("ch_tilt_detail")
@@ -1252,10 +1232,13 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             ),
             chrome::setting_row(
                 tr("ch_round_length"),
-                picker(lengths, ui.length)
-                    .menu()
-                    .id("ch-round-length")
-                    .any(),
+                picker(
+                    ui.length,
+                    LENGTHS.map(|s| (s, tr("ch_seconds").arg("n", f64::from(s)))),
+                )
+                .menu()
+                .id("ch-round-length")
+                .any(),
             ),
             chrome::setting_row(
                 tr("ch_tilt"),
@@ -1283,7 +1266,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.pop())
                 .id("ch-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id("ch-settings-card")

@@ -43,6 +43,7 @@ struct Ui {
     cursor: Cell<usize>,
     size: Cell<Size>,
     lock_mode: Signal<bool>,
+    /// The board side the New Game card has chosen, one of `SIZES`.
     size_choice: Signal<usize>,
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
@@ -132,10 +133,7 @@ impl Ui {
         self.reset_ui();
     }
     fn start(&self) {
-        *self.game.borrow_mut() = SaveState::new(
-            SIZES[self.size_choice.get_untracked().min(2)],
-            gamekit::seed(),
-        );
+        *self.game.borrow_mut() = SaveState::new(self.size_choice.get_untracked(), gamekit::seed());
         self.reset_ui();
     }
     fn reset_ui(&self) {
@@ -230,7 +228,7 @@ pub fn pipes_page() -> AnyPiece {
         .unwrap_or_else(|| SaveState::new(5, gamekit::seed()));
     let ui = Rc::new(Ui {
         network: RefCell::new(game.network()),
-        size_choice: Signal::new(SIZES.iter().position(|&n| n == game.size).unwrap()),
+        size_choice: Signal::new(game.size),
         game: RefCell::new(game),
         overlay: Signal::new(Overlay::None),
         back: Cell::new(Overlay::None),
@@ -314,7 +312,7 @@ pub fn pipes_page() -> AnyPiece {
         toggle(ui.lock_mode).id("pp-lock-mode"),
     ))
     .spacing(10.0)
-    .padding(8.0)
+    .padding(Space::S)
     .width(200.0);
     let info = column((
         stats,
@@ -343,9 +341,9 @@ pub fn pipes_page() -> AnyPiece {
             .id("pp-selection"),
         controls,
     ))
-    .spacing(4.0)
+    .spacing(Space::XS)
     .align(HAlign::Center)
-    .padding(8.0)
+    .padding(Space::S)
     .any();
     let content = chrome::game_frame(header, Some(info), board_canvas(ui.clone()), Some(footer));
     let (c, t) = (ui.clone(), ui.clone());
@@ -405,7 +403,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     })
     .on_key(move |event| k.key(&event.key))
     .focused(ui.focus)
-    .a11y(|a| a.label(tr("pp_board_a11y").format()))
+    .a11y(|a| a.label(tr("pp_board_a11y")))
     .id("pp-board")
     .grow()
     .any()
@@ -549,26 +547,13 @@ fn draw_board(
     }
 }
 fn overlays(ui: Rc<Ui>) -> AnyPiece {
-    let mut layers = Vec::new();
-    let u = ui.clone();
-    layers.push(when(move || u.overlay.get() != Overlay::None, chrome::scrim).any());
-    for kind in [
-        Overlay::Pause,
-        Overlay::NewGame,
-        Overlay::Settings,
-        Overlay::Help,
-        Overlay::Result,
-    ] {
-        let (u, v) = (ui.clone(), ui.clone());
-        layers.push(
-            when(
-                move || u.overlay.get() == kind,
-                move || overlay_card(v.clone(), kind),
-            )
-            .any(),
-        );
-    }
-    zstack(PieceVec(layers)).any()
+    let (u, v) = (ui.clone(), ui.clone());
+    let scrim = when(move || u.overlay.get() != Overlay::None, chrome::scrim);
+    let cards = switch(
+        move || v.overlay.get(),
+        move |kind| (*kind != Overlay::None).then(|| overlay_card(ui.clone(), *kind)),
+    );
+    zstack((scrim, cards)).any()
 }
 fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
     if kind == Overlay::Help {
@@ -633,12 +618,12 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(label(tr("pp_size")).color(chrome::TEXT).any());
             items.push(
                 picker(
-                    vec![
-                        tr("pp_small").format(),
-                        tr("pp_medium").format(),
-                        tr("pp_large").format(),
-                    ],
                     ui.size_choice,
+                    [
+                        (SIZES[0], tr("pp_small")),
+                        (SIZES[1], tr("pp_medium")),
+                        (SIZES[2], tr("pp_large")),
+                    ],
                 )
                 .segmented()
                 .id("pp-size")
@@ -711,7 +696,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
         Overlay::Settings => "pp-settings-card",
         _ => "pp-result",
     };
-    chrome::card(column(PieceVec(items)).spacing(12.0).align(HAlign::Center))
+    chrome::card(column(items).spacing(Space::M).align(HAlign::Center))
         .id(id)
         .any()
 }

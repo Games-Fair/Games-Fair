@@ -110,8 +110,8 @@ struct Ui {
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
     reduced: Signal<bool>,
-    /// The chosen theme, as its place in [`THEMES`].
-    theme: Signal<usize>,
+    /// The chosen theme.
+    theme: Signal<Theme>,
     sparks: RefCell<fx::Sparks>,
     /// The resting board's starlight, and how long the board has been still (any touch or key
     /// resets it, and the starlight fades away).
@@ -150,7 +150,7 @@ fn cell_center(i: usize) -> (f64, f64) {
 }
 impl Ui {
     fn style(&self) -> &'static Style {
-        Theme::from_index(self.theme.get_untracked()).style()
+        self.theme.get_untracked().style()
     }
     fn tint(&self, i: u8) -> Color {
         (self.style().tint)(i)
@@ -742,7 +742,7 @@ pub fn matchthree_page() -> AnyPiece {
         sounds: Signal::new(settings.shell.sounds),
         vibrations: Signal::new(settings.shell.vibrations),
         reduced: Signal::new(settings.reduced),
-        theme: Signal::new(settings.theme.index()),
+        theme: Signal::new(settings.theme),
         sparks: RefCell::new(fx::Sparks::new()),
         idle: RefCell::new(fx::Idle::new()),
         calm: Cell::new(0.0),
@@ -753,7 +753,7 @@ pub fn matchthree_page() -> AnyPiece {
     // A new theme starts its effects afresh: particles and ambience of its own kind.
     let u = ui.clone();
     Effect::new(move || {
-        let motion = &Theme::from_index(u.theme.get()).style().motion;
+        let motion = &u.theme.get().style().motion;
         let mut sparks = u.sparks.borrow_mut();
         sparks.clear();
         sparks.finish = motion.finish;
@@ -779,7 +779,7 @@ pub fn matchthree_page() -> AnyPiece {
                     instructions_shown: true,
                 },
                 reduced: u.reduced.get(),
-                theme: Theme::from_index(u.theme.get()),
+                theme: u.theme.get(),
             },
         )
     });
@@ -822,15 +822,16 @@ pub fn matchthree_page() -> AnyPiece {
             color,
             id,
         );
-        stats.push(if kind == 1 {
-            stat.scale(move || {
-                pulse.repaint.track();
-                pulse.moves_scale()
-            })
-            .any()
-        } else {
-            stat
-        });
+        stats.push(
+            Decorated::new(stat)
+                .apply_if(kind == 1, |s| {
+                    s.scale(move || {
+                        pulse.repaint.track();
+                        pulse.moves_scale()
+                    })
+                })
+                .any(),
+        );
     }
     let u = ui.clone();
     // What is still missing, in words. Once the score is reached but other goals are not, it
@@ -906,10 +907,10 @@ pub fn matchthree_page() -> AnyPiece {
             footer_button(tr("mt_hint"), "mt-hint", move || h.hint()),
             footer_button(tr("mt_levels"), "mt-map", move || m.push(Overlay::Map)),
         ))
-        .spacing(24.0),
+        .spacing(Space::XL),
     ))
-    .spacing(8.0)
-    .padding(12.0)
+    .spacing(Space::S)
+    .padding(Space::M)
     .any();
     let content = chrome::game_frame(header, Some(info), board(ui.clone()), Some(footer));
     let (u, v) = (ui.clone(), ui.clone());
@@ -983,7 +984,7 @@ fn goal_list(ui: Rc<Ui>, prefix: &'static str) -> AnyPiece {
             .any()
         })
         .collect();
-    column(PieceVec(rows)).spacing(4.0).any()
+    column(rows).spacing(Space::XS).any()
 }
 /// One goal: its icon (checked off once done), its name, a bar filling toward it, and its
 /// count, "1,450 / 1,600".
@@ -1005,7 +1006,7 @@ fn goal_row(ui: Rc<Ui>, slot: usize, prefix: &'static str) -> AnyPiece {
     let theme = ui.clone();
     let icon = canvas(move |d, size| {
         let Some(goal) = icon_goal() else { return };
-        let style = Theme::from_index(theme.theme.get()).style();
+        let style = theme.theme.get().style();
         let (x, y) = (size.width / 2.0, size.height / 2.0);
         match goal.kind {
             GoalKind::Score => d.fill(star(x, y, 8.5, 5), chrome::GOLD),
@@ -1108,7 +1109,7 @@ fn goal_row(ui: Rc<Ui>, slot: usize, prefix: &'static str) -> AnyPiece {
     .width(78.0)
     .id(format!("{prefix}-{slot}"));
     row((icon, name, bar, count))
-        .spacing(8.0)
+        .spacing(Space::S)
         .align(VAlign::Center)
         .any()
 }
@@ -1133,7 +1134,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
             d.preview(),
             d.settling.get(),
             &Effects {
-                style: Theme::from_index(d.theme.get()).style(),
+                style: d.theme.get().style(),
                 sparks: Some(&d.sparks.borrow()),
                 idle: Some(&d.idle.borrow()),
                 shake: d.shake.get(),
@@ -1153,7 +1154,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
     .on_pan(move |p| s.swipe(p))
     .on_key(move |e| k.key(&e.key))
     .focused(ui.focus)
-    .a11y(|a| a.label(tr("mt_board_a11y").format()))
+    .a11y(|a| a.label(tr("mt_board_a11y")))
     .id("mt-board")
     .grow()
     .any()
@@ -1485,28 +1486,16 @@ fn render(
     }
 }
 fn overlays(ui: Rc<Ui>) -> AnyPiece {
-    let u = ui.clone();
-    let mut layers = vec![when(move || u.overlay.get() != Overlay::None, chrome::scrim).any()];
-    for kind in [
-        Overlay::Pause,
-        Overlay::Map,
-        Overlay::Help,
-        Overlay::Settings,
-        Overlay::Result,
-    ] {
-        let (u, v) = (ui.clone(), ui.clone());
-        layers.push(
-            when(
-                move || u.overlay.get() == kind,
-                move || card(v.clone(), kind),
-            )
-            .any(),
-        );
-    }
-    zstack(PieceVec(layers)).any()
+    let (u, v) = (ui.clone(), ui.clone());
+    let scrim = when(move || u.overlay.get() != Overlay::None, chrome::scrim);
+    let cards = switch(
+        move || v.overlay.get(),
+        move |kind| (*kind != Overlay::None).then(|| card(ui.clone(), *kind)),
+    );
+    zstack((scrim, cards)).any()
 }
 fn footer_button(title: LocalizedText, id: &'static str, action: impl Fn() + 'static) -> AnyPiece {
-    let name = title.format();
+    let name = title.clone();
     label(title)
         .font(Font::Headline)
         .color(Color::WHITE)
@@ -1528,13 +1517,13 @@ fn menu_button(
     id: &'static str,
     action: impl Fn() + 'static,
 ) -> AnyPiece {
-    let name = title.format();
+    let name = title.clone();
     label(title)
         .font(Font::Headline)
         .bold()
         .color(Color::WHITE)
         .align(TextAlign::Center)
-        .padding(12.0)
+        .padding(Space::M)
         .width(260.0)
         .background(tint.with_alpha(0.3))
         .corner_radius(14.0)
@@ -1637,7 +1626,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                             chrome::TEXT_DIM
                         }),
                     ))
-                    .spacing(8.0)
+                    .spacing(Space::S)
                     .padding(10.0)
                     .background(Color::hex(PALETTE[i]).with_alpha(if unlocked {
                         0.18
@@ -1646,7 +1635,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                     }))
                     .corner_radius(12.0)
                     .on_tap(move || u.start(i))
-                    .a11y(move |a| a.label(tr(stage.name).format()).role(Role::Button))
+                    .a11y(move |a| a.label(tr(stage.name)).role(Role::Button))
                     .id(format!("mt-stage-{}", i + 1))
                     .width(260.0)
                     .any(),
@@ -1674,10 +1663,12 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 tr("mt_reduced"),
                 toggle(ui.reduced).id("mt-reduced").any(),
             ));
-            let names: Vec<String> = THEMES.iter().map(|t| tr(t.style().name).format()).collect();
             items.push(chrome::setting_row(
                 tr("mt_theme"),
-                picker(names, ui.theme).menu().id("mt-theme").any(),
+                picker(ui.theme, THEMES.map(|t| (t, tr(t.style().name))))
+                    .menu()
+                    .id("mt-theme")
+                    .any(),
             ));
             let u = ui.clone();
             items.push(menu_button(
@@ -1770,7 +1761,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
         Overlay::Settings => "mt-settings-card",
         _ => "mt-result",
     };
-    chrome::card(column(PieceVec(items)).spacing(12.0).align(HAlign::Center))
+    chrome::card(column(items).spacing(Space::M).align(HAlign::Center))
         .id(id)
         .any()
 }

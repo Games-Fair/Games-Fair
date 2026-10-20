@@ -1040,7 +1040,7 @@ pub fn twentyfortyeight_page() -> AnyPiece {
                     );
                 })
                 .on_tap(move || tu.undo())
-                .a11y(|a| a.label(tr("tf_undo_a11y").format()).role(Role::Button))
+                .a11y(|a| a.label(tr("tf_undo_a11y")).role(Role::Button))
                 .id("tf-undo")
                 .frame(92.0, 44.0)
             },
@@ -1053,7 +1053,7 @@ pub fn twentyfortyeight_page() -> AnyPiece {
     });
     // Undo belongs under the board with the rest of the controls; Easy is the only difficulty
     // that offers it, so the row is empty on the others.
-    let footer = row((undo,)).align(VAlign::Center).padding(8.0).any();
+    let footer = row((undo,)).align(VAlign::Center).padding(Space::S).any();
     zstack((
         chrome::game_frame(header, Some(info_bar(ui.clone())), cv.any(), Some(footer)),
         overlays(ui),
@@ -1153,36 +1153,20 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
         let u = ui.clone();
         when(move || u.overlay.get() != Overlay::None, chrome::scrim)
     };
-    let (p, w, g, d, s, i) = (
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
-        ui.clone(),
+    let u = ui.clone();
+    let card = switch(
+        move || u.overlay.get(),
+        move |kind| match kind {
+            Overlay::None => None,
+            Overlay::Pause => Some(pause_menu(ui.clone())),
+            Overlay::Won => Some(won_card(ui.clone())),
+            Overlay::GameOver => Some(game_over_card(ui.clone())),
+            Overlay::Difficulty => Some(difficulty_picker(ui.clone())),
+            Overlay::Settings => Some(settings_card(ui.clone())),
+            Overlay::Instructions => Some(instructions_card(ui.clone())),
+        },
     );
-    let card = move |kind: Overlay, build: Rc<dyn Fn() -> AnyPiece>| {
-        let u = ui.clone();
-        when(move || u.overlay.get() == kind, move || build())
-    };
-    zstack((
-        scrim,
-        card(Overlay::Pause, Rc::new(move || pause_menu(p.clone()))),
-        card(Overlay::Won, Rc::new(move || won_card(w.clone()))),
-        card(
-            Overlay::GameOver,
-            Rc::new(move || game_over_card(g.clone())),
-        ),
-        card(
-            Overlay::Difficulty,
-            Rc::new(move || difficulty_picker(d.clone())),
-        ),
-        card(Overlay::Settings, Rc::new(move || settings_card(s.clone()))),
-        card(
-            Overlay::Instructions,
-            Rc::new(move || instructions_card(i.clone())),
-        ),
-    ))
+    zstack((scrim, card))
 }
 
 fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
@@ -1327,7 +1311,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                         .font(Font::Caption)
                         .color(chrome::TEXT_DIM),
                 ))
-                .spacing(4.0)
+                .spacing(Space::XS)
                 .align(HAlign::Leading)
                 .grow_w(),
                 check,
@@ -1337,7 +1321,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .background(tint.with_alpha(0.18))
             .corner_radius(14.0)
             .on_tap(move || u.new_game(d))
-            .a11y(move |a| a.label(d.label().format()).role(Role::Button))
+            .a11y(move |a| a.label(d.label()).role(Role::Button))
             .id(d.id())
             .width(300.0)
             .any(),
@@ -1350,7 +1334,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                 .font(Font::Title2)
                 .bold()
                 .color(Color::WHITE),
-            column(PieceVec(cards)).spacing(12.0),
+            column(cards).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || {
                     let back = u.return_to.replace(Overlay::None);
@@ -1358,7 +1342,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                 })
                 .id("tf-cancel"),
         ))
-        .spacing(16.0)
+        .spacing(Space::L)
         .align(HAlign::Center),
     )
     .id("tf-difficulty-picker")
@@ -1402,7 +1386,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .action(move || done.show(Overlay::Pause))
                 .id("tf-done"),
         ))
-        .spacing(12.0)
+        .spacing(Space::M)
         .align(HAlign::Center),
     )
     .id("tf-settings-card")

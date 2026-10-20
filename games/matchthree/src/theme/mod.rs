@@ -35,12 +35,6 @@ impl Theme {
             Theme::Stones => &stones::STYLE,
         }
     }
-    pub fn index(self) -> usize {
-        THEMES.iter().position(|&t| t == self).unwrap_or(0)
-    }
-    pub fn from_index(i: usize) -> Self {
-        THEMES.get(i).copied().unwrap_or_default()
-    }
 }
 
 /// Every clip any theme plays, loaded up front so switching themes never waits on a sound.
@@ -123,14 +117,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn every_theme_round_trips_through_its_index_and_its_saved_name() {
-        for (i, &theme) in THEMES.iter().enumerate() {
-            assert_eq!(theme.index(), i);
-            assert_eq!(Theme::from_index(i), theme);
+    fn every_theme_round_trips_through_its_saved_name() {
+        for theme in THEMES {
             let saved = serde_json::to_string(&theme).unwrap();
             assert_eq!(serde_json::from_str::<Theme>(&saved).unwrap(), theme);
         }
-        assert_eq!(Theme::from_index(99), Theme::Jewels);
     }
 
     #[test]
