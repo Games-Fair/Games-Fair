@@ -54,195 +54,195 @@ flow:
   - pause: { secs: 0.4 }
   # blockblast
   - navigate: { route: blockblast }
-  - wait_for: { id: bb-pause }
+  - wait_for: { id: bb_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: bb-pause }
-  - wait_for: { id: bb-pause-menu }
-  - key: { id: bb-canvas, key: Escape }
-  - assert_missing: { id: bb-pause-menu }
-  - key: { id: bb-canvas, key: Escape }
-  - wait_for: { id: bb-pause-menu }
-  - assert_visible: { id: bb-resume }
-  - assert_visible: { id: bb-quit }
-  - key: { id: bb-canvas, key: Escape }
-  - assert_missing: { id: bb-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: bb_pause }
+  - wait_for: { id: bb_pause_menu }
+  - key: { id: bb_canvas, key: Escape }
+  - assert_missing: { id: bb_pause_menu }
+  - key: { id: bb_canvas, key: Escape }
+  - wait_for: { id: bb_pause_menu }
+  - assert_visible: { id: bb_resume }
+  - assert_visible: { id: bb_quit }
+  - key: { id: bb_canvas, key: Escape }
+  - assert_missing: { id: bb_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # breakout
   - navigate: { route: breakout }
-  - wait_for: { id: bk-pause }
+  - wait_for: { id: bk_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: bk-pause }
-  - wait_for: { id: bk-pause-menu }
-  - key: { id: bk-canvas, key: Escape }
-  - assert_missing: { id: bk-pause-menu }
-  - key: { id: bk-canvas, key: Escape }
-  - wait_for: { id: bk-pause-menu }
-  - assert_visible: { id: bk-resume }
-  - assert_visible: { id: bk-quit }
-  - key: { id: bk-canvas, key: Escape }
-  - assert_missing: { id: bk-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: bk_pause }
+  - wait_for: { id: bk_pause_menu }
+  - key: { id: bk_canvas, key: Escape }
+  - assert_missing: { id: bk_pause_menu }
+  - key: { id: bk_canvas, key: Escape }
+  - wait_for: { id: bk_pause_menu }
+  - assert_visible: { id: bk_resume }
+  - assert_visible: { id: bk_quit }
+  - key: { id: bk_canvas, key: Escape }
+  - assert_missing: { id: bk_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # charades: the deck picker has nothing to pause; a chosen deck waiting to start does.
   - navigate: { route: charades }
-  - wait_for: { id: ch-deck-animals }
-  - tap: { id: ch-deck-animals }
-  - wait_for: { id: ch-start }
+  - wait_for: { id: 'ch_deck:animals' }
+  - tap: { id: 'ch_deck:animals' }
+  - wait_for: { id: ch_start }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: ch-pause }
-  - wait_for: { id: ch-pause-menu }
-  - key: { id: ch-canvas, key: Escape }
-  - assert_missing: { id: ch-pause-menu }
-  - key: { id: ch-canvas, key: Escape }
-  - wait_for: { id: ch-pause-menu }
-  - assert_visible: { id: ch-resume }
-  - assert_visible: { id: ch-quit }
-  - key: { id: ch-canvas, key: Escape }
-  - assert_missing: { id: ch-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: ch_pause }
+  - wait_for: { id: ch_pause_menu }
+  - key: { id: ch_canvas, key: Escape }
+  - assert_missing: { id: ch_pause_menu }
+  - key: { id: ch_canvas, key: Escape }
+  - wait_for: { id: ch_pause_menu }
+  - assert_visible: { id: ch_resume }
+  - assert_visible: { id: ch_quit }
+  - key: { id: ch_canvas, key: Escape }
+  - assert_missing: { id: ch_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # flipside
   - navigate: { route: flipside }
-  - wait_for: { id: fs-pause }
+  - wait_for: { id: fs_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: fs-pause }
-  - wait_for: { id: fs-pause-menu }
-  - key: { id: fs-board, key: Escape }
-  - assert_missing: { id: fs-pause-menu }
-  - key: { id: fs-board, key: Escape }
-  - wait_for: { id: fs-pause-menu }
-  - assert_visible: { id: fs-resume }
-  - assert_visible: { id: fs-quit }
-  - key: { id: fs-board, key: Escape }
-  - assert_missing: { id: fs-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: fs_pause }
+  - wait_for: { id: fs_pause_menu }
+  - key: { id: fs_board, key: Escape }
+  - assert_missing: { id: fs_pause_menu }
+  - key: { id: fs_board, key: Escape }
+  - wait_for: { id: fs_pause_menu }
+  - assert_visible: { id: fs_resume }
+  - assert_visible: { id: fs_quit }
+  - key: { id: fs_board, key: Escape }
+  - assert_missing: { id: fs_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # pacpac
   - navigate: { route: pacpac }
-  - wait_for: { id: pm-pause }
+  - wait_for: { id: pm_pause }
   # Start from the pause menu (a saved game may already open there, or the game picker).
-  - tap: { id: pm-pause }
-  - wait_for: { id: pm-pause-menu }
-  - key: { id: pm-canvas, key: Escape }
-  - assert_missing: { id: pm-pause-menu }
-  - key: { id: pm-canvas, key: Escape }
-  - wait_for: { id: pm-pause-menu }
-  - assert_visible: { id: pm-resume }
-  - assert_visible: { id: pm-quit }
-  - key: { id: pm-canvas, key: Escape }
-  - assert_missing: { id: pm-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: pm_pause }
+  - wait_for: { id: pm_pause_menu }
+  - key: { id: pm_canvas, key: Escape }
+  - assert_missing: { id: pm_pause_menu }
+  - key: { id: pm_canvas, key: Escape }
+  - wait_for: { id: pm_pause_menu }
+  - assert_visible: { id: pm_resume }
+  - assert_visible: { id: pm_quit }
+  - key: { id: pm_canvas, key: Escape }
+  - assert_missing: { id: pm_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # matchthree
   - navigate: { route: matchthree }
-  - wait_for: { id: mt-pause }
+  - wait_for: { id: mt_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: mt-pause }
-  - wait_for: { id: mt-pause-card }
-  - key: { id: mt-board, key: Escape }
-  - assert_missing: { id: mt-pause-card }
-  - key: { id: mt-board, key: Escape }
-  - wait_for: { id: mt-pause-card }
-  - assert_visible: { id: mt-resume }
-  - assert_visible: { id: mt-close }
-  - key: { id: mt-board, key: Escape }
-  - assert_missing: { id: mt-pause-card }
-  - tap: { id: close-game }
+  - tap: { id: mt_pause }
+  - wait_for: { id: mt_pause_card }
+  - key: { id: mt_board, key: Escape }
+  - assert_missing: { id: mt_pause_card }
+  - key: { id: mt_board, key: Escape }
+  - wait_for: { id: mt_pause_card }
+  - assert_visible: { id: mt_resume }
+  - assert_visible: { id: mt_close }
+  - key: { id: mt_board, key: Escape }
+  - assert_missing: { id: mt_pause_card }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # mines
   - navigate: { route: mines }
-  - wait_for: { id: mi-pause }
+  - wait_for: { id: mi_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: mi-pause }
-  - wait_for: { id: mi-pause-menu }
-  - key: { id: mi-board, key: Escape }
-  - assert_missing: { id: mi-pause-menu }
-  - key: { id: mi-board, key: Escape }
-  - wait_for: { id: mi-pause-menu }
-  - assert_visible: { id: mi-resume }
-  - assert_visible: { id: mi-quit }
-  - key: { id: mi-board, key: Escape }
-  - assert_missing: { id: mi-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: mi_pause }
+  - wait_for: { id: mi_pause_menu }
+  - key: { id: mi_board, key: Escape }
+  - assert_missing: { id: mi_pause_menu }
+  - key: { id: mi_board, key: Escape }
+  - wait_for: { id: mi_pause_menu }
+  - assert_visible: { id: mi_resume }
+  - assert_visible: { id: mi_quit }
+  - key: { id: mi_board, key: Escape }
+  - assert_missing: { id: mi_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # pipes
   - navigate: { route: pipes }
-  - wait_for: { id: pp-pause }
+  - wait_for: { id: pp_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: pp-pause }
-  - wait_for: { id: pp-pause-menu }
-  - key: { id: pp-board, key: Escape }
-  - assert_missing: { id: pp-pause-menu }
-  - key: { id: pp-board, key: Escape }
-  - wait_for: { id: pp-pause-menu }
-  - assert_visible: { id: pp-resume }
-  - assert_visible: { id: pp-quit }
-  - key: { id: pp-board, key: Escape }
-  - assert_missing: { id: pp-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: pp_pause }
+  - wait_for: { id: pp_pause_menu }
+  - key: { id: pp_board, key: Escape }
+  - assert_missing: { id: pp_pause_menu }
+  - key: { id: pp_board, key: Escape }
+  - wait_for: { id: pp_pause_menu }
+  - assert_visible: { id: pp_resume }
+  - assert_visible: { id: pp_quit }
+  - key: { id: pp_board, key: Escape }
+  - assert_missing: { id: pp_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # sirtet
   - navigate: { route: sirtet }
-  - wait_for: { id: st-pause }
+  - wait_for: { id: st_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: st-pause }
-  - wait_for: { id: st-pause-menu }
-  - key: { id: st-canvas, key: Escape }
-  - assert_missing: { id: st-pause-menu }
-  - key: { id: st-canvas, key: Escape }
-  - wait_for: { id: st-pause-menu }
-  - assert_visible: { id: st-resume }
-  - assert_visible: { id: st-quit }
-  - key: { id: st-canvas, key: Escape }
-  - assert_missing: { id: st-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: st_pause }
+  - wait_for: { id: st_pause_menu }
+  - key: { id: st_canvas, key: Escape }
+  - assert_missing: { id: st_pause_menu }
+  - key: { id: st_canvas, key: Escape }
+  - wait_for: { id: st_pause_menu }
+  - assert_visible: { id: st_resume }
+  - assert_visible: { id: st_quit }
+  - key: { id: st_canvas, key: Escape }
+  - assert_missing: { id: st_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # solitaire
   - navigate: { route: solitaire }
-  - wait_for: { id: sol-pause }
+  - wait_for: { id: sol_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: sol-pause }
-  - wait_for: { id: sol-pause-menu }
-  - key: { id: sol-canvas, key: Escape }
-  - assert_missing: { id: sol-pause-menu }
-  - key: { id: sol-canvas, key: Escape }
-  - wait_for: { id: sol-pause-menu }
-  - assert_visible: { id: sol-resume }
-  - assert_visible: { id: sol-quit }
-  - key: { id: sol-canvas, key: Escape }
-  - assert_missing: { id: sol-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: sol_pause }
+  - wait_for: { id: sol_pause_menu }
+  - key: { id: sol_canvas, key: Escape }
+  - assert_missing: { id: sol_pause_menu }
+  - key: { id: sol_canvas, key: Escape }
+  - wait_for: { id: sol_pause_menu }
+  - assert_visible: { id: sol_resume }
+  - assert_visible: { id: sol_quit }
+  - key: { id: sol_canvas, key: Escape }
+  - assert_missing: { id: sol_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # sudoku
   - navigate: { route: sudoku }
-  - wait_for: { id: su-pause }
+  - wait_for: { id: su_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: su-pause }
-  - wait_for: { id: su-pause-menu }
-  - key: { id: su-backdrop, key: Escape }
-  - assert_missing: { id: su-pause-menu }
-  - key: { id: su-backdrop, key: Escape }
-  - wait_for: { id: su-pause-menu }
-  - assert_visible: { id: su-resume }
-  - assert_visible: { id: su-quit }
-  - key: { id: su-backdrop, key: Escape }
-  - assert_missing: { id: su-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: su_pause }
+  - wait_for: { id: su_pause_menu }
+  - key: { id: su_backdrop, key: Escape }
+  - assert_missing: { id: su_pause_menu }
+  - key: { id: su_backdrop, key: Escape }
+  - wait_for: { id: su_pause_menu }
+  - assert_visible: { id: su_resume }
+  - assert_visible: { id: su_quit }
+  - key: { id: su_backdrop, key: Escape }
+  - assert_missing: { id: su_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }
   # twentyfortyeight
   - navigate: { route: twentyfortyeight }
-  - wait_for: { id: tf-pause }
+  - wait_for: { id: tf_pause }
   # Start from the pause menu (a saved game may already open there).
-  - tap: { id: tf-pause }
-  - wait_for: { id: tf-pause-menu }
-  - key: { id: tf-canvas, key: Escape }
-  - assert_missing: { id: tf-pause-menu }
-  - key: { id: tf-canvas, key: Escape }
-  - wait_for: { id: tf-pause-menu }
-  - assert_visible: { id: tf-resume }
-  - assert_visible: { id: tf-quit }
-  - key: { id: tf-canvas, key: Escape }
-  - assert_missing: { id: tf-pause-menu }
-  - tap: { id: close-game }
+  - tap: { id: tf_pause }
+  - wait_for: { id: tf_pause_menu }
+  - key: { id: tf_canvas, key: Escape }
+  - assert_missing: { id: tf_pause_menu }
+  - key: { id: tf_canvas, key: Escape }
+  - wait_for: { id: tf_pause_menu }
+  - assert_visible: { id: tf_resume }
+  - assert_visible: { id: tf_quit }
+  - key: { id: tf_canvas, key: Escape }
+  - assert_missing: { id: tf_pause_menu }
+  - tap: { id: close_game }
   - wait_for: { id: home }

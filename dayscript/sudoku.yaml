@@ -20,67 +20,75 @@ flow:
   - navigate: { route: sudoku }
   # The clock runs once the board is up.
   - pause: { secs: 2.2 }
-  - assert_visible: { id: su-board }
+  - assert_visible: { id: su_board }
+  # Whatever an earlier run saved (a device keeps the app's data between launches), start the
+  # seeded Medium puzzle whose cells 40-42 the taps below expect empty.
+  - tap: { id: su_pause }
+  - pause: { secs: 0.4 }
+  - tap: { id: su_new_game }
+  - pause: { secs: 0.4 }
+  - tap: { id: su_diff_medium }
+  - pause: { secs: 0.4 }
   - screenshot: sudoku-board
   # Select a cell and place a digit; the keypad's count drops.
-  - tap: { id: su-cell-40 }
-  - tap: { id: su-key-5 }
+  - tap: { id: 'su_cell:40' }
+  - tap: { id: 'su_key:5' }
   - pause: { secs: 0.3 }
   # Pencil marks in a neighbor.
-  - tap: { id: su-notes }
-  - tap: { id: su-cell-41 }
-  - tap: { id: su-key-1 }
-  - tap: { id: su-key-2 }
-  - tap: { id: su-notes }
+  - tap: { id: su_notes }
+  - tap: { id: 'su_cell:41' }
+  - tap: { id: 'su_key:1' }
+  - tap: { id: 'su_key:2' }
+  - tap: { id: su_notes }
   # A checkpoint session: its placements render amber, and the button splits.
-  - tap: { id: su-checkpoint }
-  - tap: { id: su-cell-42 }
-  - tap: { id: su-key-7 }
+  - tap: { id: su_checkpoint }
+  - tap: { id: 'su_cell:42' }
+  - tap: { id: 'su_key:7' }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: su-commit }
+  - assert_visible: { id: su_commit }
   - screenshot: sudoku-checkpoint
-  - tap: { id: su-revert }
+  - tap: { id: su_revert }
   # Undo, then the split Undo/Redo.
-  - tap: { id: su-undo }
+  - tap: { id: su_undo }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: su-redo }
-  - tap: { id: su-redo }
+  - assert_visible: { id: su_redo }
+  - tap: { id: su_redo }
   # A hardware keyboard. The page holds the keyboard from the start, so a typed digit reaches
   # the selected cell: after an undo there is a redo on offer, and the placement clears it.
-  - assert_focused: { id: su-backdrop }
-  - tap: { id: su-cell-42 }
-  - tap: { id: su-undo }
+  - assert_focused: { id: su_backdrop }
+  - tap: { id: 'su_cell:42' }
+  - tap: { id: su_undo }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: su-redo }
+  - assert_visible: { id: su_redo }
   - key: { key: "3" }
   - pause: { secs: 0.3 }
-  - assert_missing: { id: su-redo }
+  - assert_missing: { id: su_redo }
   # Pause: the board hides behind the cover and the menu comes up.
-  - tap: { id: su-pause }
+  - tap: { id: su_pause }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: su-pause-menu }
+  - assert_visible: { id: su_pause_menu }
   - screenshot: sudoku-paused
-  - tap: { id: su-new-game }
+  - tap: { id: su_new_game }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: su-difficulty-picker }
+  - assert_visible: { id: su_difficulty_picker }
   - screenshot: sudoku-difficulty
-  - tap: { id: su-cancel }
+  - tap: { id: su_cancel }
   - pause: { secs: 0.3 }
-  - tap: { id: su-settings }
+  - tap: { id: su_settings }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: su-settings-card }
+  - assert_visible: { id: su_settings_card }
   - screenshot: sudoku-settings
-  - tap: { id: su-done }
+  - tap: { id: su_done }
   - pause: { secs: 0.3 }
-  - tap: { id: su-instructions }
+  - tap: { id: su_instructions }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: su-instructions-card }
+  - assert_visible: { id: su_instructions_card }
   - screenshot: sudoku-instructions
-  - tap: { id: su-help-done }
+  - tap: { id: su_help_done }
   - pause: { secs: 0.3 }
-  - tap: { id: su-resume }
+  - tap: { id: su_resume }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: su-keypad }
+  - assert_visible: { id: su_keypad }
   - nav_back: {}
   - pause: { secs: 0.6 }
-  - assert_visible: { id: tile-sudoku }
+  - assert_visible: { id: tile_sudoku }

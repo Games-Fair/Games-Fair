@@ -40,12 +40,12 @@ def main():
         assert parsed['failed'] == 0, parsed
 
     def unchanged():
-        drive({'assert_text': {'id': 'mt-score', 'text': '0'}},
-              {'assert_text': {'id': 'mt-moves', 'text': '22'}},
-              {'assert_missing': {'id': 'mt-result'}})
+        drive({'assert_text': {'id': 'mt_score', 'text': '0'}},
+              {'assert_text': {'id': 'mt_moves', 'text': '22'}},
+              {'assert_missing': {'id': 'mt_result'}})
 
-    drive({'navigate': {'route': 'matchthree'}}, {'tap': {'id': 'mt-map'}},
-          {'tap': {'id': 'mt-stage-1'}}, {'pause': {'secs': .3}})
+    drive({'navigate': {'route': 'matchthree'}}, {'tap': {'id': 'mt_map'}},
+          {'tap': {'id': 'mt_stage_1'}}, {'pause': {'secs': .3}})
     unchanged()
     adb('shell', 'uiautomator', 'dump', '/sdcard/matchthree-ui.xml')
     root = ET.fromstring(adb('exec-out', 'cat', '/sdcard/matchthree-ui.xml'))
@@ -94,18 +94,18 @@ def main():
         unchanged()
     finally:
         pointer('UP', 47)
-    drive({'assert_text': {'id': 'mt-score', 'text': '12540', 'timeout_secs': 10}},
-          {'assert_text': {'id': 'mt-moves', 'text': '21'}},
-          {'wait_for': {'id': 'mt-result', 'timeout_secs': 30}},
-          {'tap': {'id': 'mt-play-again'}}, {'pause': {'secs': .3}})
+    drive({'assert_text': {'id': 'mt_score', 'text': '12540', 'timeout_secs': 10}},
+          {'assert_text': {'id': 'mt_moves', 'text': '21'}},
+          {'wait_for': {'id': 'mt_result', 'timeout_secs': 30}},
+          {'tap': {'id': 'mt_play_again'}}, {'pause': {'secs': .3}})
     print('PASS: lifting commits the preview exactly once.', flush=True)
 
     adb('shell', 'input', 'tap', *at(46))
     adb('shell', 'input', 'tap', *at(47))
-    drive({'assert_text': {'id': 'mt-score', 'text': '12540', 'timeout_secs': 10}},
-          {'assert_text': {'id': 'mt-moves', 'text': '21'}},
-          {'wait_for': {'id': 'mt-result', 'timeout_secs': 30}},
-          {'tap': {'id': 'mt-play-again'}})
+    drive({'assert_text': {'id': 'mt_score', 'text': '12540', 'timeout_secs': 10}},
+          {'assert_text': {'id': 'mt_moves', 'text': '21'}},
+          {'wait_for': {'id': 'mt_result', 'timeout_secs': 30}},
+          {'tap': {'id': 'mt_play_again'}})
     print('PASS: tap-to-swap still commits exactly once; fresh board ready.', flush=True)
 
 

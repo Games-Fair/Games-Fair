@@ -108,12 +108,12 @@ fn difficulty_detail(d: Difficulty) -> day_fluent::LocalizedText {
     }
 }
 
-fn difficulty_id(d: Difficulty) -> &'static str {
+fn difficulty_id(d: Difficulty) -> ElementId {
     match d {
-        Difficulty::Easy => "su-diff-easy",
-        Difficulty::Medium => "su-diff-medium",
-        Difficulty::Hard => "su-diff-hard",
-        Difficulty::Expert => "su-diff-expert",
+        Difficulty::Easy => id!(su_diff_easy),
+        Difficulty::Medium => id!(su_diff_medium),
+        Difficulty::Hard => id!(su_diff_hard),
+        Difficulty::Expert => id!(su_diff_expert),
     }
 }
 
@@ -262,7 +262,7 @@ impl Ui {
 
     fn new_game(&self, d: Difficulty) {
         self.default_difficulty.set(d);
-        self.game.borrow_mut().new_game(d);
+        self.game.borrow_mut().new_game(d, gamekit::seed());
         gamekit::save(SAVE_KEY, &self.game.borrow().save_state());
         self.return_to.set(Overlay::None);
         self.show(Overlay::None);
@@ -743,11 +743,11 @@ pub fn sudoku_page() -> AnyPiece {
     })
     .on_key(keys(&ui))
     .focused(ui.board_focus)
-    .id("su-backdrop")
+    .id(id!(su_backdrop))
     .grow();
 
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_sudoku"), "su-pause", move || {
+    let header = chrome::game_header(tr("nav_sudoku"), id!(su_pause), move || {
         if pu.overlay.get_untracked() == Overlay::None {
             pu.show(Overlay::Pause);
             pu.cue(&cues::SELECT);
@@ -773,7 +773,7 @@ pub fn sudoku_page() -> AnyPiece {
     // column is taller than the window it scrolls instead.
     let page = scroll(zstack((content,)).align(Alignment::Center))
         .grow()
-        .id("su-page");
+        .id(id!(su_page));
 
     zstack((backdrop, page, overlays(ui), ticker)).any()
 }
@@ -793,7 +793,7 @@ fn status_bar(ui: Rc<Ui>) -> impl Piece {
         title: day_fluent::LocalizedText,
         value: impl Fn() -> String + 'static,
         tint: impl Fn() -> Color + 'static,
-        id: &'static str,
+        id: ElementId,
     ) -> AnyPiece {
         chrome::info_stat(title, value, tint, id)
             .min_width(96.0)
@@ -810,7 +810,7 @@ fn status_bar(ui: Rc<Ui>) -> impl Piece {
             u2.board.track();
             accent(u2.game.borrow().difficulty)
         },
-        "su-difficulty",
+        id!(su_difficulty),
     );
     let time = pill(
         tr("su_time"),
@@ -832,7 +832,7 @@ fn status_bar(ui: Rc<Ui>) -> impl Piece {
                 TIME_TINT
             }
         },
-        "su-time",
+        id!(su_time),
     );
     chrome::info_row(vec![difficulty, time])
 }
@@ -891,13 +891,13 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
                     );
                 })
                 .frame(BOARD, BOARD)
-                .id("su-pause-cover")
+                .id(id!(su_pause_cover))
             },
         )
     };
     zstack((
         rim,
-        grid(rows).padding(BOARD_PAD).id("su-board"),
+        grid(rows).padding(BOARD_PAD).id(id!(su_board)),
         pause_cover,
     ))
     .frame(BOARD, BOARD)
@@ -940,7 +940,7 @@ fn cell_piece(ui: Rc<Ui>, r: usize, c: usize) -> AnyPiece {
                 .format(),
         )
     })
-    .id(format!("su-cell-{i}"))
+    .id(id!(su_cell, i))
     .frame(CELL, CELL)
     .any()
 }
@@ -970,7 +970,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                 tu.cue(&NOTES);
             },
             ui.clone(),
-            "su-notes",
+            id!(su_notes),
         )
     };
     let hint = {
@@ -996,7 +996,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                 tu.cue(&HINT);
             },
             ui.clone(),
-            "su-hint",
+            id!(su_hint),
         )
     };
     let undo = {
@@ -1016,7 +1016,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                         u2.edit(|g| g.undo());
                         u2.cue(&UNDO);
                     },
-                    "su-undo",
+                    id!(su_undo),
                     Glyph::Redo,
                     tr("su_redo"),
                     move || !u3.game.borrow().can_redo(),
@@ -1024,7 +1024,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                         u4.edit(|g| g.redo());
                         u4.cue(&REDO);
                     },
-                    "su-redo",
+                    id!(su_redo),
                     su.clone(),
                 )
             },
@@ -1041,7 +1041,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                     u2.cue(&UNDO);
                 },
                 au.clone(),
-                "su-undo",
+                id!(su_undo),
             )
         })
     };
@@ -1062,7 +1062,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                         u2.edit(|g| g.commit_checkpoint());
                         u2.cue(&cues::SUCCESS);
                     },
-                    "su-commit",
+                    id!(su_commit),
                     Glyph::Cross,
                     tr("su_revert"),
                     move || u3.game.borrow().busy(),
@@ -1070,7 +1070,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                         u4.edit(|g| g.revert_checkpoint());
                         u4.cue(&cues::LETDOWN);
                     },
-                    "su-revert",
+                    id!(su_revert),
                     su.clone(),
                 )
             },
@@ -1087,7 +1087,7 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
                     u2.cue(&CHECKPOINT);
                 },
                 au.clone(),
-                "su-checkpoint",
+                id!(su_checkpoint),
             )
         })
     };
@@ -1111,7 +1111,7 @@ fn number_pad(ui: Rc<Ui>) -> impl Piece {
         }
         rows.push(row(keys).spacing(KEY_GAP).any());
     }
-    column(rows).spacing(KEY_GAP).id("su-keypad")
+    column(rows).spacing(KEY_GAP).id(id!(su_keypad))
 }
 
 fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
@@ -1189,7 +1189,7 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
         a.label(tr("su_key_a11y").arg("n", digit as f64))
             .role(Role::Button)
     })
-    .id(format!("su-key-{digit}"))
+    .id(id!(su_key, digit))
     .frame(KEY_W, KEY_H)
     .any()
 }
@@ -1203,7 +1203,7 @@ fn action_button(
     disabled: impl Fn() -> bool + 'static,
     action: impl Fn() + 'static,
     ui: Rc<Ui>,
-    id: &'static str,
+    id: ElementId,
 ) -> AnyPiece {
     let a11y_title = title();
     let (du, ku) = (ui.clone(), ui);
@@ -1252,19 +1252,19 @@ fn split_button(
     top_title: day_fluent::LocalizedText,
     top_disabled: impl Fn() -> bool + 'static,
     top_action: impl Fn() + 'static,
-    top_id: &'static str,
+    top_id: ElementId,
     bottom_glyph: Glyph,
     bottom_title: day_fluent::LocalizedText,
     bottom_disabled: impl Fn() -> bool + 'static,
     bottom_action: impl Fn() + 'static,
-    bottom_id: &'static str,
+    bottom_id: ElementId,
     ui: Rc<Ui>,
 ) -> AnyPiece {
     let half = |glyph: Glyph,
                 title: day_fluent::LocalizedText,
                 disabled: Box<dyn Fn() -> bool>,
                 action: Box<dyn Fn()>,
-                id: &'static str,
+                id: ElementId,
                 top: bool| {
         let (du, ku) = (ui.clone(), ui.clone());
         let a11y_title = title.clone();
@@ -1377,7 +1377,7 @@ fn card_frame(content: impl Piece) -> AnyPiece {
 fn menu_button(
     title: day_fluent::LocalizedText,
     tint: Color,
-    id: &'static str,
+    id: ElementId,
     action: impl Fn() + 'static,
 ) -> AnyPiece {
     button(title)
@@ -1394,7 +1394,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     // Resume is always offered: over a finished puzzle it just puts the menu away.
     let resume = {
         let u = ui.clone();
-        menu_button(tr("gk_resume"), GREEN, "su-resume", move || {
+        menu_button(tr("gk_resume"), GREEN, id!(su_resume), move || {
             u.show(Overlay::None);
         })
     };
@@ -1404,7 +1404,7 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
             move || live,
             move || {
                 let u = u.clone();
-                menu_button(tr("su_give_up"), AMBER, "su-give-up", move || {
+                menu_button(tr("su_give_up"), AMBER, id!(su_give_up), move || {
                     let u = u.clone();
                     day_core::task(async move {
                         let sure = Alert::new(tr("su_give_up_title"))
@@ -1431,27 +1431,27 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
                 .weight(FontWeight::Black)
                 .color(Color::WHITE),
             resume,
-            menu_button(tr("gk_new_game"), KEY_BLUE, "su-new-game", move || {
+            menu_button(tr("gk_new_game"), KEY_BLUE, id!(su_new_game), move || {
                 u1.push(Overlay::Difficulty)
             }),
-            menu_button(tr("gk_settings"), SLATE, "su-settings", move || {
+            menu_button(tr("gk_settings"), SLATE, id!(su_settings), move || {
                 u2.push(Overlay::Settings)
             }),
             menu_button(
                 tr("gk_instructions"),
                 INDIGO,
-                "su-instructions",
+                id!(su_instructions),
                 move || u3.push(Overlay::Instructions),
             ),
             give_up,
-            menu_button(tr("gk_close"), RED, "su-quit", || {
+            menu_button(tr("gk_close"), RED, id!(su_quit), || {
                 nav_back();
             }),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("su-pause-menu")
+    .id(id!(su_pause_menu))
     .any()
 }
 
@@ -1498,22 +1498,25 @@ fn solved_card(ui: Rc<Ui>) -> AnyPiece {
                     .bold()
                     .tabular()
                     .color(INK_USER)
-                    .id("su-solved-time"),
+                    .id(id!(su_solved_time)),
             ))
             .spacing(2.0)
             .align(HAlign::Center),
             record,
-            menu_button(tr("gk_play_again"), KEY_BLUE, "su-play-again", move || {
-                u.push(Overlay::Difficulty)
-            }),
-            menu_button(tr("gk_close"), RED, "su-quit", || {
+            menu_button(
+                tr("gk_play_again"),
+                KEY_BLUE,
+                id!(su_play_again),
+                move || u.push(Overlay::Difficulty),
+            ),
+            menu_button(tr("gk_close"), RED, id!(su_quit), || {
                 nav_back();
             }),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("su-solved")
+    .id(id!(su_solved))
     .any()
 }
 
@@ -1575,12 +1578,12 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             column(cards).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || u.pop())
-                .id("su-cancel"),
+                .id(id!(su_cancel)),
         ))
         .spacing(Space::L)
         .align(HAlign::Center),
     )
-    .id("su-difficulty-picker")
+    .id(id!(su_difficulty_picker))
     .any()
 }
 
@@ -1626,7 +1629,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             })
             .tabular()
             .color(TEXT_DIM)
-            .id("su-puzzles-solved")
+            .id(id!(su_puzzles_solved))
             .any(),
         )
     };
@@ -1645,7 +1648,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("su-reset-records");
+        .id(id!(su_reset_records));
     let done = ui.clone();
     card_frame(
         scroll(
@@ -1655,10 +1658,10 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     .bold()
                     .color(Color::WHITE),
                 heading(tr("nav_sudoku")),
-                setting_row(tr("gk_sounds"), toggle(ui.sounds).id("su-sounds").any()),
+                setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(su_sounds)).any()),
                 setting_row(
                     tr("gk_vibrations"),
-                    toggle(ui.vibrations).id("su-vibrations").any(),
+                    toggle(ui.vibrations).id(id!(su_vibrations)).any(),
                 ),
                 setting_row(
                     tr("su_default_difficulty"),
@@ -1667,7 +1670,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                         DIFFICULTIES.map(|d| (d, difficulty_label(d))),
                     )
                     .menu()
-                    .id("su-default-difficulty")
+                    .id(id!(su_default_difficulty))
                     .any(),
                 ),
                 setting_row(
@@ -1675,7 +1678,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     // Font names are the fonts' own, the same in every language.
                     picker(digit_choice(), DIGIT_FONTS.map(|f| (f, f.family())))
                         .menu()
-                        .id("su-digit-font")
+                        .id(id!(su_digit_font))
                         .any(),
                 ),
                 // The nine digits in the chosen face, so a choice can be judged before the
@@ -1692,7 +1695,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                         },
                     );
                 })
-                .id("su-digit-font-sample")
+                .id(id!(su_digit_font_sample))
                 .width(300.0)
                 .height(44.0),
                 heading(tr("su_records")),
@@ -1703,14 +1706,14 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 button(tr("gk_done"))
                     .prominent()
                     .action(move || done.pop())
-                    .id("su-done"),
+                    .id(id!(su_done)),
             ))
             .spacing(Space::M)
             .align(HAlign::Center),
         )
         .height(440.0),
     )
-    .id("su-settings-card")
+    .id(id!(su_settings_card))
     .any()
 }
 
@@ -1773,12 +1776,12 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.pop())
-                .id("su-help-done"),
+                .id(id!(su_help_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Leading)
         .width(300.0),
     )
-    .id("su-instructions-card")
+    .id(id!(su_instructions_card))
     .any()
 }

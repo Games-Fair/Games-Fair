@@ -787,14 +787,14 @@ pub fn matchthree_page() -> AnyPiece {
         ui.push(Overlay::Help);
     }
     let u = ui.clone();
-    let header = chrome::game_header(tr("nav_matchthree"), "mt-pause", move || {
+    let header = chrome::game_header(tr("nav_matchthree"), id!(mt_pause), move || {
         u.show(Overlay::Pause)
     });
     let mut stats = vec![];
     for (key, id, kind, color) in [
-        ("gk_score", "mt-score", 0, ACCENT),
-        ("mt_moves", "mt-moves", 1, Color::WHITE),
-        ("mt_goals", "mt-goal", 2, MINT),
+        ("gk_score", id!(mt_score), 0, ACCENT),
+        ("mt_moves", id!(mt_moves), 1, Color::WHITE),
+        ("mt_goals", id!(mt_goal), 2, MINT),
     ] {
         let u = ui.clone();
         // The moves count carries its urgency: amber, then red and throbbing (`moves_color`).
@@ -849,7 +849,7 @@ pub fn matchthree_page() -> AnyPiece {
         still_needed(&to_go_tint.save.borrow().game).1
     })
     .align(TextAlign::Center)
-    .id("mt-to-go");
+    .id(id!(mt_to_go));
     let info = column((
         label(move || {
             u.repaint.track();
@@ -863,9 +863,9 @@ pub fn matchthree_page() -> AnyPiece {
         .font(Font::Subheadline)
         .bold()
         .color(MINT)
-        .id("mt-level"),
+        .id(id!(mt_level)),
         chrome::info_row(stats),
-        goal_list(ui.clone(), "mt-goal"),
+        goal_list(ui.clone(), |slot| id!(mt_goal_row, slot)),
         to_go,
     ))
     .spacing(6.0)
@@ -902,10 +902,10 @@ pub fn matchthree_page() -> AnyPiece {
                 }
             }
         })
-        .id("mt-status"),
+        .id(id!(mt_status)),
         row((
-            footer_button(tr("mt_hint"), "mt-hint", move || h.hint()),
-            footer_button(tr("mt_levels"), "mt-map", move || m.push(Overlay::Map)),
+            footer_button(tr("mt_hint"), id!(mt_hint), move || h.hint()),
+            footer_button(tr("mt_levels"), id!(mt_map), move || m.push(Overlay::Map)),
         ))
         .spacing(Space::XL),
     ))
@@ -967,9 +967,9 @@ fn still_needed(g: &Game) -> (String, Color) {
         )
     }
 }
-/// The level's goals as a checklist, one row each (see [`goal_row`]). `prefix` keeps the ids of
+/// The level's goals as a checklist, one row each (see [`goal_row`]). `row_id` keeps the ids of
 /// the results card's copy apart from the one on the game screen.
-fn goal_list(ui: Rc<Ui>, prefix: &'static str) -> AnyPiece {
+fn goal_list(ui: Rc<Ui>, row_id: fn(usize) -> ElementId) -> AnyPiece {
     let rows: Vec<AnyPiece> = (0..3)
         .map(|slot| {
             let u = ui.clone();
@@ -979,7 +979,7 @@ fn goal_list(ui: Rc<Ui>, prefix: &'static str) -> AnyPiece {
                     shown.repaint.track();
                     shown.save.borrow().game.goals().len() > slot
                 },
-                move || goal_row(u.clone(), slot, prefix),
+                move || goal_row(u.clone(), slot, row_id),
             )
             .any()
         })
@@ -988,7 +988,7 @@ fn goal_list(ui: Rc<Ui>, prefix: &'static str) -> AnyPiece {
 }
 /// One goal: its icon (checked off once done), its name, a bar filling toward it, and its
 /// count, "1,450 / 1,600".
-fn goal_row(ui: Rc<Ui>, slot: usize, prefix: &'static str) -> AnyPiece {
+fn goal_row(ui: Rc<Ui>, slot: usize, row_id: fn(usize) -> ElementId) -> AnyPiece {
     let goal = {
         let ui = ui.clone();
         move || {
@@ -1107,7 +1107,7 @@ fn goal_row(ui: Rc<Ui>, slot: usize, prefix: &'static str) -> AnyPiece {
     })
     .align(TextAlign::Trailing)
     .width(78.0)
-    .id(format!("{prefix}-{slot}"));
+    .id(row_id(slot));
     row((icon, name, bar, count))
         .spacing(Space::S)
         .align(VAlign::Center)
@@ -1155,7 +1155,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
     .on_key(move |e| k.key(&e.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mt_board_a11y")))
-    .id("mt-board")
+    .id(id!(mt_board))
     .grow()
     .any()
 }
@@ -1494,7 +1494,7 @@ fn overlays(ui: Rc<Ui>) -> AnyPiece {
     );
     zstack((scrim, cards)).any()
 }
-fn footer_button(title: LocalizedText, id: &'static str, action: impl Fn() + 'static) -> AnyPiece {
+fn footer_button(title: LocalizedText, id: ElementId, action: impl Fn() + 'static) -> AnyPiece {
     let name = title.clone();
     label(title)
         .font(Font::Headline)
@@ -1514,7 +1514,7 @@ fn footer_button(title: LocalizedText, id: &'static str, action: impl Fn() + 'st
 fn menu_button(
     title: LocalizedText,
     tint: Color,
-    id: &'static str,
+    id: ElementId,
     action: impl Fn() + 'static,
 ) -> AnyPiece {
     let name = title.clone();
@@ -1545,14 +1545,14 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 Help::Para(tr("mt_help_goals")),
                 Help::Para(tr("mt_help_keys")),
             ],
-            "mt-help-done",
+            id!(mt_help_done),
             move || ui.show(ui.back.get()),
         )
-        .id("mt-help")
+        .id(id!(mt_help))
         .any();
     }
     let mut items = vec![];
-    let nav = |key: &'static str, id: &'static str, o: Overlay| {
+    let nav = |key: &'static str, id: ElementId, o: Overlay| {
         let u = ui.clone();
         menu_button(tr(key), chrome::INDIGO, id, move || u.push(o))
     };
@@ -1563,26 +1563,26 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(menu_button(
                 tr("gk_resume"),
                 chrome::GREEN,
-                "mt-resume",
+                id!(mt_resume),
                 move || u.show(Overlay::None),
             ));
-            items.push(nav("mt_levels", "mt-levels", Overlay::Map));
+            items.push(nav("mt_levels", id!(mt_levels), Overlay::Map));
             let u = ui.clone();
             items.push(menu_button(
                 tr("mt_retry"),
                 chrome::AMBER,
-                "mt-restart",
+                id!(mt_restart),
                 move || {
                     let level = u.save.borrow().game.level;
                     u.start(level);
                 },
             ));
-            items.push(nav("gk_settings", "mt-settings", Overlay::Settings));
-            items.push(nav("gk_instructions", "mt-instructions", Overlay::Help));
+            items.push(nav("gk_settings", id!(mt_settings), Overlay::Settings));
+            items.push(nav("gk_instructions", id!(mt_instructions), Overlay::Help));
             items.push(menu_button(
                 tr("gk_close"),
                 chrome::RED,
-                "mt-close",
+                id!(mt_close),
                 gamekit::close,
             ));
         }
@@ -1636,7 +1636,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                     .corner_radius(12.0)
                     .on_tap(move || u.start(i))
                     .a11y(move |a| a.label(tr(stage.name)).role(Role::Button))
-                    .id(format!("mt-stage-{}", i + 1))
+                    .id(id!(mt_stage, i + 1))
                     .width(260.0)
                     .any(),
                 );
@@ -1645,7 +1645,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(menu_button(
                 tr("gk_done"),
                 chrome::GREEN,
-                "mt-map-done",
+                id!(mt_map_done),
                 move || u.show(u.back.get()),
             ));
         }
@@ -1653,28 +1653,28 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::card_title(tr("gk_settings"), Color::WHITE));
             items.push(chrome::setting_row(
                 tr("gk_sounds"),
-                toggle(ui.sounds).id("mt-sounds").any(),
+                toggle(ui.sounds).id(id!(mt_sounds)).any(),
             ));
             items.push(chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("mt-vibrations").any(),
+                toggle(ui.vibrations).id(id!(mt_vibrations)).any(),
             ));
             items.push(chrome::setting_row(
                 tr("mt_reduced"),
-                toggle(ui.reduced).id("mt-reduced").any(),
+                toggle(ui.reduced).id(id!(mt_reduced)).any(),
             ));
             items.push(chrome::setting_row(
                 tr("mt_theme"),
                 picker(ui.theme, THEMES.map(|t| (t, tr(t.style().name))))
                     .menu()
-                    .id("mt-theme")
+                    .id(id!(mt_theme))
                     .any(),
             ));
             let u = ui.clone();
             items.push(menu_button(
                 tr("gk_done"),
                 chrome::GREEN,
-                "mt-settings-done",
+                id!(mt_settings_done),
                 move || u.show(u.back.get()),
             ));
         }
@@ -1707,7 +1707,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 })
                 .font(Font::LargeTitle)
                 .color(chrome::GOLD)
-                .id("mt-stars")
+                .id(id!(mt_stars))
                 .any(),
             );
             items.push(chrome::stat(
@@ -1715,7 +1715,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 g.score.to_string(),
                 Font::LargeTitle,
                 MINT,
-                "mt-final-score",
+                id!(mt_final_score),
             ));
             items.push(
                 label(tr(if won {
@@ -1733,14 +1733,14 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             );
             if !won {
                 // What was missing, so a lost level with a high score explains itself.
-                items.push(goal_list(ui.clone(), "mt-result-goal"));
+                items.push(goal_list(ui.clone(), |slot| id!(mt_result_goal_row, slot)));
             }
             if won && level + 1 < LEVELS {
                 let u = ui.clone();
                 items.push(menu_button(
                     tr("mt_next"),
                     chrome::GREEN,
-                    "mt-next",
+                    id!(mt_next),
                     move || u.start(level + 1),
                 ));
             }
@@ -1748,18 +1748,18 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(menu_button(
                 tr("mt_retry"),
                 chrome::INDIGO,
-                "mt-play-again",
+                id!(mt_play_again),
                 move || u.start(level),
             ));
-            items.push(nav("mt_levels", "mt-result-map", Overlay::Map));
+            items.push(nav("mt_levels", id!(mt_result_map), Overlay::Map));
         }
         _ => {}
     }
     let id = match kind {
-        Overlay::Pause => "mt-pause-card",
-        Overlay::Map => "mt-levels-card",
-        Overlay::Settings => "mt-settings-card",
-        _ => "mt-result",
+        Overlay::Pause => id!(mt_pause_card),
+        Overlay::Map => id!(mt_levels_card),
+        Overlay::Settings => id!(mt_settings_card),
+        _ => id!(mt_result),
     };
     chrome::card(column(items).spacing(Space::M).align(HAlign::Center))
         .id(id)

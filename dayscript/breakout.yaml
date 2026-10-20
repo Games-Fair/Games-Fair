@@ -15,38 +15,40 @@ flow:
   - pause: { secs: 0.6 }
   - navigate: { route: breakout }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: bk-canvas }
+  - assert_visible: { id: bk_canvas }
   # Whatever was saved, start fresh: the pause button opens the menu (a resumed game is
   # already showing it), and New Game parks a new ball on the paddle.
-  - tap: { id: bk-pause }
+  - tap: { id: bk_pause }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: bk-pause-menu }
-  - tap: { id: bk-new-game }
+  - assert_visible: { id: bk_pause_menu }
+  - tap: { id: bk_new_game }
   - pause: { secs: 0.4 }
   - screenshot: breakout-ready
-  # A tap launches the ball; the physics run on the frame clock.
-  - tap: { id: bk-canvas }
-  - pause: { secs: 1.4 }
-  - screenshot: breakout-play
-  - tap: { id: bk-pause }
+  # A tap launches the ball; the physics run on the frame clock. Pause while the ball is still
+  # climbing: the rules sheet below returns to the pause menu only while a round is live, and a
+  # slow capture (an Android emulator's) would let the ball fall past the paddle first.
+  - tap: { id: bk_canvas }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: bk-pause-menu }
+  - tap: { id: bk_pause }
+  - pause: { secs: 0.4 }
+  - assert_visible: { id: bk_pause_menu }
   - screenshot: breakout-paused
-  - tap: { id: bk-settings }
+  - tap: { id: bk_settings }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: bk-settings-card }
+  - assert_visible: { id: bk_settings_card }
   - screenshot: breakout-settings
-  - tap: { id: bk-done }
+  - tap: { id: bk_done }
   - pause: { secs: 0.3 }
-  - tap: { id: bk-instructions }
+  - tap: { id: bk_instructions }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: bk-instructions-card }
+  - assert_visible: { id: bk_instructions_card }
   - screenshot: breakout-instructions
-  - tap: { id: bk-help-done }
+  - tap: { id: bk_help_done }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: bk-pause-menu }
-  - tap: { id: bk-resume }
-  - pause: { secs: 0.8 }
+  - assert_visible: { id: bk_pause_menu }
+  - tap: { id: bk_resume }
+  - pause: { secs: 1.0 }
+  - screenshot: breakout-play
   - nav_back: {}
   - pause: { secs: 0.6 }
-  - assert_visible: { id: tile-breakout }
+  - assert_visible: { id: tile_breakout }

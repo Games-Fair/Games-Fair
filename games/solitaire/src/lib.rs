@@ -2520,10 +2520,10 @@ fn draw_detail(m: DrawMode) -> day_fluent::LocalizedText {
     }
 }
 
-fn draw_id(m: DrawMode) -> &'static str {
+fn draw_id(m: DrawMode) -> ElementId {
     match m {
-        DrawMode::One => "sol-draw-1",
-        DrawMode::Three => "sol-draw-3",
+        DrawMode::One => id!(sol_draw_1),
+        DrawMode::Three => id!(sol_draw_3),
     }
 }
 
@@ -2945,7 +2945,7 @@ pub fn solitaire_page() -> AnyPiece {
             ku.acted(a);
         })
         .a11y(|a| a.label(tr("sol_table_a11y")))
-        .id("sol-canvas")
+        .id(id!(sol_canvas))
         .grow()
     };
 
@@ -2959,7 +2959,7 @@ pub fn solitaire_page() -> AnyPiece {
     };
 
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_solitaire"), "sol-pause", move || {
+    let header = chrome::game_header(tr("nav_solitaire"), id!(sol_pause), move || {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
@@ -3027,7 +3027,7 @@ fn tool_button(
     ui: Rc<Ui>,
     glyph: fn(&mut Draw, Point, f64, Color),
     a11y: day_fluent::LocalizedText,
-    id: &'static str,
+    id: ElementId,
     enabled: fn(&Ui) -> bool,
     action: fn(&Ui),
 ) -> AnyPiece {
@@ -3059,7 +3059,7 @@ fn tool_button(
 fn info_bar(ui: Rc<Ui>) -> AnyPiece {
     let stat = |caption: day_fluent::LocalizedText,
                 value: Box<dyn Fn() -> String>,
-                id: &'static str,
+                id: ElementId,
                 width: f64| {
         chrome::info_stat(caption, value, Color::WHITE, id)
             .min_width(width)
@@ -3072,7 +3072,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             su.hud.track();
             (su.play.borrow().fx.shown_score.round() as i64).to_string()
         }),
-        "sol-score",
+        id!(sol_score),
         58.0,
     );
     let time = stat(
@@ -3081,7 +3081,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             tu.hud.track();
             fmt_time(tu.play.borrow().model.elapsed)
         }),
-        "sol-time",
+        id!(sol_time),
         50.0,
     );
     let moves = stat(
@@ -3090,7 +3090,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             mu.hud.track();
             mu.play.borrow().model.moves.to_string()
         }),
-        "sol-moves",
+        id!(sol_moves),
         40.0,
     );
     chrome::info_row(vec![score, time, moves])
@@ -3102,7 +3102,7 @@ fn tools(ui: Rc<Ui>) -> AnyPiece {
         ui.clone(),
         draw_hint_glyph,
         tr("sol_hint"),
-        "sol-hint",
+        id!(sol_hint),
         |u| u.play.borrow().live(),
         |u| u.hint(),
     );
@@ -3110,7 +3110,7 @@ fn tools(ui: Rc<Ui>) -> AnyPiece {
         ui.clone(),
         draw_undo_glyph,
         tr("sol_undo"),
-        "sol-undo",
+        id!(sol_undo),
         |u| {
             let p = u.play.borrow();
             p.live() && p.model.can_undo()
@@ -3212,30 +3212,33 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "sol-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(sol_resume), move || {
                 u1.show(Overlay::None)
             }),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "sol-new-game", move || {
-                u2.pick_draw()
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(sol_new_game),
+                move || u2.pick_draw(),
+            ),
             chrome::menu_button(
                 tr("gk_settings"),
                 chrome::SLATE,
-                "sol-settings",
+                id!(sol_settings),
                 move || u3.show(Overlay::Settings),
             ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "sol-instructions",
+                id!(sol_instructions),
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "sol-quit"),
+            chrome::close_game_button(chrome::RED, id!(sol_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("sol-pause-menu")
+    .id(id!(sol_pause_menu))
     .any()
 }
 
@@ -3267,21 +3270,21 @@ fn win_card(ui: Rc<Ui>) -> AnyPiece {
                     fmt_time(elapsed),
                     Font::Title2,
                     Color::WHITE,
-                    "sol-final-time",
+                    id!(sol_final_time),
                 ),
                 chrome::stat(
                     tr("sol_moves"),
                     moves.to_string(),
                     Font::Title2,
                     Color::WHITE,
-                    "sol-final-moves",
+                    id!(sol_final_moves),
                 ),
                 chrome::stat(
                     tr("gk_score"),
                     score.to_string(),
                     Font::Title2,
                     chrome::GOLD,
-                    "sol-final-score",
+                    id!(sol_final_score),
                 ),
             ))
             .spacing(Space::XL),
@@ -3291,7 +3294,7 @@ fn win_card(ui: Rc<Ui>) -> AnyPiece {
                 fmt_time(best),
                 Font::Title3,
                 Color::WHITE,
-                "sol-best-time",
+                id!(sol_best_time),
             ),
             label(
                 tr("sol_record")
@@ -3301,7 +3304,7 @@ fn win_card(ui: Rc<Ui>) -> AnyPiece {
             )
             .font(Font::Subheadline)
             .color(chrome::TEXT_DIM)
-            .id("sol-record"),
+            .id(id!(sol_record)),
             label(draw_label(mode))
                 .font(Font::Subheadline)
                 .bold()
@@ -3309,15 +3312,15 @@ fn win_card(ui: Rc<Ui>) -> AnyPiece {
             chrome::menu_button(
                 tr("gk_play_again"),
                 chrome::BLUE,
-                "sol-play-again",
+                id!(sol_play_again),
                 move || u.pick_draw(),
             ),
-            chrome::close_game_button(chrome::RED, "sol-quit"),
+            chrome::close_game_button(chrome::RED, id!(sol_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("sol-win-card")
+    .id(id!(sol_win_card))
     .any()
 }
 
@@ -3329,22 +3332,27 @@ fn stuck_card(ui: Rc<Ui>) -> AnyPiece {
             label(tr("sol_stuck_message"))
                 .color(chrome::TEXT_DIM)
                 .align(TextAlign::Center),
-            chrome::menu_button(tr("sol_undo"), chrome::GREEN, "sol-stuck-undo", move || {
-                u1.show(Overlay::None);
-                u1.undo();
-            }),
+            chrome::menu_button(
+                tr("sol_undo"),
+                chrome::GREEN,
+                id!(sol_stuck_undo),
+                move || {
+                    u1.show(Overlay::None);
+                    u1.undo();
+                },
+            ),
             chrome::menu_button(
                 tr("gk_new_game"),
                 chrome::BLUE,
-                "sol-stuck-new",
+                id!(sol_stuck_new),
                 move || u2.pick_draw(),
             ),
-            chrome::close_game_button(chrome::RED, "sol-quit"),
+            chrome::close_game_button(chrome::RED, id!(sol_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("sol-stuck-card")
+    .id(id!(sol_stuck_card))
     .any()
 }
 
@@ -3408,12 +3416,12 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
                     let back = u.return_to.replace(Overlay::None);
                     u.show(back);
                 })
-                .id("sol-cancel"),
+                .id(id!(sol_cancel)),
         ))
         .spacing(Space::L)
         .align(HAlign::Center),
     )
-    .id("sol-draw-picker")
+    .id(id!(sol_draw_picker))
     .any()
 }
 
@@ -3456,7 +3464,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("sol-reset-stats");
+        .id(id!(sol_reset_stats));
     let done = ui.clone();
     chrome::card(
         column((
@@ -3465,14 +3473,14 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_solitaire")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("sol-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(sol_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("sol-vibrations").any(),
+                toggle(ui.vibrations).id(id!(sol_vibrations)).any(),
             ),
             chrome::setting_row(
                 tr("sol_winnable"),
-                toggle(ui.winnable).id("sol-winnable").any(),
+                toggle(ui.winnable).id(id!(sol_winnable)).any(),
             ),
             label(tr("sol_winnable_detail"))
                 .font(Font::Caption)
@@ -3485,12 +3493,12 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.show(Overlay::Pause))
-                .id("sol-done"),
+                .id(id!(sol_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("sol-settings-card")
+    .id(id!(sol_settings_card))
     .any()
 }
 
@@ -3516,10 +3524,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Heading(tr("sol_help_keys")),
             Help::Para(tr("sol_help_keys_1")),
         ],
-        "sol-help-done",
+        id!(sol_help_done),
         move || ui.show(if live { Overlay::Pause } else { Overlay::None }),
     )
-    .id("sol-instructions-card")
+    .id(id!(sol_instructions_card))
     .any()
 }
 

@@ -96,11 +96,11 @@ impl Difficulty {
             Difficulty::Hard => tr("tf_detail_hard"),
         }
     }
-    fn id(self) -> &'static str {
+    fn id(self) -> ElementId {
         match self {
-            Difficulty::Easy => "tf-diff-easy",
-            Difficulty::Normal => "tf-diff-normal",
-            Difficulty::Hard => "tf-diff-hard",
+            Difficulty::Easy => id!(tf_diff_easy),
+            Difficulty::Normal => id!(tf_diff_normal),
+            Difficulty::Hard => id!(tf_diff_hard),
         }
     }
 }
@@ -997,7 +997,7 @@ pub fn twentyfortyeight_page() -> AnyPiece {
             drop(g);
             ku.repaint.notify();
         })
-        .id("tf-canvas")
+        .id(id!(tf_canvas))
         .grow()
     };
 
@@ -1041,13 +1041,13 @@ pub fn twentyfortyeight_page() -> AnyPiece {
                 })
                 .on_tap(move || tu.undo())
                 .a11y(|a| a.label(tr("tf_undo_a11y")).role(Role::Button))
-                .id("tf-undo")
+                .id(id!(tf_undo))
                 .frame(92.0, 44.0)
             },
         )
     };
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_2048"), "tf-pause", move || {
+    let header = chrome::game_header(tr("nav_2048"), id!(tf_pause), move || {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
@@ -1073,7 +1073,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             su.game.borrow().score.to_string()
         },
         ink,
-        "tf-score",
+        id!(tf_score),
     )
     .min_width(80.0)
     .any();
@@ -1084,7 +1084,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             du.game.borrow().difficulty.label().format()
         },
         ink,
-        "tf-difficulty",
+        id!(tf_difficulty),
     )
     .min_width(80.0)
     .any();
@@ -1095,7 +1095,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             bu.game.borrow().best.to_string()
         },
         ink,
-        "tf-best",
+        id!(tf_best),
     )
     .min_width(80.0)
     .any();
@@ -1174,27 +1174,33 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "tf-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(tf_resume), move || {
                 u1.show(Overlay::None)
             }),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "tf-new-game", move || {
-                u2.pick_difficulty()
-            }),
-            chrome::menu_button(tr("gk_settings"), chrome::SLATE, "tf-settings", move || {
-                u3.show(Overlay::Settings)
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(tf_new_game),
+                move || u2.pick_difficulty(),
+            ),
+            chrome::menu_button(
+                tr("gk_settings"),
+                chrome::SLATE,
+                id!(tf_settings),
+                move || u3.show(Overlay::Settings),
+            ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "tf-instructions",
+                id!(tf_instructions),
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "tf-quit"),
+            chrome::close_game_button(chrome::RED, id!(tf_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("tf-pause-menu")
+    .id(id!(tf_pause_menu))
     .any()
 }
 
@@ -1213,22 +1219,25 @@ fn won_card(ui: Rc<Ui>) -> AnyPiece {
                 score.to_string(),
                 Font::Title,
                 Color::WHITE,
-                "tf-won-score",
+                id!(tf_won_score),
             ),
             chrome::menu_button(
                 tr("tf_keep_going"),
                 chrome::GREEN,
-                "tf-keep-going",
+                id!(tf_keep_going),
                 move || u1.show(Overlay::None),
             ),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "tf-new-game", move || {
-                u2.pick_difficulty()
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(tf_new_game),
+                move || u2.pick_difficulty(),
+            ),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("tf-won")
+    .id(id!(tf_won))
     .any()
 }
 
@@ -1255,28 +1264,28 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 score.to_string(),
                 Font::LargeTitle,
                 chrome::GOLD,
-                "tf-final-score",
+                id!(tf_final_score),
             ),
             chrome::stat(
                 tr("gk_best"),
                 best.to_string(),
                 Font::Title3,
                 Color::WHITE,
-                "tf-best",
+                id!(tf_best),
             ),
             record,
             chrome::menu_button(
                 tr("gk_play_again"),
                 chrome::BLUE,
-                "tf-play-again",
+                id!(tf_play_again),
                 move || u.pick_difficulty(),
             ),
-            chrome::close_game_button(chrome::RED, "tf-quit"),
+            chrome::close_game_button(chrome::RED, id!(tf_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("tf-game-over")
+    .id(id!(tf_game_over))
     .any()
 }
 
@@ -1340,12 +1349,12 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                     let back = u.return_to.replace(Overlay::None);
                     u.show(back);
                 })
-                .id("tf-cancel"),
+                .id(id!(tf_cancel)),
         ))
         .spacing(Space::L)
         .align(HAlign::Center),
     )
-    .id("tf-difficulty-picker")
+    .id(id!(tf_difficulty_picker))
     .any()
 }
 
@@ -1365,7 +1374,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("tf-reset-high-score");
+        .id(id!(tf_reset_high_score));
     let done = ui.clone();
     chrome::card(
         column((
@@ -1374,22 +1383,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_2048")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("tf-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(tf_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("tf-vibrations").any(),
+                toggle(ui.vibrations).id(id!(tf_vibrations)).any(),
             ),
             chrome::section_heading(tr("gk_data")),
             reset,
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.show(Overlay::Pause))
-                .id("tf-done"),
+                .id(id!(tf_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("tf-settings-card")
+    .id(id!(tf_settings_card))
     .any()
 }
 
@@ -1412,10 +1421,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Para(tr("tf_help_tips_2")),
             Help::Para(tr("tf_help_tips_3")),
         ],
-        "tf-help-done",
+        id!(tf_help_done),
         move || ui.show(if live { Overlay::Pause } else { Overlay::None }),
     )
-    .id("tf-instructions-card")
+    .id(id!(tf_instructions_card))
     .any()
 }
 

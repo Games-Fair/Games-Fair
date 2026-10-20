@@ -13,8 +13,11 @@ use std::{
     rc::Rc,
 };
 
+/// The frame callbacks the toolkit has been asked for, each with its cancellation flag.
+type FrameQueue = Rc<RefCell<VecDeque<(Rc<Cell<bool>>, FrameCallback)>>>;
+
 struct Frames {
-    pending: Rc<RefCell<VecDeque<(Rc<Cell<bool>>, FrameCallback)>>>,
+    pending: FrameQueue,
     time: Cell<f64>,
 }
 impl Frames {
@@ -171,25 +174,25 @@ fn real_boards_sleep_wake_and_cancel_on_cover_disposal() {
         frames.idle();
     };
 
-    open(1, "pp-help-done");
+    open(1, "pp_help_done");
     for _ in 0..2 {
-        key("pp-board", "Enter");
+        key("pp_board", "Enter");
         frames.awake();
         frames.advance(1.0);
         frames.idle();
     }
     close();
 
-    open(2, "fs-help-done");
-    key("fs-board", "Enter"); // D3, followed by the computer's reply.
+    open(2, "fs_help_done");
+    key("fs_board", "Enter"); // D3, followed by the computer's reply.
     frames.awake();
     frames.advance(3.0);
     frames.idle();
     close();
 
-    open(3, "tf-help-done");
+    open(3, "tf_help_done");
     for direction in ["ArrowRight", "ArrowLeft"] {
-        key("tf-canvas", direction);
+        key("tf_canvas", direction);
         frames.awake();
         frames.advance(1.0);
         frames.idle();
@@ -200,7 +203,7 @@ fn real_boards_sleep_wake_and_cancel_on_cover_disposal() {
     // it stays awake at rest; closing the game still cancels every frame it asked for.
     selected.set(4);
     flush_sync();
-    tap("mt-help-done");
+    tap("mt_help_done");
     frames.advance(4.0);
     frames.awake();
     close();
@@ -209,33 +212,33 @@ fn real_boards_sleep_wake_and_cancel_on_cover_disposal() {
         "save.matchthree.settings",
         r#"{"shell":{"sounds":true,"vibrations":true,"instructions_shown":false},"reduced":true}"#,
     );
-    open(4, "mt-help-done");
+    open(4, "mt_help_done");
     for _ in 0..2 {
         for k in ["Home", "Enter", "ArrowRight", "Enter"] {
-            key("mt-board", k);
+            key("mt_board", k);
         }
         frames.awake();
         frames.advance(1.0); // Invalid swap returns to its original layout.
         frames.idle();
     }
-    tap("mt-hint");
+    tap("mt_hint");
     frames.awake();
-    key("mt-board", "Enter");
+    key("mt_board", "Enter");
     close(); // Cancel while a cascade owns pending frames.
 
-    open(5, "bb-help-done");
-    key("bb-canvas", "1");
+    open(5, "bb_help_done");
+    key("bb_canvas", "1");
     frames.advance(1.0);
     frames.awake(); // A held piece's clear preview continues pulsing after pickup settles.
-    tap("bb-pause");
+    tap("bb_pause");
     frames.idle();
-    tap("bb-resume");
+    tap("bb_resume");
     frames.advance(1.0);
     frames.idle();
     close();
 
-    open(6, "sol-help-done");
-    tap("sol-hint"); // Before the first move, there is no elapsed clock to keep frames alive.
+    open(6, "sol_help_done");
+    tap("sol_hint"); // Before the first move, there is no elapsed clock to keep frames alive.
     frames.awake();
     frames.advance(5.0);
     frames.idle();

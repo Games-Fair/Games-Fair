@@ -12,56 +12,56 @@ flow:
   - pause: { secs: 0.5 }
   - navigate: { route: mines }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: mi-board }
+  - assert_visible: { id: mi_board }
   # Opening restores the game you left, so deal a fresh Easy board to play from here.
-  - tap: { id: mi-pause }
+  - tap: { id: mi_pause }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: mi-pause-menu }
-  - tap: { id: mi-new-game }
+  - assert_visible: { id: mi_pause_menu }
+  - tap: { id: mi_new_game }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: mi-picker }
+  - assert_visible: { id: mi_picker }
   - screenshot: mines-picker
-  - tap: { id: mi-diff-easy }
+  - tap: { id: mi_diff_easy }
   - pause: { secs: 0.6 }
-  - assert_text: { id: mi-mines-left, text: "10" }
+  - assert_text: { id: mi_mines_left, text: "10" }
   - screenshot: mines-fresh
   # A flag takes one off the counter and lifting it puts it back. Flagging is allowed before the
   # first tap, so this holds wherever the pointer happens to be.
-  - key: { id: mi-board, key: "f" }
+  - key: { id: mi_board, key: "f" }
   - pause: { secs: 0.4 }
-  - assert_text: { id: mi-mines-left, text: "9" }
+  - assert_text: { id: mi_mines_left, text: "9" }
   - screenshot: mines-flagged
-  - key: { id: mi-board, key: "f" }
+  - key: { id: mi_board, key: "f" }
   - pause: { secs: 0.4 }
-  - assert_text: { id: mi-mines-left, text: "10" }
+  - assert_text: { id: mi_mines_left, text: "10" }
   # The first tap is always safe, and it opens a clearing.
-  - key: { id: mi-board, key: " " }
+  - key: { id: mi_board, key: " " }
   - pause: { secs: 0.6 }
   - screenshot: mines-opened
-  - tap: { id: mi-flag-mode }
+  - tap: { id: mi_flag_mode }
   - pause: { secs: 0.4 }
   - screenshot: mines-flag-mode
-  - tap: { id: mi-flag-mode }
+  - tap: { id: mi_flag_mode }
   - pause: { secs: 0.3 }
   # A bigger board, with its long side still down the window.
-  - tap: { id: mi-pause }
+  - tap: { id: mi_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: mi-new-game }
+  - tap: { id: mi_new_game }
   - pause: { secs: 0.4 }
-  - tap: { id: mi-diff-medium }
+  - tap: { id: mi_diff_medium }
   - pause: { secs: 0.6 }
-  - assert_text: { id: mi-mines-left, text: "25" }
-  - key: { id: mi-board, key: " " }
+  - assert_text: { id: mi_mines_left, text: "25" }
+  - key: { id: mi_board, key: " " }
   - pause: { secs: 0.8 }
   - screenshot: mines-medium
-  - tap: { id: mi-pause }
+  - tap: { id: mi_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: mi-settings }
+  - tap: { id: mi_settings }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: mi-settings-card }
+  - assert_visible: { id: mi_settings_card }
   - screenshot: mines-settings
-  - tap: { id: mi-done }
+  - tap: { id: mi_done }
   - pause: { secs: 0.4 }
-  - tap: { id: mi-resume }
+  - tap: { id: mi_resume }
   - pause: { secs: 0.5 }
   - nav_back: {}

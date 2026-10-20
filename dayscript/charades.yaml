@@ -13,42 +13,42 @@ flow:
   - pause: { secs: 0.5 }
   - navigate: { route: charades }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: ch-deck-animals }
+  - assert_visible: { id: 'ch_deck:animals' }
   - screenshot: charades-decks
-  - tap: { id: ch-settings }
+  - tap: { id: ch_settings }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: ch-settings-card }
-  - toggle: { id: ch-tilt, value: false }
+  - assert_visible: { id: ch_settings_card }
+  - toggle: { id: ch_tilt, value: false }
   - pause: { secs: 0.3 }
   - screenshot: charades-settings
-  - tap: { id: ch-done }
+  - tap: { id: ch_done }
   - pause: { secs: 0.4 }
-  - tap: { id: ch-deck-animals }
+  - tap: { id: 'ch_deck:animals' }
   - pause: { secs: 0.5 }
-  - assert_visible: { id: ch-start }
+  - assert_visible: { id: ch_start }
   - screenshot: charades-ready
-  - tap: { id: ch-start }
+  - tap: { id: ch_start }
   - pause: { secs: 1.0 }
   - screenshot: charades-countdown
   - pause: { secs: 2.6 }
-  - assert_visible: { id: ch-correct }
+  - assert_visible: { id: ch_correct }
   - screenshot: charades-card
-  - key: { id: ch-canvas, key: "ArrowDown" }
+  - key: { id: ch_canvas, key: "ArrowDown" }
   - pause: { secs: 0.2 }
   - screenshot: charades-correct
   - pause: { secs: 0.8 }
-  - tap: { id: ch-pass }
+  - tap: { id: ch_pass }
   - pause: { secs: 0.9 }
-  - tap: { id: ch-correct }
+  - tap: { id: ch_correct }
   - pause: { secs: 0.9 }
-  - tap: { id: ch-pause }
+  - tap: { id: ch_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: ch-end-round }
+  - tap: { id: ch_end_round }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: ch-again }
-  - assert_text: { id: ch-score, text: "2" }
+  - assert_visible: { id: ch_again }
+  - assert_text: { id: ch_score, text: "2" }
   - screenshot: charades-results
-  - tap: { id: ch-to-decks }
+  - tap: { id: ch_to_decks }
   - pause: { secs: 0.5 }
-  - assert_visible: { id: ch-deck-animals }
+  - assert_visible: { id: 'ch_deck:animals' }
   - nav_back: {}

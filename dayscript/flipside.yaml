@@ -9,61 +9,61 @@ flow:
   - pause: { secs: 0.4 }
   - navigate: { route: flipside }
   - pause: { secs: 0.5 }
-  - tap: { id: fs-pause }
-  - tap: { id: fs-new-game }
-  - select: { id: fs-mode, index: 1 }
-  - tap: { id: fs-start }
-  - assert_text: { id: fs-black-score, text: "2" }
-  - assert_text: { id: fs-white-score, text: "2" }
+  - tap: { id: fs_pause }
+  - tap: { id: fs_new_game }
+  - select: { id: fs_mode, index: 1 }
+  - tap: { id: fs_start }
+  - assert_text: { id: fs_black_score, text: "2" }
+  - assert_text: { id: fs_white_score, text: "2" }
   - screenshot: flipside-opening
   # Cursor starts at D3: legal opening captures D4.
-  - key: { id: fs-board, key: Enter }
+  - key: { id: fs_board, key: Enter }
   - pause: { secs: 1.0 }
-  - assert_text: { id: fs-black-score, text: "4" }
-  - assert_text: { id: fs-white-score, text: "1" }
+  - assert_text: { id: fs_black_score, text: "4" }
+  - assert_text: { id: fs_white_score, text: "1" }
   # White replies at C3, capturing D4 back.
-  - key: { id: fs-board, key: ArrowLeft }
-  - key: { id: fs-board, key: Enter }
+  - key: { id: fs_board, key: ArrowLeft }
+  - key: { id: fs_board, key: Enter }
   - pause: { secs: 1.0 }
-  - assert_text: { id: fs-black-score, text: "3" }
-  - assert_text: { id: fs-white-score, text: "3" }
+  - assert_text: { id: fs_black_score, text: "3" }
+  - assert_text: { id: fs_white_score, text: "3" }
   - screenshot: flipside-two-players
   # C4 is legal for Black; pausing must block this otherwise valid move.
-  - key: { id: fs-board, key: ArrowDown }
-  - tap: { id: fs-pause }
-  - key: { id: fs-board, key: Enter }
-  - assert_text: { id: fs-black-score, text: "3" }
-  - tap: { id: fs-settings }
-  - assert_visible: { id: fs-sounds }
+  - key: { id: fs_board, key: ArrowDown }
+  - tap: { id: fs_pause }
+  - key: { id: fs_board, key: Enter }
+  - assert_text: { id: fs_black_score, text: "3" }
+  - tap: { id: fs_settings }
+  - assert_visible: { id: fs_sounds }
   - screenshot: flipside-settings
-  - tap: { id: fs-done }
-  - tap: { id: fs-resume }
+  - tap: { id: fs_done }
+  - tap: { id: fs_resume }
   - nav_back: {}
   - pause: { secs: 0.4 }
   - navigate: { route: flipside }
   - pause: { secs: 0.5 }
-  - assert_text: { id: fs-black-score, text: "3" }
-  - assert_text: { id: fs-white-score, text: "3" }
-  - tap: { id: fs-pause }
-  - tap: { id: fs-new-game }
-  - select: { id: fs-mode, index: 0 }
-  - select: { id: fs-difficulty, index: 2 }
-  - tap: { id: fs-start }
-  - key: { id: fs-board, key: Enter }
-  - tap: { id: fs-pause }
+  - assert_text: { id: fs_black_score, text: "3" }
+  - assert_text: { id: fs_white_score, text: "3" }
+  - tap: { id: fs_pause }
+  - tap: { id: fs_new_game }
+  - select: { id: fs_mode, index: 0 }
+  - select: { id: fs_difficulty, index: 2 }
+  - tap: { id: fs_start }
+  - key: { id: fs_board, key: Enter }
+  - tap: { id: fs_pause }
   - pause: { secs: 1.0 }
-  - assert_text: { id: fs-black-score, text: "4" }
-  - assert_text: { id: fs-white-score, text: "1" }
-  - tap: { id: fs-resume }
+  - assert_text: { id: fs_black_score, text: "4" }
+  - assert_text: { id: fs_white_score, text: "1" }
+  - tap: { id: fs_resume }
   - pause: { secs: 1.8 }
-  - assert_text: { id: fs-status, key: fs_black_turn }
-  - assert_text: { id: fs-black-score, text: "3" }
-  - assert_text: { id: fs-white-score, text: "3" }
+  - assert_text: { id: fs_status, key: fs_black_turn }
+  - assert_text: { id: fs_black_score, text: "3" }
+  - assert_text: { id: fs_white_score, text: "3" }
   - screenshot: flipside-computer
-  - tap: { id: fs-pause }
-  - tap: { id: fs-instructions }
-  - assert_visible: { id: fs-help-done }
+  - tap: { id: fs_pause }
+  - tap: { id: fs_instructions }
+  - assert_visible: { id: fs_help_done }
   - screenshot: flipside-rules
-  - tap: { id: fs-help-done }
-  - tap: { id: fs-resume }
+  - tap: { id: fs_help_done }
+  - tap: { id: fs_resume }
   - nav_back: {}

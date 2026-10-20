@@ -279,7 +279,7 @@ pub fn pipes_page() -> AnyPiece {
         ui.push(Overlay::Help);
     }
     let (p, m, c, s, l) = (ui.clone(), ui.clone(), ui.clone(), ui.clone(), ui.clone());
-    let header = chrome::game_header(tr("nav_pipes"), "pp-pause", move || p.pause());
+    let header = chrome::game_header(tr("nav_pipes"), id!(pp_pause), move || p.pause());
     let stats = chrome::info_row(vec![
         // Wide enough for the counters these two reach, so a growing number never shifts the
         // row under the header.
@@ -290,7 +290,7 @@ pub fn pipes_page() -> AnyPiece {
                 m.game.borrow().moves.to_string()
             },
             Color::WHITE,
-            "pp-moves",
+            id!(pp_moves),
         )
         .min_width(96.0)
         .any(),
@@ -302,14 +302,14 @@ pub fn pipes_page() -> AnyPiece {
                 format!("{} / {}", net.connected, net.distance.len())
             },
             WATER,
-            "pp-connected",
+            id!(pp_connected),
         )
         .min_width(96.0)
         .any(),
     ]);
     let controls = row((
         label(tr("pp_lock_mode")).color(chrome::TEXT),
-        toggle(ui.lock_mode).id("pp-lock-mode"),
+        toggle(ui.lock_mode).id(id!(pp_lock_mode)),
     ))
     .spacing(10.0)
     .padding(Space::S)
@@ -327,7 +327,7 @@ pub fn pipes_page() -> AnyPiece {
         })
         .color(chrome::TEXT)
         .align(TextAlign::Center)
-        .id("pp-status"),
+        .id(id!(pp_status)),
     ))
     .spacing(6.0)
     .align(HAlign::Center)
@@ -338,7 +338,7 @@ pub fn pipes_page() -> AnyPiece {
             .font(Font::Caption)
             .color(chrome::TEXT)
             .align(TextAlign::Center)
-            .id("pp-selection"),
+            .id(id!(pp_selection)),
         controls,
     ))
     .spacing(Space::XS)
@@ -404,7 +404,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     .on_key(move |event| k.key(&event.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("pp_board_a11y")))
-    .id("pp-board")
+    .id(id!(pp_board))
     .grow()
     .any()
 }
@@ -565,14 +565,14 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 Help::Para(tr("pp_help_locks")),
                 Help::Para(tr("pp_help_keys")),
             ],
-            "pp-help-done",
+            id!(pp_help_done),
             move || ui.pop(),
         )
-        .id("pp-help")
+        .id(id!(pp_help))
         .any();
     }
     let mut items = Vec::new();
-    let action = |key: &'static str, id: &'static str, tint: Color, overlay: Overlay| {
+    let action = |key: &'static str, id: ElementId, tint: Color, overlay: Overlay| {
         let u = ui.clone();
         chrome::menu_button(tr(key), tint, id, move || u.push(overlay))
     };
@@ -583,12 +583,12 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::menu_button(
                 tr("gk_resume"),
                 chrome::GREEN,
-                "pp-resume",
+                id!(pp_resume),
                 move || u.show(Overlay::None),
             ));
             items.push(action(
                 "gk_new_game",
-                "pp-new-game",
+                id!(pp_new_game),
                 chrome::BLUE,
                 Overlay::NewGame,
             ));
@@ -596,22 +596,22 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::menu_button(
                 tr("pp_restart"),
                 chrome::AMBER,
-                "pp-restart",
+                id!(pp_restart),
                 move || u.restart(),
             ));
             items.push(action(
                 "gk_settings",
-                "pp-settings",
+                id!(pp_settings),
                 chrome::SLATE,
                 Overlay::Settings,
             ));
             items.push(action(
                 "gk_instructions",
-                "pp-instructions",
+                id!(pp_instructions),
                 chrome::INDIGO,
                 Overlay::Help,
             ));
-            items.push(chrome::close_game_button(chrome::RED, "pp-quit"));
+            items.push(chrome::close_game_button(chrome::RED, id!(pp_quit)));
         }
         Overlay::NewGame => {
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
@@ -626,21 +626,21 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                     ],
                 )
                 .segmented()
-                .id("pp-size")
+                .id(id!(pp_size))
                 .any(),
             );
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("pp_start"),
                 chrome::GREEN,
-                "pp-start",
+                id!(pp_start),
                 move || u.start(),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("gk_cancel"),
                 chrome::SLATE,
-                "pp-cancel",
+                id!(pp_cancel),
                 move || u.pop(),
             ));
         }
@@ -648,17 +648,17 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::card_title(tr("gk_settings"), Color::WHITE));
             items.push(chrome::setting_row(
                 tr("gk_sounds"),
-                toggle(ui.sounds).id("pp-sounds").any(),
+                toggle(ui.sounds).id(id!(pp_sounds)).any(),
             ));
             items.push(chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("pp-vibrations").any(),
+                toggle(ui.vibrations).id(id!(pp_vibrations)).any(),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("gk_done"),
                 chrome::GREEN,
-                "pp-done",
+                id!(pp_done),
                 move || u.pop(),
             ));
         }
@@ -671,30 +671,33 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 g.moves.to_string(),
                 Font::Title2,
                 Color::WHITE,
-                "pp-final-moves",
+                id!(pp_final_moves),
             ));
             items.push(chrome::stat(
                 tr("pp_best"),
                 ui.records.borrow().best[index].map_or_else(|| "—".into(), |m| m.to_string()),
                 Font::Title2,
                 WATER,
-                "pp-best",
+                id!(pp_best),
             ));
             items.push(action(
                 "gk_new_game",
-                "pp-play-again",
+                id!(pp_play_again),
                 chrome::GREEN,
                 Overlay::NewGame,
             ));
-            items.push(chrome::close_game_button(chrome::SLATE, "pp-result-quit"));
+            items.push(chrome::close_game_button(
+                chrome::SLATE,
+                id!(pp_result_quit),
+            ));
         }
         _ => {}
     }
     let id = match kind {
-        Overlay::Pause => "pp-pause-menu",
-        Overlay::NewGame => "pp-new-card",
-        Overlay::Settings => "pp-settings-card",
-        _ => "pp-result",
+        Overlay::Pause => id!(pp_pause_menu),
+        Overlay::NewGame => id!(pp_new_card),
+        Overlay::Settings => id!(pp_settings_card),
+        _ => id!(pp_result),
     };
     chrome::card(column(items).spacing(Space::M).align(HAlign::Center))
         .id(id)

@@ -823,7 +823,7 @@ pub fn sirtet_page() -> AnyPiece {
             }
             ku.repaint.notify();
         })
-        .id("st-canvas")
+        .id(id!(st_canvas))
         .grow()
     };
 
@@ -836,7 +836,7 @@ pub fn sirtet_page() -> AnyPiece {
         )
     };
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_sirtet"), "st-pause", move || {
+    let header = chrome::game_header(tr("nav_sirtet"), id!(st_pause), move || {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
@@ -859,7 +859,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             su.game.borrow().score.to_string()
         },
         Color::WHITE,
-        "st-score",
+        id!(st_score),
     )
     .min_width(72.0)
     .any();
@@ -870,7 +870,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             lu.game.borrow().level().to_string()
         },
         Color::WHITE,
-        "st-level",
+        id!(st_level),
     )
     .any();
     let lines = chrome::info_stat(
@@ -880,7 +880,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             nu.game.borrow().lines.to_string()
         },
         Color::WHITE,
-        "st-lines",
+        id!(st_lines),
     )
     .any();
     // The preview is the fourth readout, captioned like the three beside it so it sits on the
@@ -904,7 +904,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             }
         })
         .a11y(|a| a.label(tr("st_next_a11y")))
-        .id("st-next")
+        .id(id!(st_next))
         .frame(64.0, 28.0),
     ))
     .spacing(2.0)
@@ -966,27 +966,33 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "st-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(st_resume), move || {
                 u1.show(Overlay::None)
             }),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "st-new-game", move || {
-                u2.new_game()
-            }),
-            chrome::menu_button(tr("gk_settings"), chrome::SLATE, "st-settings", move || {
-                u3.show(Overlay::Settings)
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(st_new_game),
+                move || u2.new_game(),
+            ),
+            chrome::menu_button(
+                tr("gk_settings"),
+                chrome::SLATE,
+                id!(st_settings),
+                move || u3.show(Overlay::Settings),
+            ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "st-instructions",
+                id!(st_instructions),
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "st-quit"),
+            chrome::close_game_button(chrome::RED, id!(st_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("st-pause-menu")
+    .id(id!(st_pause_menu))
     .any()
 }
 
@@ -1013,7 +1019,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 score.to_string(),
                 Font::LargeTitle,
                 chrome::GOLD,
-                "st-final-score",
+                id!(st_final_score),
             ),
             row((
                 chrome::stat(
@@ -1021,21 +1027,21 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                     level.to_string(),
                     Font::Title3,
                     Color::WHITE,
-                    "st-final-level",
+                    id!(st_final_level),
                 ),
                 chrome::stat(
                     tr("st_lines"),
                     lines.to_string(),
                     Font::Title3,
                     Color::WHITE,
-                    "st-final-lines",
+                    id!(st_final_lines),
                 ),
                 chrome::stat(
                     tr("gk_best"),
                     best.to_string(),
                     Font::Title3,
                     Color::WHITE,
-                    "st-best",
+                    id!(st_best),
                 ),
             ))
             .spacing(Space::XL),
@@ -1043,15 +1049,15 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
             chrome::menu_button(
                 tr("gk_play_again"),
                 chrome::BLUE,
-                "st-play-again",
+                id!(st_play_again),
                 move || u.new_game(),
             ),
-            chrome::close_game_button(chrome::RED, "st-quit"),
+            chrome::close_game_button(chrome::RED, id!(st_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("st-game-over")
+    .id(id!(st_game_over))
     .any()
 }
 
@@ -1071,7 +1077,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("st-reset-high-score");
+        .id(id!(st_reset_high_score));
     let done = ui.clone();
     chrome::card(
         column((
@@ -1080,22 +1086,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_sirtet")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("st-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(st_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("st-vibrations").any(),
+                toggle(ui.vibrations).id(id!(st_vibrations)).any(),
             ),
             chrome::section_heading(tr("gk_data")),
             reset,
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.show(Overlay::Pause))
-                .id("st-done"),
+                .id(id!(st_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("st-settings-card")
+    .id(id!(st_settings_card))
     .any()
 }
 
@@ -1117,10 +1123,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Heading(tr("gk_game_over_heading")),
             Help::Para(tr("st_help_over_1")),
         ],
-        "st-help-done",
+        id!(st_help_done),
         move || ui.show(if live { Overlay::Pause } else { Overlay::None }),
     )
-    .id("st-instructions-card")
+    .id(id!(st_instructions_card))
     .any()
 }
 

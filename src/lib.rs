@@ -142,7 +142,7 @@ fn preferences() -> Prefs {
                         .caption(res::str::settings_reset_records_caption())
                         .destructive()
                         .confirm(res::str::settings_reset_records_confirm())
-                        .id("reset-records"),
+                        .id(id!(reset_records)),
                 ),
         )
         .install()
@@ -202,7 +202,7 @@ fn settings_button() -> AnyPiece {
         day_piece_settings::open();
     })
     .a11y(|a| a.label(day::tr("day-settings")).role(Role::Button))
-    .id("home-settings")
+    .id(id!(home_settings))
     .frame(gamekit::chrome::BUTTON, gamekit::chrome::BUTTON)
     .any()
 }
@@ -213,7 +213,7 @@ fn tile(
     section: Section,
     title: LocalizedText,
     preview: AnyPiece,
-    id: &'static str,
+    id: ElementId,
 ) -> impl Piece + use<> {
     let a11y_title = title.clone();
     column((
@@ -242,7 +242,7 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
             .font(Font::Title)
             .bold()
             .color(Color::WHITE)
-            .id("app-title")
+            .id(id!(app_title))
             .grow_w(),
         settings_in_chrome.then(settings_button),
     ))
@@ -259,84 +259,84 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
                     Section::Breakout,
                     res::str::nav_breakout(),
                     breakout::breakout_preview(),
-                    "tile-breakout",
+                    id!(tile_breakout),
                 ),
                 tile(
                     open,
                     Section::Sirtet,
                     res::str::nav_sirtet(),
                     sirtet::sirtet_preview(),
-                    "tile-sirtet",
+                    id!(tile_sirtet),
                 ),
                 tile(
                     open,
                     Section::Game2048,
                     res::str::nav_2048(),
                     twentyfortyeight::twentyfortyeight_preview(),
-                    "tile-twentyfortyeight",
+                    id!(tile_twentyfortyeight),
                 ),
                 tile(
                     open,
                     Section::Sudoku,
                     res::str::nav_sudoku(),
                     sudoku::sudoku_preview(),
-                    "tile-sudoku",
+                    id!(tile_sudoku),
                 ),
                 tile(
                     open,
                     Section::BlockBlast,
                     res::str::nav_blockblast(),
                     blockblast::blockblast_preview(),
-                    "tile-blockblast",
+                    id!(tile_blockblast),
                 ),
                 tile(
                     open,
                     Section::Solitaire,
                     res::str::nav_solitaire(),
                     solitaire::solitaire_preview(),
-                    "tile-solitaire",
+                    id!(tile_solitaire),
                 ),
                 tile(
                     open,
                     Section::Charades,
                     res::str::nav_charades(),
                     charades::charades_preview(),
-                    "tile-charades",
+                    id!(tile_charades),
                 ),
                 tile(
                     open,
                     Section::Pipes,
                     res::str::nav_pipes(),
                     pipes::pipes_preview(),
-                    "tile-pipes",
+                    id!(tile_pipes),
                 ),
                 tile(
                     open,
                     Section::Flipside,
                     res::str::nav_flipside(),
                     flipside::flipside_preview(),
-                    "tile-flipside",
+                    id!(tile_flipside),
                 ),
                 tile(
                     open,
                     Section::Mines,
                     res::str::nav_mines(),
                     mines::mines_preview(),
-                    "tile-mines",
+                    id!(tile_mines),
                 ),
                 tile(
                     open,
                     Section::MatchThree,
                     res::str::nav_matchthree(),
                     matchthree::matchthree_preview(),
-                    "tile-matchthree",
+                    id!(tile_matchthree),
                 ),
                 tile(
                     open,
                     Section::PacPac,
                     res::str::nav_pacpac(),
                     pacpac::pacpac_preview(),
-                    "tile-pacpac",
+                    id!(tile_pacpac),
                 ),
             ))
             .spacing(Space::L)
@@ -348,7 +348,7 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
     )
     .grow()
     .background(HOME_BG)
-    .id("home")
+    .id(id!(home))
 }
 
 /// The fullscreen game surface: the game page shielded from system edge gestures and

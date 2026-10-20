@@ -811,7 +811,7 @@ pub fn pacpac_page() -> AnyPiece {
             };
             ku.steer(dir);
         })
-        .id("pm-canvas")
+        .id(id!(pm_canvas))
         .grow()
     };
 
@@ -825,7 +825,7 @@ pub fn pacpac_page() -> AnyPiece {
     };
 
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_pacpac"), "pm-pause", move || {
+    let header = chrome::game_header(tr("nav_pacpac"), id!(pm_pause), move || {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
@@ -915,7 +915,7 @@ fn joypad(ui: Rc<Ui>) -> impl Piece {
         tu.pad_touch(None);
     })
     .a11y(|a| a.label(tr("pm_pad")))
-    .id("pm-pad")
+    .id(id!(pm_pad))
     .frame(PAD_W, PAD_H)
 }
 
@@ -978,27 +978,33 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "pm-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(pm_resume), move || {
                 u1.show(Overlay::None)
             }),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "pm-new-game", move || {
-                u2.pick_mode(Overlay::Pause)
-            }),
-            chrome::menu_button(tr("gk_settings"), chrome::SLATE, "pm-settings", move || {
-                u3.show(Overlay::Settings)
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(pm_new_game),
+                move || u2.pick_mode(Overlay::Pause),
+            ),
+            chrome::menu_button(
+                tr("gk_settings"),
+                chrome::SLATE,
+                id!(pm_settings),
+                move || u3.show(Overlay::Settings),
+            ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "pm-instructions",
+                id!(pm_instructions),
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "pm-quit"),
+            chrome::close_game_button(chrome::RED, id!(pm_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("pm-pause-menu")
+    .id(id!(pm_pause_menu))
     .any()
 }
 
@@ -1011,14 +1017,14 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
             tr("pm_mode_pacpac"),
             tr("pm_mode_pacpac_detail"),
             art::YELLOW,
-            "pm-mode-pacpac",
+            id!(pm_mode_pacpac),
         ),
         (
             Mode::MsPacPac,
             tr("pm_mode_mspacpac"),
             tr("pm_mode_mspacpac_detail"),
             art::PINKY,
-            "pm-mode-mspacpac",
+            id!(pm_mode_mspacpac),
         ),
     ];
     let mut cards = Vec::new();
@@ -1077,12 +1083,12 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
                     let back = u.return_to.replace(Overlay::None);
                     u.show(back);
                 })
-                .id("pm-cancel"),
+                .id(id!(pm_cancel)),
         ))
         .spacing(Space::L)
         .align(HAlign::Center),
     )
-    .id("pm-mode-picker")
+    .id(id!(pm_mode_picker))
     .any()
 }
 
@@ -1116,7 +1122,7 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 score.to_string(),
                 Font::LargeTitle,
                 chrome::GOLD,
-                "pm-final-score",
+                id!(pm_final_score),
             ),
             row((
                 chrome::stat(
@@ -1124,14 +1130,14 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                     level.to_string(),
                     Font::Title3,
                     Color::WHITE,
-                    "pm-final-level",
+                    id!(pm_final_level),
                 ),
                 chrome::stat(
                     tr("gk_best"),
                     best.to_string(),
                     Font::Title3,
                     Color::WHITE,
-                    "pm-best",
+                    id!(pm_best),
                 ),
             ))
             .spacing(Space::XL),
@@ -1139,15 +1145,15 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
             chrome::menu_button(
                 tr("gk_play_again"),
                 chrome::BLUE,
-                "pm-play-again",
+                id!(pm_play_again),
                 move || u.pick_mode(Overlay::GameOver),
             ),
-            chrome::close_game_button(chrome::RED, "pm-quit"),
+            chrome::close_game_button(chrome::RED, id!(pm_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("pm-game-over")
+    .id(id!(pm_game_over))
     .any()
 }
 
@@ -1167,7 +1173,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("pm-reset-high-score");
+        .id(id!(pm_reset_high_score));
     let done = ui.clone();
     chrome::card(
         column((
@@ -1176,22 +1182,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_pacpac")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("pm-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(pm_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("pm-vibrations").any(),
+                toggle(ui.vibrations).id(id!(pm_vibrations)).any(),
             ),
             chrome::section_heading(tr("gk_data")),
             reset,
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.show(Overlay::Pause))
-                .id("pm-done"),
+                .id(id!(pm_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("pm-settings-card")
+    .id(id!(pm_settings_card))
     .any()
 }
 
@@ -1217,7 +1223,7 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Heading(tr("pm_help_scoring")),
             Help::Para(tr("pm_help_scoring_1")),
         ],
-        "pm-help-done",
+        id!(pm_help_done),
         move || {
             if ui.fresh.get() {
                 ui.pick_mode(Overlay::None);
@@ -1228,7 +1234,7 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             }
         },
     )
-    .id("pm-instructions-card")
+    .id(id!(pm_instructions_card))
     .any()
 }
 

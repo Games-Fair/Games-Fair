@@ -403,11 +403,7 @@ pub fn draw_cross_glyph(d: &mut Draw, c: Point, size: f64, color: Color) {
 }
 
 /// The 44-point pause button (a pause circle), for a game's top-trailing corner.
-pub fn pause_button(
-    a11y: LocalizedText,
-    id: &'static str,
-    action: impl Fn() + 'static,
-) -> AnyPiece {
+pub fn pause_button(a11y: LocalizedText, id: ElementId, action: impl Fn() + 'static) -> AnyPiece {
     canvas(|d, sz| {
         draw_pause_glyph(
             d,
@@ -443,7 +439,7 @@ pub fn close_button() -> AnyPiece {
     })
     .a11y(|a| a.label(day_fluent::tr("gk_close")).role(Role::Button))
     // The id every dayscript taps to leave a game.
-    .id("close-game")
+    .id(id!(close_game))
     .frame(BUTTON, BUTTON)
     .any()
 }
@@ -454,7 +450,7 @@ pub fn close_button() -> AnyPiece {
 /// guessing at its width.
 pub fn game_header(
     title: LocalizedText,
-    pause_id: &'static str,
+    pause_id: ElementId,
     on_pause: impl Fn() + 'static,
 ) -> AnyPiece {
     row((
@@ -488,7 +484,7 @@ pub fn info_stat<M, C>(
     // A constant, or a source that recolors the value as the game changes: Sudoku's clock turns
     // once the puzzle is given up, and its difficulty carries that difficulty's accent.
     color: impl IntoReactive<Color, C>,
-    id: &'static str,
+    id: ElementId,
 ) -> AnyPiece {
     column((
         label(caption).font(Font::Caption).color(ink_at(0.55)),
@@ -574,7 +570,7 @@ pub fn card_title(text: LocalizedText, color: Color) -> AnyPiece {
 pub fn menu_button(
     title: LocalizedText,
     tint: Color,
-    id: &'static str,
+    id: ElementId,
     action: impl Fn() + 'static,
 ) -> AnyPiece {
     button(title)
@@ -592,7 +588,7 @@ pub fn stat<M>(
     value: impl IntoText<M>,
     font: Font,
     color: Color,
-    id: &'static str,
+    id: ElementId,
 ) -> AnyPiece {
     column((
         label(caption).font(Font::Caption).color(TEXT_DIM),
@@ -634,7 +630,7 @@ pub enum Help {
 pub fn instructions_card(
     title: LocalizedText,
     blocks: Vec<Help>,
-    done_id: &'static str,
+    done_id: ElementId,
     on_done: impl Fn() + 'static,
 ) -> AnyPiece {
     let mut pieces: Vec<AnyPiece> = Vec::with_capacity(blocks.len());
@@ -676,12 +672,12 @@ pub fn instructions_card(
 
 /// The shell's leave-game operation, shared by the canvas header and every pause/results card.
 pub fn close_command() -> Command {
-    Command::new("close-game", day_fluent::tr("gk_close"), crate::close)
+    Command::new(id!(close_game), day_fluent::tr("gk_close"), crate::close)
 }
 
 /// A pause/results-card presentation of the same command as the header's close glyph: "Close
 /// Game", since progress is always saved and nothing is lost by leaving.
-pub fn close_game_button(tint: Color, id: &'static str) -> AnyPiece {
+pub fn close_game_button(tint: Color, id: ElementId) -> AnyPiece {
     close_command()
         .button()
         .prominent()

@@ -1,31 +1,34 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 # The web build's joypad follows the window's width: there in a window the width of a phone or
 # a tablet, gone at a desktop width, and gone for good once a key is pressed (which is why the
-# keyboard steps come last).
+# keyboard steps come last). A phone shows it at every width until a key is pressed. A desktop
+# build never shows it, so the script is for the web and the phones.
 #
 #     day launch -p web-dom --env DAY_GAMES_SEED=15 --script dayscript/pacpac-pad.yaml
+#     day launch -p android-mdc --env DAY_GAMES_SEED=15 --script dayscript/pacpac-pad.yaml
 #
 name: pacpac-pad
 flow:
   - wait_for: { id: home }
   - navigate: { route: pacpac }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: pm-canvas }
+  - assert_visible: { id: pm_canvas }
   - size_class: { width: compact }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: pm-pad }
+  - assert_visible: { id: pm_pad }
   - size_class: { width: expanded }
   - pause: { secs: 0.3 }
-  - assert_missing: { id: pm-pad }
+  - assert_missing: { id: pm_pad, skip_on: [uikit, mdc, arkui] }
+  - assert_visible: { id: pm_pad, only_on: [uikit, mdc, arkui] }
   - size_class: { width: medium }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: pm-pad }
+  - assert_visible: { id: pm_pad }
   # A key press means a keyboard: the pad goes and stays gone.
-  - key: { id: pm-canvas, key: "ArrowLeft" }
+  - key: { id: pm_canvas, key: "ArrowLeft" }
   - pause: { secs: 0.3 }
-  - assert_missing: { id: pm-pad }
+  - assert_missing: { id: pm_pad }
   - size_class: { width: compact }
   - pause: { secs: 0.3 }
-  - assert_missing: { id: pm-pad }
+  - assert_missing: { id: pm_pad }
   - size_class: { width: auto }
   - nav_back: {}

@@ -280,7 +280,7 @@ pub fn flipside_page() -> AnyPiece {
         ui.push(Overlay::Help);
     }
     let (p, s, b, w) = (ui.clone(), ui.clone(), ui.clone(), ui.clone());
-    let header = chrome::game_header(tr("nav_flipside"), "fs-pause", move || p.pause());
+    let header = chrome::game_header(tr("nav_flipside"), id!(fs_pause), move || p.pause());
     let info = column((
         chrome::info_row(vec![
             chrome::info_stat(
@@ -290,7 +290,7 @@ pub fn flipside_page() -> AnyPiece {
                     b.game.borrow().board.count(true).to_string()
                 },
                 Color::WHITE,
-                "fs-black-score",
+                id!(fs_black_score),
             )
             .min_width(72.0)
             .any(),
@@ -301,7 +301,7 @@ pub fn flipside_page() -> AnyPiece {
                     w.game.borrow().board.count(false).to_string()
                 },
                 Color::WHITE,
-                "fs-white-score",
+                id!(fs_white_score),
             )
             .min_width(72.0)
             .any(),
@@ -309,7 +309,7 @@ pub fn flipside_page() -> AnyPiece {
         label(move || s.status())
             .color(chrome::TEXT)
             .align(TextAlign::Center)
-            .id("fs-status"),
+            .id(id!(fs_status)),
     ))
     .spacing(6.0)
     .align(HAlign::Center)
@@ -321,7 +321,7 @@ pub fn flipside_page() -> AnyPiece {
             .font(Font::Caption)
             .color(chrome::TEXT)
             .align(TextAlign::Center)
-            .id("fs-selection"),
+            .id(id!(fs_selection)),
         label(tr("fs_board_hint"))
             .font(Font::Caption)
             .color(chrome::TEXT_DIM)
@@ -389,7 +389,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     .on_key(move |event| k.key(&event.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("fs_board_a11y")))
-    .id("fs-board")
+    .id(id!(fs_board))
     .grow()
     .any()
 }
@@ -537,14 +537,14 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 Help::Para(tr("fs_help_solo")),
                 Help::Para(tr("fs_help_keys")),
             ],
-            "fs-help-done",
+            id!(fs_help_done),
             move || ui.pop(),
         )
-        .id("fs-help")
+        .id(id!(fs_help))
         .any();
     }
     let mut items: Vec<AnyPiece> = Vec::new();
-    let action = |key: &'static str, id: &'static str, tint: Color, overlay: Overlay| {
+    let action = |key: &'static str, id: ElementId, tint: Color, overlay: Overlay| {
         let u = ui.clone();
         chrome::menu_button(tr(key), tint, id, move || u.push(overlay))
     };
@@ -555,28 +555,28 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::menu_button(
                 tr("gk_resume"),
                 chrome::GREEN,
-                "fs-resume",
+                id!(fs_resume),
                 move || u.show(Overlay::None),
             ));
             items.push(action(
                 "gk_new_game",
-                "fs-new-game",
+                id!(fs_new_game),
                 chrome::BLUE,
                 Overlay::NewGame,
             ));
             items.push(action(
                 "gk_settings",
-                "fs-settings",
+                id!(fs_settings),
                 chrome::SLATE,
                 Overlay::Settings,
             ));
             items.push(action(
                 "gk_instructions",
-                "fs-instructions",
+                id!(fs_instructions),
                 chrome::INDIGO,
                 Overlay::Help,
             ));
-            items.push(chrome::close_game_button(chrome::RED, "fs-quit"));
+            items.push(chrome::close_game_button(chrome::RED, id!(fs_quit)));
         }
         Overlay::NewGame => {
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
@@ -584,7 +584,7 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(
                 picker(ui.mode, [(0, tr("fs_solo")), (1, tr("fs_two_players"))])
                     .segmented()
-                    .id("fs-mode")
+                    .id(id!(fs_mode))
                     .any(),
             );
             items.push(label(tr("fs_difficulty")).color(chrome::TEXT).any());
@@ -594,21 +594,21 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                     [(0, tr("fs_easy")), (1, tr("fs_medium")), (2, tr("fs_hard"))],
                 )
                 .segmented()
-                .id("fs-difficulty")
+                .id(id!(fs_difficulty))
                 .any(),
             );
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("fs_start"),
                 chrome::GREEN,
-                "fs-start",
+                id!(fs_start),
                 move || u.start(),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("gk_cancel"),
                 chrome::SLATE,
-                "fs-cancel",
+                id!(fs_cancel),
                 move || u.pop(),
             ));
         }
@@ -616,17 +616,17 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::card_title(tr("gk_settings"), Color::WHITE));
             items.push(chrome::setting_row(
                 tr("gk_sounds"),
-                toggle(ui.sounds).id("fs-sounds").any(),
+                toggle(ui.sounds).id(id!(fs_sounds)).any(),
             ));
             items.push(chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("fs-vibrations").any(),
+                toggle(ui.vibrations).id(id!(fs_vibrations)).any(),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("gk_done"),
                 chrome::GREEN,
-                "fs-done",
+                id!(fs_done),
                 move || u.pop(),
             ));
         }
@@ -640,24 +640,27 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                         .arg("white", f64::from(b.count(false))),
                 )
                 .color(chrome::TEXT)
-                .id("fs-result-score")
+                .id(id!(fs_result_score))
                 .any(),
             );
             items.push(action(
                 "gk_new_game",
-                "fs-play-again",
+                id!(fs_play_again),
                 chrome::GREEN,
                 Overlay::NewGame,
             ));
-            items.push(chrome::close_game_button(chrome::SLATE, "fs-result-quit"));
+            items.push(chrome::close_game_button(
+                chrome::SLATE,
+                id!(fs_result_quit),
+            ));
         }
         _ => {}
     }
     let id = match kind {
-        Overlay::Pause => "fs-pause-menu",
-        Overlay::NewGame => "fs-new-card",
-        Overlay::Settings => "fs-settings-card",
-        _ => "fs-result",
+        Overlay::Pause => id!(fs_pause_menu),
+        Overlay::NewGame => id!(fs_new_card),
+        Overlay::Settings => id!(fs_settings_card),
+        _ => id!(fs_result),
     };
     chrome::card(column(items).spacing(14.0).align(HAlign::Center))
         .id(id)

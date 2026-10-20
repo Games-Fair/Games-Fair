@@ -10,92 +10,92 @@ flow:
   - {"pause": {"secs": 0.4}}
   - {"navigate": {"route": "matchthree"}}
   - {"pause": {"secs": 0.4}}
-  - {"tap": {"id": "mt-map"}}
-  - {"tap": {"id": "mt-stage-1"}}
-  - {"assert_text": {"id": "mt-score", "text": "0"}}
-  - {"assert_text": {"id": "mt-moves", "text": "22"}}
+  - {"tap": {"id": "mt_map"}}
+  - {"tap": {"id": "mt_stage:1"}}
+  - {"assert_text": {"id": "mt_score", "text": "0"}}
+  - {"assert_text": {"id": "mt_moves", "text": "22"}}
   - {"screenshot": "match-three-opening"}
-  - {"key": {"id": "mt-board", "key": "Home"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
-  - {"assert_text": {"id": "mt-moves", "text": "22"}}
-  - {"assert_text": {"id": "mt-score", "text": "0"}}
-  - {"tap": {"id": "mt-pause"}}
-  - {"key": {"id": "mt-board", "key": "h"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"assert_text": {"id": "mt-moves", "text": "22"}}
-  - {"tap": {"id": "mt-resume"}}
-  - {"key": {"id": "mt-board", "key": "Home"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"assert_text": {"id": "mt-score", "text": "12540"}}
-  - {"assert_text": {"id": "mt-moves", "text": "21"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
-  - {"wait_for": {"id": "mt-result", "timeout_secs": 30}}
-  - {"assert_text": {"id": "mt-final-score", "text": "12540"}}
+  - {"key": {"id": "mt_board", "key": "Home"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt_status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt_moves", "text": "22"}}
+  - {"assert_text": {"id": "mt_score", "text": "0"}}
+  - {"tap": {"id": "mt_pause"}}
+  - {"key": {"id": "mt_board", "key": "h"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt_moves", "text": "22"}}
+  - {"tap": {"id": "mt_resume"}}
+  - {"key": {"id": "mt_board", "key": "Home"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt_score", "text": "12540"}}
+  - {"assert_text": {"id": "mt_moves", "text": "21"}}
+  - {"assert_text": {"id": "mt_status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"wait_for": {"id": "mt_result", "timeout_secs": 30}}
+  - {"assert_text": {"id": "mt_final_score", "text": "12540"}}
   - {"screenshot": "match-three-victory"}
-  - {"tap": {"id": "mt-next"}}
-  - {"assert_text": {"id": "mt-moves", "text": "26"}}
-  - {"key": {"id": "mt-board", "key": "Home"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "ArrowRight"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"key": {"id": "mt-board", "key": "ArrowDown"}}
-  - {"key": {"id": "mt-board", "key": "Enter"}}
-  - {"assert_text": {"id": "mt-score", "text": "600"}}
-  - {"assert_text": {"id": "mt-moves", "text": "25"}}
-  - {"assert_text": {"id": "mt-status", "key": "mt_swap_hint", "timeout_secs": 30}}
+  - {"tap": {"id": "mt_next"}}
+  - {"assert_text": {"id": "mt_moves", "text": "26"}}
+  - {"key": {"id": "mt_board", "key": "Home"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "ArrowRight"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"key": {"id": "mt_board", "key": "ArrowDown"}}
+  - {"key": {"id": "mt_board", "key": "Enter"}}
+  - {"assert_text": {"id": "mt_score", "text": "600"}}
+  - {"assert_text": {"id": "mt_moves", "text": "25"}}
+  - {"assert_text": {"id": "mt_status", "key": "mt_swap_hint", "timeout_secs": 30}}
   - {"nav_back": {}}
   - {"pause": {"secs": 0.4}}
   - {"navigate": {"route": "matchthree"}}
   - {"pause": {"secs": 0.4}}
-  - {"assert_text": {"id": "mt-score", "text": "600"}}
-  - {"assert_text": {"id": "mt-moves", "text": "25"}}
-  - {"tap": {"id": "mt-pause"}}
-  - {"tap": {"id": "mt-settings"}}
-  - {"toggle": {"id": "mt-sounds", "value": false}}
-  - {"toggle": {"id": "mt-vibrations", "value": false}}
-  - {"toggle": {"id": "mt-reduced", "value": true}}
-  - {"assert_value": {"id": "mt-sounds", "value": false}}
-  - {"assert_value": {"id": "mt-vibrations", "value": false}}
-  - {"assert_value": {"id": "mt-reduced", "value": true}}
-  - {"select": {"id": "mt-theme", "index": 1}}
-  - {"tap": {"id": "mt-settings-done"}}
-  - {"tap": {"id": "mt-resume"}}
+  - {"assert_text": {"id": "mt_score", "text": "600"}}
+  - {"assert_text": {"id": "mt_moves", "text": "25"}}
+  - {"tap": {"id": "mt_pause"}}
+  - {"tap": {"id": "mt_settings"}}
+  - {"toggle": {"id": "mt_sounds", "value": false}}
+  - {"toggle": {"id": "mt_vibrations", "value": false}}
+  - {"toggle": {"id": "mt_reduced", "value": true}}
+  - {"assert_value": {"id": "mt_sounds", "value": false}}
+  - {"assert_value": {"id": "mt_vibrations", "value": false}}
+  - {"assert_value": {"id": "mt_reduced", "value": true}}
+  - {"select": {"id": "mt_theme", "index": 1}}
+  - {"tap": {"id": "mt_settings_done"}}
+  - {"tap": {"id": "mt_resume"}}
   # A theme changes only the look: the level carries on where it was.
-  - {"assert_text": {"id": "mt-score", "text": "600"}}
-  - {"assert_text": {"id": "mt-moves", "text": "25"}}
+  - {"assert_text": {"id": "mt_score", "text": "600"}}
+  - {"assert_text": {"id": "mt_moves", "text": "25"}}
   - {"screenshot": "match-three-stones"}
-  - {"tap": {"id": "mt-pause"}}
-  - {"tap": {"id": "mt-settings"}}
-  - {"toggle": {"id": "mt-sounds", "value": true}}
-  - {"toggle": {"id": "mt-vibrations", "value": true}}
-  - {"toggle": {"id": "mt-reduced", "value": false}}
-  - {"select": {"id": "mt-theme", "index": 0}}
-  - {"tap": {"id": "mt-settings-done"}}
-  - {"tap": {"id": "mt-instructions"}}
-  - {"assert_visible": {"id": "mt-help"}}
-  - {"tap": {"id": "mt-help-done"}}
-  - {"tap": {"id": "mt-resume"}}
+  - {"tap": {"id": "mt_pause"}}
+  - {"tap": {"id": "mt_settings"}}
+  - {"toggle": {"id": "mt_sounds", "value": true}}
+  - {"toggle": {"id": "mt_vibrations", "value": true}}
+  - {"toggle": {"id": "mt_reduced", "value": false}}
+  - {"select": {"id": "mt_theme", "index": 0}}
+  - {"tap": {"id": "mt_settings_done"}}
+  - {"tap": {"id": "mt_instructions"}}
+  - {"assert_visible": {"id": "mt_help"}}
+  - {"tap": {"id": "mt_help_done"}}
+  - {"tap": {"id": "mt_resume"}}
   - {"assert_no_placeholders": {}}
   - {"screenshot": "match-three-ready"}

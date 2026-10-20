@@ -274,13 +274,15 @@ impl Model {
             records: Records::default(),
             rng: Rng(seed | 1),
         };
-        m.new_game(difficulty);
+        m.new_game(difficulty, seed);
         m
     }
 
-    /// Start a fresh puzzle at `difficulty`, keeping the records.
-    pub fn new_game(&mut self, difficulty: Difficulty) {
+    /// Start a fresh puzzle at `difficulty` from `seed`, keeping the records. A fixed seed always
+    /// deals the same puzzle, as `Model::new` with that seed does.
+    pub fn new_game(&mut self, difficulty: Difficulty, seed: u64) {
         self.difficulty = difficulty;
+        self.rng = Rng(seed | 1);
         let (puzzle, solution) = generate_puzzle(&mut self.rng, difficulty);
         self.solution = solution;
         self.values = puzzle;
@@ -895,6 +897,18 @@ mod tests {
         for i in [40usize, 41, 42] {
             assert!(!m.original[i], "cell {i} must be empty for seed 15");
         }
+    }
+
+    /// New Game under the walkthrough's fixed seed deals the walkthrough's puzzle again, however
+    /// much was played since: a device that kept an earlier run's save starts from it too.
+    #[test]
+    fn new_game_with_a_seed_deals_that_seeds_puzzle() {
+        let fresh = Model::new(15, Difficulty::Medium);
+        let mut played = Model::new(15, Difficulty::Medium);
+        played.new_game(Difficulty::Hard, 99);
+        played.new_game(Difficulty::Medium, 15);
+        assert_eq!(played.values, fresh.values);
+        assert_eq!(played.solution, fresh.solution);
     }
 
     #[test]

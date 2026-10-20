@@ -7,66 +7,66 @@
 flow:
   # The home grid mounts immediately on every platform.
   - wait_for: { id: home }
-  - assert_visible: { id: app-title }
-  - assert_visible: { id: tile-breakout }
+  - assert_visible: { id: app_title }
+  - assert_visible: { id: tile_breakout }
 
   # A tile tap presents the game in the fullscreen cover.
-  - tap: { id: tile-breakout }
+  - tap: { id: tile_breakout }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: bk-canvas }
+  - assert_visible: { id: bk_canvas }
   - assert_route: { route: breakout }
 
   # The X in the top-leading corner is the way out.
-  - tap: { id: close-game }
+  - tap: { id: close_game }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: tile-sirtet }
+  - assert_visible: { id: tile_sirtet }
 
   # Covers are route surfaces too: navigate presents, nav_back dismisses.
   - navigate: { route: twentyfortyeight }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: tf-canvas }
+  - assert_visible: { id: tf_canvas }
   - nav_back:
   - pause: { secs: 0.6 }
 
   - navigate: { route: blockblast }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: bb-canvas }
+  - assert_visible: { id: bb_canvas }
   - nav_back:
   - pause: { secs: 0.6 }
 
   - navigate: { route: solitaire }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: sol-canvas }
+  - assert_visible: { id: sol_canvas }
   - nav_back:
   - pause: { secs: 0.6 }
 
   - navigate: { route: charades }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: ch-deck-animals }
+  - assert_visible: { id: 'ch_deck:animals' }
   - nav_back:
   - pause: { secs: 0.6 }
 
   - navigate: { route: mines }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: mi-board }
+  - assert_visible: { id: mi_board }
   - nav_back:
   - pause: { secs: 0.6 }
 
   - navigate: { route: flipside }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: fs-board }
+  - assert_visible: { id: fs_board }
   - nav_back: {}
   - pause: { secs: 0.6 }
 
   - navigate: { route: pacpac }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: pm-canvas }
+  - assert_visible: { id: pm_canvas }
   - nav_back: {}
   - pause: { secs: 0.6 }
 
   - navigate: { route: pipes }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: pp-board }
+  - assert_visible: { id: pp_board }
   - nav_back: {}
   - pause: { secs: 0.6 }
 
@@ -74,5 +74,5 @@ flow:
 
   - navigate: { route: matchthree }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: mt-board }
+  - assert_visible: { id: mt_board }
   - nav_back: {}

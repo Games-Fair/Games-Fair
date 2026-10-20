@@ -287,11 +287,11 @@ fn difficulty_detail(d: Difficulty) -> day_fluent::LocalizedText {
     }
 }
 
-fn difficulty_id(d: Difficulty) -> &'static str {
+fn difficulty_id(d: Difficulty) -> ElementId {
     match d {
-        Difficulty::Easy => "bb-diff-easy",
-        Difficulty::Normal => "bb-diff-normal",
-        Difficulty::Hard => "bb-diff-hard",
+        Difficulty::Easy => id!(bb_diff_easy),
+        Difficulty::Normal => id!(bb_diff_normal),
+        Difficulty::Hard => id!(bb_diff_hard),
     }
 }
 
@@ -1679,7 +1679,7 @@ pub fn blockblast_page() -> AnyPiece {
             ku.repaint.notify();
         })
         .a11y(|a| a.label(tr("bb_board_a11y")))
-        .id("bb-canvas")
+        .id(id!(bb_canvas))
         .grow()
     };
 
@@ -1693,7 +1693,7 @@ pub fn blockblast_page() -> AnyPiece {
     };
 
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_blockblast"), "bb-pause", move || {
+    let header = chrome::game_header(tr("nav_blockblast"), id!(bb_pause), move || {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
@@ -1716,7 +1716,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             (su.play.borrow().fx.shown_score.round() as i64).to_string()
         },
         Color::WHITE,
-        "bb-score",
+        id!(bb_score),
     )
     // Room for a six-digit score from the first layout, so a growing value never truncates.
     .min_width(88.0)
@@ -1728,7 +1728,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             (bu.play.borrow().fx.shown_best.round() as i64).to_string()
         },
         chrome::GOLD,
-        "bb-best",
+        id!(bb_best),
     )
     .min_width(88.0)
     .any();
@@ -1790,27 +1790,33 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "bb-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(bb_resume), move || {
                 u1.show(Overlay::None)
             }),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "bb-new-game", move || {
-                u2.pick_difficulty()
-            }),
-            chrome::menu_button(tr("gk_settings"), chrome::SLATE, "bb-settings", move || {
-                u3.show(Overlay::Settings)
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(bb_new_game),
+                move || u2.pick_difficulty(),
+            ),
+            chrome::menu_button(
+                tr("gk_settings"),
+                chrome::SLATE,
+                id!(bb_settings),
+                move || u3.show(Overlay::Settings),
+            ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "bb-instructions",
+                id!(bb_instructions),
                 move || u4.show(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "bb-quit"),
+            chrome::close_game_button(chrome::RED, id!(bb_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("bb-pause-menu")
+    .id(id!(bb_pause_menu))
     .any()
 }
 
@@ -1838,14 +1844,14 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
                 score.to_string(),
                 Font::LargeTitle,
                 chrome::GOLD,
-                "bb-final-score",
+                id!(bb_final_score),
             ),
             chrome::stat(
                 tr("gk_best"),
                 best.to_string(),
                 Font::Title3,
                 Color::WHITE,
-                "bb-final-best",
+                id!(bb_final_best),
             ),
             label(difficulty_label(difficulty))
                 .font(Font::Subheadline)
@@ -1855,15 +1861,15 @@ fn game_over_card(ui: Rc<Ui>) -> AnyPiece {
             chrome::menu_button(
                 tr("gk_play_again"),
                 chrome::BLUE,
-                "bb-play-again",
+                id!(bb_play_again),
                 move || u.pick_difficulty(),
             ),
-            chrome::close_game_button(chrome::RED, "bb-quit"),
+            chrome::close_game_button(chrome::RED, id!(bb_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("bb-game-over")
+    .id(id!(bb_game_over))
     .any()
 }
 
@@ -1927,12 +1933,12 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                     let back = u.return_to.replace(Overlay::None);
                     u.show(back);
                 })
-                .id("bb-cancel"),
+                .id(id!(bb_cancel)),
         ))
         .spacing(Space::L)
         .align(HAlign::Center),
     )
-    .id("bb-difficulty-picker")
+    .id(id!(bb_difficulty_picker))
     .any()
 }
 
@@ -1952,7 +1958,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("bb-reset-high-score");
+        .id(id!(bb_reset_high_score));
     let done = ui.clone();
     chrome::card(
         column((
@@ -1961,22 +1967,22 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_blockblast")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("bb-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(bb_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("bb-vibrations").any(),
+                toggle(ui.vibrations).id(id!(bb_vibrations)).any(),
             ),
             chrome::section_heading(tr("gk_data")),
             reset,
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.show(Overlay::Pause))
-                .id("bb-done"),
+                .id(id!(bb_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("bb-settings-card")
+    .id(id!(bb_settings_card))
     .any()
 }
 
@@ -2002,10 +2008,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Heading(tr("gk_game_over_heading")),
             Help::Para(tr("bb_help_over_1")),
         ],
-        "bb-help-done",
+        id!(bb_help_done),
         move || ui.show(if live { Overlay::Pause } else { Overlay::None }),
     )
-    .id("bb-instructions-card")
+    .id(id!(bb_instructions_card))
     .any()
 }
 

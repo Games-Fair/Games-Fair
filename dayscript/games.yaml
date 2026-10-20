@@ -52,44 +52,44 @@ flow:
   # clears the top row, photographed while the preview is lit and mid-clear.
   - navigate: { route: blockblast }
   - pause: { secs: 0.8 }
-  - tap: { id: bb-pause }
+  - tap: { id: bb_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: bb-new-game }
+  - tap: { id: bb_new_game }
   - pause: { secs: 0.4 }
-  - tap: { id: bb-diff-normal }
+  - tap: { id: bb_diff_normal }
   - pause: { secs: 0.8 }
-  - key: { id: bb-canvas, key: "3" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowLeft" }
-  - key: { id: bb-canvas, key: "ArrowLeft" }
-  - key: { id: bb-canvas, key: "3" }
+  - key: { id: bb_canvas, key: "3" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowLeft" }
+  - key: { id: bb_canvas, key: "ArrowLeft" }
+  - key: { id: bb_canvas, key: "3" }
   - pause: { secs: 0.3 }
-  - key: { id: bb-canvas, key: "1" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowRight" }
-  - key: { id: bb-canvas, key: "1" }
+  - key: { id: bb_canvas, key: "1" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowRight" }
+  - key: { id: bb_canvas, key: "1" }
   - pause: { secs: 0.3 }
-  - key: { id: bb-canvas, key: "2" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowRight" }
-  - key: { id: bb-canvas, key: "ArrowRight" }
-  - key: { id: bb-canvas, key: "2" }
+  - key: { id: bb_canvas, key: "2" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowRight" }
+  - key: { id: bb_canvas, key: "ArrowRight" }
+  - key: { id: bb_canvas, key: "2" }
   - pause: { secs: 0.6 }
-  - key: { id: bb-canvas, key: "2" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowUp" }
-  - key: { id: bb-canvas, key: "ArrowRight" }
-  - key: { id: bb-canvas, key: "ArrowRight" }
-  - key: { id: bb-canvas, key: "ArrowRight" }
+  - key: { id: bb_canvas, key: "2" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowUp" }
+  - key: { id: bb_canvas, key: "ArrowRight" }
+  - key: { id: bb_canvas, key: "ArrowRight" }
+  - key: { id: bb_canvas, key: "ArrowRight" }
   - pause: { secs: 0.2 }
   - screenshot: blockblast-lift
-  - key: { id: bb-canvas, key: "2" }
+  - key: { id: bb_canvas, key: "2" }
   - pause: { secs: 0.35 }
   - screenshot: { name: blockblast, title: Block Blast, caption: "Drag pieces onto the board; full rows and columns clear, and back-to-back clears build a combo.", source: games/blockblast/src/lib.rs }
   - nav_back: {}
@@ -98,17 +98,17 @@ flow:
   # home (dayscript/solitaire.yaml explains the keys).
   - navigate: { route: solitaire }
   - pause: { secs: 0.8 }
-  - tap: { id: sol-pause }
+  - tap: { id: sol_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: sol-new-game }
+  - tap: { id: sol_new_game }
   - pause: { secs: 0.4 }
-  - tap: { id: sol-draw-1 }
+  - tap: { id: sol_draw_1 }
   - pause: { secs: 3.0 }
-  - key: { id: sol-canvas, key: "9" }
+  - key: { id: sol_canvas, key: "9" }
   - pause: { secs: 0.12 }
   - screenshot: solitaire-flight
   - pause: { secs: 1.0 }
-  - key: { id: sol-canvas, key: "9" }
+  - key: { id: sol_canvas, key: "9" }
   - pause: { secs: 1.0 }
   - screenshot: { name: solitaire, title: Solitaire, caption: "Klondike, one card at a time or three; with Winnable Deals Only on, a solver proves every deal before it reaches the table.", source: games/solitaire/src/lib.rs }
   - nav_back: {}
@@ -118,14 +118,14 @@ flow:
   - navigate: { route: charades }
   - pause: { secs: 0.6 }
   - screenshot: { name: charades, title: Charades, caption: "Hold the phone to your forehead, let your friends give clues, and nod when you guess right.", source: games/charades/src/lib.rs }
-  - tap: { id: ch-settings }
+  - tap: { id: ch_settings }
   - pause: { secs: 0.4 }
-  - toggle: { id: ch-tilt, value: false }
-  - tap: { id: ch-done }
+  - toggle: { id: ch_tilt, value: false }
+  - tap: { id: ch_done }
   - pause: { secs: 0.4 }
-  - tap: { id: ch-deck-animals }
+  - tap: { id: 'ch_deck:animals' }
   - pause: { secs: 0.5 }
-  - tap: { id: ch-start }
+  - tap: { id: ch_start }
   - pause: { secs: 3.6 }
   - screenshot: charades-card
   - nav_back: {}
@@ -134,22 +134,22 @@ flow:
   # cascade, so the flag is still there once the clearing runs into it.
   - navigate: { route: mines }
   - pause: { secs: 0.6 }
-  - tap: { id: mi-pause }
+  - tap: { id: mi_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: mi-new-game }
+  - tap: { id: mi_new_game }
   - pause: { secs: 0.4 }
-  - tap: { id: mi-diff-easy }
+  - tap: { id: mi_diff_easy }
   - pause: { secs: 0.6 }
-  - key: { id: mi-board, key: "f" }
-  - key: { id: mi-board, key: "ArrowDown" }
-  - key: { id: mi-board, key: " " }
+  - key: { id: mi_board, key: "f" }
+  - key: { id: mi_board, key: "ArrowDown" }
+  - key: { id: mi_board, key: " " }
   - pause: { secs: 0.6 }
   - screenshot: { name: mines, title: Mines, caption: "The classic sweeper: your first tap is always safe, hold a square to flag it, and the board turns with the window.", source: games/mines/src/lib.rs }
   - nav_back: {}
   - pause: { secs: 0.6 }
   - navigate: { route: breakout }
   - pause: { secs: 0.6 }
-  - tap: { id: bk-canvas }
+  - tap: { id: bk_canvas }
   - pause: { secs: 0.9 }
   - screenshot: { name: breakout-a, title: Breakout, caption: "The paddle glides under your finger or pointer; combos, power-ups, and armored bricks follow.", source: games/breakout/src/lib.rs }
   - pause: { secs: 0.7 }
@@ -158,8 +158,8 @@ flow:
   - pause: { secs: 0.6 }
   - navigate: { route: sirtet }
   - pause: { secs: 0.5 }
-  - tap: { id: st-canvas }
-  - tap: { id: st-canvas }
+  - tap: { id: st_canvas }
+  - tap: { id: st_canvas }
   - pause: { secs: 0.4 }
   - screenshot: sirtet-a
   - pause: { secs: 1.0 }
@@ -170,15 +170,15 @@ flow:
   - pause: { secs: 0.6 }
   - screenshot: { name: g2048, title: "2048", caption: "Slide, merge, and chase your best score.", source: games/twentyfortyeight/src/lib.rs }
   # New Game asks for the rules; Easy adds the undo button beside pause.
-  - tap: { id: tf-pause }
+  - tap: { id: tf_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: tf-new-game }
+  - tap: { id: tf_new_game }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: tf-difficulty-picker }
+  - assert_visible: { id: tf_difficulty_picker }
   - screenshot: { name: g2048-difficulty, title: "2048 difficulty", caption: "Easy grants three undos; Hard spawns two tiles a move.", source: games/twentyfortyeight/src/lib.rs }
-  - tap: { id: tf-diff-easy }
+  - tap: { id: tf_diff_easy }
   - pause: { secs: 0.5 }
-  - assert_visible: { id: tf-undo }
+  - assert_visible: { id: tf_undo }
   - screenshot: g2048-easy
   - nav_back: {}
   - pause: { secs: 0.6 }
@@ -188,34 +188,34 @@ flow:
   - pause: { secs: 0.6 }
   - navigate: { route: sudoku }
   - pause: { secs: 0.8 }
-  - tap: { id: su-cell-40 }
-  - tap: { id: su-key-5 }
+  - tap: { id: 'su_cell:40' }
+  - tap: { id: 'su_key:5' }
   - pause: { secs: 0.4 }
   - screenshot: { name: sudoku, title: Sudoku, caption: "Pencil marks, a checkpoint you can commit or revert, and a best time per difficulty.", source: games/sudoku/src/lib.rs }
   - nav_back: {}
 
   - navigate: { route: flipside }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: fs-board }
+  - assert_visible: { id: fs_board }
   - screenshot: flipside
   - nav_back: {}
 
   - navigate: { route: pipes }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: pp-board }
+  - assert_visible: { id: pp_board }
   - screenshot: pipes
   - nav_back: {}
 
   # Pac-Pac: a fresh Pac-Pac round, photographed once READY! has given way to play.
   - navigate: { route: pacpac }
   - pause: { secs: 0.6 }
-  - tap: { id: pm-pause }
+  - tap: { id: pm_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: pm-new-game }
+  - tap: { id: pm_new_game }
   - pause: { secs: 0.4 }
-  - tap: { id: pm-mode-pacpac }
+  - tap: { id: pm_mode_pacpac }
   - pause: { secs: 5.5 }
-  - key: { id: pm-canvas, key: "ArrowDown" }
+  - key: { id: pm_canvas, key: "ArrowDown" }
   - pause: { secs: 1.0 }
   - screenshot: { name: pacpac, title: Pac-Pac, caption: "Pac-Pac and Ms. Pac-Pac at the arcade's pixels: the ghosts' real targets, the real speeds, and the sirens.", source: games/pacpac/src/lib.rs }
   - nav_back: {}
@@ -226,8 +226,8 @@ flow:
   # cover there. The cover's root lists the groups, so the phones and the web step into General.
   # The cover draws inside the main window, so one capture key serves every target.
   - menu: { key: day-preferences, skip_on: [uikit, mdc, arkui] }
-  - tap: { id: home-settings, only_on: [uikit, mdc, arkui] }
-  - tap: { id: prefs-group-general, only_on: [uikit, mdc, arkui, dom] }
-  - wait_for: { id: language-picker }
+  - tap: { id: home_settings, only_on: [uikit, mdc, arkui] }
+  - tap: { id: 'prefs_group:general', only_on: [uikit, mdc, arkui, dom] }
+  - wait_for: { id: language_picker }
   - screenshot: { name: settings, window: day.preferences }
   - close_window: { window: day.preferences }

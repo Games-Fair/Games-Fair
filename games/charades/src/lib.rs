@@ -534,12 +534,12 @@ fn deck_screen(ui: Rc<Ui>) -> AnyPiece {
             .bordered()
             .tint(Color::WHITE)
             .action(move || iu.push(Overlay::Instructions))
-            .id("ch-instructions"),
+            .id(id!(ch_instructions)),
         button(tr("gk_settings"))
             .bordered()
             .tint(Color::WHITE)
             .action(move || su.push(Overlay::Settings))
-            .id("ch-settings"),
+            .id(id!(ch_settings)),
     ))
     .spacing(Space::S);
     // The header stays out of the scroll, so the close button sits where every other game keeps
@@ -566,7 +566,7 @@ fn deck_screen(ui: Rc<Ui>) -> AnyPiece {
     ))
     .grow()
     .background(SURFACE)
-    .id("ch-decks")
+    .id(id!(ch_decks))
     .any()
 }
 
@@ -599,7 +599,7 @@ fn deck_tile(ui: Rc<Ui>, deck: &Deck) -> AnyPiece {
     .corner_radius(16.0)
     .on_tap(move || ui.start(id))
     .a11y(move |a| a.label(a11y.clone()).role(Role::Button))
-    .id(format!("ch-deck-{id}"))
+    .id(id!(ch_deck, id))
     // Last, so the wrap sees a growing cell and stretches its columns to the width.
     .grow_w()
     .any()
@@ -630,7 +630,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
             a.label(tr("ch_card_a11y").arg("word", word))
         }
     })
-    .id("ch-canvas")
+    .id(id!(ch_canvas))
     .grow();
 
     // Starting by hand: always there while waiting, since a phone can be held up in a pose the
@@ -646,12 +646,12 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
                         .bordered()
                         .tint(Color::WHITE)
                         .action(move || b.to_decks())
-                        .id("ch-back"),
+                        .id(id!(ch_back)),
                     button(tr("ch_start"))
                         .prominent()
                         .tint(GREEN)
                         .action(move || s.begin_countdown())
-                        .id("ch-start"),
+                        .id(id!(ch_start)),
                 ))
                 .spacing(Space::L)
             },
@@ -669,13 +669,13 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
                         .prominent()
                         .tint(ORANGE)
                         .action(move || p.answer(Mark::Pass))
-                        .id("ch-pass")
+                        .id(id!(ch_pass))
                         .grow_w(),
                     button(tr("ch_correct"))
                         .prominent()
                         .tint(GREEN)
                         .action(move || k.answer(Mark::Correct))
-                        .id("ch-correct")
+                        .id(id!(ch_correct))
                         .grow_w(),
                 ))
                 .spacing(Space::L)
@@ -684,7 +684,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
         )
     };
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_charades"), "ch-pause", move || pu.pause());
+    let header = chrome::game_header(tr("nav_charades"), id!(ch_pause), move || pu.pause());
     // Under the card: whichever of the two button rows this phase shows.
     let footer = column((ready, answers))
         .spacing(Space::M)
@@ -1110,19 +1110,21 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
                 score.to_string(),
                 Font::LargeTitle,
                 chrome::GOLD,
-                "ch-score",
+                id!(ch_score),
             ),
             best,
             list,
-            chrome::menu_button(tr("ch_play_again"), GREEN, "ch-again", move || au.start(id)),
-            chrome::menu_button(tr("ch_decks"), chrome::BLUE, "ch-to-decks", move || {
+            chrome::menu_button(tr("ch_play_again"), GREEN, id!(ch_again), move || {
+                au.start(id)
+            }),
+            chrome::menu_button(tr("ch_decks"), chrome::BLUE, id!(ch_to_decks), move || {
                 du.to_decks()
             }),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("ch-results");
+    .id(id!(ch_results));
     zstack((card,))
         .align(Alignment::Center)
         .grow()
@@ -1157,13 +1159,13 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "ch-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(ch_resume), move || {
                 u1.show(Overlay::None)
             }),
             chrome::menu_button(
                 tr("ch_end_round"),
                 chrome::AMBER,
-                "ch-end-round",
+                id!(ch_end_round),
                 move || {
                     // Ending early still counts what was played; a round that never started does not.
                     if u2.phase.get_untracked() == Phase::Play {
@@ -1176,21 +1178,21 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
             chrome::menu_button(
                 tr("gk_settings"),
                 chrome::SLATE,
-                "ch-pause-settings",
+                id!(ch_pause_settings),
                 move || u3.push(Overlay::Settings),
             ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "ch-pause-instructions",
+                id!(ch_pause_instructions),
                 move || u4.push(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "ch-quit"),
+            chrome::close_game_button(chrome::RED, id!(ch_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("ch-pause-menu")
+    .id(id!(ch_pause_menu))
     .any()
 }
 
@@ -1216,7 +1218,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("ch-reset-records");
+        .id(id!(ch_reset_records));
     let done = ui.clone();
     chrome::card(
         column((
@@ -1225,10 +1227,10 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_charades")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("ch-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(ch_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("ch-vibrations").any(),
+                toggle(ui.vibrations).id(id!(ch_vibrations)).any(),
             ),
             chrome::setting_row(
                 tr("ch_round_length"),
@@ -1237,14 +1239,14 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     LENGTHS.map(|s| (s, tr("ch_seconds").arg("n", f64::from(s)))),
                 )
                 .menu()
-                .id("ch-round-length")
+                .id(id!(ch_round_length))
                 .any(),
             ),
             chrome::setting_row(
                 tr("ch_tilt"),
                 toggle(ui.tilt_on)
                     .enabled(ui.tilt_available)
-                    .id("ch-tilt")
+                    .id(id!(ch_tilt))
                     .any(),
             ),
             label(tilt_detail)
@@ -1257,19 +1259,19 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 label(played.to_string())
                     .tabular()
                     .color(chrome::TEXT_DIM)
-                    .id("ch-rounds-played")
+                    .id(id!(ch_rounds_played))
                     .any(),
             ),
             reset,
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.pop())
-                .id("ch-done"),
+                .id(id!(ch_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("ch-settings-card")
+    .id(id!(ch_settings_card))
     .any()
 }
 
@@ -1286,10 +1288,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Heading(tr("ch_help_buttons")),
             Help::Para(tr("ch_help_buttons_1")),
         ],
-        "ch-help-done",
+        id!(ch_help_done),
         move || ui.pop(),
     )
-    .id("ch-instructions-card")
+    .id(id!(ch_instructions_card))
     .any()
 }
 

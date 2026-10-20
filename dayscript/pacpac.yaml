@@ -20,63 +20,63 @@ flow:
   - pause: { secs: 0.6 }
   - navigate: { route: pacpac }
   - pause: { secs: 0.6 }
-  - assert_visible: { id: pm-canvas }
-  - tap: { id: pm-pause }
+  - assert_visible: { id: pm_canvas }
+  - tap: { id: pm_pause }
   - pause: { secs: 0.4 }
-  - tap: { id: pm-new-game }
+  - tap: { id: pm_new_game }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: pm-mode-picker }
+  - assert_visible: { id: pm_mode_picker }
   - screenshot: pacpac-picker
-  - tap: { id: pm-mode-pacpac }
+  - tap: { id: pm_mode_pacpac }
   - pause: { secs: 1.0 }
   - screenshot: pacpac-ready
   # The jingle plays through READY!, then Pac-Pac sets off to the left; steer him round the
   # bottom of the maze.
   - pause: { secs: 4.0 }
-  - key: { id: pm-canvas, key: "ArrowDown" }
+  - key: { id: pm_canvas, key: "ArrowDown" }
   - pause: { secs: 1.2 }
-  - key: { id: pm-canvas, key: "ArrowLeft" }
+  - key: { id: pm_canvas, key: "ArrowLeft" }
   - pause: { secs: 1.0 }
   - screenshot: pacpac-play
-  - key: { id: pm-canvas, key: "ArrowDown" }
+  - key: { id: pm_canvas, key: "ArrowDown" }
   - pause: { secs: 1.5 }
-  - key: { id: pm-canvas, key: "ArrowRight" }
+  - key: { id: pm_canvas, key: "ArrowRight" }
   - pause: { secs: 1.5 }
   - screenshot: pacpac-play-2
-  - tap: { id: pm-pause }
+  - tap: { id: pm_pause }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: pm-pause-menu }
+  - assert_visible: { id: pm_pause_menu }
   - screenshot: pacpac-paused
-  - tap: { id: pm-settings }
+  - tap: { id: pm_settings }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: pm-settings-card }
+  - assert_visible: { id: pm_settings_card }
   - screenshot: pacpac-settings
-  - tap: { id: pm-done }
+  - tap: { id: pm_done }
   - pause: { secs: 0.3 }
-  - tap: { id: pm-instructions }
+  - tap: { id: pm_instructions }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: pm-instructions-card }
+  - assert_visible: { id: pm_instructions_card }
   - screenshot: pacpac-instructions
-  - tap: { id: pm-help-done }
+  - tap: { id: pm_help_done }
   - pause: { secs: 0.3 }
-  - assert_visible: { id: pm-pause-menu }
+  - assert_visible: { id: pm_pause_menu }
   # Ms. Pac-Pac: a fresh round in her first maze.
-  - tap: { id: pm-new-game }
+  - tap: { id: pm_new_game }
   - pause: { secs: 0.4 }
-  - tap: { id: pm-mode-mspacpac }
+  - tap: { id: pm_mode_mspacpac }
   - pause: { secs: 1.0 }
   - screenshot: mspacpac-ready
   - pause: { secs: 4.5 }
-  - key: { id: pm-canvas, key: "ArrowUp" }
+  - key: { id: pm_canvas, key: "ArrowUp" }
   - pause: { secs: 1.5 }
   - screenshot: mspacpac-play
-  - key: { id: pm-canvas, key: "Escape" }
+  - key: { id: pm_canvas, key: "Escape" }
   - pause: { secs: 0.4 }
-  - assert_visible: { id: pm-pause-menu }
-  - key: { id: pm-canvas, key: "Escape" }
+  - assert_visible: { id: pm_pause_menu }
+  - key: { id: pm_canvas, key: "Escape" }
   - pause: { secs: 0.4 }
-  - assert_missing: { id: pm-pause-menu }
+  - assert_missing: { id: pm_pause_menu }
   - nav_back: {}
   - pause: { secs: 0.6 }
-  - assert_visible: { id: tile-pacpac }
+  - assert_visible: { id: tile_pacpac }
   - screenshot: home-with-pacpac

@@ -103,11 +103,11 @@ fn difficulty_label(d: Difficulty) -> day_fluent::LocalizedText {
     }
 }
 
-fn difficulty_id(d: Difficulty) -> &'static str {
+fn difficulty_id(d: Difficulty) -> ElementId {
     match d {
-        Difficulty::Easy => "mi-diff-easy",
-        Difficulty::Medium => "mi-diff-medium",
-        Difficulty::Hard => "mi-diff-hard",
+        Difficulty::Easy => id!(mi_diff_easy),
+        Difficulty::Medium => id!(mi_diff_medium),
+        Difficulty::Hard => id!(mi_diff_hard),
     }
 }
 
@@ -693,7 +693,7 @@ pub fn mines_page() -> AnyPiece {
     };
     let pu = ui.clone();
     let content = chrome::game_frame(
-        chrome::game_header(tr("nav_mines"), "mi-pause", move || pu.pause()),
+        chrome::game_header(tr("nav_mines"), id!(mi_pause), move || pu.pause()),
         Some(info_bar(ui.clone())),
         board.any(),
         Some(flag_toggle(ui.clone())),
@@ -769,7 +769,7 @@ fn board_canvas(ui: Rc<Ui>) -> impl Piece {
     .on_key(move |k| ku.key(&k.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mi_board_a11y")))
-    .id("mi-board")
+    .id(id!(mi_board))
     .grow()
 }
 
@@ -1113,7 +1113,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             mu.board.borrow().mines_left().to_string()
         },
         FLAG_RED,
-        "mi-mines-left",
+        id!(mi_mines_left),
     );
     let time = counter(
         tr("mi_time"),
@@ -1122,7 +1122,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
             fmt_time(tu.board.borrow().elapsed)
         },
         Color::WHITE,
-        "mi-time",
+        id!(mi_time),
     );
     chrome::info_row(vec![mines, time])
 }
@@ -1160,7 +1160,7 @@ fn flag_toggle(ui: Rc<Ui>) -> AnyPiece {
             fu.hud.notify();
         })
         .a11y(|a| a.label(tr("mi_flag_mode_a11y")).role(Role::Button))
-        .id("mi-flag-mode")
+        .id(id!(mi_flag_mode))
         .frame(44.0, 44.0)
     };
     row((label(tr("mi_flag_mode")).color(chrome::TEXT), flag))
@@ -1174,7 +1174,7 @@ fn counter(
     caption: day_fluent::LocalizedText,
     value: impl Fn() -> String + 'static,
     color: Color,
-    id: &'static str,
+    id: ElementId,
 ) -> AnyPiece {
     column((
         label(caption).font(Font::Caption).color(chrome::TEXT_DIM),
@@ -1222,27 +1222,33 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
     chrome::card(
         column((
             chrome::card_title(tr("gk_paused"), Color::WHITE),
-            chrome::menu_button(tr("gk_resume"), chrome::GREEN, "mi-resume", move || {
+            chrome::menu_button(tr("gk_resume"), chrome::GREEN, id!(mi_resume), move || {
                 u1.show(Overlay::None)
             }),
-            chrome::menu_button(tr("gk_new_game"), chrome::BLUE, "mi-new-game", move || {
-                u2.push(Overlay::Picker)
-            }),
-            chrome::menu_button(tr("gk_settings"), chrome::SLATE, "mi-settings", move || {
-                u3.push(Overlay::Settings)
-            }),
+            chrome::menu_button(
+                tr("gk_new_game"),
+                chrome::BLUE,
+                id!(mi_new_game),
+                move || u2.push(Overlay::Picker),
+            ),
+            chrome::menu_button(
+                tr("gk_settings"),
+                chrome::SLATE,
+                id!(mi_settings),
+                move || u3.push(Overlay::Settings),
+            ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
-                "mi-instructions",
+                id!(mi_instructions),
                 move || u4.push(Overlay::Instructions),
             ),
-            chrome::close_game_button(chrome::RED, "mi-quit"),
+            chrome::close_game_button(chrome::RED, id!(mi_quit)),
         ))
         .spacing(14.0)
         .align(HAlign::Center),
     )
-    .id("mi-pause-menu")
+    .id(id!(mi_pause_menu))
     .any()
 }
 
@@ -1312,12 +1318,12 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
             column(rows).spacing(Space::M),
             button(tr("gk_cancel"))
                 .action(move || u.pop())
-                .id("mi-cancel"),
+                .id(id!(mi_cancel)),
         ))
         .spacing(Space::L)
         .align(HAlign::Center),
     )
-    .id("mi-picker")
+    .id(id!(mi_picker))
     .any()
 }
 
@@ -1328,9 +1334,9 @@ fn end_card(ui: Rc<Ui>, won: bool) -> AnyPiece {
     let best = ui.records.borrow().best[d.index()];
     let new_best = ui.new_best.get();
     let (again_label, again_id) = if won {
-        (tr("gk_play_again"), "mi-play-again")
+        (tr("gk_play_again"), id!(mi_play_again))
     } else {
-        (tr("mi_try_again"), "mi-try-again")
+        (tr("mi_try_again"), id!(mi_try_again))
     };
     let (au, nu) = (ui.clone(), ui.clone());
     let best_line = when(
@@ -1341,7 +1347,7 @@ fn end_card(ui: Rc<Ui>, won: bool) -> AnyPiece {
                 best.map(fmt_time).unwrap_or_default(),
                 Font::Title3,
                 Color::WHITE,
-                "mi-best",
+                id!(mi_best),
             )
         },
     );
@@ -1368,7 +1374,7 @@ fn end_card(ui: Rc<Ui>, won: bool) -> AnyPiece {
                 fmt_time(secs),
                 Font::LargeTitle,
                 if won { chrome::GOLD } else { Color::WHITE },
-                "mi-final-time",
+                id!(mi_final_time),
             ),
             best_line,
             record,
@@ -1376,15 +1382,19 @@ fn end_card(ui: Rc<Ui>, won: bool) -> AnyPiece {
             chrome::menu_button(
                 tr("gk_new_game"),
                 chrome::BLUE,
-                "mi-end-new-game",
+                id!(mi_end_new_game),
                 move || nu.push(Overlay::Picker),
             ),
-            chrome::close_game_button(chrome::RED, "mi-end-quit"),
+            chrome::close_game_button(chrome::RED, id!(mi_end_quit)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id(if won { "mi-won-card" } else { "mi-lost-card" })
+    .id(if won {
+        id!(mi_won_card)
+    } else {
+        id!(mi_lost_card)
+    })
     .any()
 }
 
@@ -1436,7 +1446,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 }
             });
         })
-        .id("mi-reset-records");
+        .id(id!(mi_reset_records));
     let done = ui.clone();
     chrome::card(
         column((
@@ -1445,14 +1455,14 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                 .bold()
                 .color(Color::WHITE),
             chrome::section_heading(tr("nav_mines")),
-            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id("mi-sounds").any()),
+            chrome::setting_row(tr("gk_sounds"), toggle(ui.sounds).id(id!(mi_sounds)).any()),
             chrome::setting_row(
                 tr("gk_vibrations"),
-                toggle(ui.vibrations).id("mi-vibrations").any(),
+                toggle(ui.vibrations).id(id!(mi_vibrations)).any(),
             ),
             chrome::setting_row(
                 tr("mi_flag_mode"),
-                toggle(ui.flag_mode).id("mi-flag-setting").any(),
+                toggle(ui.flag_mode).id(id!(mi_flag_setting)).any(),
             ),
             chrome::section_heading(tr("mi_records")),
             line(Difficulty::Easy),
@@ -1462,12 +1472,12 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.pop())
-                .id("mi-done"),
+                .id(id!(mi_done)),
         ))
         .spacing(Space::M)
         .align(HAlign::Center),
     )
-    .id("mi-settings-card")
+    .id(id!(mi_settings_card))
     .any()
 }
 
@@ -1484,10 +1494,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
             Help::Heading(tr("mi_help_keys")),
             Help::Para(tr("mi_help_keys_1")),
         ],
-        "mi-help-done",
+        id!(mi_help_done),
         move || ui.pop(),
     )
-    .id("mi-instructions-card")
+    .id(id!(mi_instructions_card))
     .any()
 }
 
