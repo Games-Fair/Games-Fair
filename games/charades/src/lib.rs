@@ -701,7 +701,6 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
 
 /// The frame consumer: motion into gestures, the countdown, the round's clock, and the flashes.
 fn charades_clock(ui: Rc<Ui>) -> impl Piece {
-    let sample_dt = day_part_sensors::SAMPLE_MS as f64 / 1000.0;
     let demand = ui.clone();
     gamekit::animation::clock(
         move || {
@@ -726,8 +725,12 @@ fn charades_clock(ui: Rc<Ui>) -> impl Piece {
             let mut gestures = Vec::new();
             if ui.tilting.get_untracked() {
                 let mut tilt = ui.tilt.borrow_mut();
+                // The sensor part makes no cadence promise (about 20 Hz, device-dependent,
+                // coalesced when callbacks lag), so the samples drained this frame share the
+                // frame's elapsed time instead of assuming a fixed interval.
+                let per_sample = dt / samples.len().max(1) as f64;
                 for s in &samples {
-                    gestures.extend(tilt.feed(*s, sample_dt));
+                    gestures.extend(tilt.feed(*s, per_sample));
                 }
                 if !samples.is_empty() {
                     let mut stage = ui.stage.borrow_mut();
