@@ -182,6 +182,9 @@ scope cancellation. `tests/frame_sync.rs` mounts six real game pages and verifie
 request counts across input, idle, AI responses, pause, held-piece pulses, hint searches, and
 scope disposal; it preserves and restores the preferences it exercises. `tests/records.rs` seeds
 every game's records and checks that Reset all records clears them, the same way.
+`tests/fits_screen.rs` opens every game, with its how-to-play card and without, on the narrowest
+phone screens (320 points wide, upright and sideways) and fails if anything reaches past the
+window's edges.
 
 `day lint` checks routes, element ids, and locale coverage.
 

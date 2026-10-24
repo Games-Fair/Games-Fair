@@ -12,7 +12,7 @@ use std::rc::Rc;
 use day_fluent::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
-use day_spec::Cursor;
+use day_spec::{Cursor, LineCap, StrokeStyle};
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Sfx, sfx};
 use serde::{Deserialize, Serialize};
@@ -1067,13 +1067,57 @@ impl Game {
         );
     }
 
-    /// The wall layer: bricks only, in field coordinates.
+    /// The wall layer: the paddle's zone and the bricks, in field coordinates.
     fn draw_wall(&self, d: &mut Draw) {
+        self.draw_paddle_zone(d);
         for (i, brick) in self.bricks.iter().enumerate() {
             if brick.alive() {
                 self.draw_brick(d, i, brick);
             }
         }
+    }
+
+    /// Where the paddle can go, as a faint panel: a rounded outline around the band the paddle
+    /// travels in (the field's full width, from halfway down to the floor), with a wash that
+    /// fades out downward and a brighter top edge, since the ceiling is the limit a player
+    /// meets first. It sits under the bricks and the ball, and is quiet enough to read as part
+    /// of the field rather than as a control.
+    fn draw_paddle_zone(&self, d: &mut Draw) {
+        let (w, h) = (self.field.width, self.field.height);
+        let top = self.paddle_y_min() - PADDLE_H / 2.0;
+        if w <= 4.0 || h - top <= 4.0 {
+            return;
+        }
+        // Half the outline's width in from the edges, so all of it shows.
+        let zone = Rect::new(1.0, top, w - 2.0, h - top - 1.0);
+        d.fill(
+            Shape::RoundedRect(zone, 14.0),
+            LinearGradient::new(
+                UnitPoint::TOP,
+                UnitPoint::BOTTOM,
+                vec![
+                    (0.0, Color::rgba(0.70, 0.78, 1.0, 0.06)),
+                    (0.45, Color::rgba(0.70, 0.78, 1.0, 0.02)),
+                    (1.0, Color::rgba(0.70, 0.78, 1.0, 0.0)),
+                ],
+            ),
+        );
+        d.stroke(
+            Shape::RoundedRect(zone, 14.0),
+            Color::rgba(0.75, 0.82, 1.0, 0.10),
+            1.0,
+        );
+        // The ceiling, a touch brighter and dashed, inset from the rounded corners.
+        d.stroke_styled(
+            Shape::Line(Point::new(18.0, top), Point::new(w - 18.0, top)),
+            Color::rgba(0.75, 0.82, 1.0, 0.16),
+            StrokeStyle {
+                width: 1.0,
+                cap: LineCap::Round,
+                dash: vec![6.0, 6.0],
+                ..Default::default()
+            },
+        );
     }
 
     /// The play layer: everything that moves, in field coordinates.
@@ -1222,11 +1266,11 @@ impl Game {
             );
         }
 
-        // Launch prompt.
+        // Launch prompt, just inside the paddle's zone, clear of its dashed ceiling.
         if !self.launched && !self.game_over && !self.level_complete {
             d.text(
                 &tr("bk_tap_to_launch").format(),
-                Point::new(w / 2.0, h / 2.0 - 10.0),
+                Point::new(w / 2.0, h / 2.0 + 20.0),
                 TextStyle {
                     size: 17.0,
                     color: Color::WHITE,
@@ -1236,7 +1280,7 @@ impl Game {
             );
             d.text(
                 &tr("bk_drag_to_move").format(),
-                Point::new(w / 2.0, h / 2.0 + 14.0),
+                Point::new(w / 2.0, h / 2.0 + 44.0),
                 TextStyle {
                     size: 12.0,
                     color: Color::rgba(1.0, 1.0, 1.0, 0.6),
@@ -1911,9 +1955,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
     .min_width(88.0)
     .any();
     let lives = column((
-        label(tr("bk_lives"))
-            .font(Font::Caption)
-            .color(chrome::TEXT_DIM),
+        chrome::info_caption(tr("bk_lives")),
         canvas(move |d, sz| {
             vu.hud.track();
             let n = vu.game.borrow().lives.max(0);

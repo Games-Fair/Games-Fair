@@ -8,6 +8,7 @@ use day_fluent::LocalizedText;
 use day_part_haptics::Haptic;
 use day_part_sound::{AssetName, Play};
 use day_piece_settings::Pref;
+use day_pieces::TextSource;
 use day_pieces::prelude::*;
 use day_reactive::Scope;
 use day_spec::{LineCap, LineJoin, StrokeStyle};
@@ -60,6 +61,15 @@ pub const RED: Color = Color::rgb(0.85, 0.30, 0.30);
 
 /// One fixed width for every menu button, so a stack of them lines up.
 pub const MENU_W: f64 = 180.0;
+
+/// The width a card's content is laid out at where the screen has room. A narrower screen gets
+/// narrower content: give a card's rows `.grow_w().max_width(CARD_W)`, never a fixed width,
+/// or a 320-point phone (Display Zoom) clips the card and widens the whole page under it.
+pub const CARD_W: f64 = 300.0;
+
+/// The widest share of the readout row a readout gets: on a wide screen they sit this far
+/// apart, centre to centre, and on a narrow one they share what there is.
+const INFO_SLOT: f64 = 112.0;
 
 /// The side of the close and pause buttons: the minimum comfortable touch target.
 pub const BUTTON: f64 = 44.0;
@@ -476,8 +486,58 @@ pub fn game_header_plain(title: LocalizedText) -> AnyPiece {
     .any()
 }
 
+/// A readout's caption size: the Caption text style at the default text size.
+const INFO_CAPTION: f64 = 12.0;
+/// A readout's value size: the Title3 text style at the default text size.
+const INFO_VALUE: f64 = 20.0;
+/// A caption line's height, and the readout's whole height: the caption, a 2-point gap, the value.
+const INFO_CAPTION_H: f64 = INFO_CAPTION * 1.3;
+const INFO_H: f64 = INFO_CAPTION_H + 2.0 + INFO_VALUE * 1.3;
+/// The narrowest a readout gets where nothing gives it a width of its own.
+const INFO_MIN_W: f64 = 64.0;
+
+/// The text of a readout's value as it stands, subscribing to whatever it reads.
+fn read_text(source: &TextSource) -> String {
+    match source {
+        TextSource::Static(s) => s.clone(),
+        TextSource::Dyn(f) => f(),
+    }
+}
+
+/// A caption over a readout, drawn at a fixed size like [`info_stat`]'s own: for a readout a
+/// game draws itself (Breakout's lives, Sirtet's next piece).
+pub fn info_caption(caption: LocalizedText) -> AnyPiece {
+    let ink = ink_at(0.55);
+    let spoken = caption.clone();
+    canvas(move |d, sz| {
+        let text = caption.format();
+        let font = canvas_font(FontWeight::Regular);
+        d.text(
+            &text,
+            Point::new(sz.width / 2.0, sz.height / 2.0),
+            TextStyle {
+                size: fit_text(&text, INFO_CAPTION, &font, sz.width),
+                color: ink,
+                anchor: TextAnchor::CENTERED,
+                font,
+            },
+        );
+    })
+    .a11y(move |a| a.label(spoken.clone()))
+    .height(INFO_CAPTION_H)
+    .grow_w()
+    .min_width(INFO_MIN_W)
+    .any()
+}
+
 /// One readout for a game's info row: a dim caption over its value, in the size and weight every
 /// game uses for these. `stat` is its bigger cousin, for the numbers on a results card.
+///
+/// Drawn at a fixed size rather than set as labels: a score is decoration around the play
+/// area, and under a large accessibility text size it grew until the game had no room left
+/// to play in. A value too wide for its share of the row narrows instead. A screen reader
+/// still hears the caption and the value, and a script reads the value with `assert_text`.
+/// The cards and sheets keep scaling with the reader's text size.
 pub fn info_stat<M, C>(
     caption: LocalizedText,
     value: impl IntoText<M>,
@@ -486,26 +546,61 @@ pub fn info_stat<M, C>(
     color: impl IntoReactive<Color, C>,
     id: ElementId,
 ) -> AnyPiece {
-    column((
-        label(caption).font(Font::Caption).color(ink_at(0.55)),
-        label(value)
-            .font(Font::Title3)
-            .bold()
-            .tabular()
-            .color(color)
-            .id(id),
-    ))
-    .spacing(2.0)
-    .align(HAlign::Center)
+    let value = value.into_text();
+    let color = color.into_reactive();
+    let ink = ink_at(0.55);
+    let (spoken_caption, spoken_value) = (caption.clone(), value.clone());
+    canvas(move |d, sz| {
+        let w = sz.width;
+        let cap = caption.format();
+        let cap_font = canvas_font(FontWeight::Regular);
+        d.text(
+            &cap,
+            Point::new(w / 2.0, INFO_CAPTION_H / 2.0),
+            TextStyle {
+                size: fit_text(&cap, INFO_CAPTION, &cap_font, w),
+                color: ink,
+                anchor: TextAnchor::CENTERED,
+                font: cap_font,
+            },
+        );
+        let val = read_text(&value);
+        let val_font = canvas_font(FontWeight::Bold);
+        d.text(
+            &val,
+            Point::new(w / 2.0, (INFO_CAPTION_H + 2.0 + sz.height) / 2.0),
+            TextStyle {
+                size: fit_text(&val, INFO_VALUE, &val_font, w),
+                color: color.get(),
+                anchor: TextAnchor::CENTERED,
+                font: val_font,
+            },
+        );
+    })
+    // The value as a source, not a string read once: the binding re-reads it as the game
+    // changes, which keeps a screen reader and `assert_text` on the current score.
+    .a11y(move |a| {
+        let v = spoken_value.clone();
+        a.label(spoken_caption.clone()).value(move || read_text(&v))
+    })
+    .id(id)
+    .height(INFO_H)
+    .grow_w()
+    .min_width(INFO_MIN_W)
     .any()
 }
 
 /// The row of readouts directly under the header: the score, the clock, whatever the game
-/// counts. Built from [`info_stat`]s, evenly spaced and centered.
+/// counts. Built from [`info_stat`]s, each centered in an equal share of the row. The row is
+/// at most [`INFO_SLOT`] per readout wide and narrows with the screen, so four readouts still
+/// fit a 320-point phone where fixed gaps between them ran off its edge.
 pub fn info_row(stats: Vec<AnyPiece>) -> AnyPiece {
+    let slots = stats.len().max(1) as f64;
+    let stats: Vec<AnyPiece> = stats.into_iter().map(|s| s.grow_w().any()).collect();
     row(stats)
-        .spacing(28.0)
         .align(VAlign::Center)
+        .grow_w()
+        .max_width(slots * INFO_SLOT)
         .padding(Insets {
             bottom: 4.0,
             ..Insets::horizontal(EDGE)
@@ -546,13 +641,15 @@ pub fn scrim() -> AnyPiece {
     .any()
 }
 
-/// The rounded dark card an overlay's content sits on.
+/// The rounded dark card an overlay's content sits on, kept [`EDGE`] clear of the screen's
+/// sides. Its content sizes itself to [`CARD_W`] or less (see there).
 pub fn card(content: impl Piece) -> AnyPiece {
     content
         .padding(Space::XL)
         .background(CARD)
         .corner_radius(20.0)
         .max_width(380.0)
+        .padding(EDGE)
         .any()
 }
 
@@ -612,7 +709,8 @@ pub fn section_heading(text: LocalizedText) -> AnyPiece {
 pub fn setting_row(title: LocalizedText, control: AnyPiece) -> AnyPiece {
     row((label(title).color(TEXT).grow_w(), control))
         .align(VAlign::Center)
-        .width(300.0)
+        .grow_w()
+        .max_width(CARD_W)
         .any()
 }
 
@@ -656,9 +754,12 @@ pub fn instructions_card(
                 column(pieces)
                     .spacing(10.0)
                     .align(HAlign::Leading)
-                    .width(300.0),
+                    .grow_w()
+                    .max_width(CARD_W),
             )
-            .height(360.0),
+            // At most 360 points, and less on a short screen (a phone held sideways), so Done
+            // stays on screen.
+            .max_height(360.0),
             button(day_fluent::tr("gk_done"))
                 .prominent()
                 .action(on_done)
@@ -666,7 +767,8 @@ pub fn instructions_card(
         ))
         .spacing(Space::M)
         .align(HAlign::Leading)
-        .width(300.0),
+        .grow_w()
+        .max_width(CARD_W),
     )
 }
 

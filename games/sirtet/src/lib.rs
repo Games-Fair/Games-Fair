@@ -34,6 +34,11 @@ const ROWS: usize = 20;
 /// The well takes the whole canvas: the header and the readouts are pieces above it now
 /// (gamekit::chrome::game_frame), so nothing is reserved inside the drawing.
 const TOP_UI: f64 = 0.0;
+/// Room kept around the cells for the well's border, so its outline shows on every side even
+/// where the well spans the canvas.
+const WELL_RIM: f64 = 4.0;
+/// How far the well's border sits outside its cells.
+const WELL_INSET: f64 = 3.0;
 /// How long a line clear's call-out stays up (it fades over the last third).
 const CLEAR_POPUP_LIFE: f64 = 1.0;
 
@@ -416,7 +421,9 @@ impl Game {
     fn cell_size(&self) -> f64 {
         let w = self.field.width;
         let h = self.field.height;
-        (w / COLS as f64).min((h - TOP_UI) / ROWS as f64).max(6.0)
+        ((w - 2.0 * WELL_RIM) / COLS as f64)
+            .min((h - TOP_UI - 2.0 * WELL_RIM) / ROWS as f64)
+            .max(6.0)
     }
     fn well_origin(&self) -> (f64, f64) {
         let cs = self.cell_size();
@@ -430,26 +437,55 @@ impl Game {
         ((self.field.height - TOP_UI - well) / 2.0).max(0.0)
     }
 
+    /// The well: a dark floor with a faint cool wash, brightest at the bottom where pieces land,
+    /// and a hairline border marking the walls and floor a piece stops at.
+    fn draw_well(&self, d: &mut Draw) {
+        let cs = self.cell_size();
+        let (ox, oy) = self.well_origin();
+        let well = Rect::new(
+            ox - WELL_INSET,
+            oy - WELL_INSET,
+            cs * COLS as f64 + 2.0 * WELL_INSET,
+            cs * ROWS as f64 + 2.0 * WELL_INSET,
+        );
+        let shape = Shape::RoundedRect(well, 6.0);
+        d.fill(shape.clone(), Color::hex(0x05_05_0C));
+        d.fill(
+            shape.clone(),
+            LinearGradient::new(
+                UnitPoint::TOP,
+                UnitPoint::BOTTOM,
+                vec![
+                    (0.0, Color::rgba(0.70, 0.78, 1.0, 0.0)),
+                    (0.6, Color::rgba(0.70, 0.78, 1.0, 0.015)),
+                    (1.0, Color::rgba(0.70, 0.78, 1.0, 0.05)),
+                ],
+            ),
+        );
+        // Half the stroke's width inside the well's edge, so all of it shows.
+        d.stroke(
+            Shape::RoundedRect(
+                Rect::new(
+                    well.origin.x + 0.5,
+                    well.origin.y + 0.5,
+                    well.size.width - 1.0,
+                    well.size.height - 1.0,
+                ),
+                5.5,
+            ),
+            Color::rgba(0.75, 0.82, 1.0, 0.14),
+            1.0,
+        );
+    }
+
     fn draw(&self, d: &mut Draw, sz: Size) {
         d.fill(
             Shape::Rect(Rect::new(0.0, 0.0, sz.width, sz.height)),
             Color::hex(0x0A_0A_14),
         );
+        self.draw_well(d);
         let cs = self.cell_size();
         let (ox, oy) = self.well_origin();
-        // Well background.
-        d.fill(
-            Shape::RoundedRect(
-                Rect::new(
-                    ox - 3.0,
-                    oy - 3.0,
-                    cs * COLS as f64 + 6.0,
-                    cs * ROWS as f64 + 6.0,
-                ),
-                6.0,
-            ),
-            Color::hex(0x05_05_0C),
-        );
         let cell =
             |d: &mut Draw, r: i32, c: i32, color: Color| draw_cell(d, ox, oy, cs, r, c, color);
         // Settled cells.
@@ -886,9 +922,7 @@ fn info_bar(ui: Rc<Ui>) -> AnyPiece {
     // The preview is the fourth readout, captioned like the three beside it so it sits on the
     // same baseline and takes an equal share of the row instead of hanging off its end.
     let next = column((
-        label(tr("st_next"))
-            .font(Font::Caption)
-            .color(chrome::TEXT_DIM),
+        chrome::info_caption(tr("st_next")),
         canvas(move |d, sz| {
             pu.repaint.track();
             let kind = pu.game.borrow().next;

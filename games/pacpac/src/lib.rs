@@ -1066,7 +1066,8 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
             })
             .a11y(move |a| a.label(spoken.clone()).role(Role::Button))
             .id(id)
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
             .any(),
         );
     }

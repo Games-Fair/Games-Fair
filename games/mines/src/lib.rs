@@ -1304,7 +1304,8 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
             .any(),
         );
     }
@@ -1428,7 +1429,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             label(best).tabular().color(chrome::TEXT_DIM),
         ))
         .align(VAlign::Center)
-        .width(300.0)
+        .grow_w()
+        .max_width(chrome::CARD_W)
         .any()
     };
     let reset = button(tr("mi_reset_records"))

@@ -1496,18 +1496,18 @@ fn overlays(ui: Rc<Ui>) -> AnyPiece {
 }
 fn footer_button(title: LocalizedText, id: ElementId, action: impl Fn() + 'static) -> AnyPiece {
     let name = title.clone();
-    label(title)
+    // A one-line label hugs its text, so the column centers it in the button's minimum width.
+    column((label(title)
         .font(Font::Headline)
         .color(Color::WHITE)
-        .align(TextAlign::Center)
-        .padding(10.0)
-        .min_width(90.0)
-        .background(Color::hex(0x343047))
-        .corner_radius(10.0)
-        .on_tap(action)
-        .a11y(move |a| a.label(name).role(Role::Button))
-        .id(id)
-        .any()
+        .padding(10.0),))
+    .min_width(90.0)
+    .background(Color::hex(0x343047))
+    .corner_radius(10.0)
+    .on_tap(action)
+    .a11y(move |a| a.label(name).role(Role::Button))
+    .id(id)
+    .any()
 }
 
 /// Explicit control colors keep their contrast in native light and dark appearances.
@@ -1524,7 +1524,8 @@ fn menu_button(
         .color(Color::WHITE)
         .align(TextAlign::Center)
         .padding(Space::M)
-        .width(260.0)
+        .grow_w()
+        .max_width(260.0)
         .background(tint.with_alpha(0.3))
         .corner_radius(14.0)
         .on_tap(action)
@@ -1637,7 +1638,8 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                     .on_tap(move || u.start(i))
                     .a11y(move |a| a.label(tr(stage.name)).role(Role::Button))
                     .id(id!(mt_stage, i + 1))
-                    .width(260.0)
+                    .grow_w()
+                    .max_width(260.0)
                     .any(),
                 );
             }
@@ -1798,7 +1800,8 @@ fn celebration(reduced: bool) -> AnyPiece {
             Color::WHITE.with_alpha(0.8),
         );
     })
-    .width(270.0)
+    .grow_w()
+    .max_width(270.0)
     .height(108.0);
     zstack((
         art,

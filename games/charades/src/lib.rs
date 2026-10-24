@@ -562,7 +562,8 @@ fn deck_screen(ui: Rc<Ui>) -> AnyPiece {
                 ..Insets::horizontal(16.0)
             }),
         )
-        .grow(),
+        .grow()
+        .id(id!(ch_deck_list)),
     ))
     .grow()
     .background(SURFACE)
@@ -1087,7 +1088,8 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
                 .frame(22.0, 22.0),
             ))
             .align(VAlign::Center)
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
             .any(),
         );
     }
@@ -1104,7 +1106,7 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
                 .color(chrome::GOLD)
         },
     );
-    let list = (!empty).then(|| scroll(column(rows).spacing(Space::S)).height(240.0));
+    let list = (!empty).then(|| scroll(column(rows).spacing(Space::S)).max_height(240.0));
     let card = chrome::card(
         column((
             label(title).font(Font::Headline).color(chrome::TEXT_DIM),
@@ -1255,7 +1257,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             label(tilt_detail)
                 .font(Font::Caption)
                 .color(chrome::TEXT_DIM)
-                .width(300.0),
+                .grow_w()
+                .max_width(chrome::CARD_W),
             chrome::section_heading(tr("ch_records")),
             chrome::setting_row(
                 tr("ch_rounds_played"),

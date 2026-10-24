@@ -3399,7 +3399,8 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(m))
             .a11y(move |a| a.label(draw_label(m)).role(Role::Button))
             .id(draw_id(m))
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
             .any(),
         );
     }
@@ -3446,7 +3447,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             .grow_w(),
             label(best).tabular().color(chrome::TEXT_DIM),
         ))
-        .width(300.0)
+        .grow_w()
+        .max_width(chrome::CARD_W)
         .any()
     };
     let reset = button(tr("sol_reset_stats"))
@@ -3485,7 +3487,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             label(tr("sol_winnable_detail"))
                 .font(Font::Caption)
                 .color(chrome::TEXT_DIM)
-                .width(300.0),
+                .grow_w()
+                .max_width(chrome::CARD_W),
             chrome::section_heading(tr("sol_statistics")),
             line(DrawMode::One),
             line(DrawMode::Three),

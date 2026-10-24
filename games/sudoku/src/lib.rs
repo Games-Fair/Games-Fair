@@ -15,7 +15,7 @@ use std::rc::Rc;
 
 use day_fluent::tr;
 use day_pieces::prelude::*;
-use day_spec::{KeyEvent, LineCap, LineJoin, StrokeStyle};
+use day_spec::{HeightClass, KeyEvent, LineCap, LineJoin, StrokeStyle};
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Sfx, sfx};
 
@@ -29,6 +29,9 @@ const SAVE_KEY: &str = "sudoku.v2";
 const RECORDS_KEY: &str = "sudoku.records";
 const SETTINGS_KEY: &str = "sudoku.settings";
 
+// The sizes below are each piece's largest: the board and the keypad take them where the screen
+// has room, and shrink in proportion where it does not (a 320-point-wide phone with Display
+// Zoom, a phone held sideways), so the page never scrolls to reach its own controls.
 const CELL: f64 = 38.0;
 const BOARD_PAD: f64 = 4.0;
 const BOARD: f64 = CELL * 9.0 + BOARD_PAD * 2.0;
@@ -37,8 +40,14 @@ const KEY_W: f64 = 64.0;
 const KEY_H: f64 = KEY_W;
 const KEY_GAP: f64 = 6.0;
 const ACTION_W: f64 = 64.0;
-/// Two action buttons stacked with an 8pt gap span the keypad's height.
-const ACTION_H: f64 = (KEY_H * 3.0 + KEY_GAP * 2.0 - 8.0) / 2.0;
+/// The gap between the two action buttons stacked in each of the keypad's side columns.
+const ACTION_GAP: f64 = 8.0;
+/// Two action buttons stacked with their gap span the keypad's height.
+const ACTION_H: f64 = (KEY_H * 3.0 + KEY_GAP * 2.0 - ACTION_GAP) / 2.0;
+/// The keypad: five equal columns (Notes and Hint, the three digit columns, Undo and
+/// Checkpoint), three keys tall.
+const PAD_W: f64 = KEY_W * 5.0 + KEY_GAP * 4.0;
+const PAD_H: f64 = KEY_H * 3.0 + KEY_GAP * 2.0;
 const MENU_W: f64 = 180.0;
 
 // Palette (night-blue).
@@ -746,36 +755,80 @@ pub fn sudoku_page() -> AnyPiece {
     .id(id!(su_backdrop))
     .grow();
 
+    // A phone held sideways has a compact height: the keypad moves beside the board there,
+    // where under it would leave the board no room at all.
+    let page = {
+        let (pu, lu) = (ui.clone(), ui.clone());
+        when(
+            || day_core::size_class().is_some_and(|c| c.height == HeightClass::Compact),
+            move || landscape_page(&lu),
+        )
+        .otherwise(move || portrait_page(&pu))
+    };
+    let page = zstack((page,)).grow().id(id!(su_page));
+
+    zstack((backdrop, page, overlays(ui), ticker)).any()
+}
+
+/// The close button, the title, and the pause button.
+fn header(ui: &Rc<Ui>) -> AnyPiece {
     let pu = ui.clone();
-    let header = chrome::game_header(tr("nav_sudoku"), id!(su_pause), move || {
+    chrome::game_header(tr("nav_sudoku"), id!(su_pause), move || {
         if pu.overlay.get_untracked() == Overlay::None {
             pu.show(Overlay::Pause);
             pu.cue(&cues::SELECT);
         }
-    });
-    // Not `chrome::game_frame`, which centers the play area between the readouts and the
-    // footer: the board is pinned under the readouts, the keypad to the foot of the page, and
-    // the spacer between them takes whatever height is left over.
-    let content = column((
-        header,
+    })
+}
+
+/// The page held upright. Not `chrome::game_frame`, which centers the play area between the
+/// readouts and the footer: the board is pinned under the readouts, the keypad to the foot of
+/// the page, and the slack falls between them. The keypad's height follows the screen's width,
+/// and the board takes the height that leaves, so on a short or narrow screen both shrink and
+/// nothing scrolls.
+fn portrait_page(ui: &Rc<Ui>) -> AnyPiece {
+    column((
+        header(ui),
         status_bar(ui.clone()),
-        board_grid(ui.clone()),
-        spacer(),
+        zstack((board_grid(ui.clone()).padding(Insets::horizontal(chrome::EDGE)),))
+            .align(Alignment::Top)
+            .grow(),
         control_pad(ui.clone()).padding(Insets {
             bottom: 16.0,
             ..Insets::all(12.0)
         }),
     ))
     .align(HAlign::Center)
-    .grow();
-    // The scroll gives its content at least the window's height, so the growing column spans
-    // it: the board at the top, the keypad at the bottom, the slack between them. Once the
-    // column is taller than the window it scrolls instead.
-    let page = scroll(zstack((content,)).align(Alignment::Center))
-        .grow()
-        .id(id!(su_page));
+    .grow()
+    .any()
+}
 
-    zstack((backdrop, page, overlays(ui), ticker)).any()
+/// The page on a phone held sideways: the board on the leading half, the readouts and the
+/// keypad on the trailing half, each as large as its half allows.
+fn landscape_page(ui: &Rc<Ui>) -> AnyPiece {
+    column((
+        header(ui),
+        row((
+            zstack((board_grid(ui.clone()).padding(Insets {
+                bottom: chrome::EDGE,
+                ..Insets::horizontal(chrome::EDGE)
+            }),))
+            .grow(),
+            column((
+                status_bar(ui.clone()),
+                zstack((control_pad(ui.clone()),)).grow(),
+            ))
+            .align(HAlign::Center)
+            .padding(Insets {
+                bottom: chrome::EDGE,
+                ..Insets::horizontal(12.0)
+            })
+            .grow(),
+        ))
+        .grow(),
+    ))
+    .grow()
+    .any()
 }
 
 /// The page's key handler, for every canvas a press can focus (docs/menus.md).
@@ -838,6 +891,7 @@ fn status_bar(ui: Rc<Ui>) -> impl Piece {
 }
 
 /// The 9×9 board: Day's eager grid of interactive cell canvases, with the pause cover over it.
+/// The board is square and at most [`BOARD`] across; it shrinks to fit what it is offered.
 fn board_grid(ui: Rc<Ui>) -> impl Piece {
     let mut rows = Vec::new();
     for r in 0..9usize {
@@ -862,7 +916,7 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
         );
     })
     .on_key(keys(&ui))
-    .frame(BOARD, BOARD);
+    .grow();
     let pause_cover = {
         let u = ui.clone();
         when(
@@ -890,17 +944,20 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
                         },
                     );
                 })
-                .frame(BOARD, BOARD)
+                .grow()
                 .id(id!(su_pause_cover))
             },
         )
     };
+    // As large a square as the board is offered, up to its natural size: the cells share the
+    // width, and each is as tall as it is wide.
     zstack((
         rim,
         grid(rows).padding(BOARD_PAD).id(id!(su_board)),
         pause_cover,
     ))
-    .frame(BOARD, BOARD)
+    .aspect_ratio(1.0)
+    .max_width(BOARD)
 }
 
 fn cell_piece(ui: Rc<Ui>, r: usize, c: usize) -> AnyPiece {
@@ -941,7 +998,9 @@ fn cell_piece(ui: Rc<Ui>, r: usize, c: usize) -> AnyPiece {
         )
     })
     .id(id!(su_cell, i))
-    .frame(CELL, CELL)
+    // Each cell takes a ninth of the board's width and is as tall as it is wide.
+    .aspect_ratio(1.0)
+    .grow_w()
     .any()
 }
 
@@ -1091,13 +1150,17 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
             )
         })
     };
-    row((
-        column((notes, hint)).spacing(Space::S),
-        number_pad(ui),
-        column((undo, checkpoint)).spacing(Space::S),
-    ))
-    .spacing(Space::S)
-    .align(VAlign::Center)
+    // Five equal columns, the digits spanning the middle three, so the keypad keeps its
+    // proportions at any width: as wide as it is offered up to its natural size, and no taller
+    // than its share of the page (it fits whichever of the two runs out first).
+    grid((grid_row((
+        column((notes, hint)).spacing(ACTION_GAP).grow_w(),
+        number_pad(ui).grow_w().grid_span(3),
+        column((undo, checkpoint)).spacing(ACTION_GAP).grow_w(),
+    )),))
+    .column_spacing(KEY_GAP)
+    .aspect_ratio(PAD_W / PAD_H)
+    .max_width(PAD_W)
 }
 
 /// The keypad: digit and remaining count on a keycap that reads raised (available), lowered
@@ -1109,9 +1172,9 @@ fn number_pad(ui: Rc<Ui>) -> impl Piece {
         for c in 1..=3u8 {
             keys.push(number_key(ui.clone(), r * 3 + c));
         }
-        rows.push(row(keys).spacing(KEY_GAP).any());
+        rows.push(grid_row(keys).any());
     }
-    column(rows).spacing(KEY_GAP).id(id!(su_keypad))
+    grid(rows).spacing(KEY_GAP).id(id!(su_keypad))
 }
 
 fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
@@ -1145,14 +1208,16 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
         } else {
             Color::rgba(1.0, 1.0, 1.0, 0.22)
         };
+        let (w, h) = (sz.width, sz.height);
+        // The keycap is drawn for a KEY_W-point key; a smaller one scales it down.
+        let k = (w / KEY_W).min(h / KEY_H);
         let offset = if lowered {
-            2.0
+            2.0 * k
         } else if flat {
             0.0
         } else {
-            -2.0
+            -2.0 * k
         };
-        let (w, h) = (sz.width, sz.height);
         d.stroke(
             Shape::RoundedRect(Rect::new(1.25, 1.25, w - 2.5, h - 2.5), 10.0),
             outline,
@@ -1164,9 +1229,9 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
         );
         d.text(
             &digit.to_string(),
-            Point::new(w / 2.0, h / 2.0 - 5.0 + offset),
+            Point::new(w / 2.0, h / 2.0 - 5.0 * k + offset),
             TextStyle {
-                size: 28.0,
+                size: 28.0 * k,
                 color: digit_color,
                 anchor: TextAnchor::CENTERED,
                 font: digit_font(),
@@ -1174,9 +1239,9 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
         );
         d.text(
             &remaining.to_string(),
-            Point::new(w / 2.0, h - 10.0 + offset),
+            Point::new(w / 2.0, h - 10.0 * k + offset),
             TextStyle {
-                size: 10.0,
+                size: 10.0 * k,
                 color: count_color,
                 anchor: TextAnchor::CENTERED,
                 font: digit_font(),
@@ -1190,7 +1255,8 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
             .role(Role::Button)
     })
     .id(id!(su_key, digit))
-    .frame(KEY_W, KEY_H)
+    .aspect_ratio(1.0)
+    .grow_w()
     .any()
 }
 
@@ -1225,15 +1291,26 @@ fn action_button(
         } else {
             Color::rgba(1.0, 1.0, 1.0, if off { 0.35 } else { 0.80 })
         };
-        draw_glyph(d, glyph, Point::new(w / 2.0, h / 2.0 - 9.0), 18.0, ink);
+        // Drawn for an ACTION_W-point button; a smaller one scales it down, and a caption
+        // longer than the button narrows to fit.
+        let k = (w / ACTION_W).min(h / ACTION_H);
+        draw_glyph(
+            d,
+            glyph,
+            Point::new(w / 2.0, h / 2.0 - 9.0 * k),
+            18.0 * k,
+            ink,
+        );
+        let caption = title();
+        let font = canvas_font(FontWeight::Semibold);
         d.text(
-            &title(),
-            Point::new(w / 2.0, h / 2.0 + 12.0),
+            &caption,
+            Point::new(w / 2.0, h / 2.0 + 12.0 * k),
             TextStyle {
-                size: 10.0,
+                size: chrome::fit_text(&caption, 10.0 * k, &font, w - 4.0),
                 color: ink,
                 anchor: TextAnchor::CENTERED,
-                font: canvas_font(FontWeight::Semibold),
+                font,
             },
         );
     })
@@ -1241,7 +1318,7 @@ fn action_button(
     .on_key(move |k| ku.key(k))
     .a11y(move |a| a.label(a11y_title.clone()).role(Role::Button))
     .id(id)
-    .frame(ACTION_W, ACTION_H)
+    .aspect_ratio(ACTION_W / ACTION_H)
     .any()
 }
 
@@ -1286,18 +1363,21 @@ fn split_button(
                 );
             }
             let ink = Color::rgba(1.0, 1.0, 1.0, if disabled() { 0.35 } else { 0.80 });
-            draw_glyph(d, glyph, Point::new(w * 0.2, h / 2.0), 12.0, ink);
+            let k = (w / ACTION_W).min(h * 2.0 / ACTION_H);
+            draw_glyph(d, glyph, Point::new(w * 0.2, h / 2.0), 12.0 * k, ink);
+            let caption = title.format();
+            let font = canvas_font(FontWeight::Semibold);
             d.text(
-                &title.format(),
+                &caption,
                 Point::new(w * 0.33, h / 2.0),
                 TextStyle {
-                    size: 10.0,
+                    size: chrome::fit_text(&caption, 10.0 * k, &font, w * 0.67 - 2.0),
                     color: ink,
                     anchor: TextAnchor {
                         h: TextAlign::Leading,
                         v: TextVAlign::Middle,
                     },
-                    font: canvas_font(FontWeight::Semibold),
+                    font,
                 },
             );
         })
@@ -1305,7 +1385,7 @@ fn split_button(
         .on_key(move |k| ku.key(k))
         .a11y(move |a| a.label(a11y_title.clone()).role(Role::Button))
         .id(id)
-        .frame(ACTION_W, ACTION_H / 2.0)
+        .aspect_ratio(ACTION_W * 2.0 / ACTION_H)
     };
     column((
         half(
@@ -1370,6 +1450,8 @@ fn card_frame(content: impl Piece) -> AnyPiece {
         .background(CARD)
         .corner_radius(20.0)
         .max_width(380.0)
+        // Clear of the screen's sides on a phone narrower than the card.
+        .padding(chrome::EDGE)
         .any()
 }
 
@@ -1564,7 +1646,8 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
             .any(),
         );
     }
@@ -1597,7 +1680,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
     let setting_row = |t: day_fluent::LocalizedText, control: AnyPiece| {
         row((label(t).color(TEXT).grow_w(), control))
             .align(VAlign::Center)
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
     };
     let mut record_rows = Vec::new();
     for d in DIFFICULTIES {
@@ -1696,7 +1780,8 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     );
                 })
                 .id(id!(su_digit_font_sample))
-                .width(300.0)
+                .grow_w()
+                .max_width(chrome::CARD_W)
                 .height(44.0),
                 heading(tr("su_records")),
                 column(record_rows).spacing(Space::S),
@@ -1711,7 +1796,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             .spacing(Space::M)
             .align(HAlign::Center),
         )
-        .height(440.0),
+        .max_height(440.0),
     )
     .id(id!(su_settings_card))
     .any()
@@ -1770,9 +1855,10 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
                 column((body, tail))
                     .spacing(10.0)
                     .align(HAlign::Leading)
-                    .width(300.0),
+                    .grow_w()
+                    .max_width(chrome::CARD_W),
             )
-            .height(360.0),
+            .max_height(360.0),
             button(tr("gk_done"))
                 .prominent()
                 .action(move || done.pop())
@@ -1780,7 +1866,8 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
         ))
         .spacing(Space::M)
         .align(HAlign::Leading)
-        .width(300.0),
+        .grow_w()
+        .max_width(chrome::CARD_W),
     )
     .id(id!(su_instructions_card))
     .any()

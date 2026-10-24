@@ -1213,7 +1213,8 @@ fn won_card(ui: Rc<Ui>) -> AnyPiece {
             label(tr("tf_won_message"))
                 .color(chrome::TEXT)
                 .align(TextAlign::Center)
-                .width(260.0),
+                .grow_w()
+                .max_width(260.0),
             chrome::stat(
                 tr("gk_score"),
                 score.to_string(),
@@ -1332,7 +1333,8 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(d.label()).role(Role::Button))
             .id(d.id())
-            .width(300.0)
+            .grow_w()
+            .max_width(chrome::CARD_W)
             .any(),
         );
     }
