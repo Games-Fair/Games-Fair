@@ -225,7 +225,7 @@ flow:
   # same item, a cover. A phone has no app menu, so the gear beside the home title presents the
   # cover there. The cover's root lists the groups, so the phones and the web step into General.
   # The cover draws inside the main window, so one capture key serves every target.
-  - menu: { key: day-preferences, skip_on: [uikit, mdc, arkui] }
+  - menu: { key: day_preferences, skip_on: [uikit, mdc, arkui] }
   - tap: { id: home_settings, only_on: [uikit, mdc, arkui] }
   - tap: { id: 'prefs_group:general', only_on: [uikit, mdc, arkui, dom] }
   - wait_for: { id: language_picker }
