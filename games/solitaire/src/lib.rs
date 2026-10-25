@@ -17,7 +17,7 @@ use std::cell::{Cell, RefCell};
 use std::f64::consts::{PI, TAU};
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_geometry::Affine;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
@@ -2506,14 +2506,14 @@ fn fmt_time(secs: f64) -> String {
     }
 }
 
-fn draw_label(m: DrawMode) -> day_fluent::LocalizedText {
+fn draw_label(m: DrawMode) -> day_localization_ui::LocalizedText {
     match m {
         DrawMode::One => tr("sol_draw_one"),
         DrawMode::Three => tr("sol_draw_three"),
     }
 }
 
-fn draw_detail(m: DrawMode) -> day_fluent::LocalizedText {
+fn draw_detail(m: DrawMode) -> day_localization_ui::LocalizedText {
     match m {
         DrawMode::One => tr("sol_detail_one"),
         DrawMode::Three => tr("sol_detail_three"),
@@ -3026,7 +3026,7 @@ fn draw_hint_glyph(d: &mut Draw, c: Point, size: f64, color: Color) {
 fn tool_button(
     ui: Rc<Ui>,
     glyph: fn(&mut Draw, Point, f64, Color),
-    a11y: day_fluent::LocalizedText,
+    a11y: day_localization_ui::LocalizedText,
     id: ElementId,
     enabled: fn(&Ui) -> bool,
     action: fn(&Ui),
@@ -3057,7 +3057,7 @@ fn tool_button(
 /// button.
 /// The readouts under the header: score, clock, moves.
 fn info_bar(ui: Rc<Ui>) -> AnyPiece {
-    let stat = |caption: day_fluent::LocalizedText,
+    let stat = |caption: day_localization_ui::LocalizedText,
                 value: Box<dyn Fn() -> String>,
                 id: ElementId,
                 width: f64| {

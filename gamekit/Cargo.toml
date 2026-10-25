@@ -5,18 +5,18 @@ version.workspace = true
 edition = "2024"
 license = "Apache-2.0"
 
-# The games' shared save-state mechanism: serde_json snapshots in day-part-prefs, written on
+# The games' shared save-state mechanism: serde_json snapshots in day-part-preferences, written on
 # game exit (scope cleanup) and on app backgrounding (lifecycle phases where delivered).
 
 [dependencies]
 day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-reactive = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-spec = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-part-prefs = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-part-preferences = { git = "https://github.com/daybrite/day.git", branch = "main" }
 # The shared game chrome (`chrome`): composed from Day's core pieces, localized through
 # Fluent, with sounds and haptics behind each game's Sounds and Vibrations settings.
 day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-localization-ui = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-part-haptics = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-part-sound = { git = "https://github.com/daybrite/day.git", branch = "main" }
 # The app-wide Sounds and Vibrations defaults (`chrome::SOUNDS`, `chrome::VIBRATIONS`) are
@@ -27,6 +27,6 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 # The web build has no `SystemTime`; `seed()` draws browser entropy through the getrandom
-# bridge day-dom already answers (docs/web.md).
+# bridge day-toolkit-dom already answers (docs/web.md).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.4", default-features = false }

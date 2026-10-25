@@ -431,6 +431,6 @@ storefront:
     screenshots:
       default: [home, blockblast, solitaire, sudoku, mines, g2048, breakout-a, charades]
 
-  android-mdc:
+  android-material:
     screenshots:
       default: [home, blockblast, solitaire, sudoku, mines, g2048, breakout-a, charades]

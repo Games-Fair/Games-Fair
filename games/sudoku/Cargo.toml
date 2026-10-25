@@ -14,7 +14,7 @@ day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-reactive = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-spec = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-localization-ui = { git = "https://github.com/daybrite/day.git", branch = "main" }
 # Haptic feedback per move, behind the game's Vibrations setting (a no-op where the platform
 # has no engine).
 gamekit = { path = "../../gamekit" }

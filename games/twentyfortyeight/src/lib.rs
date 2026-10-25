@@ -6,7 +6,7 @@
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_pieces::prelude::*;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Sfx, sfx};
@@ -82,14 +82,14 @@ impl Difficulty {
         }
     }
     /// Literal `tr` keys, so `day lint` tracks their coverage.
-    fn label(self) -> day_fluent::LocalizedText {
+    fn label(self) -> day_localization_ui::LocalizedText {
         match self {
             Difficulty::Easy => tr("tf_easy"),
             Difficulty::Normal => tr("tf_normal"),
             Difficulty::Hard => tr("tf_hard"),
         }
     }
-    fn detail(self) -> day_fluent::LocalizedText {
+    fn detail(self) -> day_localization_ui::LocalizedText {
         match self {
             Difficulty::Easy => tr("tf_detail_easy"),
             Difficulty::Normal => tr("tf_detail_normal"),

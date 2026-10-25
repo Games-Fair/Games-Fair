@@ -16,7 +16,7 @@ day launch --git https://github.com/Games-Fair/Games-Fair.git
 ```
 
 With no `-p`, the CLI picks the host's own toolkit (`macos-appkit`, `windows-winui`, `linux-gtk`).
-Name a target to run elsewhere: `-p ios-uikit` for a booted Simulator, `-p android-mdc` for a
+Name a target to run elsewhere: `-p ios-uikit` for a booted Simulator, `-p android-material` for a
 running emulator or device, `-p harmony-arkui` for HarmonyOS, `-p web-dom` to serve the browser
 build. `day doctor` lists what each toolkit needs and prints the install command for anything
 missing. The launch prints where it put the checkout, so you can open the code and change it.
@@ -120,7 +120,7 @@ target the app ships is listed in `Day.toml`.
 day doctor                       # toolchains present and missing, with fixes
 day launch -p macos-appkit       # the Mac's own toolkit (macos-gtk and macos-qt run here too)
 day launch -p ios-uikit          # needs a booted Simulator
-day launch -p android-mdc        # needs a JDK and a running emulator or device
+day launch -p android-material        # needs a JDK and a running emulator or device
 day launch -p harmony-arkui      # needs the OpenHarmony SDK and an emulator
 day launch -p web-dom            # builds the wasm bundle and serves it to your browser
 day build  -p windows-winui      # build only (Windows builds on a Windows host)
@@ -194,7 +194,7 @@ For a native Match Three held-drag check, launch an Android emulator with
 finger is held, commit on release, cancellation, and ordinary taps.
 
 For Android cover hit testing, launch on a 360×640dp emulator with
-`day launch -p android-mdc --android-device SERIAL --env DAY_GAMES_SEED=15 --keep-alive`,
+`day launch -p android-material --android-device SERIAL --env DAY_GAMES_SEED=15 --keep-alive`,
 then run `python3 scripts/android-cover-touch-test.py SERIAL` with `adb` on PATH.
 This uses native screen taps to check that passive game headers cannot activate the hidden
 home grid, while pause, close, and the home tiles still respond. Ordinary dayscript taps

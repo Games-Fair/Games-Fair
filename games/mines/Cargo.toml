@@ -14,7 +14,7 @@ day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-reactive = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-geometry = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-localization-ui = { git = "https://github.com/daybrite/day.git", branch = "main" }
 day-part-haptics = { git = "https://github.com/daybrite/day.git", branch = "main" }
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }

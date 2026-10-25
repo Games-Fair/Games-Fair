@@ -18,7 +18,7 @@ day-spec = { git = "https://github.com/daybrite/day.git", branch = "main" }
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
 
-day-fluent = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-localization-ui = { git = "https://github.com/daybrite/day.git", branch = "main" }
 
 [dev-dependencies]
 serde_json = "1"

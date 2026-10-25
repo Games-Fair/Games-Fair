@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 """Native hit-test regression, on a 360×640dp Android emulator (e.g. 720×1280 @ 320dpi).
 
-First launch Day-Games with `day launch -p android-mdc --android-device SERIAL
+First launch Day-Games with `day launch -p android-material --android-device SERIAL
 --env DAY_GAMES_SEED=15 --keep-alive`, then run this script with SERIAL.
 Requires adb on PATH. This changes only the emulator's game/navigation state.
 Dayscript taps target a node directly; adb taps exercise Android's actual view dispatch.
@@ -43,7 +43,7 @@ def main():
 
     def drive(*steps):
         result = subprocess.run(
-            [*DAY_CLI, "drive", "-p", "android-mdc", "--steps-json", json.dumps(steps)],
+            [*DAY_CLI, "drive", "-p", "android-material", "--steps-json", json.dumps(steps)],
             cwd=project, env=env, text=True, capture_output=True,
         )
         if result.returncode:

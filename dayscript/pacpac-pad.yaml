@@ -5,7 +5,7 @@
 # build never shows it, so the script is for the web and the phones.
 #
 #     day launch -p web-dom --env DAY_GAMES_SEED=15 --script dayscript/pacpac-pad.yaml
-#     day launch -p android-mdc --env DAY_GAMES_SEED=15 --script dayscript/pacpac-pad.yaml
+#     day launch -p android-material --env DAY_GAMES_SEED=15 --script dayscript/pacpac-pad.yaml
 #
 name: pacpac-pad
 flow:
@@ -18,8 +18,8 @@ flow:
   - assert_visible: { id: pm_pad }
   - size_class: { width: expanded }
   - pause: { secs: 0.3 }
-  - assert_missing: { id: pm_pad, skip_on: [uikit, mdc, arkui] }
-  - assert_visible: { id: pm_pad, only_on: [uikit, mdc, arkui] }
+  - assert_missing: { id: pm_pad, skip_on: [uikit, material, arkui] }
+  - assert_visible: { id: pm_pad, only_on: [uikit, material, arkui] }
   - size_class: { width: medium }
   - pause: { secs: 0.3 }
   - assert_visible: { id: pm_pad }

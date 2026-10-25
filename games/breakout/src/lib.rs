@@ -9,7 +9,7 @@
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
 use day_spec::{Cursor, LineCap, StrokeStyle};

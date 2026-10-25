@@ -17,7 +17,7 @@ build = 93
 # Supported platform-toolkit pairs. `windows-winui`, `linux-gtk`, and `linux-qt` build in CI
 # on their native hosts. On a macOS dev box the toolkits
 # run locally as `macos-appkit`,
-# `macos-gtk`, `macos-qt`, `ios-uikit`, `android-mdc`, `harmony-arkui`, and `web-dom` (GTK/Qt are
+# `macos-gtk`, `macos-qt`, `ios-uikit`, `android-material`, `harmony-arkui`, and `web-dom` (GTK/Qt are
 # portable, so `macos-gtk`/`macos-qt` stand in for `linux-gtk`/`linux-qt`). `day build -p <target>`
 # accepts any host-buildable target regardless of this list.
 targets = [
@@ -26,7 +26,7 @@ targets = [
   "linux-gtk",
   "linux-qt",
   "ios-uikit",
-  "android-mdc",
+  "android-material",
   "harmony-arkui",
   "web-dom", "macos-gtk", "macos-qt",
 ]

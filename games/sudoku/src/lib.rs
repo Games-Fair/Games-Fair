@@ -13,7 +13,7 @@
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_pieces::prelude::*;
 use day_spec::{HeightClass, KeyEvent, LineCap, LineJoin, StrokeStyle};
 use gamekit::chrome::cues::{self, with};
@@ -98,7 +98,7 @@ fn accent(d: Difficulty) -> Color {
 }
 
 /// The difficulty display names, as literal `tr` keys so `day lint` tracks their coverage.
-fn difficulty_label(d: Difficulty) -> day_fluent::LocalizedText {
+fn difficulty_label(d: Difficulty) -> day_localization_ui::LocalizedText {
     match d {
         Difficulty::Easy => tr("su_easy"),
         Difficulty::Medium => tr("su_medium"),
@@ -108,7 +108,7 @@ fn difficulty_label(d: Difficulty) -> day_fluent::LocalizedText {
 }
 
 /// The picker's one-line description of each difficulty.
-fn difficulty_detail(d: Difficulty) -> day_fluent::LocalizedText {
+fn difficulty_detail(d: Difficulty) -> day_localization_ui::LocalizedText {
     match d {
         Difficulty::Easy => tr("su_detail_easy"),
         Difficulty::Medium => tr("su_detail_medium"),
@@ -843,7 +843,7 @@ fn status_bar(ui: Rc<Ui>) -> impl Piece {
     // The same readout every game wears under its header, with room for "00:00" from the first
     // layout so a ticking value never truncates.
     fn pill(
-        title: day_fluent::LocalizedText,
+        title: day_localization_ui::LocalizedText,
         value: impl Fn() -> String + 'static,
         tint: impl Fn() -> Color + 'static,
         id: ElementId,
@@ -1326,19 +1326,19 @@ fn action_button(
 #[allow(clippy::too_many_arguments)]
 fn split_button(
     top_glyph: Glyph,
-    top_title: day_fluent::LocalizedText,
+    top_title: day_localization_ui::LocalizedText,
     top_disabled: impl Fn() -> bool + 'static,
     top_action: impl Fn() + 'static,
     top_id: ElementId,
     bottom_glyph: Glyph,
-    bottom_title: day_fluent::LocalizedText,
+    bottom_title: day_localization_ui::LocalizedText,
     bottom_disabled: impl Fn() -> bool + 'static,
     bottom_action: impl Fn() + 'static,
     bottom_id: ElementId,
     ui: Rc<Ui>,
 ) -> AnyPiece {
     let half = |glyph: Glyph,
-                title: day_fluent::LocalizedText,
+                title: day_localization_ui::LocalizedText,
                 disabled: Box<dyn Fn() -> bool>,
                 action: Box<dyn Fn()>,
                 id: ElementId,
@@ -1457,7 +1457,7 @@ fn card_frame(content: impl Piece) -> AnyPiece {
 
 /// A menu button: filled in `tint`, one fixed width so the stack lines up.
 fn menu_button(
-    title: day_fluent::LocalizedText,
+    title: day_localization_ui::LocalizedText,
     tint: Color,
     id: ElementId,
     action: impl Fn() + 'static,
@@ -1671,13 +1671,13 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
 }
 
 fn settings_card(ui: Rc<Ui>) -> AnyPiece {
-    let heading = |t: day_fluent::LocalizedText| {
+    let heading = |t: day_localization_ui::LocalizedText| {
         label(t)
             .font(Font::Caption)
             .weight(FontWeight::Semibold)
             .color(TEXT_DIM)
     };
-    let setting_row = |t: day_fluent::LocalizedText, control: AnyPiece| {
+    let setting_row = |t: day_localization_ui::LocalizedText, control: AnyPiece| {
         row((label(t).color(TEXT).grow_w(), control))
             .align(VAlign::Center)
             .grow_w()
@@ -1804,13 +1804,13 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
 
 /// The how-to-play sheet: headings and bullets as labels, inline markdown for the emphasis.
 fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
-    let heading = |t: day_fluent::LocalizedText| {
+    let heading = |t: day_localization_ui::LocalizedText| {
         label(t)
             .font(Font::Headline)
             .color(Color::WHITE)
             .align(TextAlign::Leading)
     };
-    let para = |t: day_fluent::LocalizedText| {
+    let para = |t: day_localization_ui::LocalizedText| {
         label(t)
             .font(Font::Body)
             .color(TEXT)

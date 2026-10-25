@@ -3,7 +3,7 @@
 """Real Android pointer regression for Match Three (an API 33+ emulator).
 
 Launch first:
-  day launch -p android-mdc --android-device SERIAL --env DAY_GAMES_SEED=15 --locale en --keep-alive
+  day launch -p android-material --android-device SERIAL --env DAY_GAMES_SEED=15 --locale en --keep-alive
 Then:
   python3 scripts/matchthree-touch-test.py SERIAL
 
@@ -32,7 +32,7 @@ def main():
         return subprocess.check_output(['adb', '-s', serial, *args])
 
     def drive(*steps):
-        result = subprocess.run([*day, 'drive', '-p', 'android-mdc', '--steps-json', json.dumps(steps)],
+        result = subprocess.run([*day, 'drive', '-p', 'android-material', '--steps-json', json.dumps(steps)],
                                 cwd=project, capture_output=True, text=True, timeout=90)
         if result.returncode:
             raise AssertionError(result.stdout + result.stderr)
@@ -68,7 +68,7 @@ def main():
         png = adb('exec-out', 'screencap', '-p')
         signature = png.find(b'\x89PNG\r\n\x1a\n')
         assert signature >= 0, 'screencap returned no PNG'
-        folder = project / 'build/day/screenshots/android-mdc/native-matchthree'
+        folder = project / 'build/day/screenshots/android-material/native-matchthree'
         folder.mkdir(parents=True, exist_ok=True)
         (folder / f'{name}.png').write_bytes(png[signature:])
 

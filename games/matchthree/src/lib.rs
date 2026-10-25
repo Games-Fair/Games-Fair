@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 //! Match Three: six levels of shape matching with native vector artwork and animated cascades.
-use day_fluent::{LocalizedText, tr};
+use day_localization_ui::{LocalizedText, tr};
 use day_pieces::prelude::*;
 use gamekit::chrome::{self, Feedback, Help, cues};
 use serde::{Deserialize, Serialize};

@@ -13,7 +13,7 @@ use std::cell::{Cell, RefCell};
 use std::f64::consts::TAU;
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_geometry::Affine;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
@@ -95,7 +95,7 @@ fn fmt_time(secs: f64) -> String {
     format!("{}:{:02}", s / 60, s % 60)
 }
 
-fn difficulty_label(d: Difficulty) -> day_fluent::LocalizedText {
+fn difficulty_label(d: Difficulty) -> day_localization_ui::LocalizedText {
     match d {
         Difficulty::Easy => tr("mi_easy"),
         Difficulty::Medium => tr("mi_medium"),
@@ -1171,7 +1171,7 @@ fn flag_toggle(ui: Rc<Ui>) -> AnyPiece {
 }
 
 fn counter(
-    caption: day_fluent::LocalizedText,
+    caption: day_localization_ui::LocalizedText,
     value: impl Fn() -> String + 'static,
     color: Color,
     id: ElementId,

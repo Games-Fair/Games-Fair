@@ -12,7 +12,7 @@ use std::f64::consts::PI;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_geometry::Affine;
 use day_part_haptics::Haptic;
 use day_part_sensors::SensorKind;
@@ -401,7 +401,7 @@ pub fn reset_records() {
 /// The Charades screen.
 pub fn charades_page() -> AnyPiece {
     let settings = gamekit::restore::<Settings>(SETTINGS_KEY).unwrap_or_default();
-    let locale = model::resolve_locale(&day_fluent::locale().get_untracked());
+    let locale = model::resolve_locale(&day_localization_ui::locale().get_untracked());
     let tilt_available = day_part_sensors::is_available(SensorKind::Accelerometer);
     let ui = Rc::new(Ui {
         phase: Signal::new(Phase::Decks),

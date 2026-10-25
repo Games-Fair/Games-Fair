@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 //! Pipes: rotate a scrambled network, lock settled tiles, and connect every branch.
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_pieces::prelude::*;
 use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
 use serde::{Deserialize, Serialize};

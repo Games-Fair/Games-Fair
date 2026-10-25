@@ -13,7 +13,7 @@ use std::cell::{Cell, RefCell};
 use std::f64::consts::{PI, TAU};
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_geometry::Affine;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
@@ -249,7 +249,7 @@ fn tier_color(tier: u8) -> Color {
 
 /// A call-out for a clear of `tier`, the `pick`th of its pool. Literal `tr` keys, so `day lint`
 /// tracks their coverage.
-fn message(tier: u8, pick: usize) -> day_fluent::LocalizedText {
+fn message(tier: u8, pick: usize) -> day_localization_ui::LocalizedText {
     match (tier, pick % 3) {
         (1, 0) => tr("bb_msg_nice"),
         (1, 1) => tr("bb_msg_good"),
@@ -271,7 +271,7 @@ fn message(tier: u8, pick: usize) -> day_fluent::LocalizedText {
     }
 }
 
-fn difficulty_label(d: Difficulty) -> day_fluent::LocalizedText {
+fn difficulty_label(d: Difficulty) -> day_localization_ui::LocalizedText {
     match d {
         Difficulty::Easy => tr("bb_easy"),
         Difficulty::Normal => tr("bb_normal"),
@@ -279,7 +279,7 @@ fn difficulty_label(d: Difficulty) -> day_fluent::LocalizedText {
     }
 }
 
-fn difficulty_detail(d: Difficulty) -> day_fluent::LocalizedText {
+fn difficulty_detail(d: Difficulty) -> day_localization_ui::LocalizedText {
     match d {
         Difficulty::Easy => tr("bb_detail_easy"),
         Difficulty::Normal => tr("bb_detail_normal"),

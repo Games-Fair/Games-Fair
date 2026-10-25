@@ -6,7 +6,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_pieces::prelude::*;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Sfx, sfx};

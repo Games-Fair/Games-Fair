@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 //! gamekit is the games' standard save-state mechanism. Each game serializes its durable state
-//! (board, score, best) to JSON in `day-part-prefs` (docs/prefs.md) and restores it the next
+//! (board, score, best) to JSON in `day-part-preferences` (docs/prefs.md) and restores it the next
 //! time it opens. Two write triggers cover every exit path:
 //!
 //! - **game exit**: [`autosave`] hooks the page scope's cleanup, so closing the cover (the X
@@ -74,12 +74,12 @@ fn pref_key(key: &str) -> String {
 /// The saved state for `key`, if a readable one exists. An unparsable save (a schema change)
 /// is discarded rather than propagated: the game starts fresh.
 pub fn restore<T: DeserializeOwned>(key: &str) -> Option<T> {
-    let raw = day_part_prefs::get(&pref_key(key))?;
+    let raw = day_part_preferences::get(&pref_key(key))?;
     match serde_json::from_str(&raw) {
         Ok(v) => Some(v),
         Err(e) => {
             eprintln!("gamekit: discarding unreadable save {key:?}: {e}");
-            let _ = day_part_prefs::remove(&pref_key(key));
+            let _ = day_part_preferences::remove(&pref_key(key));
             None
         }
     }
@@ -89,7 +89,7 @@ pub fn restore<T: DeserializeOwned>(key: &str) -> Option<T> {
 pub fn save<T: Serialize>(key: &str, state: &T) {
     match serde_json::to_string(state) {
         Ok(s) => {
-            let _ = day_part_prefs::set(&pref_key(key), &s);
+            let _ = day_part_preferences::set(&pref_key(key), &s);
         }
         Err(e) => eprintln!("gamekit: failed to serialize save {key:?}: {e}"),
     }
@@ -97,7 +97,7 @@ pub fn save<T: Serialize>(key: &str, state: &T) {
 
 /// Delete the saved state for `key`.
 pub fn clear(key: &str) {
-    let _ = day_part_prefs::remove(&pref_key(key));
+    let _ = day_part_preferences::remove(&pref_key(key));
 }
 
 thread_local! {

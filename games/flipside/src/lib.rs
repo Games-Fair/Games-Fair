@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
 //! Flipside: shared canvas drawing, pure rules, and the standard gamekit shell.
-use day_fluent::tr;
+use day_localization_ui::tr;
 use day_pieces::prelude::*;
 use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
 use serde::de::DeserializeOwned;
@@ -209,7 +209,7 @@ impl Ui {
         }
     }
 }
-fn result(b: Board) -> day_fluent::LocalizedText {
+fn result(b: Board) -> day_localization_ui::LocalizedText {
     match b.count(true).cmp(&b.count(false)) {
         std::cmp::Ordering::Greater => tr("fs_black_wins"),
         std::cmp::Ordering::Less => tr("fs_white_wins"),

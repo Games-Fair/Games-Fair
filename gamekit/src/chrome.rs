@@ -4,7 +4,7 @@
 //! pause button and its glyph; the per-game settings record; and the haptic gate. Composed from
 //! Day's core pieces, so it renders the same on every toolkit (docs/compose.md).
 
-use day_fluent::LocalizedText;
+use day_localization_ui::LocalizedText;
 use day_part_haptics::Haptic;
 use day_part_sound::{AssetName, Play};
 use day_piece_settings::Pref;
@@ -447,7 +447,7 @@ pub fn close_button() -> AnyPiece {
     .on_tap(move || {
         close.invoke();
     })
-    .a11y(|a| a.label(day_fluent::tr("gk_close")).role(Role::Button))
+    .a11y(|a| a.label(day_localization_ui::tr("gk_close")).role(Role::Button))
     // The id every dayscript taps to leave a game.
     .id(id!(close_game))
     .frame(BUTTON, BUTTON)
@@ -466,7 +466,7 @@ pub fn game_header(
     row((
         close_button(),
         fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow_w(),
-        pause_button(day_fluent::tr("gk_pause"), pause_id, on_pause),
+        pause_button(day_localization_ui::tr("gk_pause"), pause_id, on_pause),
     ))
     .align(VAlign::Center)
     .padding(EDGE)
@@ -760,7 +760,7 @@ pub fn instructions_card(
             // At most 360 points, and less on a short screen (a phone held sideways), so Done
             // stays on screen.
             .max_height(360.0),
-            button(day_fluent::tr("gk_done"))
+            button(day_localization_ui::tr("gk_done"))
                 .prominent()
                 .action(on_done)
                 .id(done_id),
@@ -774,7 +774,7 @@ pub fn instructions_card(
 
 /// The shell's leave-game operation, shared by the canvas header and every pause/results card.
 pub fn close_command() -> Command {
-    Command::new(id!(close_game), day_fluent::tr("gk_close"), crate::close)
+    Command::new(id!(close_game), day_localization_ui::tr("gk_close"), crate::close)
 }
 
 /// A pause/results-card presentation of the same command as the header's close glyph: "Close
