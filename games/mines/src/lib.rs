@@ -13,8 +13,8 @@ use std::cell::{Cell, RefCell};
 use std::f64::consts::TAU;
 use std::rc::Rc;
 
-use day_localization_ui::tr;
 use day_geometry::Affine;
+use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
 use gamekit::chrome::cues::{self, with};

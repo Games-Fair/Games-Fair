@@ -447,7 +447,10 @@ pub fn close_button() -> AnyPiece {
     .on_tap(move || {
         close.invoke();
     })
-    .a11y(|a| a.label(day_localization_ui::tr("gk_close")).role(Role::Button))
+    .a11y(|a| {
+        a.label(day_localization_ui::tr("gk_close"))
+            .role(Role::Button)
+    })
     // The id every dayscript taps to leave a game.
     .id(id!(close_game))
     .frame(BUTTON, BUTTON)
@@ -774,7 +777,11 @@ pub fn instructions_card(
 
 /// The shell's leave-game operation, shared by the canvas header and every pause/results card.
 pub fn close_command() -> Command {
-    Command::new(id!(close_game), day_localization_ui::tr("gk_close"), crate::close)
+    Command::new(
+        id!(close_game),
+        day_localization_ui::tr("gk_close"),
+        crate::close,
+    )
 }
 
 /// A pause/results-card presentation of the same command as the header's close glyph: "Close

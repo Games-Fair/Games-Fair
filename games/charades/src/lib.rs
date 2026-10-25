@@ -12,8 +12,8 @@ use std::f64::consts::PI;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
-use day_localization_ui::tr;
 use day_geometry::Affine;
+use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_part_sensors::SensorKind;
 use day_part_wakelock::ScreenLock;
