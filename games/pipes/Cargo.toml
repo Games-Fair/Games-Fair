@@ -6,8 +6,8 @@ edition = "2024"
 license = "Apache-2.0"
 
 [dependencies]
-day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-localization-ui = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-pieces = "0.6"
+day-localization-ui = "0.6"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
 

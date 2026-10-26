@@ -11,15 +11,15 @@ build = "build.rs"
 # parts, with no native per-backend code and no cargo features, so it works on every backend as is.
 
 [dependencies]
-day-pieces = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-reactive = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-geometry = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-localization-ui = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-part-haptics = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-pieces = "0.6"
+day-core = "0.6"
+day-reactive = "0.6"
+day-geometry = "0.6"
+day-localization-ui = "0.6"
+day-part-haptics = "0.6"
 # The nod and the tip back (docs/sensors.md).
-day-part-sensors = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-part-sensors = "0.6"
 # A round is played hands-free for a minute or more, past most auto-lock settings (docs/wakelock.md).
-day-part-wakelock = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-part-wakelock = "0.6"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }

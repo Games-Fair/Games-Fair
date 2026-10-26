@@ -39,10 +39,10 @@ crate-type = ["rlib"]
 # The day framework resolves from the main branch of its git repository, here and in every game
 # crate; the lock is not committed, so a build takes the tip. Local development against a
 # checkout goes through the gitignored .cargo/config.toml that `day patch --local ../day` writes.
-day = { package = "day-app", git = "https://github.com/daybrite/day.git", branch = "main" }
+day = { package = "day-app", version = "0.6" }
 # Settings and About (https://daybrite.dev/docs/settings): the Preferences window and menu items
 # on the desktops, the cover the home grid's gear opens on the phones and the web.
-day-piece-settings = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-piece-settings = "0.6"
 blockblast = { path = "games/blockblast" }
 breakout = { path = "games/breakout" }
 charades = { path = "games/charades" }
@@ -58,14 +58,14 @@ sudoku = { path = "games/sudoku" }
 twentyfortyeight = { path = "games/twentyfortyeight" }
 
 [dev-dependencies]
-day-core = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-core = "0.6"
 # tests/records.rs reads the saves Reset all records leaves behind.
 serde_json = "1"
-day-mock = { git = "https://github.com/daybrite/day.git", branch = "main" }
-day-spec = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-mock = "0.6"
+day-spec = "0.6"
 
 [build-dependencies]
-day-build = { git = "https://github.com/daybrite/day.git", branch = "main" }
+day-build = "0.6"
 
 # Solitaire proves each new deal winnable by searching tens of thousands of positions, which an
 # unoptimized build does dozens of times slower; debug builds and walkthroughs optimize that crate.
