@@ -53,6 +53,7 @@ day::routes! {
         BlockBlast => "blockblast",
         Breakout => "breakout",
         Charades => "charades",
+        Crossword => "crossword",
         MatchThree => "matchthree",
         Mines => "mines",
         PacPac => "pacpac",
@@ -77,6 +78,7 @@ fn game_background(section: Section) -> Color {
         Section::BlockBlast => blockblast::SURFACE,
         Section::Breakout => breakout::SURFACE,
         Section::Charades => charades::SURFACE,
+        Section::Crossword => crossword::SURFACE,
         Section::MatchThree => matchthree::SURFACE,
         Section::Mines => mines::SURFACE,
         Section::PacPac => pacpac::SURFACE,
@@ -156,6 +158,7 @@ pub fn reset_all_records() {
     blockblast::reset_records();
     breakout::reset_records();
     charades::reset_records();
+    crossword::reset_records();
     mines::reset_records();
     pacpac::reset_records();
     pipes::reset_records();
@@ -284,6 +287,13 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
                 ),
                 tile(
                     open,
+                    Section::Crossword,
+                    res::str::nav_crossword(),
+                    crossword::crossword_preview(),
+                    id!(tile_crossword),
+                ),
+                tile(
+                    open,
                     Section::BlockBlast,
                     res::str::nav_blockblast(),
                     blockblast::blockblast_preview(),
@@ -364,6 +374,7 @@ fn game_cover(open: Signal<Option<Section>>) -> impl Piece {
             Section::BlockBlast => blockblast::blockblast_page(),
             Section::Breakout => breakout::breakout_page(),
             Section::Charades => charades::charades_page(),
+            Section::Crossword => crossword::crossword_page(),
             Section::MatchThree => matchthree::matchthree_page(),
             Section::Mines => mines::mines_page(),
             Section::PacPac => pacpac::pacpac_page(),

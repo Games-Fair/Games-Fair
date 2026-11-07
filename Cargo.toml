@@ -35,16 +35,16 @@ name = "dayapp"
 crate-type = ["rlib"]
 
 [dependencies]
-# The day framework resolves from the main branch of its git repository, here and in every game
-# crate; the lock is not committed, so a build takes the tip. Local development against a
-# checkout goes through the gitignored .cargo/config.toml that `day patch --local ../day` writes.
-day = { package = "day-app", version = "0.6" }
+# Day dependencies accept every stable 0.x release. Cargo.lock records the tested versions.
+# Local development uses the gitignored patch table written by `day patch --local ../day`.
+day = { package = "day-app", version = "0.*" }
 # Settings and About (https://daybrite.dev/docs/settings): the Preferences window and menu items
 # on the desktops, the cover the home grid's gear opens on the phones and the web.
-day-piece-settings = "0.6"
+day-piece-settings = "0.*"
 blockblast = { path = "games/blockblast" }
 breakout = { path = "games/breakout" }
 charades = { path = "games/charades" }
+crossword = { path = "games/crossword" }
 matchthree = { path = "games/matchthree" }
 mines = { path = "games/mines" }
 pacpac = { path = "games/pacpac" }
@@ -57,14 +57,14 @@ sudoku = { path = "games/sudoku" }
 twentyfortyeight = { path = "games/twentyfortyeight" }
 
 [dev-dependencies]
-day-core = "0.6"
+day-core = "0.*"
 # tests/records.rs reads the saves Reset all records leaves behind.
 serde_json = "1"
-day-mock = "0.6"
-day-spec = "0.6"
+day-mock = "0.*"
+day-spec = "0.*"
 
 [build-dependencies]
-day-build = "0.6"
+day-build = "0.*"
 
 # Solitaire proves each new deal winnable by searching tens of thousands of positions, which an
 # unoptimized build does dozens of times slower; debug builds and walkthroughs optimize that crate.
@@ -79,6 +79,7 @@ members = [
     "games/blockblast",
     "games/breakout",
     "games/charades",
+    "games/crossword",
     "games/matchthree",
     "games/mines",
     "games/pacpac",

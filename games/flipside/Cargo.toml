@@ -10,12 +10,12 @@ license = "Apache-2.0"
 # plain `{ workspace = true }` (or git) line and call the builder from `use day::prelude::*` code.
 
 [dependencies]
-day-pieces = "0.6"
-day-core = "0.6"
-day-reactive = "0.6"
-day-geometry = "0.6"
-day-localization-ui = "0.6"
-day-part-haptics = "0.6"
+day-pieces = "0.*"
+day-core = "0.*"
+day-reactive = "0.*"
+day-geometry = "0.*"
+day-localization-ui = "0.*"
+day-part-haptics = "0.*"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
 
