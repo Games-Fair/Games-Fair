@@ -1156,7 +1156,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mt_board_a11y")))
     .id(id!(mt_board))
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 fn layout(s: Size) -> (f64, f64, f64) {
@@ -1524,7 +1524,7 @@ fn menu_button(
         .color(Color::WHITE)
         .align(TextAlign::Center)
         .padding(Space::M)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(260.0)
         .background(tint.with_alpha(0.3))
         .corner_radius(14.0)
@@ -1620,7 +1620,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                             } else {
                                 chrome::TEXT_DIM
                             })
-                            .grow_w(),
+                            .grow(Dimension::Width),
                         label(detail).font(Font::Caption).color(if unlocked {
                             chrome::GOLD
                         } else {
@@ -1638,7 +1638,7 @@ fn card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                     .on_tap(move || u.start(i))
                     .a11y(move |a| a.label(tr(stage.name)).role(Role::Button))
                     .id(id!(mt_stage, i + 1))
-                    .grow_w()
+                    .grow(Dimension::Width)
                     .max_width(260.0)
                     .any(),
                 );
@@ -1800,7 +1800,7 @@ fn celebration(reduced: bool) -> AnyPiece {
             Color::WHITE.with_alpha(0.8),
         );
     })
-    .grow_w()
+    .grow(Dimension::Width)
     .max_width(270.0)
     .height(108.0);
     zstack((

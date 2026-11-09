@@ -81,6 +81,7 @@ fn key(id: &str, key: &str) {
         id,
         Event::Key(KeyEvent {
             key: key.into(),
+            text: None,
             modifiers: 0,
         }),
     );

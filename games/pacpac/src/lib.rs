@@ -751,7 +751,7 @@ pub fn pacpac_page() -> AnyPiece {
             let g = mu.game.borrow();
             d.transformed(placement(sz), |d| draw_maze_layer(&g, d));
         })
-        .grow()
+        .grow(Dimension::Both)
     };
     let play_layer = {
         let (du, dr, tu, ku, hu) = (ui.clone(), ui.clone(), ui.clone(), ui.clone(), ui.clone());
@@ -812,7 +812,7 @@ pub fn pacpac_page() -> AnyPiece {
             ku.steer(dir);
         })
         .id(id!(pm_canvas))
-        .grow()
+        .grow(Dimension::Both)
     };
 
     // Mounted only while the round runs, so the display link goes idle behind a card.
@@ -829,7 +829,7 @@ pub fn pacpac_page() -> AnyPiece {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
-    let play = zstack((maze_layer, play_layer)).grow().any();
+    let play = zstack((maze_layer, play_layer)).grow(Dimension::Both).any();
     let pad = {
         let (vu, bu) = (ui.clone(), ui.clone());
         when(move || vu.pad_visible(), move || joypad(bu.clone()))
@@ -1053,7 +1053,7 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
                 ))
                 .spacing(Space::XS)
                 .align(HAlign::Leading)
-                .grow_w(),
+                .grow(Dimension::Width),
                 check,
             ))
             .align(VAlign::Center)
@@ -1066,7 +1066,7 @@ fn mode_picker(ui: Rc<Ui>) -> AnyPiece {
             })
             .a11y(move |a| a.label(spoken.clone()).role(Role::Button))
             .id(id)
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );

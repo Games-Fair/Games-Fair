@@ -63,7 +63,7 @@ pub const RED: Color = Color::rgb(0.85, 0.30, 0.30);
 pub const MENU_W: f64 = 180.0;
 
 /// The width a card's content is laid out at where the screen has room. A narrower screen gets
-/// narrower content: give a card's rows `.grow_w().max_width(CARD_W)`, never a fixed width,
+/// narrower content: give a card's rows `.grow(Dimension::Width).max_width(CARD_W)`, never a fixed width,
 /// or a 320-point phone (Display Zoom) clips the card and widens the whole page under it.
 pub const CARD_W: f64 = 300.0;
 
@@ -331,7 +331,7 @@ const LEGIBLE: f64 = 10.0;
 /// A one-line title for a header it shares with scores and buttons: drawn at `size` when the row
 /// leaves it room, narrowed to fit when it does not, and left out once that would take it below a
 /// legible size. A label in that spot wraps or ellipsizes instead, one letter per line at worst.
-/// Give it `.grow_w()` so it takes what the row has left.
+/// Give it `.grow(Dimension::Width)` so it takes what the row has left.
 pub fn fitted_title(text: LocalizedText, size: f64, weight: FontWeight, color: Color) -> AnyPiece {
     let spoken = text.clone();
     canvas(move |d, sz| {
@@ -468,7 +468,7 @@ pub fn game_header(
 ) -> AnyPiece {
     row((
         close_button(),
-        fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow_w(),
+        fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow(Dimension::Width),
         pause_button(day_localization_ui::tr("gk_pause"), pause_id, on_pause),
     ))
     .align(VAlign::Center)
@@ -481,7 +481,7 @@ pub fn game_header(
 pub fn game_header_plain(title: LocalizedText) -> AnyPiece {
     row((
         close_button(),
-        fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow_w(),
+        fitted_title(title, TITLE, FontWeight::Heavy, ink_at(0.85)).grow(Dimension::Width),
         spacer().width(BUTTON),
     ))
     .align(VAlign::Center)
@@ -528,7 +528,7 @@ pub fn info_caption(caption: LocalizedText) -> AnyPiece {
     })
     .a11y(move |a| a.label(spoken.clone()))
     .height(INFO_CAPTION_H)
-    .grow_w()
+    .grow(Dimension::Width)
     .min_width(INFO_MIN_W)
     .any()
 }
@@ -588,7 +588,7 @@ pub fn info_stat<M, C>(
     })
     .id(id)
     .height(INFO_H)
-    .grow_w()
+    .grow(Dimension::Width)
     .min_width(INFO_MIN_W)
     .any()
 }
@@ -599,10 +599,13 @@ pub fn info_stat<M, C>(
 /// fit a 320-point phone where fixed gaps between them ran off its edge.
 pub fn info_row(stats: Vec<AnyPiece>) -> AnyPiece {
     let slots = stats.len().max(1) as f64;
-    let stats: Vec<AnyPiece> = stats.into_iter().map(|s| s.grow_w().any()).collect();
+    let stats: Vec<AnyPiece> = stats
+        .into_iter()
+        .map(|s| s.grow(Dimension::Width).any())
+        .collect();
     row(stats)
         .align(VAlign::Center)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(slots * INFO_SLOT)
         .padding(Insets {
             bottom: 4.0,
@@ -628,9 +631,9 @@ pub fn game_frame(
     // slack to first, which leaves a play area that grows sitting at its smallest. A growing
     // stack centres instead: one that fills takes the whole box, one with a size of its own sits
     // in the middle of it.
-    column((header, info, zstack([play]).grow(), footer))
+    column((header, info, zstack([play]).grow(Dimension::Both), footer))
         .align(HAlign::Center)
-        .grow()
+        .grow(Dimension::Both)
         .any()
 }
 
@@ -640,7 +643,7 @@ pub fn scrim() -> AnyPiece {
         d.fill(Shape::Rect(Rect::new(0.0, 0.0, sz.width, sz.height)), SCRIM);
     })
     .on_tap(|| {})
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 
@@ -710,9 +713,9 @@ pub fn section_heading(text: LocalizedText) -> AnyPiece {
 
 /// A settings row: a title on the leading edge, its control trailing.
 pub fn setting_row(title: LocalizedText, control: AnyPiece) -> AnyPiece {
-    row((label(title).color(TEXT).grow_w(), control))
+    row((label(title).color(TEXT).grow(Dimension::Width), control))
         .align(VAlign::Center)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(CARD_W)
         .any()
 }
@@ -757,7 +760,7 @@ pub fn instructions_card(
                 column(pieces)
                     .spacing(10.0)
                     .align(HAlign::Leading)
-                    .grow_w()
+                    .grow(Dimension::Width)
                     .max_width(CARD_W),
             )
             // At most 360 points, and less on a short screen (a phone held sideways), so Done
@@ -770,7 +773,7 @@ pub fn instructions_card(
         ))
         .spacing(Space::M)
         .align(HAlign::Leading)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(CARD_W),
     )
 }

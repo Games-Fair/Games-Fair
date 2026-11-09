@@ -405,7 +405,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     .focused(ui.focus)
     .a11y(|a| a.label(tr("pp_board_a11y")))
     .id(id!(pp_board))
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 /// How long a quarter-turn animation draws for.
@@ -718,7 +718,7 @@ pub fn pipes_preview() -> AnyPiece {
         );
         draw_board(d, size, &g, &net, None, None, 1.0, 2.0);
     })
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 

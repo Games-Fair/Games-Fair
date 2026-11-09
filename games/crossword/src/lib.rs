@@ -436,7 +436,7 @@ pub fn crossword_page() -> AnyPiece {
         d.fill(Shape::Rect(Rect::new(0.0, 0.0, sz.width, sz.height)), BG);
     })
     .on_key(keys(&ui))
-    .grow();
+    .grow(Dimension::Both);
 
     // The page's shape follows the window: the clue lists beside the grid where there is room
     // for them, the grid over a keyboard on a phone, and the keyboard beside the grid on a
@@ -446,7 +446,7 @@ pub fn crossword_page() -> AnyPiece {
         switch(
             move || (u.open.get(), layout()),
             move |&(open, shape)| match (open, shape) {
-                (None, _) => column((header(&b),)).grow().any(),
+                (None, _) => column((header(&b),)).grow(Dimension::Both).any(),
                 (Some(_), Layout::Wide) => wide_page(&b),
                 (Some(_), Layout::Phone) => phone_page(&b),
                 (Some(_), Layout::Sideways) => sideways_page(&b),
@@ -456,7 +456,7 @@ pub fn crossword_page() -> AnyPiece {
 
     zstack((
         backdrop,
-        zstack((page,)).grow().id(id!(cw_page)),
+        zstack((page,)).grow(Dimension::Both).id(id!(cw_page)),
         overlays(ui),
         ticker,
     ))
@@ -527,7 +527,7 @@ fn byline(ui: &Rc<Ui>) -> AnyPiece {
         ))
         .spacing(2.0)
         .align(HAlign::Leading)
-        .grow_w(),
+        .grow(Dimension::Width),
         label(move || {
             c.clock.track();
             c.board.track();
@@ -555,12 +555,12 @@ fn wide_page(ui: &Rc<Ui>) -> AnyPiece {
         row((clue_list(ui, Dir::Across), clue_list(ui, Dir::Down)))
             .spacing(Space::M)
             .align(VAlign::Top)
-            .grow_h()
+            .grow(Dimension::Height)
             .any()
     } else {
         column((clue_list(ui, Dir::Across), clue_list(ui, Dir::Down)))
             .spacing(Space::M)
-            .grow_h()
+            .grow(Dimension::Height)
             .any()
     };
     column((
@@ -569,11 +569,13 @@ fn wide_page(ui: &Rc<Ui>) -> AnyPiece {
         row((
             column((
                 clue_bar(ui),
-                zstack((grid(ui),)).align(Alignment::Top).grow(),
+                zstack((grid(ui),))
+                    .align(Alignment::Top)
+                    .grow(Dimension::Both),
                 tools(ui),
             ))
             .spacing(Space::M)
-            .grow(),
+            .grow(Dimension::Both),
             lists,
         ))
         .spacing(Space::L)
@@ -582,10 +584,10 @@ fn wide_page(ui: &Rc<Ui>) -> AnyPiece {
             bottom: 16.0,
             ..Insets::horizontal(16.0)
         })
-        .grow(),
+        .grow(Dimension::Both),
     ))
     .spacing(Space::S)
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 
@@ -596,7 +598,7 @@ fn phone_page(ui: &Rc<Ui>) -> AnyPiece {
         byline(ui),
         zstack((grid(ui).padding(Insets::horizontal(chrome::EDGE)),))
             .align(Alignment::Top)
-            .grow(),
+            .grow(Dimension::Both),
         column((clue_bar(ui), tools(ui), keyboard(ui)))
             .spacing(Space::S)
             .padding(Insets {
@@ -605,7 +607,7 @@ fn phone_page(ui: &Rc<Ui>) -> AnyPiece {
             }),
     ))
     .spacing(Space::S)
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 
@@ -615,19 +617,19 @@ fn sideways_page(ui: &Rc<Ui>) -> AnyPiece {
     column((
         header(ui),
         row((
-            zstack((grid(ui),)).grow(),
+            zstack((grid(ui),)).grow(Dimension::Both),
             column((clue_bar(ui), tools(ui), spacer(), keyboard(ui)))
                 .spacing(Space::S)
-                .grow(),
+                .grow(Dimension::Both),
         ))
         .spacing(Space::M)
         .padding(Insets {
             bottom: chrome::EDGE,
             ..Insets::horizontal(chrome::EDGE)
         })
-        .grow(),
+        .grow(Dimension::Both),
     ))
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 
@@ -643,7 +645,9 @@ fn grid_geometry(p: &Puzzle, sz: Size) -> (f64, f64, f64) {
         .floor()
         .max(4.0);
     let ox = ((sz.width - side * p.width as f64) / 2.0).floor();
-    let oy = ((sz.height - side * p.height as f64) / 2.0).floor().max(0.0);
+    let oy = ((sz.height - side * p.height as f64) / 2.0)
+        .floor()
+        .max(0.0);
     (side, ox, oy)
 }
 
@@ -870,12 +874,12 @@ fn clue_bar(ui: &Rc<Ui>) -> AnyPiece {
             .font(Font::Body)
             .color(Color::WHITE)
             .max_lines(3)
-            .grow_w()
+            .grow(Dimension::Width)
             .id(id!(cw_clue_text)),
         ))
         .spacing(Space::S)
         .align(VAlign::Center)
-        .grow_w()
+        .grow(Dimension::Width)
         .on_tap(move || xu.edit(|s| s.toggle_dir())),
         chevron(true, id!(cw_next_clue), move || {
             fu.edit(|s| s.next_clue(true))
@@ -968,7 +972,7 @@ fn clue_list(ui: &Rc<Ui>, dir: Dir) -> AnyPiece {
                             chrome::TEXT
                         }
                     })
-                    .grow_w(),
+                    .grow(Dimension::Width),
             ))
             .spacing(Space::S)
             .align(VAlign::FirstBaseline)
@@ -1003,14 +1007,14 @@ fn clue_list(ui: &Rc<Ui>, dir: Dir) -> AnyPiece {
             Dir::Across => tr("cw_across"),
             Dir::Down => tr("cw_down"),
         }),
-        scroll(column(rows).spacing(2.0).grow_w())
+        scroll(column(rows).spacing(2.0).grow(Dimension::Width))
             .scroll_target(target)
-            .grow(),
+            .grow(Dimension::Both),
     ))
     .spacing(Space::S)
     .align(HAlign::Leading)
     .width(LIST_W)
-    .grow_h()
+    .grow(Dimension::Height)
     .any()
 }
 
@@ -1029,23 +1033,35 @@ fn tools(ui: &Rc<Ui>) -> AnyPiece {
         }
     };
     let list_button = (layout() != Layout::Wide).then(move || {
-        tool_button(tr("cw_clues"), || false, id!(cw_show_clues), move || {
-            lu.push(Overlay::Clues)
-        })
+        tool_button(
+            tr("cw_clues"),
+            || false,
+            id!(cw_show_clues),
+            move || lu.push(Overlay::Clues),
+        )
     });
     row((
         tool_button(tr("cw_pencil"), pencil_on, id!(cw_pencil), move || {
             pu.edit(|s| s.pencil_mode = !s.pencil_mode)
         }),
-        tool_button(tr("cw_check"), || false, id!(cw_check), move || {
-            cu.push(Overlay::Check)
-        }),
-        tool_button(tr("cw_reveal"), || false, id!(cw_reveal), move || {
-            ru.push(Overlay::Reveal)
-        }),
-        tool_button(tr("cw_clear"), || false, id!(cw_clear), move || {
-            xu.push(Overlay::Clear)
-        }),
+        tool_button(
+            tr("cw_check"),
+            || false,
+            id!(cw_check),
+            move || cu.push(Overlay::Check),
+        ),
+        tool_button(
+            tr("cw_reveal"),
+            || false,
+            id!(cw_reveal),
+            move || ru.push(Overlay::Reveal),
+        ),
+        tool_button(
+            tr("cw_clear"),
+            || false,
+            id!(cw_clear),
+            move || xu.push(Overlay::Clear),
+        ),
         list_button,
     ))
     .spacing(Space::S)
@@ -1082,7 +1098,7 @@ fn tool_button(
     .a11y(move |a| a.label(spoken).role(Role::Button))
     .id(id)
     .height(36.0)
-    .grow_w()
+    .grow(Dimension::Width)
     .max_width(110.0)
     .any()
 }
@@ -1101,7 +1117,11 @@ fn key_layout(width: f64) -> Vec<(Rect, Option<char>)> {
         let y = r as f64 * (KEY_H + KEY_GAP);
         let n = letters.chars().count() as f64;
         let row_w = n * unit + (n - 1.0) * KEY_GAP;
-        let room = if r == 2 { width - back - KEY_GAP } else { width };
+        let room = if r == 2 {
+            width - back - KEY_GAP
+        } else {
+            width
+        };
         let x0 = (room - row_w) / 2.0;
         for (k, ch) in letters.chars().enumerate() {
             let x = x0 + k as f64 * (unit + KEY_GAP);
@@ -1163,7 +1183,7 @@ fn keyboard(ui: &Rc<Ui>) -> Option<AnyPiece> {
         .a11y(|a| a.label(tr("cw_keyboard")))
         .id(id!(cw_keyboard))
         .height(height)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(560.0)
         .any(),
     )
@@ -1183,11 +1203,7 @@ fn draw_backspace(d: &mut Draw, c: Point) {
         Point::new(l, c.y),
     ];
     for pair in outline.windows(2) {
-        d.stroke_styled(
-            Shape::Line(pair[0], pair[1]),
-            Color::WHITE,
-            style.clone(),
-        );
+        d.stroke_styled(Shape::Line(pair[0], pair[1]), Color::WHITE, style.clone());
     }
     let x = l + 13.5;
     for dy in [-3.5, 3.5] {
@@ -1237,10 +1253,15 @@ fn pause_menu(ui: Rc<Ui>) -> AnyPiece {
             chrome::menu_button(tr("cw_puzzles"), chrome::BLUE, id!(cw_puzzles), move || {
                 u2.push(Overlay::Library)
             }),
-            chrome::menu_button(tr("cw_restart"), chrome::AMBER, id!(cw_restart), move || {
-                u3.edit(|s| s.restart());
-                u3.show(Overlay::None);
-            }),
+            chrome::menu_button(
+                tr("cw_restart"),
+                chrome::AMBER,
+                id!(cw_restart),
+                move || {
+                    u3.edit(|s| s.restart());
+                    u3.show(Overlay::None);
+                },
+            ),
             chrome::menu_button(
                 tr("gk_instructions"),
                 chrome::INDIGO,
@@ -1290,7 +1311,12 @@ fn scope_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
                 id!(cw_scope_square),
                 act(&ui, Scope::Square),
             ),
-            chrome::menu_button(tr("cw_word"), tint, id!(cw_scope_word), act(&ui, Scope::Word)),
+            chrome::menu_button(
+                tr("cw_word"),
+                tint,
+                id!(cw_scope_word),
+                act(&ui, Scope::Word),
+            ),
             chrome::menu_button(
                 tr("cw_puzzle"),
                 tint,
@@ -1362,7 +1388,7 @@ fn library(ui: Rc<Ui>) -> AnyPiece {
             .spacing(2.0)
             .align(HAlign::Leading)
             .padding(Space::M)
-            .grow_w()
+            .grow(Dimension::Width)
             .background(Color::rgba(1.0, 1.0, 1.0, 0.07))
             .corner_radius(12.0)
             .on_tap(move || u.open_puzzle(id))
@@ -1379,7 +1405,7 @@ fn library(ui: Rc<Ui>) -> AnyPiece {
                 .font(Font::Title2)
                 .bold()
                 .color(Color::WHITE),
-            scroll(column(rows).spacing(Space::S).grow_w()).max_height(440.0),
+            scroll(column(rows).spacing(Space::S).grow(Dimension::Width)).max_height(440.0),
             has_open.then(move || {
                 button(tr("gk_done"))
                     .action(move || back.pop())
@@ -1388,7 +1414,7 @@ fn library(ui: Rc<Ui>) -> AnyPiece {
         ))
         .spacing(Space::M)
         .align(HAlign::Leading)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(chrome::CARD_W),
     )
     .id(id!(cw_library))
@@ -1504,7 +1530,11 @@ pub fn crossword_preview() -> AnyPiece {
                 );
             }
         }
-        d.stroke(Shape::Rect(Rect::new(ox, oy, side * n, side * n)), BLOCK, 2.0);
+        d.stroke(
+            Shape::Rect(Rect::new(ox, oy, side * n, side * n)),
+            BLOCK,
+            2.0,
+        );
     })
     .any()
 }

@@ -221,7 +221,10 @@ fn tile(
     let a11y_title = title.clone();
     column((
         // Square at whatever width the tile's column gets.
-        preview.grow_w().aspect_ratio(1.0).corner_radius(16.0),
+        preview
+            .grow(Dimension::Width)
+            .aspect_ratio(1.0)
+            .corner_radius(16.0),
         label(title)
             .weight(FontWeight::Semibold)
             .color(Color::WHITE),
@@ -235,7 +238,7 @@ fn tile(
     .a11y(move |a| a.label(a11y_title))
     .id(id)
     // Last, so the home grid sees a growing cell and stretches its columns to the width.
-    .grow_w()
+    .grow(Dimension::Width)
 }
 
 fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Piece {
@@ -246,11 +249,11 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
             .bold()
             .color(Color::WHITE)
             .id(id!(app_title))
-            .grow_w(),
+            .grow(Dimension::Width),
         settings_in_chrome.then(settings_button),
     ))
     .align(VAlign::Center)
-    .grow_w();
+    .grow(Dimension::Width);
     scroll(
         column((
             header,
@@ -356,7 +359,7 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
         .align(HAlign::Leading)
         .padding(20.0),
     )
-    .grow()
+    .grow(Dimension::Both)
     .background(HOME_BG)
     .id(id!(home))
 }
@@ -389,7 +392,7 @@ fn game_cover(open: Signal<Option<Section>>) -> impl Piece {
         // header row (gamekit::chrome::game_header), where it lines up with the title and the
         // pause button. Registered per open cover, and cleared with it.
         gamekit::on_close(move || open.set(None));
-        game.grow()
+        game.grow(Dimension::Both)
             .defers_system_gestures(Edges::ALL)
             .interactive_dismiss_disabled()
             .any()

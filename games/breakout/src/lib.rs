@@ -1816,7 +1816,7 @@ pub fn breakout_page() -> AnyPiece {
         canvas(move |d, sz| {
             du.game.borrow().draw_backdrop(d, sz);
         })
-        .grow()
+        .grow(Dimension::Both)
     };
     let wall = {
         let du = ui.clone();
@@ -1825,7 +1825,7 @@ pub fn breakout_page() -> AnyPiece {
             du.game.borrow_mut().setup(sz.width, sz.height.max(10.0));
             du.game.borrow().draw_wall(d);
         })
-        .grow()
+        .grow(Dimension::Both)
     };
     let field = {
         let (du, dr, hu, cu, tu, ku) = (
@@ -1911,7 +1911,7 @@ pub fn breakout_page() -> AnyPiece {
             }
         })
         .id(id!(bk_canvas))
-        .grow()
+        .grow(Dimension::Both)
     };
 
     // Mounted only while the game is live, so the display link goes idle behind a card.
@@ -1929,7 +1929,7 @@ pub fn breakout_page() -> AnyPiece {
         pu.cue(&cues::SELECT);
     });
     // The wall and the field share the frame's play box, one over the other.
-    let play = zstack((wall, field)).grow().any();
+    let play = zstack((wall, field)).grow(Dimension::Both).any();
     zstack((
         backdrop,
         chrome::game_frame(header, Some(info_bar(ui.clone())), play, None),

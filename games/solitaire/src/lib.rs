@@ -2853,7 +2853,7 @@ pub fn solitaire_page() -> AnyPiece {
             RadialGradient::new(UnitPoint::CENTER, 0.8, vec![(0.0, FELT), (1.0, SURFACE)]),
         );
     })
-    .grow();
+    .grow(Dimension::Both);
 
     let resting = {
         let u = ui.clone();
@@ -2866,7 +2866,7 @@ pub fn solitaire_page() -> AnyPiece {
             }
             p.draw_table(d);
         })
-        .grow()
+        .grow(Dimension::Both)
     };
 
     let moving = {
@@ -2946,7 +2946,7 @@ pub fn solitaire_page() -> AnyPiece {
         })
         .a11y(|a| a.label(tr("sol_table_a11y")))
         .id(id!(sol_canvas))
-        .grow()
+        .grow(Dimension::Both)
     };
 
     // Mounted only while the game is live, so the display link goes idle behind a card.
@@ -2963,7 +2963,7 @@ pub fn solitaire_page() -> AnyPiece {
         pu.pause();
         pu.cue(&cues::SELECT);
     });
-    let table = zstack((resting, moving)).grow().any();
+    let table = zstack((resting, moving)).grow(Dimension::Both).any();
     zstack((
         felt,
         chrome::game_frame(
@@ -3389,7 +3389,7 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
                 ))
                 .spacing(Space::XS)
                 .align(HAlign::Leading)
-                .grow_w(),
+                .grow(Dimension::Width),
                 check,
             ))
             .align(VAlign::Center)
@@ -3399,7 +3399,7 @@ fn draw_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(m))
             .a11y(move |a| a.label(draw_label(m)).role(Role::Button))
             .id(draw_id(m))
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );
@@ -3444,10 +3444,10 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     .arg("played", stats.played[i] as f64),
             )
             .color(chrome::TEXT)
-            .grow_w(),
+            .grow(Dimension::Width),
             label(best).tabular().color(chrome::TEXT_DIM),
         ))
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(chrome::CARD_W)
         .any()
     };
@@ -3487,7 +3487,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             label(tr("sol_winnable_detail"))
                 .font(Font::Caption)
                 .color(chrome::TEXT_DIM)
-                .grow_w()
+                .grow(Dimension::Width)
                 .max_width(chrome::CARD_W),
             chrome::section_heading(tr("sol_statistics")),
             line(DrawMode::One),

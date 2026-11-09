@@ -770,7 +770,7 @@ fn board_canvas(ui: Rc<Ui>) -> impl Piece {
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mi_board_a11y")))
     .id(id!(mi_board))
-    .grow()
+    .grow(Dimension::Both)
 }
 
 /// The frame consumer: the clock, the effects, the press that becomes a flag, and the card a
@@ -1294,7 +1294,7 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
                 ))
                 .spacing(Space::XS)
                 .align(HAlign::Leading)
-                .grow_w(),
+                .grow(Dimension::Width),
                 check,
             ))
             .align(VAlign::Center)
@@ -1304,7 +1304,7 @@ fn picker_card(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );
@@ -1425,11 +1425,11 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             ))
             .spacing(2.0)
             .align(HAlign::Leading)
-            .grow_w(),
+            .grow(Dimension::Width),
             label(best).tabular().color(chrome::TEXT_DIM),
         ))
         .align(VAlign::Center)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(chrome::CARD_W)
         .any()
     };

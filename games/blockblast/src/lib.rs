@@ -1606,7 +1606,7 @@ pub fn blockblast_page() -> AnyPiece {
             ),
         );
     })
-    .grow();
+    .grow(Dimension::Both);
 
     let board = {
         let (du, dr, hu, ku) = (ui.clone(), ui.clone(), ui.clone(), ui.clone());
@@ -1680,7 +1680,7 @@ pub fn blockblast_page() -> AnyPiece {
         })
         .a11y(|a| a.label(tr("bb_board_a11y")))
         .id(id!(bb_canvas))
-        .grow()
+        .grow(Dimension::Both)
     };
 
     // Mounted only while the game is live, so the display link goes idle behind a card.
@@ -1906,7 +1906,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                 ))
                 .spacing(Space::XS)
                 .align(HAlign::Leading)
-                .grow_w(),
+                .grow(Dimension::Width),
                 check,
             ))
             .align(VAlign::Center)
@@ -1916,7 +1916,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );

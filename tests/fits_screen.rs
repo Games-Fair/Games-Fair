@@ -371,6 +371,7 @@ fn a_drawn_readout_follows_the_game() {
             day_core::rnode_to_id(board),
             Event::Key(day_spec::KeyEvent {
                 key: "Enter".into(),
+                text: None,
                 modifiers: 0,
             }),
         );

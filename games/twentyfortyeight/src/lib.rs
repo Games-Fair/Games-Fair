@@ -998,7 +998,7 @@ pub fn twentyfortyeight_page() -> AnyPiece {
             ku.repaint.notify();
         })
         .id(id!(tf_canvas))
-        .grow()
+        .grow(Dimension::Both)
     };
 
     // Mounted only while the game is live, so the display link goes idle behind a card.
@@ -1213,7 +1213,7 @@ fn won_card(ui: Rc<Ui>) -> AnyPiece {
             label(tr("tf_won_message"))
                 .color(chrome::TEXT)
                 .align(TextAlign::Center)
-                .grow_w()
+                .grow(Dimension::Width)
                 .max_width(260.0),
             chrome::stat(
                 tr("gk_score"),
@@ -1323,7 +1323,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                 ))
                 .spacing(Space::XS)
                 .align(HAlign::Leading)
-                .grow_w(),
+                .grow(Dimension::Width),
                 check,
             ))
             .align(VAlign::Center)
@@ -1333,7 +1333,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(d.label()).role(Role::Button))
             .id(d.id())
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );

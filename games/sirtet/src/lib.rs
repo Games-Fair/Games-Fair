@@ -860,7 +860,7 @@ pub fn sirtet_page() -> AnyPiece {
             ku.repaint.notify();
         })
         .id(id!(st_canvas))
-        .grow()
+        .grow(Dimension::Both)
     };
 
     // Mounted only while the game is live, so the display link goes idle behind a card.

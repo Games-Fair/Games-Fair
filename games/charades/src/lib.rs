@@ -562,10 +562,10 @@ fn deck_screen(ui: Rc<Ui>) -> AnyPiece {
                 ..Insets::horizontal(16.0)
             }),
         )
-        .grow()
+        .grow(Dimension::Both)
         .id(id!(ch_deck_list)),
     ))
-    .grow()
+    .grow(Dimension::Both)
     .background(SURFACE)
     .id(id!(ch_decks))
     .any()
@@ -602,7 +602,7 @@ fn deck_tile(ui: Rc<Ui>, deck: &Deck) -> AnyPiece {
     .a11y(move |a| a.label(a11y.clone()).role(Role::Button))
     .id(id!(ch_deck, id))
     // Last, so the wrap sees a growing cell and stretches its columns to the width.
-    .grow_w()
+    .grow(Dimension::Width)
     .any()
 }
 
@@ -632,7 +632,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
         }
     })
     .id(id!(ch_canvas))
-    .grow();
+    .grow(Dimension::Both);
 
     // Starting by hand: always there while waiting, since a phone can be held up in a pose the
     // sensor does not call upright.
@@ -671,13 +671,13 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
                         .tint(ORANGE)
                         .action(move || p.answer(Mark::Pass))
                         .id(id!(ch_pass))
-                        .grow_w(),
+                        .grow(Dimension::Width),
                     button(tr("ch_correct"))
                         .prominent()
                         .tint(GREEN)
                         .action(move || k.answer(Mark::Correct))
                         .id(id!(ch_correct))
-                        .grow_w(),
+                        .grow(Dimension::Width),
                 ))
                 .spacing(Space::L)
                 .max_width(520.0)
@@ -1077,7 +1077,7 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
         };
         rows.push(
             row((
-                label(word).color(color).grow_w(),
+                label(word).color(color).grow(Dimension::Width),
                 canvas(move |d, sz| {
                     let c = Point::new(sz.width / 2.0, sz.height / 2.0);
                     match mark {
@@ -1088,7 +1088,7 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
                 .frame(22.0, 22.0),
             ))
             .align(VAlign::Center)
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );
@@ -1132,7 +1132,7 @@ fn results_screen(ui: Rc<Ui>) -> AnyPiece {
     .id(id!(ch_results));
     zstack((card,))
         .align(Alignment::Center)
-        .grow()
+        .grow(Dimension::Both)
         .background(SURFACE)
         .any()
 }
@@ -1257,7 +1257,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             label(tilt_detail)
                 .font(Font::Caption)
                 .color(chrome::TEXT_DIM)
-                .grow_w()
+                .grow(Dimension::Width)
                 .max_width(chrome::CARD_W),
             chrome::section_heading(tr("ch_records")),
             chrome::setting_row(

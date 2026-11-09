@@ -390,7 +390,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
     .focused(ui.focus)
     .a11y(|a| a.label(tr("fs_board_a11y")))
     .id(id!(fs_board))
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 fn board_layout(size: Size) -> (f64, f64, f64) {
@@ -682,6 +682,6 @@ pub fn flipside_preview() -> AnyPiece {
         );
         draw_board(d, size, board, board, 0, 1.0, None, None, false);
     })
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }

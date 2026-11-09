@@ -753,7 +753,7 @@ pub fn sudoku_page() -> AnyPiece {
     .on_key(keys(&ui))
     .focused(ui.board_focus)
     .id(id!(su_backdrop))
-    .grow();
+    .grow(Dimension::Both);
 
     // A phone held sideways has a compact height: the keypad moves beside the board there,
     // where under it would leave the board no room at all.
@@ -765,7 +765,7 @@ pub fn sudoku_page() -> AnyPiece {
         )
         .otherwise(move || portrait_page(&pu))
     };
-    let page = zstack((page,)).grow().id(id!(su_page));
+    let page = zstack((page,)).grow(Dimension::Both).id(id!(su_page));
 
     zstack((backdrop, page, overlays(ui), ticker)).any()
 }
@@ -792,14 +792,14 @@ fn portrait_page(ui: &Rc<Ui>) -> AnyPiece {
         status_bar(ui.clone()),
         zstack((board_grid(ui.clone()).padding(Insets::horizontal(chrome::EDGE)),))
             .align(Alignment::Top)
-            .grow(),
+            .grow(Dimension::Both),
         control_pad(ui.clone()).padding(Insets {
             bottom: 16.0,
             ..Insets::all(12.0)
         }),
     ))
     .align(HAlign::Center)
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 
@@ -813,21 +813,21 @@ fn landscape_page(ui: &Rc<Ui>) -> AnyPiece {
                 bottom: chrome::EDGE,
                 ..Insets::horizontal(chrome::EDGE)
             }),))
-            .grow(),
+            .grow(Dimension::Both),
             column((
                 status_bar(ui.clone()),
-                zstack((control_pad(ui.clone()),)).grow(),
+                zstack((control_pad(ui.clone()),)).grow(Dimension::Both),
             ))
             .align(HAlign::Center)
             .padding(Insets {
                 bottom: chrome::EDGE,
                 ..Insets::horizontal(12.0)
             })
-            .grow(),
+            .grow(Dimension::Both),
         ))
-        .grow(),
+        .grow(Dimension::Both),
     ))
-    .grow()
+    .grow(Dimension::Both)
     .any()
 }
 
@@ -916,7 +916,7 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
         );
     })
     .on_key(keys(&ui))
-    .grow();
+    .grow(Dimension::Both);
     let pause_cover = {
         let u = ui.clone();
         when(
@@ -944,7 +944,7 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
                         },
                     );
                 })
-                .grow()
+                .grow(Dimension::Both)
                 .id(id!(su_pause_cover))
             },
         )
@@ -1000,7 +1000,7 @@ fn cell_piece(ui: Rc<Ui>, r: usize, c: usize) -> AnyPiece {
     .id(id!(su_cell, i))
     // Each cell takes a ninth of the board's width and is as tall as it is wide.
     .aspect_ratio(1.0)
-    .grow_w()
+    .grow(Dimension::Width)
     .any()
 }
 
@@ -1154,9 +1154,13 @@ fn control_pad(ui: Rc<Ui>) -> impl Piece {
     // proportions at any width: as wide as it is offered up to its natural size, and no taller
     // than its share of the page (it fits whichever of the two runs out first).
     grid((grid_row((
-        column((notes, hint)).spacing(ACTION_GAP).grow_w(),
-        number_pad(ui).grow_w().grid_span(3),
-        column((undo, checkpoint)).spacing(ACTION_GAP).grow_w(),
+        column((notes, hint))
+            .spacing(ACTION_GAP)
+            .grow(Dimension::Width),
+        number_pad(ui).grow(Dimension::Width).grid_span(3),
+        column((undo, checkpoint))
+            .spacing(ACTION_GAP)
+            .grow(Dimension::Width),
     )),))
     .column_spacing(KEY_GAP)
     .aspect_ratio(PAD_W / PAD_H)
@@ -1256,7 +1260,7 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
     })
     .id(id!(su_key, digit))
     .aspect_ratio(1.0)
-    .grow_w()
+    .grow(Dimension::Width)
     .any()
 }
 
@@ -1425,7 +1429,7 @@ fn overlays(ui: Rc<Ui>) -> impl Piece {
                 })
                 // Absorbs taps so the board underneath never hears them.
                 .on_tap(|| {})
-                .grow()
+                .grow(Dimension::Both)
             },
         )
     };
@@ -1636,7 +1640,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
                 ))
                 .spacing(Space::XS)
                 .align(HAlign::Leading)
-                .grow_w(),
+                .grow(Dimension::Width),
                 check,
             ))
             .align(VAlign::Center)
@@ -1646,7 +1650,7 @@ fn difficulty_picker(ui: Rc<Ui>) -> AnyPiece {
             .on_tap(move || u.new_game(d))
             .a11y(move |a| a.label(difficulty_label(d)).role(Role::Button))
             .id(difficulty_id(d))
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
             .any(),
         );
@@ -1678,9 +1682,9 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
             .color(TEXT_DIM)
     };
     let setting_row = |t: day_localization_ui::LocalizedText, control: AnyPiece| {
-        row((label(t).color(TEXT).grow_w(), control))
+        row((label(t).color(TEXT).grow(Dimension::Width), control))
             .align(VAlign::Center)
-            .grow_w()
+            .grow(Dimension::Width)
             .max_width(chrome::CARD_W)
     };
     let mut record_rows = Vec::new();
@@ -1780,7 +1784,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                     );
                 })
                 .id(id!(su_digit_font_sample))
-                .grow_w()
+                .grow(Dimension::Width)
                 .max_width(chrome::CARD_W)
                 .height(44.0),
                 heading(tr("su_records")),
@@ -1855,7 +1859,7 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
                 column((body, tail))
                     .spacing(10.0)
                     .align(HAlign::Leading)
-                    .grow_w()
+                    .grow(Dimension::Width)
                     .max_width(chrome::CARD_W),
             )
             .max_height(360.0),
@@ -1866,7 +1870,7 @@ fn instructions_card(ui: Rc<Ui>) -> AnyPiece {
         ))
         .spacing(Space::M)
         .align(HAlign::Leading)
-        .grow_w()
+        .grow(Dimension::Width)
         .max_width(chrome::CARD_W),
     )
     .id(id!(su_instructions_card))
