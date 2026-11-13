@@ -11,12 +11,13 @@ id = "io.github.GamesFair"
 # The URL scheme the published app registered; the id's last segment would be the default.
 scheme = "fairegames"
 title = "Games Fair"
-# Pinned, because the default is slugged from the title and the phones override theirs below;
-# every platform's packages keep the one file name.
+# Every platform keeps "Games Fair": the shorter "Games" is Apple's own app's name, which App Store
+# Connect refuses (ITMS-90129). Pinned, because the default is slugged from the title, so every
+# platform's packages keep the one file name.
 artifact = "games-fair"
 # Above the 36 the stores have seen. Both order releases by version and build, and refuse one
 # that repeats or lowers them.
-build = 101
+build = 102
 # Supported platform-toolkit pairs. `windows-winui`, `linux-gtk`, and `linux-qt` build in CI
 # on their native hosts. On a macOS dev box the toolkits
 # run locally as `macos-appkit`,
@@ -33,14 +34,6 @@ targets = [
   "harmony-arkui",
   "web-dom", "macos-gtk", "macos-qt",
 ]
-
-# A Home Screen label has room for about a dozen characters before it is cut short, so the
-# phones carry the short name. The app's own headings there follow it.
-[app.ios]
-title = "Games"
-
-[app.android]
-title = "Games"
 
 # The live listings, which the website turns into each store's localized badge
 # (https://daybrite.dev/docs/store#listed-apps). The App Fair publishes this app to both stores
