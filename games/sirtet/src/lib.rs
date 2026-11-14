@@ -203,7 +203,7 @@ impl Game {
                 self.bag.swap(i, j);
             }
         }
-        self.bag.pop().unwrap()
+        self.bag.pop().expect("an empty bag was just refilled")
     }
 
     fn level(&self) -> i64 {

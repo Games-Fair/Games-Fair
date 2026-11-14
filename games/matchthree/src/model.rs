@@ -392,17 +392,19 @@ impl Game {
         out.valid = true;
         let mut forced = vec![];
         if combo {
-            let (x, y) = (self.grid[a].unwrap(), self.grid[b].unwrap());
+            let occupied = "both swapped cells were checked to hold a candy";
+            let (x, y) = (self.grid[a].expect(occupied), self.grid[b].expect(occupied));
             forced.extend([a, b]);
             if x.special == Special::Rainbow || y.special == Special::Rainbow {
                 let other = if x.special == Special::Rainbow { y } else { x };
-                for i in 0..LEN {
-                    if self.grid[i].is_some_and(|c| {
-                        c.color == other.color || other.special == Special::Rainbow
-                    }) {
+                for (i, cell) in self.grid.iter_mut().enumerate().take(LEN) {
+                    if let Some(candy) = cell
+                        .as_mut()
+                        .filter(|c| c.color == other.color || other.special == Special::Rainbow)
+                    {
                         forced.push(i);
                         if !matches!(other.special, Special::Plain | Special::Rainbow) {
-                            self.grid[i].as_mut().unwrap().special = other.special;
+                            candy.special = other.special;
                         }
                     }
                 }
@@ -463,7 +465,7 @@ impl Game {
                     .iter()
                     .filter(|r| r.iter().any(|i| group.contains(i)))
                     .max_by_key(|r| r.len())
-                    .unwrap();
+                    .expect("every component was merged from at least one run");
                 let special = if longest.len() >= 5 {
                     Special::Rainbow
                 } else if cross {
@@ -487,7 +489,9 @@ impl Game {
                 created.push((
                     at,
                     Candy {
-                        color: self.grid[at].unwrap().color,
+                        color: self.grid[at]
+                            .expect("a cell in a matched run holds a candy")
+                            .color,
                         special,
                     },
                 ));
@@ -498,7 +502,7 @@ impl Game {
                 let next = (0..LEN).find(|&i| hit[i] && !fired[i] && self.grid[i].is_some());
                 let Some(i) = next else { break };
                 fired[i] = true;
-                let c = self.grid[i].unwrap();
+                let c = self.grid[i].expect("`next` only finds cells that hold a candy");
                 for (j, hit) in hit.iter_mut().enumerate() {
                     let blast = match c.special {
                         Special::Plain => false,
@@ -519,7 +523,7 @@ impl Game {
                 if yes && self.grid[i].is_some() {
                     f.cleared.push(i);
                     self.frost[i] = self.frost[i].saturating_sub(1);
-                    if self.grid[i].unwrap().color == 0 {
+                    if self.grid[i].is_some_and(|c| c.color == 0) {
                         self.collected += 1;
                     }
                     self.grid[i] = None;
@@ -711,8 +715,8 @@ mod tests {
                 let (a, b) = g.hint().unwrap();
                 assert!(g.swap(a, b).valid);
                 assert!(g.groups().is_empty());
-                for i in 0..LEN {
-                    assert_eq!(g.grid[i].is_some(), active(level, i));
+                for (i, cell) in g.grid.iter().enumerate().take(LEN) {
+                    assert_eq!(cell.is_some(), active(level, i));
                 }
                 let s = Save {
                     game: g.clone(),

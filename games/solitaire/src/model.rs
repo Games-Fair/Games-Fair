@@ -1939,9 +1939,9 @@ mod tests {
         if black {
             // A card in every column first: with no empty column, a red king cannot come back
             // down for the black cards to build on, which keeps the search small.
-            for col in 0..COLS {
+            for column in t.tableau.iter_mut().take(COLS) {
                 if let Some(card) = rest.pop() {
-                    t.tableau[col].push(card);
+                    column.push(card);
                 }
             }
         }

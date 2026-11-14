@@ -1021,12 +1021,12 @@ impl Play {
         };
         let lit = |i: usize| rows.contains(&(i / N)) || cols.contains(&(i % N));
         let inset = l.cell * 0.05;
-        for i in 0..CELLS {
+        for (i, &cell) in m.grid.iter().enumerate().take(CELLS) {
             let (x, y) = (
                 l.bx + (i % N) as f64 * l.cell,
                 l.by + (i / N) as f64 * l.cell,
             );
-            match m.grid[i] {
+            match cell {
                 // A block on a line the drop would clear takes the piece's color.
                 Some(c) => {
                     let c = if lit(i) { color.unwrap_or(c) } else { c };

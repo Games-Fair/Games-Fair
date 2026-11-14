@@ -406,11 +406,11 @@ impl Model {
     /// Done whether or not the guess is right, so the side effect reveals nothing.
     fn strip_peer_notes(&mut self, i: usize, digit: u8) -> Vec<(usize, u16, u16)> {
         let mut peers = Vec::new();
-        for j in 0..CELLS {
-            if Self::is_peer(i, j) && self.notes[j] & (1 << digit) != 0 {
-                let before = self.notes[j];
-                self.notes[j] &= !(1 << digit);
-                peers.push((j, before, self.notes[j]));
+        for (j, note) in self.notes.iter_mut().enumerate().take(CELLS) {
+            if Self::is_peer(i, j) && *note & (1 << digit) != 0 {
+                let before = *note;
+                *note &= !(1 << digit);
+                peers.push((j, before, *note));
             }
         }
         peers

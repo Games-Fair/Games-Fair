@@ -113,7 +113,8 @@ impl Ui {
             self.cue(&cues::WARNING);
             return;
         }
-        self.spinning.set(Some((i, before.unwrap())));
+        let before = before.expect("`turn` succeeded, so `i` is a tile index");
+        self.spinning.set(Some((i, before)));
         self.age.set(0.0);
         self.cue(&TURN);
         self.refresh();
@@ -121,7 +122,10 @@ impl Ui {
             self.win_age.set(0.0);
             self.cue(&cues::SUCCESS);
             let g = self.game.borrow();
-            let index = SIZES.iter().position(|&n| n == g.size).unwrap();
+            let index = SIZES
+                .iter()
+                .position(|&n| n == g.size)
+                .expect("a game's size is always one of SIZES");
             let mut records = self.records.borrow_mut();
             records.best[index] =
                 Some(records.best[index].map_or(g.moves, |best| best.min(g.moves)));
@@ -665,7 +669,10 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
         Overlay::Result => {
             items.push(chrome::card_title(tr("pp_solved"), chrome::GOLD));
             let g = ui.game.borrow();
-            let index = SIZES.iter().position(|&n| n == g.size).unwrap();
+            let index = SIZES
+                .iter()
+                .position(|&n| n == g.size)
+                .expect("a game's size is always one of SIZES");
             items.push(chrome::stat(
                 tr("pp_moves"),
                 g.moves.to_string(),

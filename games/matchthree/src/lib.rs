@@ -193,8 +193,11 @@ impl Ui {
         self.settling.set(None);
         self.selected.set(None);
         self.hint.set(None);
-        self.cursor
-            .set((0..LEN).find(|&i| active(level, i)).unwrap());
+        self.cursor.set(
+            (0..LEN)
+                .find(|&i| active(level, i))
+                .expect("every level has at least one active cell"),
+        );
         self.elapsed.set(0.0);
         self.sparks.borrow_mut().clear();
         self.shake.set(0.0);
@@ -1819,9 +1822,16 @@ fn celebration(reduced: bool) -> AnyPiece {
 }
 pub fn matchthree_preview() -> AnyPiece {
     let mut g = Game::new(0, 15);
-    g.grid[16].as_mut().unwrap().special = Special::Row;
-    g.grid[24].as_mut().unwrap().special = Special::Rainbow;
-    g.grid[32].as_mut().unwrap().special = Special::Wrapped;
+    for (cell, special) in [
+        (16, Special::Row),
+        (24, Special::Rainbow),
+        (32, Special::Wrapped),
+    ] {
+        g.grid[cell]
+            .as_mut()
+            .expect("level 0 fills every cell with a candy")
+            .special = special;
+    }
     // The thumbnail is the game's icon: always the default theme.
     let style = Theme::default().style();
     canvas(move |d, size| {

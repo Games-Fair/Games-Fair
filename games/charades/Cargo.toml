@@ -23,3 +23,6 @@ day-part-sensors = "0.*"
 day-part-wakelock = "0.*"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
+
+[lints]
+workspace = true

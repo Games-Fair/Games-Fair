@@ -17,3 +17,6 @@ day-reactive = "0.*"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
 day-localization-ui = "0.*"
+
+[lints]
+workspace = true

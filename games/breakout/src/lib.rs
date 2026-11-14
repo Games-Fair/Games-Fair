@@ -1576,10 +1576,10 @@ pub fn breakout_preview() -> AnyPiece {
         g.build_level();
         // Bite a notch out of the wall and drop the two lowest rows, so the tile reads as a
         // game in progress.
-        for i in 0..ROWS * COLS {
+        for (i, brick) in g.bricks.iter_mut().enumerate().take(ROWS * COLS) {
             let (r, c) = (i / COLS, i % COLS);
             if r >= 6 || (r == 5 && (3..=5).contains(&c)) || (r == 4 && c == 4) {
-                g.bricks[i].hp = 0;
+                brick.hp = 0;
             }
         }
         g.bricks[2 * COLS + 6].power = Some(Power::Multi);

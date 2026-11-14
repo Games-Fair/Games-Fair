@@ -97,8 +97,9 @@ impl SaveState {
             moves: 0,
         };
         // A rare scramble could already be solved. Rotate a non-cross tile in that case.
-        if board.network().solved() {
-            let i = board.tiles.iter().position(|&m| m != 15).unwrap();
+        if board.network().solved()
+            && let Some(i) = board.tiles.iter().position(|&m| m != 15)
+        {
             board.tiles[i] = rotate(board.tiles[i]);
         }
         board
@@ -165,7 +166,8 @@ impl SaveState {
                     && self.tiles[j] & PORTS[(dir + 2) % 4] != 0
                     && distance[j].is_none()
                 {
-                    distance[j] = Some(distance[i].unwrap() + 1);
+                    let here = distance[i].expect("a tile is queued only once its distance is set");
+                    distance[j] = Some(here + 1);
                     queue.push_back(j);
                 }
             }

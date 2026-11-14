@@ -18,3 +18,6 @@ day-localization-ui = "0.*"
 day-part-haptics = "0.*"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }
+
+[lints]
+workspace = true
