@@ -56,7 +56,6 @@ day::routes! {
         Crossword => "crossword",
         MatchThree => "matchthree",
         Mines => "mines",
-        PacPac => "pacpac",
         Flipside => "flipside",
         Pipes => "pipes",
         Sirtet => "sirtet",
@@ -81,7 +80,6 @@ fn game_background(section: Section) -> Color {
         Section::Crossword => crossword::SURFACE,
         Section::MatchThree => matchthree::SURFACE,
         Section::Mines => mines::SURFACE,
-        Section::PacPac => pacpac::SURFACE,
         Section::Flipside => flipside::SURFACE,
         Section::Pipes => pipes::SURFACE,
         Section::Sirtet => sirtet::SURFACE,
@@ -160,7 +158,6 @@ pub fn reset_all_records() {
     charades::reset_records();
     crossword::reset_records();
     mines::reset_records();
-    pacpac::reset_records();
     pipes::reset_records();
     sirtet::reset_records();
     solitaire::reset_records();
@@ -344,13 +341,6 @@ fn home_page(open: Signal<Option<Section>>, settings_in_chrome: bool) -> impl Pi
                     matchthree::matchthree_preview(),
                     id!(tile_matchthree),
                 ),
-                tile(
-                    open,
-                    Section::PacPac,
-                    res::str::nav_pacpac(),
-                    pacpac::pacpac_preview(),
-                    id!(tile_pacpac),
-                ),
             ))
             .spacing(Space::L)
             .fit(RowFit::WrapColumns { run_spacing: 16.0 }),
@@ -380,7 +370,6 @@ fn game_cover(open: Signal<Option<Section>>) -> impl Piece {
             Section::Crossword => crossword::crossword_page(),
             Section::MatchThree => matchthree::matchthree_page(),
             Section::Mines => mines::mines_page(),
-            Section::PacPac => pacpac::pacpac_page(),
             Section::Flipside => flipside::flipside_page(),
             Section::Pipes => pipes::pipes_page(),
             Section::Sirtet => sirtet::sirtet_page(),

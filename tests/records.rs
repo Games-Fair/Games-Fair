@@ -11,8 +11,6 @@ const KEYS: &[&str] = &[
     "breakout.best",
     "charades.records",
     "mines.records",
-    "pacpac.best.pacpac",
-    "pacpac.best.mspacpac",
     "pipes.records",
     "sirtet.best",
     "sirtet.v1",
@@ -80,8 +78,6 @@ fn reset_all_records_clears_every_game() {
         "mines.records",
         r#"{"played":[3,0,0],"won":[1,0,0],"best":[24.5,null,null]}"#,
     );
-    seed("pacpac.best.pacpac", "3210");
-    seed("pacpac.best.mspacpac", "4960");
     seed("pipes.records", r#"{"best":[33,null,160]}"#);
     seed("sirtet.best", "1200");
     seed(
@@ -106,8 +102,6 @@ fn reset_all_records_clears_every_game() {
         "breakout.best",
         "charades.records",
         "mines.records",
-        "pacpac.best.pacpac",
-        "pacpac.best.mspacpac",
         "pipes.records",
         "sirtet.best",
         "solitaire.stats",

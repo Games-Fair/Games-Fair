@@ -47,7 +47,6 @@ charades = { path = "games/charades" }
 crossword = { path = "games/crossword" }
 matchthree = { path = "games/matchthree" }
 mines = { path = "games/mines" }
-pacpac = { path = "games/pacpac" }
 flipside = { path = "games/flipside" }
 pipes = { path = "games/pipes" }
 gamekit = { path = "gamekit" }
@@ -85,7 +84,6 @@ members = [
     "games/crossword",
     "games/matchthree",
     "games/mines",
-    "games/pacpac",
     "games/flipside",
     "games/pipes",
     "games/sirtet",

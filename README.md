@@ -1,6 +1,6 @@
 # Games Fair
 
-Solitaire, Block Blast, Breakout, Pac-Pac, falling blocks, Sudoku, 2048, Mines, Charades, Flipside,
+Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Flipside,
 Pipes, and Match Three in one app. Built with
 [Day](https://daybrite.dev) in one Rust codebase and rendered with the platform's own widgets on
 iPhone, Android, HarmonyOS, macOS, Windows, Linux, and the web. Every game runs entirely on the
@@ -40,15 +40,6 @@ the App Fair publishes this app under are separate, and live in `Day-appfair.tom
   ball up or down. Quick successive breaks multiply the score, armored bricks arrive on later
   levels, and five power-ups drop from marked bricks: a wider paddle, a slower ball, a ball
   that smashes straight through, extra balls, and an extra life.
-- **Pac-Pac.** Pac-Pac and Ms. Pac-Pac, chosen when a game starts, drawn pixel for pixel at
-  the arcade's 224×288 and scaled to the window. Pac-Pac keeps the arcade's maze, its ghosts'
-  targets and scatter schedule, its per-level speeds, fright times and fruit, the ghost house's
-  dot counters, and Cruise Elroy. Ms. Pac-Pac rotates through four mazes with more tunnels,
-  sends her fruit wandering in through them, and lets the ghosts roam at random before they
-  hunt. Swipe anywhere to steer, hold the joypad under the maze (a phone always has one, and
-  a browser or desktop window the width of a phone or tablet does until a key is pressed or a
-  pointer hovers), or use the arrows; the sirens climb as the dots go, and the chomps, the
-  frightened warble, the eyes' retreat and the deaths all sound as they did.
 - **Falling blocks.** The one you already know how to play, with the next piece shown, lines
   clearing in a flash, and the pieces coming quicker as the level climbs.
 - **Sudoku.** Four difficulties, pencil marks, unlimited undo and redo, a checkpoint you can
@@ -92,7 +83,7 @@ the Sudoku selection. In Block Blast, 1 to 3 pick up a piece, the arrows move it
 number drops it. In Solitaire, 1 to 7 pick a column and another of those digits moves it there,
 8 picks the waste, 9 sends a card home, and 0 turns the stock. In Charades, ↓ or Return scores
 a card and ↑ passes it. In Mines, the arrows move the pointer, Space or Return uncovers, and F
-plants a flag. In Pac-Pac, the arrows (or WASD, or HJKL) steer and P pauses.
+plants a flag.
 
 The app's own Settings hold what applies to every game: Appearance, Language (any of the 13
 the app ships), the Sounds and Vibrations a game starts with the first time it opens (a game
@@ -135,8 +126,6 @@ from the keyboard and walks its menus, `flipside.yaml` checks captures, solo pla
 `pipes.yaml` checks locks, saves, all board sizes, and a complete seeded solution;
 `matchthree.yaml` checks invalid swaps, a win, progression, settings, and save restoration;
 `matchthree-levels.yaml` completes all six levels (both use `--env DAY_GAMES_SEED=15 --locale en`);
-`pacpac.yaml` picks each game, steers a round from the keyboard, and walks the menus;
-`pacpac-pad.yaml` checks the web build's joypad against the window's width class;
 `solitaire.yaml` plays a proven-winnable deal from the
 keyboard, and `bk.yaml` and `games.yaml` sweep gameplay for screenshots; `games.yaml` ends in
 the Settings window:
@@ -151,7 +140,7 @@ day launch -p ios-uikit --script dayscript/games.yaml
   routes so deep links and dayscript can open a game by name, and the Settings and About
   declaration: General, Sound & haptics, Records, and the font licenses `build.rs` gathers from
   `resource/font-licenses/`.
-- `games/blockblast`, `games/breakout`, `games/pacpac`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/flipside`, `games/pipes`, and
+- `games/blockblast`, `games/breakout`, `games/sirtet`, `games/solitaire`, `games/sudoku`, `games/flipside`, `games/pipes`, and
   `games/twentyfortyeight` are one crate per game: canvas or grid-layout UI, physics on the
   frame clock, and a serde save state.
 - `gamekit/src/animation.rs` adapts Day's native display callbacks to game demand. Each mounted
