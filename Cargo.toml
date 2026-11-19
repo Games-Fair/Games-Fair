@@ -44,7 +44,6 @@ day-piece-settings = "0.*"
 blockblast = { path = "games/blockblast" }
 breakout = { path = "games/breakout" }
 charades = { path = "games/charades" }
-crossword = { path = "games/crossword" }
 matchthree = { path = "games/matchthree" }
 mines = { path = "games/mines" }
 flipside = { path = "games/flipside" }
@@ -81,7 +80,6 @@ members = [
     "games/blockblast",
     "games/breakout",
     "games/charades",
-    "games/crossword",
     "games/matchthree",
     "games/mines",
     "games/flipside",
