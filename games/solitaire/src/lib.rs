@@ -21,6 +21,7 @@ use day_geometry::Affine;
 use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Pattern, Sfx, sfx};
 use serde::{Deserialize, Serialize};
@@ -345,7 +346,7 @@ fn draw_face(d: &mut Draw, card: Card, r: Rect, alpha: f64) {
         Point::new(x + w * 0.07, y + w * 0.03),
         TextStyle {
             size: w * if rank == 10 { 0.31 } else { 0.35 },
-            color,
+            color: color.into(),
             anchor: TextAnchor::LEADING,
             font: chrome::canvas_font(FontWeight::Bold),
         },
@@ -384,7 +385,7 @@ fn draw_face(d: &mut Draw, card: Card, r: Rect, alpha: f64) {
                 Point::new(c.x, c.y - w * 0.05),
                 TextStyle {
                     size: w * 0.40,
-                    color,
+                    color: color.into(),
                     anchor: TextAnchor::CENTERED,
                     font: chrome::canvas_font(FontWeight::Black),
                 },
@@ -419,7 +420,7 @@ fn draw_trail_face(d: &mut Draw, card: Card, r: Rect) {
         Point::new(r.origin.x + w * 0.07, r.origin.y + w * 0.03),
         TextStyle {
             size: w * 0.33,
-            color,
+            color: color.into(),
             anchor: TextAnchor::LEADING,
             font: chrome::canvas_font(FontWeight::Bold),
         },
@@ -566,7 +567,7 @@ fn draw_slot(d: &mut Draw, r: Rect, mark: Mark) {
             c,
             TextStyle {
                 size: w * 0.42,
-                color: faint,
+                color: faint.into(),
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Bold),
             },
@@ -577,8 +578,8 @@ fn draw_slot(d: &mut Draw, r: Rect, mark: Mark) {
             d.stroke_styled(
                 Shape::Arc {
                     rect: Rect::new(c.x - s, c.y - s, 2.0 * s, 2.0 * s),
-                    start_deg: -60.0,
-                    sweep_deg: 300.0,
+                    start: Angle::deg(-60.0),
+                    sweep: Angle::deg(300.0),
                 },
                 faint.with_alpha(0.55),
                 style,
@@ -1574,15 +1575,13 @@ impl Play {
     /// Keys: 1–7 a column, 8 the waste, 9 home, 0 the stock; the same pile twice sends it where
     /// a tap would; the arrows move the pick between piles and change how many cards it takes;
     /// Backspace or Delete drops the pick, or undoes when there is none.
-    fn key(&mut self, key: &str) -> Action {
+    fn key(&mut self, key: Key) -> Action {
         if !self.live() || self.fx.held.is_some() {
             return Action::Nothing;
         }
         let pile = match key {
-            "1" | "2" | "3" | "4" | "5" | "6" | "7" => {
-                Some(Pile::Tableau(key.as_bytes()[0] as usize - b'1' as usize))
-            }
-            "8" => Some(Pile::Waste),
+            Key::Character(c @ '1'..='7') => Some(Pile::Tableau(c as usize - '1' as usize)),
+            Key::Character('8') => Some(Pile::Waste),
             _ => None,
         };
         if let Some(pile) = pile {
@@ -1596,11 +1595,11 @@ impl Play {
             };
         }
         match key {
-            "0" => {
+            Key::Character('0') => {
                 self.fx.sel = None;
                 self.draw()
             }
-            "9" => {
+            Key::Character('9') => {
                 // Home: the pick's top card, else the first card anywhere that can go.
                 let from = self.fx.sel.take().map(|s| s.pile).or_else(|| {
                     std::iter::once(Pile::Waste)
@@ -1636,7 +1635,7 @@ impl Play {
                     }
                 }
             }
-            "ArrowLeft" | "ArrowRight" => {
+            Key::ArrowLeft | Key::ArrowRight => {
                 // Walk the pick over the waste and the columns that have cards to take.
                 let order: Vec<Pile> = std::iter::once(Pile::Waste)
                     .chain((0..COLS).map(Pile::Tableau))
@@ -1652,7 +1651,7 @@ impl Play {
                     .fx
                     .sel
                     .and_then(|s| order.iter().position(|&p| p == s.pile));
-                let next = match (at, key == "ArrowRight") {
+                let next = match (at, key == Key::ArrowRight) {
                     (None, true) => 0,
                     (None, false) => order.len() - 1,
                     (Some(i), true) => (i + 1) % order.len(),
@@ -1660,7 +1659,7 @@ impl Play {
                 };
                 self.select(order[next])
             }
-            "ArrowUp" | "ArrowDown" => {
+            Key::ArrowUp | Key::ArrowDown => {
                 let Some(sel) = self.fx.sel else {
                     return Action::Nothing;
                 };
@@ -1668,7 +1667,7 @@ impl Play {
                     Pile::Tableau(c) => self.model.table.face_up(c),
                     _ => 1,
                 };
-                let count = if key == "ArrowUp" {
+                let count = if key == Key::ArrowUp {
                     sel.count + 1
                 } else {
                     sel.count.saturating_sub(1)
@@ -1679,7 +1678,7 @@ impl Play {
                 self.fx.sel = Some(Sel { count, ..sel });
                 Action::Picked
             }
-            "Backspace" | "Delete" => {
+            Key::Backspace | Key::Delete => {
                 if self.fx.sel.take().is_some() {
                     Action::Nothing
                 } else if self.undo() {
@@ -2160,7 +2159,7 @@ impl Play {
             d.transformed(
                 Affine::translate(-pivot.x, -pivot.y)
                     .then(Affine::scale(1.05, 1.05))
-                    .then(Affine::rotate(h.tilt))
+                    .then(Affine::rotate(Angle::rad(h.tilt)))
                     .then(Affine::translate(pivot.x, pivot.y)),
                 |d| {
                     for c in &h.cards {
@@ -2213,7 +2212,7 @@ impl Play {
             let spin = side * 0.35 * (1.0 - e);
             d.transformed(
                 Affine::translate(-p.x, -p.y)
-                    .then(Affine::rotate(spin))
+                    .then(Affine::rotate(Angle::rad(spin)))
                     .then(Affine::translate(p.x, p.y)),
                 |d| draw_back(d, r, 1.0),
             );
@@ -2260,7 +2259,7 @@ impl Play {
             let a = (p.life / p.max).clamp(0.0, 1.0);
             let s = p.size;
             d.transformed(
-                Affine::rotate(p.angle).then(Affine::translate(p.x, p.y)),
+                Affine::rotate(Angle::rad(p.angle)).then(Affine::translate(p.x, p.y)),
                 |d| {
                     d.fill(
                         Shape::Polygon(vec![
@@ -2294,7 +2293,7 @@ impl Play {
             let wiggle = if b.big { (1.0 - pop) * -0.15 } else { 0.0 };
             d.transformed(
                 Affine::scale(0.4 + 0.6 * pop, 0.4 + 0.6 * pop)
-                    .then(Affine::rotate(wiggle))
+                    .then(Affine::rotate(Angle::rad(wiggle)))
                     .then(Affine::translate(at.x, at.y)),
                 |d| {
                     outlined_text(
@@ -2324,7 +2323,7 @@ impl Play {
             let a = (c.life / 0.6).clamp(0.0, 1.0);
             let (w, h) = (c.w, c.h);
             d.transformed(
-                Affine::rotate(c.angle).then(Affine::translate(c.x, c.y)),
+                Affine::rotate(Angle::rad(c.angle)).then(Affine::translate(c.x, c.y)),
                 |d| {
                     d.fill(
                         Shape::Rect(Rect::new(-w / 2.0, -h / 2.0, w, h)),
@@ -2377,7 +2376,7 @@ fn outlined_text(
 ) {
     let style = |c: Color| TextStyle {
         size,
-        color: c,
+        color: c.into(),
         anchor: TextAnchor::CENTERED,
         font: chrome::canvas_font(FontWeight::Black),
     };
@@ -2558,14 +2557,14 @@ pub fn solitaire_preview() -> AnyPiece {
         let base = Rect::new(pivot.x - w / 2.0, pivot.y - h * 1.55, w, h);
         d.transformed(
             Affine::translate(-pivot.x, -pivot.y)
-                .then(Affine::rotate(-0.70))
+                .then(Affine::rotate(Angle::rad(-0.70)))
                 .then(Affine::translate(pivot.x, pivot.y)),
             |d| draw_back(d, base, 1.0),
         );
         for (card, angle, up) in hand {
             d.transformed(
                 Affine::translate(-pivot.x, -pivot.y)
-                    .then(Affine::rotate(angle))
+                    .then(Affine::rotate(Angle::rad(angle)))
                     .then(Affine::translate(pivot.x, pivot.y)),
                 |d| {
                     draw_shadow(d, base, 0.5);
@@ -2935,13 +2934,13 @@ pub fn solitaire_page() -> AnyPiece {
             }
         })
         .on_key(move |k| {
-            if k.key == "Escape" {
+            if k.key == Key::Escape {
                 return ku.escape();
             }
             if ku.overlay.get_untracked() != Overlay::None {
                 return;
             }
-            let a = ku.play.borrow_mut().key(&k.key);
+            let a = ku.play.borrow_mut().key(k.key);
             ku.acted(a);
         })
         .a11y(|a| a.label(tr("sol_table_a11y")))
@@ -3573,7 +3572,7 @@ mod tests {
     #[test]
     fn slow_frame_keeps_elapsed_time_but_bounds_animation_catch_up() {
         let mut p = play_with(Table::deal(15), DrawMode::One);
-        assert!(matches!(p.key("0"), Action::Drew(_)));
+        assert!(matches!(p.key(Key::Character('0')), Action::Drew(_)));
         let animation_time = p.fx.t;
         p.step(0.75);
         assert_eq!(p.model.elapsed, 0.75);
@@ -3655,13 +3654,19 @@ mod tests {
         let (from, to) = pair(&t).unwrap();
         let mut p = play_with(t, DrawMode::Three);
         let digit = |c: usize| ((b'1' + c as u8) as char).to_string();
-        assert!(matches!(p.key(&digit(from)), Action::Picked));
-        assert!(matches!(p.key(&digit(to)), Action::Moved(_)));
-        let Action::Drew(out) = p.key("0") else {
+        assert!(matches!(
+            p.key(Key::from_name(&digit(from))),
+            Action::Picked
+        ));
+        assert!(matches!(
+            p.key(Key::from_name(&digit(to))),
+            Action::Moved(_)
+        ));
+        let Action::Drew(out) = p.key(Key::Character('0')) else {
             panic!("0 turns the stock");
         };
         assert_eq!(out.drew, 3);
-        assert!(matches!(p.key("Backspace"), Action::Undone));
+        assert!(matches!(p.key(Key::Backspace), Action::Undone));
         assert_eq!(p.model.table.waste.len(), 0);
         settle(&mut p);
     }
@@ -3773,7 +3778,7 @@ mod tests {
         settle(&mut p);
         let mut seen = Vec::new();
         for key in ["9", "9", "6", "3", "0"] {
-            p.key(key);
+            p.key(Key::from_name(key));
             seen.push(p.model.score);
         }
         assert_eq!(seen, vec![15, 30, 30, 35, 35]);

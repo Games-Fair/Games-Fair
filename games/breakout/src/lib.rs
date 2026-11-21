@@ -12,7 +12,7 @@ use std::rc::Rc;
 use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
-use day_spec::{Cursor, LineCap, StrokeStyle};
+use day_spec::{Cursor, Key, LineCap, StrokeStyle};
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Sfx, sfx};
 use serde::{Deserialize, Serialize};
@@ -1180,7 +1180,7 @@ impl Game {
                 Point::new(dr.x, dr.y),
                 TextStyle {
                     size: 11.0,
-                    color: Color::WHITE,
+                    color: Color::WHITE.into(),
                     anchor: TextAnchor::CENTERED,
                     font: chrome::canvas_font(FontWeight::Heavy),
                 },
@@ -1206,7 +1206,7 @@ impl Game {
             let a = (s.life / POPUP_LIFE).clamp(0.0, 1.0);
             let style = |color: Color| TextStyle {
                 size: 13.0,
-                color,
+                color: color.into(),
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Heavy),
             };
@@ -1259,7 +1259,7 @@ impl Game {
                 Point::new(cx, cy),
                 TextStyle {
                     size: 26.0,
-                    color: chrome::GOLD,
+                    color: chrome::GOLD.into(),
                     anchor: TextAnchor::CENTERED,
                     font: chrome::canvas_font(FontWeight::Black),
                 },
@@ -1273,7 +1273,7 @@ impl Game {
                 Point::new(w / 2.0, h / 2.0 + 20.0),
                 TextStyle {
                     size: 17.0,
-                    color: Color::WHITE,
+                    color: Color::WHITE.into(),
                     anchor: TextAnchor::CENTERED,
                     font: chrome::canvas_font(FontWeight::Black),
                 },
@@ -1283,7 +1283,7 @@ impl Game {
                 Point::new(w / 2.0, h / 2.0 + 44.0),
                 TextStyle {
                     size: 12.0,
-                    color: Color::rgba(1.0, 1.0, 1.0, 0.6),
+                    color: Color::rgba(1.0, 1.0, 1.0, 0.6).into(),
                     anchor: TextAnchor::CENTERED,
                     font: chrome::canvas_font(FontWeight::Bold),
                 },
@@ -1417,7 +1417,7 @@ impl Game {
                     );
                     for a in [45.0f64, -45.0] {
                         d.transformed(
-                            Affine::rotate(a.to_radians()).then(Affine::translate(cx, cy)),
+                            Affine::rotate(Angle::deg(a)).then(Affine::translate(cx, cy)),
                             |d| {
                                 d.fill(
                                     Shape::RoundedRect(Rect::new(-3.0, -0.65, 6.0, 1.3), 0.65),
@@ -1535,7 +1535,7 @@ impl Game {
             Point::new(*x + 13.0, y + 10.0),
             TextStyle {
                 size: 10.0,
-                color: Color::WHITE,
+                color: Color::WHITE.into(),
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Heavy),
             },
@@ -1899,14 +1899,14 @@ pub fn breakout_page() -> AnyPiece {
             }
         })
         .on_key(move |k| {
-            if k.key == "Escape" {
+            if k.key == Key::Escape {
                 return ku.escape();
             }
             let mut g = ku.game.borrow_mut();
-            match k.key.as_str() {
-                "ArrowLeft" => g.nudge_target(-KEY_STEP),
-                "ArrowRight" => g.nudge_target(KEY_STEP),
-                "ArrowUp" => g.launch(),
+            match k.key {
+                Key::ArrowLeft => g.nudge_target(-KEY_STEP),
+                Key::ArrowRight => g.nudge_target(KEY_STEP),
+                Key::ArrowUp => g.launch(),
                 _ => {}
             }
         })

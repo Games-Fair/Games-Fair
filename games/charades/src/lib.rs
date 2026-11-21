@@ -8,7 +8,6 @@
 //! lists under words/, one folder per language (words/README.md).
 
 use std::cell::{Cell, RefCell};
-use std::f64::consts::PI;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
@@ -19,6 +18,7 @@ use day_part_sensors::SensorKind;
 use day_part_wakelock::ScreenLock;
 use day_pieces::prelude::*;
 use day_reactive::Scope;
+use day_spec::Key;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Pattern, Sfx, sfx};
 
@@ -372,19 +372,21 @@ impl Ui {
         self.set_phase(Phase::Decks);
     }
 
-    fn key(&self, key: &str) {
+    fn key(&self, key: Key) {
         // Escape pauses the game in play (below), and closes the pause menu to resume it.
-        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+        if key == Key::Escape && self.overlay.get_untracked() == Overlay::Pause {
             return self.show(Overlay::None);
         }
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
         match (self.phase.get_untracked(), key) {
-            (Phase::Play, "ArrowDown" | "Enter" | " ") => self.answer(Mark::Correct),
-            (Phase::Play, "ArrowUp" | "Backspace") => self.answer(Mark::Pass),
-            (Phase::Ready, "Enter" | " ") => self.begin_countdown(),
-            (Phase::Play | Phase::Countdown | Phase::Ready, "Escape") => self.pause(),
+            (Phase::Play, Key::ArrowDown | Key::Enter | Key::Character(' ')) => {
+                self.answer(Mark::Correct)
+            }
+            (Phase::Play, Key::ArrowUp | Key::Backspace) => self.answer(Mark::Pass),
+            (Phase::Ready, Key::Enter | Key::Character(' ')) => self.begin_countdown(),
+            (Phase::Play | Phase::Countdown | Phase::Ready, Key::Escape) => self.pause(),
             _ => {}
         }
     }
@@ -616,7 +618,7 @@ fn game_screen(ui: Rc<Ui>) -> AnyPiece {
         du.repaint.track();
         draw_round(&du, d, sz);
     })
-    .on_key(move |k| ku.key(&k.key))
+    .on_key(move |k| ku.key(k.key))
     .focused(ui.focus)
     .a11y({
         let u = ui.clone();
@@ -854,7 +856,7 @@ fn centered(d: &mut Draw, text: &str, at: Point, size: f64, color: Color, weight
         at,
         TextStyle {
             size,
-            color,
+            color: color.into(),
             anchor: TextAnchor::CENTERED,
             font: chrome::canvas_font(weight),
         },
@@ -900,7 +902,7 @@ fn draw_round(ui: &Ui, d: &mut Draw, sz: Size) {
     };
     let (cx, cy) = (sz.width / 2.0, sz.height / 2.0);
     let turn = Affine::translate(-cx, -cy)
-        .then(Affine::rotate(f64::from(quarter) * PI / 2.0))
+        .then(Affine::rotate(Angle::QUARTER * f64::from(quarter)))
         .then(Affine::translate(cx, cy));
     let origin = Point::new(cx - w / 2.0, cy - h / 2.0);
     let at = |x: f64, y: f64| Point::new(origin.x + x, origin.y + y);
@@ -1320,7 +1322,7 @@ pub fn charades_preview() -> AnyPiece {
         let c = Point::new(w / 2.0, h * 0.48);
         let (pw, ph) = (w * 0.72, w * 0.40);
         let tilt = Affine::translate(-c.x, -c.y)
-            .then(Affine::rotate(-0.10))
+            .then(Affine::rotate(Angle::rad(-0.10)))
             .then(Affine::translate(c.x, c.y));
         d.transformed(tilt, |d| {
             let (x, y) = (c.x - pw / 2.0, c.y - ph / 2.0);

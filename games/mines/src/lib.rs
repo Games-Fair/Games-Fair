@@ -17,6 +17,7 @@ use day_geometry::Affine;
 use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Pattern, Sfx, sfx};
 
@@ -566,9 +567,9 @@ impl Ui {
         gamekit::clear(SAVE_KEY);
     }
 
-    fn key(&self, key: &str) {
+    fn key(&self, key: Key) {
         // Escape pauses the game in play (below), and closes the pause menu to resume it.
-        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+        if key == Key::Escape && self.overlay.get_untracked() == Overlay::Pause {
             return self.show(Overlay::None);
         }
         if self.overlay.get_untracked() != Overlay::None {
@@ -581,19 +582,19 @@ impl Ui {
         let here = self.cursor.get().unwrap_or((len / 2) as usize);
         let step = |d: i64| ((here as i64 + d).rem_euclid(len)) as usize;
         match key {
-            "ArrowLeft" => self.cursor.set(Some(step(-1))),
-            "ArrowRight" => self.cursor.set(Some(step(1))),
-            "ArrowUp" => self.cursor.set(Some(step(-cols))),
-            "ArrowDown" => self.cursor.set(Some(step(cols))),
-            " " | "Enter" => {
+            Key::ArrowLeft => self.cursor.set(Some(step(-1))),
+            Key::ArrowRight => self.cursor.set(Some(step(1))),
+            Key::ArrowUp => self.cursor.set(Some(step(-cols))),
+            Key::ArrowDown => self.cursor.set(Some(step(cols))),
+            Key::Character(' ') | Key::Enter => {
                 self.cursor.set(Some(here));
                 self.tap(here);
             }
-            "f" | "F" => {
+            Key::Character('f' | 'F') => {
                 self.cursor.set(Some(here));
                 self.hold(here);
             }
-            "Escape" => self.pause(),
+            Key::Escape => self.pause(),
             _ => return,
         }
         if self.cursor.get().is_none() {
@@ -766,7 +767,7 @@ fn board_canvas(ui: Rc<Ui>) -> impl Piece {
             }
         }
     })
-    .on_key(move |k| ku.key(&k.key))
+    .on_key(move |k| ku.key(k.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mi_board_a11y")))
     .id(id!(mi_board))
@@ -989,7 +990,7 @@ fn draw_cell(
                     center,
                     TextStyle {
                         size: l.cell * 0.56 * scale,
-                        color: NUMBERS[(n as usize - 1).min(7)].with_alpha(alpha),
+                        color: NUMBERS[(n as usize - 1).min(7)].with_alpha(alpha).into(),
                         anchor: TextAnchor::CENTERED,
                         font: chrome::canvas_font(FontWeight::Black),
                     },
@@ -1036,7 +1037,7 @@ fn draw_flag(d: &mut Draw, c: Point, cell: f64, plant: f64, wrong: bool) {
     let s = cell * 0.34 * (0.7 + 0.3 * e);
     d.transformed(
         Affine::translate(-c.x, -c.y)
-            .then(Affine::rotate(lean))
+            .then(Affine::rotate(Angle::rad(lean)))
             .then(Affine::translate(c.x, c.y)),
         |d| {
             d.fill(
@@ -1570,7 +1571,7 @@ pub fn mines_preview() -> AnyPiece {
                             center,
                             TextStyle {
                                 size: cell * 0.56,
-                                color: NUMBERS[(n as usize - 1).min(7)],
+                                color: NUMBERS[(n as usize - 1).min(7)].into(),
                                 anchor: TextAnchor::CENTERED,
                                 font: chrome::canvas_font(FontWeight::Black),
                             },

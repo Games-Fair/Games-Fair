@@ -2,6 +2,7 @@
 //! Flipside: shared canvas drawing, pure rules, and the standard gamekit shell.
 use day_localization_ui::tr;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
@@ -150,9 +151,9 @@ impl Ui {
             }
         }
     }
-    fn key(&self, key: &str) {
+    fn key(&self, key: Key) {
         // Escape pauses the game in play (below), and closes the pause menu to resume it.
-        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+        if key == Key::Escape && self.overlay.get_untracked() == Overlay::Pause {
             return self.show(Overlay::None);
         }
         if self.overlay.get_untracked() != Overlay::None {
@@ -160,12 +161,12 @@ impl Ui {
         }
         let i = self.cursor.get();
         match key {
-            "ArrowLeft" => self.cursor.set(i / 8 * 8 + (i + 7) % 8),
-            "ArrowRight" => self.cursor.set(i / 8 * 8 + (i + 1) % 8),
-            "ArrowUp" => self.cursor.set((i + 56) % 64),
-            "ArrowDown" => self.cursor.set((i + 8) % 64),
-            " " | "Enter" | "Return" => self.play(i),
-            "Escape" | "p" | "P" => self.pause(),
+            Key::ArrowLeft => self.cursor.set(i / 8 * 8 + (i + 7) % 8),
+            Key::ArrowRight => self.cursor.set(i / 8 * 8 + (i + 1) % 8),
+            Key::ArrowUp => self.cursor.set((i + 56) % 64),
+            Key::ArrowDown => self.cursor.set((i + 8) % 64),
+            Key::Character(' ') | Key::Enter => self.play(i),
+            Key::Escape | Key::Character('p' | 'P') => self.pause(),
             _ => return,
         }
         self.repaint.notify();
@@ -386,7 +387,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
         t.play(i);
         t.repaint.notify();
     })
-    .on_key(move |event| k.key(&event.key))
+    .on_key(move |event| k.key(event.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("fs_board_a11y")))
     .id(id!(fs_board))

@@ -6,7 +6,7 @@
 use day::prelude::*;
 use day::reactive::flush_sync;
 use day_mock::MockToolkit;
-use day_spec::{Event, FrameCallback, FrameStamp, KeyEvent};
+use day_spec::{Event, FrameCallback, FrameStamp, KeyEvent, Modifiers};
 use std::{
     cell::{Cell, RefCell},
     collections::VecDeque,
@@ -77,14 +77,7 @@ fn tap(id: &str) {
     flush_sync();
 }
 fn key(id: &str, key: &str) {
-    emit(
-        id,
-        Event::Key(KeyEvent {
-            key: key.into(),
-            text: None,
-            modifiers: 0,
-        }),
-    );
+    emit(id, Event::Key(KeyEvent::named(key, Modifiers::NONE)));
 }
 
 struct SavedPreferences {

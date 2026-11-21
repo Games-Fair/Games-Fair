@@ -2,6 +2,7 @@
 //! Pipes: rotate a scrambled network, lock settled tiles, and connect every branch.
 use day_localization_ui::tr;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
 use serde::{Deserialize, Serialize};
 use std::cell::{Cell, RefCell};
@@ -169,9 +170,9 @@ impl Ui {
             }
         }
     }
-    fn key(&self, key: &str) {
+    fn key(&self, key: Key) {
         // Escape pauses the game in play (below), and closes the pause menu to resume it.
-        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+        if key == Key::Escape && self.overlay.get_untracked() == Overlay::Pause {
             return self.show(Overlay::None);
         }
         if self.overlay.get_untracked() != Overlay::None {
@@ -180,13 +181,13 @@ impl Ui {
         let n = self.game.borrow().size;
         let i = self.cursor.get();
         match key {
-            "ArrowLeft" => self.cursor.set(i / n * n + (i % n + n - 1) % n),
-            "ArrowRight" => self.cursor.set(i / n * n + (i % n + 1) % n),
-            "ArrowUp" => self.cursor.set((i + n * n - n) % (n * n)),
-            "ArrowDown" => self.cursor.set((i + n) % (n * n)),
-            " " | "Enter" | "Return" => self.act(i, false),
-            "l" | "L" => self.act(i, true),
-            "Escape" | "p" | "P" => self.pause(),
+            Key::ArrowLeft => self.cursor.set(i / n * n + (i % n + n - 1) % n),
+            Key::ArrowRight => self.cursor.set(i / n * n + (i % n + 1) % n),
+            Key::ArrowUp => self.cursor.set((i + n * n - n) % (n * n)),
+            Key::ArrowDown => self.cursor.set((i + n) % (n * n)),
+            Key::Character(' ') | Key::Enter => self.act(i, false),
+            Key::Character('l' | 'L') => self.act(i, true),
+            Key::Escape | Key::Character('p' | 'P') => self.pause(),
             _ => return,
         }
         self.repaint.notify();
@@ -405,7 +406,7 @@ fn board_canvas(ui: Rc<Ui>) -> AnyPiece {
         t.act(i, t.lock_mode.get_untracked());
         t.repaint.notify();
     })
-    .on_key(move |event| k.key(&event.key))
+    .on_key(move |event| k.key(event.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("pp_board_a11y")))
     .id(id!(pp_board))

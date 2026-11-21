@@ -2,6 +2,7 @@
 //! Match Three: six levels of shape matching with native vector artwork and animated cascades.
 use day_localization_ui::{LocalizedText, tr};
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::{self, Feedback, Help, cues};
 use serde::{Deserialize, Serialize};
 use std::{
@@ -272,37 +273,37 @@ impl Ui {
         self.cue(&cues::HINT);
         self.repaint.notify();
     }
-    fn key(&self, key: &str) {
+    fn key(&self, key: Key) {
         self.calm.set(0.0);
         // Escape pauses the game in play (below), and closes the pause menu to resume it.
-        if key == "Escape" && self.overlay.get_untracked() == Overlay::Pause {
+        if key == Key::Escape && self.overlay.get_untracked() == Overlay::Pause {
             return self.show(Overlay::None);
         }
         if self.overlay.get_untracked() != Overlay::None {
             return;
         }
         if self.drag.get().is_some() {
-            if matches!(key, "Escape" | "p" | "P") {
+            if matches!(key, Key::Escape | Key::Character('p' | 'P')) {
                 self.show(Overlay::Pause);
             }
             return;
         }
         let i = self.cursor.get();
         let next = match key {
-            "Home" => Some(0),
-            "ArrowLeft" => Some(i / N * N + (i % N + N - 1) % N),
-            "ArrowRight" => Some(i / N * N + (i % N + 1) % N),
-            "ArrowUp" => Some((i + LEN - N) % LEN),
-            "ArrowDown" => Some((i + N) % LEN),
-            " " | "Enter" | "Return" => {
+            Key::Home => Some(0),
+            Key::ArrowLeft => Some(i / N * N + (i % N + N - 1) % N),
+            Key::ArrowRight => Some(i / N * N + (i % N + 1) % N),
+            Key::ArrowUp => Some((i + LEN - N) % LEN),
+            Key::ArrowDown => Some((i + N) % LEN),
+            Key::Character(' ') | Key::Enter => {
                 self.choose(i);
                 None
             }
-            "h" | "H" => {
+            Key::Character('h' | 'H') => {
                 self.hint();
                 None
             }
-            "Escape" | "p" | "P" => {
+            Key::Escape | Key::Character('p' | 'P') => {
                 self.show(Overlay::Pause);
                 None
             }
@@ -689,11 +690,11 @@ impl Ui {
         };
         self.swipe
             .set((p.phase != DragPhase::Ended).then_some((start, moved)));
-        self.gesture(Drag {
-            phase: p.phase,
-            location: Point::new(start.x + moved.x, start.y + moved.y),
-            translation: moved,
-        });
+        self.gesture(Drag::new(
+            p.phase,
+            Point::new(start.x + moved.x, start.y + moved.y),
+            moved,
+        ));
     }
     /// The gem nearest `p` when it lies within half a cell outside the board's edge.
     fn near(&self, p: Point) -> Option<usize> {
@@ -1155,7 +1156,7 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
     })
     .on_drag(move |e| g.gesture(e))
     .on_pan(move |p| s.swipe(p))
-    .on_key(move |e| k.key(&e.key))
+    .on_key(move |e| k.key(e.key))
     .focused(ui.focus)
     .a11y(|a| a.label(tr("mt_board_a11y")))
     .id(id!(mt_board))
@@ -1471,7 +1472,7 @@ fn render(
             Point::new(at.x + 1.0, at.y + 2.0),
             TextStyle {
                 size: size_pt,
-                color: SURFACE,
+                color: SURFACE.into(),
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Black),
             },
@@ -1481,7 +1482,7 @@ fn render(
             at,
             TextStyle {
                 size: size_pt,
-                color: ink,
+                color: ink.into(),
                 anchor: TextAnchor::CENTERED,
                 font: chrome::canvas_font(FontWeight::Black),
             },

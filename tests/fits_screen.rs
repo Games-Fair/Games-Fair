@@ -364,11 +364,10 @@ fn a_drawn_readout_follows_the_game() {
         let board = day_core::with_tree(|t| t.find_by_id("pp_board")).expect("pp_board");
         day_core::enqueue_event(
             day_core::rnode_to_id(board),
-            Event::Key(day_spec::KeyEvent {
-                key: "Enter".into(),
-                text: None,
-                modifiers: 0,
-            }),
+            Event::Key(day_spec::KeyEvent::new(
+                day_spec::Key::Enter,
+                day_spec::Modifiers::NONE,
+            )),
         );
         flush_sync();
         assert_eq!(text_of("pp_moves"), "1");

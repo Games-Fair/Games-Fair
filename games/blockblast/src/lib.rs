@@ -17,6 +17,7 @@ use day_geometry::Affine;
 use day_localization_ui::tr;
 use day_part_haptics::Haptic;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Pattern, Sfx, sfx};
 
@@ -1141,7 +1142,7 @@ impl Play {
                 3.0,
             );
             d.transformed(
-                Affine::rotate(g.spin * 1.6 * e).then(Affine::translate(cx, cy)),
+                Affine::rotate(Angle::rad(g.spin * 1.6 * e)).then(Affine::translate(cx, cy)),
                 |d| {
                     draw_block(
                         d,
@@ -1240,7 +1241,7 @@ impl Play {
             let a = (p.life / p.max).clamp(0.0, 1.0);
             let s = p.size;
             d.transformed(
-                Affine::rotate(p.angle).then(Affine::translate(p.x, p.y)),
+                Affine::rotate(Angle::rad(p.angle)).then(Affine::translate(p.x, p.y)),
                 |d| {
                     d.fill(
                         Shape::RoundedRect(Rect::new(-s / 2.0, -s / 2.0, s, s), s * 0.2),
@@ -1274,7 +1275,7 @@ impl Play {
             let color = tier_color(b.tier);
             d.transformed(
                 Affine::scale(0.4 + 0.6 * pop, 0.4 + 0.6 * pop)
-                    .then(Affine::rotate(wiggle))
+                    .then(Affine::rotate(Angle::rad(wiggle)))
                     .then(Affine::translate(at.x, at.y)),
                 |d| {
                     outlined_text(d, &b.text, Point::ZERO, size, color, fade, Some(color));
@@ -1296,7 +1297,7 @@ impl Play {
             let a = (c.life / 0.6).clamp(0.0, 1.0);
             let (w, h) = (c.w, c.h);
             d.transformed(
-                Affine::rotate(c.angle).then(Affine::translate(c.x, c.y)),
+                Affine::rotate(Angle::rad(c.angle)).then(Affine::translate(c.x, c.y)),
                 |d| {
                     d.fill(
                         Shape::Rect(Rect::new(-w / 2.0, -h / 2.0, w, h)),
@@ -1331,7 +1332,7 @@ fn outlined_text(
 ) {
     let style = |c: Color| TextStyle {
         size,
-        color: c,
+        color: c.into(),
         anchor: TextAnchor::CENTERED,
         font: chrome::canvas_font(FontWeight::Black),
     };
@@ -1646,7 +1647,7 @@ pub fn blockblast_page() -> AnyPiece {
         })
         .on_hover(move |_| hu.pointer_seen.set(true))
         .on_key(move |k| {
-            if k.key == "Escape" {
+            if k.key == Key::Escape {
                 return ku.escape();
             }
             if ku.overlay.get_untracked() != Overlay::None {
@@ -1654,15 +1655,15 @@ pub fn blockblast_page() -> AnyPiece {
             }
             let outcome = {
                 let mut p = ku.play.borrow_mut();
-                match k.key.as_str() {
-                    "1" => p.key_slot(0),
-                    "2" => p.key_slot(1),
-                    "3" => p.key_slot(2),
-                    "ArrowLeft" => p.key_move(0, -1),
-                    "ArrowRight" => p.key_move(0, 1),
-                    "ArrowUp" => p.key_move(-1, 0),
-                    "ArrowDown" => p.key_move(1, 0),
-                    "Delete" | "Backspace" if p.fx.held.is_some() => {
+                match k.key {
+                    Key::Character('1') => p.key_slot(0),
+                    Key::Character('2') => p.key_slot(1),
+                    Key::Character('3') => p.key_slot(2),
+                    Key::ArrowLeft => p.key_move(0, -1),
+                    Key::ArrowRight => p.key_move(0, 1),
+                    Key::ArrowUp => p.key_move(-1, 0),
+                    Key::ArrowDown => p.key_move(1, 0),
+                    Key::Delete | Key::Backspace if p.fx.held.is_some() => {
                         p.send_home();
                         KeyOutcome::Released(Release::Cancelled)
                     }

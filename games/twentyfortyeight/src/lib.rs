@@ -8,6 +8,7 @@ use std::rc::Rc;
 
 use day_localization_ui::tr;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Sfx, sfx};
 use serde::{Deserialize, Serialize};
@@ -248,7 +249,7 @@ fn draw_tile(d: &mut Draw, x: f64, y: f64, cell: f64, value: u32, scale: f64) {
         Point::new(x + cell / 2.0, y + cell / 2.0),
         TextStyle {
             size: fsize,
-            color: tile_text_color(value),
+            color: tile_text_color(value).into(),
             anchor: TextAnchor::CENTERED,
             ..Default::default()
         },
@@ -705,7 +706,7 @@ impl Game {
                 Point::new(ox + size / 2.0, oy + size / 2.0 - 12.0),
                 TextStyle {
                     size: 30.0,
-                    color: Color::hex(0x77_6E_65),
+                    color: Color::hex(0x77_6E_65).into(),
                     anchor: TextAnchor::CENTERED,
                     ..Default::default()
                 },
@@ -716,7 +717,7 @@ impl Game {
                 Point::new(ox + size / 2.0, oy + size + 28.0),
                 TextStyle {
                     size: 16.0,
-                    color: Color::hex(0xF6_5E_3B),
+                    color: Color::hex(0xF6_5E_3B).into(),
                     anchor: TextAnchor::CENTERED,
                     ..Default::default()
                 },
@@ -974,17 +975,17 @@ pub fn twentyfortyeight_page() -> AnyPiece {
             dr.repaint.notify();
         })
         .on_key(move |k| {
-            if k.key == "Escape" {
+            if k.key == Key::Escape {
                 return ku.escape();
             }
             if ku.overlay.get_untracked() != Overlay::None {
                 return;
             }
-            let dir = match k.key.as_str() {
-                "ArrowLeft" => 0,
-                "ArrowRight" => 1,
-                "ArrowUp" => 2,
-                "ArrowDown" => 3,
+            let dir = match k.key {
+                Key::ArrowLeft => 0,
+                Key::ArrowRight => 1,
+                Key::ArrowUp => 2,
+                Key::ArrowDown => 3,
                 _ => return,
             };
             // A key press is a whole move: preview it fully, then release.
@@ -1033,7 +1034,7 @@ pub fn twentyfortyeight_page() -> AnyPiece {
                         Point::new(sz.width / 2.0, sz.height / 2.0),
                         TextStyle {
                             size: 13.0,
-                            color: ink,
+                            color: ink.into(),
                             anchor: TextAnchor::CENTERED,
                             font: chrome::canvas_font(FontWeight::Bold),
                         },

@@ -15,7 +15,7 @@ use std::rc::Rc;
 
 use day_localization_ui::tr;
 use day_pieces::prelude::*;
-use day_spec::{HeightClass, KeyEvent, LineCap, LineJoin, StrokeStyle};
+use day_spec::{HeightClass, Key, KeyEvent, LineCap, LineJoin, StrokeStyle};
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Sfx, sfx};
 
@@ -303,7 +303,7 @@ impl Ui {
     /// clear key every keyboard delivers.
     fn key(&self, k: &KeyEvent) {
         // Escape pauses the game, and closes the pause menu to resume it.
-        if k.key == "Escape" {
+        if k.key == Key::Escape {
             match self.overlay.get_untracked() {
                 Overlay::None => {
                     self.show(Overlay::Pause);
@@ -325,12 +325,12 @@ impl Ui {
             }
             return;
         }
-        let (dr, dc) = match k.key.as_str() {
-            "ArrowLeft" => (0, -1),
-            "ArrowRight" => (0, 1),
-            "ArrowUp" => (-1, 0),
-            "ArrowDown" => (1, 0),
-            "Delete" | "Backspace" => {
+        let (dr, dc) = match k.key {
+            Key::ArrowLeft => (0, -1),
+            Key::ArrowRight => (0, 1),
+            Key::ArrowUp => (-1, 0),
+            Key::ArrowDown => (1, 0),
+            Key::Delete | Key::Backspace => {
                 self.erase();
                 return;
             }
@@ -430,7 +430,7 @@ fn draw_cell(
             Point::new(w / 2.0, h / 2.0),
             TextStyle {
                 size: h * 0.55,
-                color: ink,
+                color: ink.into(),
                 anchor: TextAnchor::CENTERED,
                 font: digit_font(),
             },
@@ -445,7 +445,7 @@ fn draw_cell(
                     Point::new(w * (0.5 + nc) / 3.0, h * (0.5 + nr) / 3.0),
                     TextStyle {
                         size: h * 0.24,
-                        color,
+                        color: color.into(),
                         anchor: TextAnchor::CENTERED,
                         font: digit_font(),
                     },
@@ -512,7 +512,7 @@ pub fn sudoku_preview() -> AnyPiece {
                     Point::new(x + (c + 0.5) * cell, y + (r + 0.5) * cell),
                     TextStyle {
                         size: cell * 0.72,
-                        color: palette[(b + digit) % palette.len()],
+                        color: palette[(b + digit) % palette.len()].into(),
                         anchor: TextAnchor::CENTERED,
                         font: digit_font(),
                     },
@@ -585,8 +585,8 @@ fn draw_glyph(d: &mut Draw, glyph: Glyph, c: Point, size: f64, color: Color) {
             d.stroke_styled(
                 Shape::Arc {
                     rect: Rect::new(c.x - 0.7 * s, c.y - 0.55 * s, 1.4 * s, 1.4 * s),
-                    start_deg: if m > 0.0 { 200.0 } else { 340.0 },
-                    sweep_deg: 220.0 * m,
+                    start: Angle::deg(if m > 0.0 { 200.0 } else { 340.0 }),
+                    sweep: Angle::deg(220.0 * m),
                 },
                 color,
                 style,
@@ -938,7 +938,7 @@ fn board_grid(ui: Rc<Ui>) -> impl Piece {
                         Point::new(sz.width / 2.0, sz.height / 2.0 + 34.0),
                         TextStyle {
                             size: 22.0,
-                            color: Color::rgba(1.0, 1.0, 1.0, 0.75),
+                            color: Color::rgba(1.0, 1.0, 1.0, 0.75).into(),
                             anchor: TextAnchor::CENTERED,
                             font: canvas_font(FontWeight::Heavy),
                         },
@@ -1236,7 +1236,7 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
             Point::new(w / 2.0, h / 2.0 - 5.0 * k + offset),
             TextStyle {
                 size: 28.0 * k,
-                color: digit_color,
+                color: digit_color.into(),
                 anchor: TextAnchor::CENTERED,
                 font: digit_font(),
             },
@@ -1246,7 +1246,7 @@ fn number_key(ui: Rc<Ui>, digit: u8) -> AnyPiece {
             Point::new(w / 2.0, h - 10.0 * k + offset),
             TextStyle {
                 size: 10.0 * k,
-                color: count_color,
+                color: count_color.into(),
                 anchor: TextAnchor::CENTERED,
                 font: digit_font(),
             },
@@ -1312,7 +1312,7 @@ fn action_button(
             Point::new(w / 2.0, h / 2.0 + 12.0 * k),
             TextStyle {
                 size: chrome::fit_text(&caption, 10.0 * k, &font, w - 4.0),
-                color: ink,
+                color: ink.into(),
                 anchor: TextAnchor::CENTERED,
                 font,
             },
@@ -1376,7 +1376,7 @@ fn split_button(
                 Point::new(w * 0.33, h / 2.0),
                 TextStyle {
                     size: chrome::fit_text(&caption, 10.0 * k, &font, w * 0.67 - 2.0),
-                    color: ink,
+                    color: ink.into(),
                     anchor: TextAnchor {
                         h: TextAlign::Leading,
                         v: TextVAlign::Middle,
@@ -1777,7 +1777,7 @@ fn settings_card(ui: Rc<Ui>) -> AnyPiece {
                         Point::new(size.width / 2.0, size.height / 2.0),
                         TextStyle {
                             size: 30.0,
-                            color: TEXT,
+                            color: TEXT.into(),
                             anchor: TextAnchor::CENTERED,
                             font: digit_font(),
                         },

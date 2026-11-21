@@ -7,6 +7,7 @@ license = "Apache-2.0"
 
 [dependencies]
 day-pieces = "0.*"
+day-spec = "0.*"
 day-localization-ui = "0.*"
 gamekit = { path = "../../gamekit" }
 serde = { version = "1", features = ["derive"] }

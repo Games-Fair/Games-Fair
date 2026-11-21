@@ -8,6 +8,7 @@ use std::rc::Rc;
 
 use day_localization_ui::tr;
 use day_pieces::prelude::*;
+use day_spec::Key;
 use gamekit::chrome::cues::{self, with};
 use gamekit::chrome::{self, Cue, Feedback, Help, Sfx, sfx};
 use serde::{Deserialize, Serialize};
@@ -542,7 +543,7 @@ impl Game {
                     Point::new(at.x + dx, at.y + dy),
                     TextStyle {
                         size: 30.0,
-                        color: Color::rgba(0.3, 0.5, 1.0, 0.55 * a),
+                        color: Color::rgba(0.3, 0.5, 1.0, 0.55 * a).into(),
                         anchor: TextAnchor::CENTERED,
                         font: font.clone(),
                     },
@@ -554,9 +555,9 @@ impl Game {
                 TextStyle {
                     size: 30.0,
                     color: if n >= 4 {
-                        Color::rgba(1.0, 0.84, 0.25, a)
+                        Color::rgba(1.0, 0.84, 0.25, a).into()
                     } else {
-                        Color::rgba(1.0, 1.0, 1.0, a)
+                        Color::rgba(1.0, 1.0, 1.0, a).into()
                     },
                     anchor: TextAnchor::CENTERED,
                     font,
@@ -573,7 +574,7 @@ impl Game {
                 Point::new(sz.width / 2.0, sz.height / 2.0 - 16.0),
                 TextStyle {
                     size: 32.0,
-                    color: Color::WHITE,
+                    color: Color::WHITE.into(),
                     anchor: TextAnchor::CENTERED,
                     ..Default::default()
                 },
@@ -834,7 +835,7 @@ pub fn sirtet_page() -> AnyPiece {
             dr.repaint.notify();
         })
         .on_key(move |k| {
-            if k.key == "Escape" {
+            if k.key == Key::Escape {
                 return ku.escape();
             }
             if ku.overlay.get_untracked() != Overlay::None {
@@ -842,11 +843,11 @@ pub fn sirtet_page() -> AnyPiece {
             }
             let mut g = ku.game.borrow_mut();
             let before = (g.rot, g.prow, g.pcol);
-            match k.key.as_str() {
-                "ArrowLeft" => g.move_dxy(-1),
-                "ArrowRight" => g.move_dxy(1),
-                "ArrowUp" => g.rotate(),
-                "ArrowDown" => g.soft_drop(),
+            match k.key {
+                Key::ArrowLeft => g.move_dxy(-1),
+                Key::ArrowRight => g.move_dxy(1),
+                Key::ArrowUp => g.rotate(),
+                Key::ArrowDown => g.soft_drop(),
                 _ => {}
             }
             let after = (g.rot, g.prow, g.pcol);

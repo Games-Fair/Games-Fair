@@ -334,7 +334,7 @@ pub fn fitted_title(text: LocalizedText, size: f64, weight: FontWeight, color: C
                 Point::new(sz.width / 2.0, sz.height / 2.0),
                 TextStyle {
                     size: fit,
-                    color,
+                    color: color.into(),
                     anchor: TextAnchor::CENTERED,
                     font,
                 },
@@ -510,7 +510,7 @@ pub fn info_caption(caption: LocalizedText) -> AnyPiece {
             Point::new(sz.width / 2.0, sz.height / 2.0),
             TextStyle {
                 size: fit_text(&text, INFO_CAPTION, &font, sz.width),
-                color: ink,
+                color: ink.into(),
                 anchor: TextAnchor::CENTERED,
                 font,
             },
@@ -552,7 +552,7 @@ pub fn info_stat<M, C>(
             Point::new(w / 2.0, INFO_CAPTION_H / 2.0),
             TextStyle {
                 size: fit_text(&cap, INFO_CAPTION, &cap_font, w),
-                color: ink,
+                color: ink.into(),
                 anchor: TextAnchor::CENTERED,
                 font: cap_font,
             },
@@ -564,7 +564,7 @@ pub fn info_stat<M, C>(
             Point::new(w / 2.0, (INFO_CAPTION_H + 2.0 + sz.height) / 2.0),
             TextStyle {
                 size: fit_text(&val, INFO_VALUE, &val_font, w),
-                color: color.get(),
+                color: color.get().into(),
                 anchor: TextAnchor::CENTERED,
                 font: val_font,
             },

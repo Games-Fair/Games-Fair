@@ -11,6 +11,7 @@ license = "Apache-2.0"
 
 [dependencies]
 day-pieces = "0.*"
+day-spec = "0.*"
 day-core = "0.*"
 day-reactive = "0.*"
 day-geometry = "0.*"
