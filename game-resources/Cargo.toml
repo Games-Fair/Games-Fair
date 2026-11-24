@@ -1,0 +1,11 @@
+[package]
+name = "game-resources"
+version.workspace = true
+edition = "2024"
+license = "AGPL-3.0-only WITH App-Fair-Distribution-Exception"
+[dependencies]
+day = { package = "day-app", version = "0.*", default-features = false }
+[build-dependencies]
+day-build = "0.*"
+[lints]
+workspace = true

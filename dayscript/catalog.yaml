@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+name: catalog-mobile
+flow:
+  - assert_visible: { id: home_player_filter }
+  - tap: { id: home_players_1 }
+  - pause: { secs: 0.3 }
+  - assert_visible: { id: tile_sudoku }
+  - assert_visible: { id: tile_snakes }
+  - assert_visible: { id: tile_pool }
+  - assert_missing: { id: tile_charades }
+  - tap: { id: home_players_2 }
+  - pause: { secs: 0.3 }
+  - assert_missing: { id: tile_sudoku }
+  - assert_visible: { id: tile_flipside }
+  - assert_visible: { id: tile_charades }
+  - assert_visible: { id: tile_tictactoe }
+  - assert_visible: { id: tile_pool }
+  - tap: { id: home_players_3 }
+  - pause: { secs: 0.3 }
+  - assert_missing: { id: tile_flipside }
+  - assert_missing: { id: tile_tictactoe }
+  - assert_missing: { id: tile_pool }
+  - assert_visible: { id: tile_memory }
+  - assert_visible: { id: tile_moles }
+  - assert_visible: { id: tile_snakes }
+  - assert_visible: { id: tile_paintfight }
+  - tap: { id: home_players_4 }
+  - pause: { secs: 0.3 }
+  - assert_visible: { id: tile_charades }
+  - screenshot: four-player-catalog
+  - tap: { id: home_players_2 }
+  - pause: { secs: 0.3 }

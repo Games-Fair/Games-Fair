@@ -9,6 +9,9 @@ license = "Apache-2.0"
 # game exit (scope cleanup) and on app backgrounding (lifecycle phases where delivered).
 
 [dependencies]
+resvg = { version = "0.49", default-features = false }
+game-resources = { path = "../game-resources" }
+day-geometry = "0.*"
 day-core = "0.*"
 day-reactive = "0.*"
 day-spec = "0.*"

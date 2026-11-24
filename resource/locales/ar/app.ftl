@@ -461,3 +461,118 @@ mt_help_goals = يعرض كل مستوى أهدافه تحت النقاط: اب�
 mt_help_keys = الأسهم وEnter للاختيار والتبديل. H يبرز تبديلًا صالحًا وEnter ينفّذه. الإيقاف المؤقت يفتح الإعدادات والقواعد وإعادة اللعب. يمكن ضبط المؤثرات الصوتية والاهتزازات وتقليل الحركة. تُحفظ اللوحة والتقدم تلقائيًا.
 mt_complete_detail = يمكنك إعادة أي مستوى لتحسين نتيجتك وتقييمك بالنجوم.
 mt_matching = جارٍ المطابقة…
+
+# Local party games
+nav_tictactoe = إكس أو
+nav_memory = الذاكرة
+nav_moles = اضرب الخلد
+party_ttt_rules = ضع ثلاث علامات متطابقة في صف أو عمود أو قطر. اللاعب 1 يستخدم الصليب واللاعب 2 يستخدم الدائرة. يضيف اللعب الفردي خصمًا من الكمبيوتر.
+party_memory_rules = اكشف بطاقتين. الصور المتطابقة تمنح زوجًا ودورًا إضافيًا، وإلا ينتقل الدور. اجمع الأزواج الخمسة عشر؛ يفوز صاحب أكبر عدد. يضيف اللعب الفردي خصمًا من الكمبيوتر.
+party_moles_rules = المس حيوانات الخلد بلونك. يلعب الجميع معًا، ويفوز أول لون يصل إلى 30 نقطة. كل حيوان يمنح نقطة واحدة. في اللعب الفردي تواجه الكمبيوتر.
+party_controls = المس مربعًا أو اختره بالأسهم ثم اضغط Enter أو المسافة للعب. يوقف Escape اللعبة مؤقتًا. تُحفظ اللعبة عند إغلاقها وتُفتح في وضع الإيقاف المؤقت.
+party_computer = الكمبيوتر
+party_player = اللاعب { $n }
+party_draw = تعادل!
+party_wins = فاز { $player }!
+party_turn = دور { $player }
+party_cross = صليب
+party_ring = دائرة
+party_empty = فارغ
+party_matched = زوج مكتمل
+party_card_value = البطاقة { $n }
+party_hidden = مقلوبة
+party_selection = الصف { $row }، العمود { $column }: { $state }
+party_board = لوحة اللعب. استخدم الأسهم للاختيار وEnter للعب.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = الثعابين
+nav_paintfight = معركة الطلاء
+nav_pool = بلياردو
+arena_snakes_rules = وجّه بعصا التحكم في زاويتك. يطول ثعبانك مع كل نبضة، ويتسارع نموه خلال الجولة. اعبر الحافة لتظهر من الجانب المقابل. تجنّب رؤوس الثعابين الأخرى وأجسامها؛ يمكنك عبور ذيلك. يفوز آخر ثعبان حي. في اللعب الفردي تواجه الكمبيوتر.
+arena_paint_rules = اطلِ مساحة أكبر من خصومك خلال 45 ثانية. أمسك عصا التحكم للتحرك واتركها للتوقف. اطلِ فوق ألوان المنافسين واجمع الصواعق لزيادة السرعة. تلوّن النجوم مساحة كبيرة بلونك. تفوز المساحة الأكبر. يضيف اللعب الفردي خصمًا من الكمبيوتر.
+arena_pool_rules = أدخل كرات مجموعتك السبع ثم الكرة السوداء رقم ٨. اللاعب ١ يلعب بالكرات السادة (١–٧)، واللاعب ٢ أو الكمبيوتر بالكرات المخططة (٩–١٥). إدخال الكرة ٨ مبكرًا يعني الخسارة. إدخال كرة لك يمنحك ضربة أخرى؛ الإخفاق أو إدخال الكرة البيضاء ينقل الدور.
+arena_pool_solids = سادة · ١–٧
+arena_pool_stripes = مخططة · ٩–١٥
+arena_controls = يمكن للجميع سحب عصا التحكم الخاصة بهم معًا. لوحة المفاتيح: اللاعب 1 WASD، اللاعب 2 الأسهم، اللاعب 3 IJKL، اللاعب 4 TFGH. اتركها للاستمرار في الاتجاه نفسه. Escape للإيقاف المؤقت. يُحفظ الدور عند الإغلاق ويفتح متوقفًا مؤقتًا.
+arena_pool_controls = اسحب إلى الخلف من الكرة البيضاء للتصويب ثم اتركها للتسديد. السحب الأطول يعطي قوة أكبر. يوضح الدليل الاتجاه. استخدم الإصبع أو الفأرة أو لوحة التتبع. أوقف مؤقتًا لتغيير اللاعبين أو إعادة البدء.
+arena_countdown = البدء خلال { $n }…
+arena_remaining = بقي { $seconds } ث
+arena_rolling = الكرات تتحرك…
+arena_alive = مستمر
+arena_out = خارج
+arena_ai = آلي
+arena_board = ملعب مشترك. يستخدم كل لاعب عصا التحكم في زاويته؛ في البلياردو اسحب إلى الخلف من البيضاء ثم اتركها.
+
+# Mobile game catalog
+
+party_moles_race = الأول إلى 30 · المس لونك
+
+party_round_wins = الجولات الفائزة
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = عام
+party_turn_badge = الدور
+party_playing_badge = يلعب
+party_waiting_badge = ينتظر
+party_winner_badge = الفائز
+party_finished_badge = انتهى
+party_everyone_plays = الجميع يلعب
+party_wins_count = الفوز: { $n }
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }٪
+party_status_detail = { $status } · { $detail }
+
+home_player_count = اللاعبون: { $n }
+home_players_label = اللاعبون:
+
+nav_basketball = كرة السلة
+basketball_swipe = اسحب الكرة نحو السلة
+basketball_board = ملعب كرة السلة
+basketball_rules = اسحب الكرة لأعلى نحو السلة للتسديد. يتحكم اتجاه السحب وسرعته في التسديدة. سجّل أكبر عدد خلال 30 ثانية لكل لاعب، أو 45 ثانية للاعب واحد. يبدأ الوقت مع أول تسديدة. يدور الملعب للاعبين على الجانب المقابل. يمكن للكرات الطائرة أن تسجّل بعد انتهاء الوقت.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = كرة قدم الأزرار
+nav_dotsboxes = النقاط والمربعات
+nav_impostor = المحتال
+nav_minigolf = الغولف المصغر
+nav_fruitmerge = دمج الفواكه
+buttonsoccer_rules = اسحب القرص للخلف ثم اتركه للتسديد. يتغير الدور عندما تتوقف كل القطع. سجّل ثلاثة أهداف للفوز.
+dotsboxes_rules = المس خطًا فارغًا بين نقطتين. أكمل مربعًا لتملكه وتلعب مجددًا. يفوز من يملك أكثر المربعات.
+impostor_rules = مرّر الجهاز واكشف كلمتك سرًا. أحد اللاعبين هو المحتال. ناقشوا التلميحات ثم صوّتوا لكشفه.
+minigolf_rules = اسحب الكرة للخلف ثم اتركها. تناوبوا واستفيدوا من الارتداد عن العوائق. بعد سبع جولات يفوز صاحب أكثر التسديدات الناجحة.
+fruitmerge_rules = اسحب للتصويب واترك الفاكهة لتسقط. تندمج الفواكه المتطابقة في فاكهة أكبر. أبقِ الكومة تحت الخط المنقط.
+fruitmerge_sweep = تنظيف
+
+# Impostor: private reveal and group voting.
+impostor_word_for = الكلمة الخاصة بـ { $player }
+impostor_hold = اضغط مطولًا للكشف
+impostor_role = أنت المحتال!
+impostor_discuss = النقاش
+impostor_clues = قولوا بالتناوب كلمة أو عبارة مرتبطة بالكلمة السرية. أكملوا 1–3 جولات باتجاه عقارب الساعة ثم ناقشوا من هو المحتال.
+impostor_vote = التصويت
+impostor_choose = قرروا معًا من هو المحتال.
+impostor_confirm = التصويت لـ { $player }؟
+impostor_caught = تم كشف المحتال!
+impostor_escaped = فاز المحتال!
+impostor_secret = الكلمة السرية
+impostor_pass = مرر الجهاز إلى { $player }
+impostor_hint = إظهار الفئة للمحتال
+impostor_roles = المحتالون
+impostor_categories = الفئات
+impostor_language = لغة الكلمات
+impostor_next = الجولة التالية
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = مبارزة الفواكه
+fruitduel_rules = اضغط زرك الملوّن عند ظهور فاكهة. يحصل أول سيف يقطعها على نقطة. تجنّب الهدية والزهرة وكرة الشاطئ: فالضغط الخاطئ يجعل سيفك يعود ببطء. يفوز أول من يبلغ 10 نقاط. العب وحدك ضد الكمبيوتر أو مع ما يصل إلى أربعة لاعبين.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

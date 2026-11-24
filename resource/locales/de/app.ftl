@@ -453,3 +453,118 @@ mt_help_goals = Jedes Level zeigt seine Ziele unter der Punktzahl: Erreiche die 
 mt_help_keys = Mit Pfeilen und Eingabe wählst und tauschst du. H markiert einen gültigen Tausch, Eingabe führt ihn aus. Pause öffnet Einstellungen, Regeln und Wiederholen. Töne, Vibrationen und reduzierte Bewegung sind einstellbar. Spielfeld und Fortschritt werden automatisch gespeichert.
 mt_complete_detail = Du kannst jedes Level wiederholen, um Punkte und Sterne zu verbessern.
 mt_matching = Wird kombiniert…
+
+# Local party games
+nav_tictactoe = Tic-Tac-Toe
+nav_memory = Paare finden
+nav_moles = Maulwurfjagd
+party_ttt_rules = Setze drei gleiche Zeichen in eine Reihe, Spalte oder Diagonale. Spieler 1 spielt Kreuze, Spieler 2 Kreise. Allein spielst du gegen den Computer.
+party_memory_rules = Decke zwei Karten auf. Gleiche Bilder ergeben ein Paar und du bist erneut dran. Sonst wechselt der Zug. Sammle alle 15 Paare; die meisten Paare gewinnen. Allein spielst du gegen den Computer.
+party_moles_rules = Tippe auf Maulwürfe deiner Farbe. Alle spielen gleichzeitig; die erste Farbe mit 30 Punkten gewinnt. Jeder Maulwurf zählt einmal. Allein spielst du gegen den Computer.
+party_controls = Tippe auf ein Feld oder wähle es mit den Pfeiltasten und spiele mit Eingabe oder Leertaste. Escape pausiert. Beim Schließen wird gespeichert; beim Öffnen bleibt das Spiel pausiert.
+party_computer = Computer
+party_player = Spieler { $n }
+party_draw = Unentschieden!
+party_wins = { $player } gewinnt!
+party_turn = { $player } ist dran
+party_cross = Kreuz
+party_ring = Kreis
+party_empty = Leer
+party_matched = Paar gefunden
+party_card_value = Karte { $n }
+party_hidden = Verdeckt
+party_selection = Zeile { $row }, Spalte { $column }: { $state }
+party_board = Spielfeld. Pfeiltasten zur Auswahl, Eingabe zum Spielen.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = Schlangen
+nav_paintfight = Farbschlacht
+nav_pool = Poolbillard
+arena_snakes_rules = Steuere mit deinem Joystick in der Ecke. Mit jedem Takt wächst deine Schlange um ein Segment, im Verlauf immer schneller. Am Rand erscheint sie auf der gegenüberliegenden Seite. Meide Köpfe und Körper anderer Schlangen; deinen eigenen Schwanz darfst du kreuzen. Die letzte lebende Schlange gewinnt. Allein spielst du gegen den Computer.
+arena_paint_rules = Bemale in 45 Sekunden mehr Fläche als deine Gegner. Halte deinen Joystick zum Bewegen; lass los, um anzuhalten. Übermale fremde Farben und sammle Blitze für mehr Tempo. Sterne färben eine große Fläche in deiner Farbe. Die größte Fläche gewinnt. Allein spielst du gegen den Computer.
+arena_pool_rules = Versenke alle sieben Kugeln deiner Gruppe und danach die schwarze 8. Spieler 1 spielt die Vollen (1–7), Spieler 2 oder der Computer die Halben (9–15). Wer die 8 zu früh versenkt, verliert. Eine eigene versenkte Kugel gibt einen weiteren Stoß; ein Fehlstoß oder die versenkte weiße Kugel gibt den Zug ab.
+arena_pool_solids = Volle · 1–7
+arena_pool_stripes = Halbe · 9–15
+arena_controls = Alle Spieler können ihren eigenen Joystick gleichzeitig ziehen. Tastatur: Spieler 1 WASD, Spieler 2 Pfeile, Spieler 3 IJKL, Spieler 4 TFGH. Beim Loslassen bleibt die Richtung. Escape pausiert. Beim Schließen wird gespeichert; beim Öffnen bleibt die Runde pausiert.
+arena_pool_controls = Ziehe von der weißen Kugel zurück, um zu zielen, und lass zum Stoßen los. Weiteres Ziehen erhöht die Kraft. Die Hilfslinie zeigt die Richtung. Nutze Finger, Maus oder Trackpad. Über Pause kannst du Spieler ändern oder neu starten.
+arena_countdown = Start in { $n }…
+arena_remaining = Noch { $seconds } s
+arena_rolling = Kugeln rollen…
+arena_alive = Dabei
+arena_out = Raus
+arena_ai = KI
+arena_board = Gemeinsames Spielfeld. Jeder nutzt seinen Eck-Joystick. Beim Pool von der weißen Kugel zurückziehen und loslassen.
+
+# Mobile game catalog
+
+party_moles_race = Zuerst 30 · Tippe deine Farbe
+
+party_round_wins = Gewonnene Runden
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = Allgemein
+party_turn_badge = Am Zug
+party_playing_badge = Spielt
+party_waiting_badge = Wartet
+party_winner_badge = Gewinner
+party_finished_badge = Beendet
+party_everyone_plays = Alle spielen
+party_wins_count = Siege: { $n }
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) } %
+party_status_detail = { $status } · { $detail }
+
+home_player_count = Spieler: { $n }
+home_players_label = Spieler:
+
+nav_basketball = Basketball
+basketball_swipe = Wische den Ball zum Korb
+basketball_board = Basketballfeld
+basketball_rules = Wische einen Ball nach oben zum Korb. Richtung und Geschwindigkeit bestimmen den Wurf. Erziele in 30 Sekunden pro Spieler möglichst viele Körbe, allein in 45 Sekunden. Die Zeit beginnt beim ersten Wurf. Für Spieler auf der anderen Seite dreht sich das Spielfeld. Fliegende Bälle können nach Ablauf der Zeit noch punkten.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = Button-Fußball
+nav_dotsboxes = Käsekästchen
+nav_impostor = Hochstapler
+nav_minigolf = Minigolf
+nav_fruitmerge = Früchte fusionieren
+buttonsoccer_rules = Ziehe eine Scheibe zurück und lasse sie zum Schießen los. Nach dem Stillstand aller Figuren wechselt der Zug. Drei Tore gewinnen.
+dotsboxes_rules = Tippe auf eine freie Linie zwischen zwei Punkten. Schließe ein Kästchen, um es zu erhalten und erneut zu spielen. Die meisten Kästchen gewinnen.
+impostor_rules = Gib das Gerät weiter und decke dein Wort heimlich auf. Ein Spieler ist der Hochstapler. Tauscht Hinweise aus und stimmt gemeinsam ab.
+minigolf_rules = Ziehe den Ball zurück und lasse los. Spielt abwechselnd und nutze die Hindernisse zum Abprallen. Nach sieben Runden gewinnen die meisten Treffer.
+fruitmerge_rules = Ziehe zum Zielen und lasse eine Frucht fallen. Gleiche Früchte verschmelzen zu größeren. Halte den Stapel unter der gepunkteten Linie.
+fruitmerge_sweep = Aufräumen
+
+# Impostor: private reveal and group voting.
+impostor_word_for = Das Wort für { $player }
+impostor_hold = Zum Aufdecken gedrückt halten
+impostor_role = Du bist der Hochstapler!
+impostor_discuss = Diskussion
+impostor_clues = Nennt reihum ein Wort oder einen Satz zum geheimen Wort. Spielt 1–3 Runden im Uhrzeigersinn und besprecht dann, wer der Hochstapler sein könnte.
+impostor_vote = Abstimmen
+impostor_choose = Entscheidet gemeinsam, wer der Hochstapler ist.
+impostor_confirm = Für { $player } stimmen?
+impostor_caught = Hochstapler entlarvt!
+impostor_escaped = Der Hochstapler gewinnt!
+impostor_secret = Geheimes Wort
+impostor_pass = Weitergeben an { $player }
+impostor_hint = Kategorie dem Hochstapler zeigen
+impostor_roles = Hochstapler
+impostor_categories = Kategorien
+impostor_language = Wortsprache
+impostor_next = Nächste Runde
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = Fruchtduell
+fruitduel_rules = Tippe auf deinen farbigen Knopf, wenn eine Frucht erscheint. Die erste Klinge, die sie zerschneidet, erhält einen Punkt. Meide Geschenk, Blume und Strandball: Nach einem Fehlversuch kehrt dein Schwert langsamer zurück. Wer zuerst 10 Punkte hat, gewinnt. Spiele allein gegen den Computer oder mit bis zu vier Personen.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

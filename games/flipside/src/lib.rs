@@ -3,6 +3,7 @@
 use day_localization_ui::tr;
 use day_pieces::prelude::*;
 use day_spec::Key;
+use game_resources::res;
 use gamekit::chrome::{self, Feedback, Help, Sfx, cues, sfx};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
@@ -23,6 +24,8 @@ pub const SOUNDS: &[Sfx] = &[sfx("sounds/flipside/place.wav")];
 #[derive(Clone, Serialize, Deserialize, Default)]
 struct Settings {
     shell: chrome::GameSettings,
+    #[serde(default)]
+    difficulty: Option<usize>,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum Overlay {
@@ -51,7 +54,7 @@ struct Ui {
     sounds: Signal<bool>,
     vibrations: Signal<bool>,
     focus: Signal<bool>,
-    mode: Signal<usize>,
+    fixed_players: bool,
     difficulty: Signal<usize>,
 }
 impl Ui {
@@ -70,6 +73,11 @@ impl Ui {
         self.cue(&cues::SELECT);
     }
     fn push(&self, overlay: Overlay) {
+        if overlay == Overlay::NewGame && self.fixed_players {
+            let mode = self.game.borrow().mode;
+            self.start(mode, self.difficulty.get_untracked());
+            return;
+        }
         self.back.set(self.overlay.get_untracked());
         self.show(overlay);
     }
@@ -112,12 +120,9 @@ impl Ui {
         self.cue(&PLACE);
         self.repaint.notify();
     }
-    fn start(&self) {
-        *self.game.borrow_mut() = SaveState::new(
-            self.mode.get_untracked(),
-            self.difficulty.get_untracked(),
-            gamekit::seed(),
-        );
+    fn start(&self, mode: usize, difficulty: usize) {
+        *self.game.borrow_mut() = SaveState::new(mode, difficulty, gamekit::seed());
+        self.difficulty.set(difficulty);
         self.cursor.set(19);
         self.age.set(1.0);
         self.flipped.set(0);
@@ -230,13 +235,24 @@ fn restore_renamed<T: Serialize + DeserializeOwned>(key: &str, old: &str) -> Opt
 }
 
 pub fn flipside_page() -> AnyPiece {
+    flipside_page_for_players(None)
+}
+
+pub fn flipside_page_for_players(players: Option<usize>) -> AnyPiece {
     let settings = restore_renamed::<Settings>(SETTINGS, OLD_SETTINGS).unwrap_or_default();
-    let game = restore_renamed::<SaveState>(SAVE, OLD_SAVE)
-        .and_then(SaveState::apply_save)
-        .unwrap_or_else(|| SaveState::new(0, 1, gamekit::seed()));
+    let saved = restore_renamed::<SaveState>(SAVE, OLD_SAVE).and_then(SaveState::apply_save);
+    let difficulty = settings
+        .difficulty
+        .filter(|&level| level <= 2)
+        .or_else(|| saved.as_ref().map(|g| g.difficulty))
+        .unwrap_or(1);
+    let mode = usize::from(players.is_some_and(|p| p > 1));
+    let game = saved
+        .filter(|g| players.is_none() || g.mode == mode)
+        .unwrap_or_else(|| SaveState::new(mode, difficulty, gamekit::seed()));
     let ui = Rc::new(Ui {
-        mode: Signal::new(game.mode),
-        difficulty: Signal::new(game.difficulty),
+        fixed_players: players.is_some(),
+        difficulty: Signal::new(difficulty),
         before: Cell::new(game.board),
         game: RefCell::new(game),
         overlay: Signal::new(Overlay::None),
@@ -265,9 +281,12 @@ pub fn flipside_page() -> AnyPiece {
     Effect::new({
         let u = ui.clone();
         move || {
+            let difficulty = u.difficulty.get();
+            u.game.borrow_mut().difficulty = difficulty;
             gamekit::save(
                 SETTINGS,
                 &Settings {
+                    difficulty: Some(difficulty),
                     shell: chrome::GameSettings {
                         sounds: u.sounds.get(),
                         vibrations: u.vibrations.get(),
@@ -528,6 +547,25 @@ fn overlays(ui: Rc<Ui>) -> AnyPiece {
     );
     zstack((scrim, cards)).any()
 }
+fn difficulty_picker(selection: Signal<usize>) -> AnyPiece {
+    column((
+        label(res::str::fs_difficulty()).color(chrome::TEXT),
+        picker(
+            selection,
+            [
+                (0, res::str::fs_easy()),
+                (1, res::str::fs_medium()),
+                (2, res::str::fs_hard()),
+            ],
+        )
+        .segmented()
+        .id(id!(fs_difficulty)),
+    ))
+    .spacing(8.0)
+    .align(HAlign::Center)
+    .any()
+}
+
 fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
     if kind == Overlay::Help {
         return chrome::instructions_card(
@@ -580,30 +618,24 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
             items.push(chrome::close_game_button(chrome::RED, id!(fs_quit)));
         }
         Overlay::NewGame => {
+            // Commit the desktop setup choices only when Start is pressed.
+            let mode = Signal::new(ui.game.borrow().mode);
+            let difficulty = Signal::new(ui.difficulty.get_untracked());
             items.push(chrome::card_title(tr("gk_new_game"), Color::WHITE));
             items.push(label(tr("fs_mode")).color(chrome::TEXT).any());
             items.push(
-                picker(ui.mode, [(0, tr("fs_solo")), (1, tr("fs_two_players"))])
+                picker(mode, [(0, tr("fs_solo")), (1, tr("fs_two_players"))])
                     .segmented()
                     .id(id!(fs_mode))
                     .any(),
             );
-            items.push(label(tr("fs_difficulty")).color(chrome::TEXT).any());
-            items.push(
-                picker(
-                    ui.difficulty,
-                    [(0, tr("fs_easy")), (1, tr("fs_medium")), (2, tr("fs_hard"))],
-                )
-                .segmented()
-                .id(id!(fs_difficulty))
-                .any(),
-            );
+            items.push(difficulty_picker(difficulty));
             let u = ui.clone();
             items.push(chrome::menu_button(
                 tr("fs_start"),
                 chrome::GREEN,
                 id!(fs_start),
-                move || u.start(),
+                move || u.start(mode.get_untracked(), difficulty.get_untracked()),
             ));
             let u = ui.clone();
             items.push(chrome::menu_button(
@@ -615,6 +647,9 @@ fn overlay_card(ui: Rc<Ui>, kind: Overlay) -> AnyPiece {
         }
         Overlay::Settings => {
             items.push(chrome::card_title(tr("gk_settings"), Color::WHITE));
+            if ui.game.borrow().mode == 0 {
+                items.push(difficulty_picker(ui.difficulty));
+            }
             items.push(chrome::setting_row(
                 tr("gk_sounds"),
                 toggle(ui.sounds).id(id!(fs_sounds)).any(),

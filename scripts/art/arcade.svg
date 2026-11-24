@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+  <!-- SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception -->
+  <!-- All drawings use a 100-unit square. Player pieces inherit their team's color. -->
+  <defs>
+    <radialGradient id="fur" cx=".33" cy=".22" r=".8"><stop stop-color="#bc8e70"/><stop offset=".65" stop-color="#92644e"/><stop offset="1" stop-color="#63463f"/></radialGradient>
+    <linearGradient id="metal" x2=".8" y2="1"><stop stop-color="#effdff"/><stop offset=".46" stop-color="#b5e6ed"/><stop offset=".49" stop-color="#e8faff"/><stop offset="1" stop-color="#71a1bf"/></linearGradient>
+    <g id="cross" fill="none" stroke-linecap="round"><path d="M24 24l52 52m0-52L24 76" stroke="#502d40" stroke-width="23"/><path d="M24 22l52 52m0-52L24 74" stroke="#ff7565" stroke-width="15"/><path d="M25 20l16 16m31-14L59 35" stroke="#ffc4a3" stroke-width="4"/></g>
+    <g id="ring" fill="none"><circle cx="50" cy="51" r="34" stroke="#173b54" stroke-width="22"/><circle cx="50" cy="49" r="34" stroke="#40d1e3" stroke-width="15"/><path d="M22 38q6-17 23-20" stroke="#bdffff" stroke-width="4" stroke-linecap="round"/></g>
+    <g id="hole"><ellipse cx="50" cy="67" rx="46" ry="23" fill="#ac7958"/><ellipse cx="50" cy="63" rx="44" ry="22" fill="#513a3a"/><ellipse cx="50" cy="66" rx="37" ry="16" fill="#2d2631"/><path d="M9 68q13 22 47 19" fill="none" stroke="#e4ab71" stroke-width="3"/></g>
+    <g id="mole" stroke="#49363a" stroke-width="3.5" stroke-linejoin="round">
+      <path d="M14 83Q12 63 19 46Q12 28 27 29Q46 10 70 28Q87 23 83 43Q90 61 85 84Q51 99 14 83Z" fill="url(#fur)"/>
+      <path d="M18 39q32-17 66 0l-2 10q-30-12-64 0Z" fill="currentColor"/>
+      <path d="M78 40l13-9 6 6-12 8 10 7-4 6-11-10" fill="currentColor"/>
+      <ellipse cx="50" cy="69" rx="23" ry="13" fill="#dfac86" stroke="none"/>
+      <path d="M43 61q8-5 15 0-3 9-8 8-6-1-7-8Z" fill="#422e37"/>
+      <g fill="#29232c" stroke="none"><ellipse cx="33" cy="54" rx="4" ry="5"/><ellipse cx="66" cy="54" rx="4" ry="5"/></g>
+      <g fill="#fff1d9" stroke="none"><circle cx="32" cy="52" r="1.5"/><circle cx="65" cy="52" r="1.5"/></g>
+      <path d="M23 64l-9-2m10 7-8 2m60-6 9-3m-8 7 8 2" fill="none" stroke-width="2"/>
+    </g>
+    <g id="coil"><circle cx="50" cy="50" r="45" fill="currentColor" stroke="#233844" stroke-width="6"/><path d="M24 36q23-24 48-5" stroke="#fff" opacity=".33" fill="none" stroke-width="8" stroke-linecap="round"/><path d="M22 72q35 28 62-9" fill="none" stroke="#183245" opacity=".23" stroke-width="7"/></g>
+    <g id="snake"><path d="M38 78l12 10 12-10m-12 9v9" fill="none" stroke="#f27879" stroke-width="4" stroke-linecap="round"/><path d="M16 41Q17 6 50 7t35 35q1 35-35 44Q14 77 16 41Z" fill="currentColor" stroke="#243946" stroke-width="5"/><path d="M27 27q10-12 24-12" stroke="white" opacity=".4" stroke-width="5" fill="none" stroke-linecap="round"/><g fill="#fff6db" stroke="#334152" stroke-width="2"><ellipse cx="32" cy="51" rx="11" ry="13"/><ellipse cx="68" cy="51" rx="11" ry="13"/></g><g fill="#243345"><ellipse cx="35" cy="56" rx="5" ry="7"/><ellipse cx="65" cy="56" rx="5" ry="7"/><circle cx="44" cy="75" r="2"/><circle cx="56" cy="75" r="2"/></g></g>
+    <g id="roller" stroke="#263747" stroke-linejoin="round"><path d="M80 29h9v22L53 63v13" fill="none" stroke-width="8"/><path d="M80 29h9v22L53 63v13" fill="none" stroke="#c9e1df" stroke-width="4"/><rect x="44" y="70" width="17" height="26" rx="7" fill="currentColor" stroke-width="4"/><rect x="8" y="12" width="72" height="34" rx="11" fill="currentColor" stroke-width="4"/><path d="M18 19h44" stroke="white" opacity=".6" stroke-width="4" stroke-linecap="round"/><path d="M15 37q9 4 16 0t16 0 16 0 12 0" fill="none" opacity=".3" stroke-width="3"/></g>
+    <path id="star" d="M50 5l12 29 32 3-24 22 7 32-27-16-28 16 7-32L6 37l32-3Z" fill="#ffca54" stroke="#825037" stroke-linejoin="round" stroke-width="4"/>
+    <g id="selection" fill="none"><circle cx="50" cy="50" r="43" stroke="#193b4c" stroke-width="8" opacity=".7"/><circle cx="50" cy="50" r="43" stroke="#fff2ae" stroke-width="5" stroke-dasharray="19 8"/></g>
+    <g id="back"><rect x="7" y="5" width="86" height="90" rx="13" fill="#21394e" stroke="#142c40" stroke-width="4"/><rect x="13" y="11" width="74" height="76" rx="9" fill="#377c91" stroke="#8bd0ca" stroke-width="2"/><path d="M50 21l27 28-27 27-27-27Z" fill="#225268" stroke="#6fbbb8" stroke-width="3"/><path d="M50 31l6 13 12 5-12 6-6 12-6-12-12-6 12-5Z" fill="#ffdc98"/></g>
+    <g id="gift" stroke="#643c50" stroke-width="3.5"><rect x="14" y="34" width="72" height="55" rx="6" fill="#e45f75"/><rect x="9" y="28" width="82" height="19" rx="4" fill="#fe8f8d"/><path d="M44 28h13v61H44Z" fill="#ffd678"/><path d="M50 29Q15 29 28 12q9-11 22 17Zm0 0q33 0 22-16-11-12-22 16Z" fill="#ffd678"/></g>
+    <g id="flower"><g fill="#ec7897" stroke="#683c55" stroke-width="3"><ellipse id="petal" cx="50" cy="27" rx="13" ry="22"/><use xlink:href="#petal" transform="rotate(72 50 50)"/><use xlink:href="#petal" transform="rotate(144 50 50)"/><use xlink:href="#petal" transform="rotate(216 50 50)"/><use xlink:href="#petal" transform="rotate(288 50 50)"/></g><circle cx="50" cy="50" r="18" fill="#ffc857" stroke="#795039" stroke-width="3"/><circle cx="45" cy="45" r="5" fill="#ffeb97"/></g>
+    <g id="beach"><circle cx="50" cy="50" r="44" fill="#ffdf83"/><path d="M28 13Q62 30 90 65q-7 16-20 23Q63 48 28 13Z" fill="#e96665"/><path d="M27 13Q36 43 26 87 9 75 7 59q10-24 20-46Z" fill="#46bdc6"/><circle cx="31" cy="21" r="7" fill="#ffefcf"/><circle cx="50" cy="50" r="44" fill="none" stroke="#354356" stroke-width="4"/></g>
+    <g id="blade"><path d="M39 98C58 67 58 30 14 2c33 4 60 24 65 54q3 24-19 42Z" fill="currentColor" stroke="#304859" stroke-width="3"/><path d="M27 9q48 25 30 82 34-49-30-82Z" fill="#f2fcff" opacity=".68"/></g>
+    <!-- The scimitar uses a 100 by 256 canvas with its grip centered at (39, 208). -->
+    <g id="scimitar" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M31 182C31 153 21 127 26 99C31 66 54 32 92 5C68 45 57 76 51 108C46 136 46 161 47 182Z" fill="url(#metal)" stroke="#294455" stroke-width="2.8"/>
+      <path d="M32 173C32 147 24 124 29 100C34 69 52 40 81 17C53 52 40 83 37 110C34 136 37 155 37 173Z" fill="#f2ffff"/>
+      <path d="M42 165C40 138 38 120 44 94C49 72 58 51 69 35C56 66 49 90 46 114Z" fill="#77a6b8"/>
+      <path d="M31 180Q39 183 47 179L47 195Q45 213 49 229L42 237L29 232Q35 211 31 195Z" fill="currentColor" stroke="#443741" stroke-width="3"/>
+      <path d="M33 197l12-5m-12 13 12-5m-12 13 12-5m-12 13 13-5m-14 13 14-5" stroke="#402f3d" opacity=".62" stroke-width="3"/>
+      <path d="M11 176Q19 183 31 177L38 173L46 177Q53 180 63 174Q67 170 69 174Q72 183 60 185L47 185L41 191L34 186Q25 183 18 188Q9 192 7 183Q6 178 11 176Z" fill="#e6aa52" stroke="#553e38" stroke-width="2.8"/>
+      <path d="M15 182Q24 184 35 179L39 177L46 181M52 182l10-3" fill="none" stroke="#ffe7a0" stroke-width="2.2"/>
+      <path d="M30 228Q39 232 48 225Q48 234 56 235Q52 246 38 244Q27 242 27 236Z" fill="#e6aa52" stroke="#553e38" stroke-width="2.8"/>
+      <path d="M31 235q8 6 17 2" fill="none" stroke="#ffe7a0" stroke-width="2.5"/>
+    </g>
+  </defs>
+</svg>

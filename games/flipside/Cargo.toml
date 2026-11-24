@@ -10,6 +10,7 @@ license = "Apache-2.0"
 # plain `{ workspace = true }` (or git) line and call the builder from `use day::prelude::*` code.
 
 [dependencies]
+game-resources = { path = "../../game-resources" }
 day-pieces = "0.*"
 day-spec = "0.*"
 day-core = "0.*"

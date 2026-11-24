@@ -444,3 +444,118 @@ mt_help_goals = Setiap level menampilkan tujuannya di bawah skor: capai skor tar
 mt_help_keys = Gunakan panah dan Enter untuk memilih dan menukar. H menyorot tukaran yang sah; Enter memainkannya. Jeda membuka pengaturan, aturan, dan ulangi level. Suara, getaran, dan pengurangan gerakan bisa diatur. Papan dan progresmu tersimpan otomatis.
 mt_complete_detail = Kamu bisa mengulang level mana pun untuk memperbaiki skor dan bintangmu.
 mt_matching = Mencocokkan…
+
+# Local party games
+nav_tictactoe = Tic-Tac-Toe
+nav_memory = Memori
+nav_moles = Pukul Tikus Tanah
+party_ttt_rules = Susun tiga tanda yang sama dalam satu baris, kolom, atau diagonal. Pemain 1 memakai silang; pemain 2 memakai lingkaran. Mode solo menambahkan lawan komputer.
+party_memory_rules = Buka dua kartu. Gambar yang sama memberi satu pasangan dan giliran lagi. Jika berbeda, giliran berpindah. Temukan 15 pasangan; yang terbanyak menang. Mode solo menambahkan lawan komputer.
+party_moles_rules = Ketuk tikus tanah dengan warna Anda. Semua bermain bersamaan; warna pertama mencapai 30 menang. Setiap tikus memberi satu poin. Bermain sendiri melawan komputer.
+party_controls = Ketuk kotak, atau pilih dengan tombol panah lalu tekan Enter atau Spasi. Escape menjeda. Permainan disimpan saat ditutup dan dibuka kembali dalam keadaan dijeda.
+party_computer = Komputer
+party_player = Pemain { $n }
+party_draw = Seri!
+party_wins = { $player } menang!
+party_turn = Giliran { $player }
+party_cross = Silang
+party_ring = Lingkaran
+party_empty = Kosong
+party_matched = Pasangan ditemukan
+party_card_value = Kartu { $n }
+party_hidden = Tertutup
+party_selection = Baris { $row }, kolom { $column }: { $state }
+party_board = Papan permainan. Gunakan panah untuk memilih, Enter untuk bermain.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = Ular
+nav_paintfight = Perang Cat
+nav_pool = Biliar
+arena_snakes_rules = Kendalikan dengan joystick di sudutmu. Ular bertambah panjang setiap ketukan, semakin cepat seiring ronde berlangsung. Lewati tepi untuk muncul di sisi seberang. Hindari kepala dan tubuh ular lain; ekormu sendiri boleh dilewati. Ular terakhir yang hidup menang. Mode solo melawan komputer.
+arena_paint_rules = Cat area lebih luas daripada lawan dalam 45 detik. Tahan joystick untuk bergerak; lepaskan untuk berhenti. Timpa warna lawan dan kumpulkan petir untuk menambah kecepatan. Bintang mengecat area luas dengan warnamu. Area terluas menang. Mode solo menambahkan lawan komputer.
+arena_pool_rules = Masukkan ketujuh bola kelompokmu, lalu bola hitam 8. Pemain 1 memakai bola polos (1–7); pemain 2 atau komputer memakai bola bergaris (9–15). Memasukkan bola 8 terlalu awal membuatmu kalah. Memasukkan bola sendiri memberi tembakan lagi; gagal atau memasukkan bola putih memindahkan giliran.
+arena_pool_solids = Polos · 1–7
+arena_pool_stripes = Garis · 9–15
+arena_controls = Semua pemain dapat menyeret joystick masing-masing bersamaan. Keyboard: pemain 1 WASD, pemain 2 panah, pemain 3 IJKL, pemain 4 TFGH. Lepas untuk tetap melaju searah. Escape menjeda. Ronde disimpan saat ditutup dan dibuka dalam keadaan dijeda.
+arena_pool_controls = Seret ke belakang dari bola putih untuk membidik, lalu lepas untuk menembak. Tarikan lebih jauh memberi tenaga lebih besar. Garis menunjukkan arah. Gunakan jari, mouse, atau trackpad. Jeda untuk mengganti pemain atau mengulang.
+arena_countdown = Mulai dalam { $n }…
+arena_remaining = Tersisa { $seconds } dtk
+arena_rolling = Bola bergerak…
+arena_alive = Aktif
+arena_out = Keluar
+arena_ai = AI
+arena_board = Arena bersama. Tiap pemain memakai joystick sudutnya; di Biliar, seret ke belakang dari bola putih lalu lepas.
+
+# Mobile game catalog
+
+party_moles_race = Pertama ke 30 · Ketuk warna Anda
+
+party_round_wins = Kemenangan ronde
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = Umum
+party_turn_badge = Giliran
+party_playing_badge = Bermain
+party_waiting_badge = Menunggu
+party_winner_badge = Pemenang
+party_finished_badge = Selesai
+party_everyone_plays = Semua bermain
+party_wins_count = { $n } kemenangan
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status } · { $detail }
+
+home_player_count = Pemain: { $n }
+home_players_label = Pemain:
+
+nav_basketball = Lempar Basket
+basketball_swipe = Usap bola ke arah ring
+basketball_board = Lapangan basket
+basketball_rules = Usap bola ke atas menuju ring. Arah dan kecepatan usapan menentukan tembakan. Cetak sebanyak mungkin poin dalam 30 detik per pemain, atau 45 detik untuk solo. Waktu mulai saat tembakan pertama. Lapangan berputar untuk pemain di sisi seberang. Bola yang masih melayang tetap bisa mencetak poin setelah waktu habis.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = Sepak bola kancing
+nav_dotsboxes = Titik dan kotak
+nav_impostor = Penyusup
+nav_minigolf = Golf mini
+nav_fruitmerge = Gabung buah
+buttonsoccer_rules = Tarik keping ke belakang lalu lepaskan untuk menembak. Giliran berganti setelah semua keping berhenti. Cetak tiga gol untuk menang.
+dotsboxes_rules = Ketuk garis kosong di antara dua titik. Lengkapi kotak untuk merebutnya dan bermain lagi. Kotak terbanyak menang.
+impostor_rules = Oper perangkat dan lihat kata secara rahasia. Satu pemain adalah penyusup. Diskusikan petunjuk lalu pilih siapa penyusupnya.
+minigolf_rules = Tarik bola ke belakang lalu lepaskan. Bergiliran memanfaatkan pantulan. Setelah tujuh ronde, tembakan berhasil terbanyak menang.
+fruitmerge_rules = Geser untuk membidik lalu lepaskan buah. Buah yang sama bergabung menjadi lebih besar. Jaga tumpukan di bawah garis putus-putus.
+fruitmerge_sweep = Bersihkan
+
+# Impostor: private reveal and group voting.
+impostor_word_for = Kata untuk { $player }
+impostor_hold = Tahan untuk membuka
+impostor_role = Kamu penyusupnya!
+impostor_discuss = Diskusi
+impostor_clues = Bergiliran ucapkan kata atau frasa terkait kata rahasia. Mainkan 1–3 putaran searah jarum jam, lalu diskusikan siapa penyusupnya.
+impostor_vote = Pilih
+impostor_choose = Putuskan bersama siapa penyusupnya.
+impostor_confirm = Pilih { $player }?
+impostor_caught = Penyusup terungkap!
+impostor_escaped = Penyusup menang!
+impostor_secret = Kata rahasia
+impostor_pass = Berikan kepada { $player }
+impostor_hint = Tampilkan kategori ke penyusup
+impostor_roles = Penyusup
+impostor_categories = Kategori
+impostor_language = Bahasa kata
+impostor_next = Putaran berikutnya
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = Duel Buah
+fruitduel_rules = Ketuk tombol berwarnamu saat buah muncul. Pedang pertama yang memotongnya mendapat satu poin. Hindari hadiah, bunga, dan bola pantai: salah ketuk membuat pedang kembali lebih lambat. Yang pertama meraih 10 poin menang. Bermain sendiri melawan komputer atau bersama hingga empat pemain.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

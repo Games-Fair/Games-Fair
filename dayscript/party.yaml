@@ -1,0 +1,123 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# Native shell, catalog-selected player counts, keyboard input, pause and save restoration.
+# Run with --locale en --env DAY_GAMES_SEED=15. Safe to rerun with existing saves.
+name: party
+flow:
+  - tap: { id: home_players_2 }
+  - navigate: { route: tictactoe }
+  - tap: { id: tictactoe_help_done, if_present: true }
+  - tap: { id: tictactoe_pause }
+  - tap: { id: tictactoe_new_game, if_present: true }
+  - tap: { id: tictactoe_change_players, if_present: true }
+  - key: { id: tictactoe_board, key: Enter }
+  - key: { id: tictactoe_board, key: ArrowDown }
+  - key: { id: tictactoe_board, key: Enter }
+  - key: { id: tictactoe_board, key: ArrowUp }
+  - key: { id: tictactoe_board, key: ArrowRight }
+  - key: { id: tictactoe_board, key: Enter }
+  - key: { id: tictactoe_board, key: ArrowDown }
+  - key: { id: tictactoe_board, key: Enter }
+  - key: { id: tictactoe_board, key: ArrowUp }
+  - key: { id: tictactoe_board, key: ArrowRight }
+  - key: { id: tictactoe_board, key: Enter }
+  - pause: { secs: 1.3 }
+  - assert_visible: { id: tictactoe_play_again }
+  - screenshot: tictactoe-win
+  - nav_back: {}
+  - tap: { id: home_players_4 }
+  - navigate: { route: memory }
+  - tap: { id: memory_help_done, if_present: true }
+  - tap: { id: memory_pause }
+  - tap: { id: memory_new_game, if_present: true }
+  - tap: { id: memory_change_players, if_present: true }
+  - key: { id: memory_board, key: Enter }
+  - screenshot: memory-four-players
+  - tap: { id: memory_pause }
+  - key: { id: memory_board, key: ArrowRight }
+  - key: { id: memory_board, key: Enter }
+  - nav_back: {}
+  - tap: { id: home_players_4 }
+  - navigate: { route: memory }
+  - assert_visible: { id: memory_resume }
+  - tap: { id: memory_resume }
+  - nav_back: {}
+  - tap: { id: home_players_4 }
+  - navigate: { route: moles }
+  - tap: { id: moles_help_done, if_present: true }
+  - tap: { id: moles_pause }
+  - tap: { id: moles_new_game, if_present: true }
+  - tap: { id: moles_change_players, if_present: true }
+  - pause: { secs: 3.2 }
+  - pause: { secs: 0.3 }
+  - tap: { id: moles_pause }
+  - tap: { id: moles_settings }
+  - assert_visible: { id: moles_sounds }
+  - tap: { id: moles_done }
+  - tap: { id: moles_resume }
+  - screenshot: moles-round
+  - nav_back: {}
+  - tap: { id: home_players_4 }
+  - navigate: { route: snakes }
+  - tap: { id: snakes_help_done, if_present: true }
+  - tap: { id: snakes_pause }
+  - tap: { id: snakes_new_game, if_present: true }
+  - tap: { id: snakes_change_players, if_present: true }
+  - key: { id: snakes_board, key: a, phase: down }
+  - key: { id: snakes_board, key: ArrowRight, phase: down }
+  - pause: { secs: 4 }
+  - key: { id: snakes_board, key: a, phase: up }
+  - key: { id: snakes_board, key: ArrowRight, phase: up }
+  - screenshot: snakes-four-players
+  - tap: { id: snakes_pause }
+  - nav_back: {}
+  - tap: { id: home_players_4 }
+  - navigate: { route: snakes }
+  - assert_visible: { id: snakes_resume }
+  - nav_back: {}
+  - tap: { id: home_players_4 }
+  - navigate: { route: paintfight }
+  - tap: { id: paintfight_help_done, if_present: true }
+  - tap: { id: paintfight_pause }
+  - tap: { id: paintfight_new_game, if_present: true }
+  - tap: { id: paintfight_change_players, if_present: true }
+  - key: { id: paintfight_board, key: a, phase: down }
+  - key: { id: paintfight_board, key: ArrowRight, phase: down }
+  - pause: { secs: 5 }
+  - key: { id: paintfight_board, key: a, phase: up }
+  - key: { id: paintfight_board, key: ArrowRight, phase: up }
+  - screenshot: paintfight-four-players
+  - tap: { id: paintfight_pause }
+  - tap: { id: paintfight_settings }
+  - assert_visible: { id: paintfight_sounds }
+  - tap: { id: paintfight_done }
+  - nav_back: {}
+  - tap: { id: home_players_2 }
+  - navigate: { route: pool }
+  - tap: { id: pool_help_done, if_present: true }
+  - tap: { id: pool_pause }
+  - tap: { id: pool_new_game, if_present: true }
+  - tap: { id: pool_change_players, if_present: true }
+  - screenshot: pool-opening
+  - tap: { id: pool_pause }
+  - tap: { id: pool_instructions }
+  - assert_visible: { id: pool_help_done }
+  - tap: { id: pool_help_done }
+  - tap: { id: pool_resume }
+  - nav_back: {}
+  # Charades: the decks, then a card from a round started by hand (dayscript/charades.yaml
+  # explains why tilting goes off first).
+  - navigate: { route: charades }
+  - pause: { secs: 0.6 }
+  - screenshot: { name: charades, title: Charades, caption: "Hold the phone to your forehead, let your friends give clues, and nod when you guess right.", source: games/charades/src/lib.rs }
+  - tap: { id: ch_settings }
+  - pause: { secs: 0.4 }
+  - toggle: { id: ch_tilt, value: false }
+  - tap: { id: ch_done }
+  - pause: { secs: 0.4 }
+  - tap: { id: 'ch_deck:animals' }
+  - pause: { secs: 0.5 }
+  - tap: { id: ch_start }
+  - pause: { secs: 3.6 }
+  - screenshot: charades-card
+  - nav_back: {}
+  - pause: { secs: 0.6 }

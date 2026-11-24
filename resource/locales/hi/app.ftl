@@ -453,3 +453,118 @@ mt_help_goals = हर स्तर स्कोर के नीचे अप�
 mt_help_keys = चुनने और अदला-बदली के लिए तीर और Enter इस्तेमाल करें। H एक मान्य अदला-बदली दिखाता है; Enter उसे खेलता है। रोकें से सेटिंग्स, नियम और फिर से खेलना खुलते हैं। ध्वनियाँ, कंपन और कम एनीमेशन बदले जा सकते हैं। आपका बोर्ड और प्रगति अपने-आप सहेजे जाते हैं।
 mt_complete_detail = स्कोर और तारे बेहतर करने के लिए आप कोई भी स्तर फिर से खेल सकते हैं।
 mt_matching = मिलान हो रहा है…
+
+# Local party games
+nav_tictactoe = टिक-टैक-टो
+nav_memory = याददाश्त
+nav_moles = छछूँदर पकड़ो
+party_ttt_rules = एक पंक्ति, स्तंभ या तिरछी रेखा में तीन समान निशान लगाएँ। खिलाड़ी 1 का निशान क्रॉस और खिलाड़ी 2 का गोला है। अकेले खेलने पर कंप्यूटर प्रतिद्वंद्वी होगा।
+party_memory_rules = दो कार्ड खोलें। समान चित्रों से एक जोड़ी और एक और बारी मिलती है। अलग चित्रों पर बारी आगे जाती है। सभी 15 जोड़ियाँ खोजें; सबसे अधिक जोड़ियाँ जीतती हैं। अकेले खेलने पर कंप्यूटर प्रतिद्वंद्वी होगा।
+party_moles_rules = अपने रंग के छछूंदरों पर टैप करें। सभी एक साथ खेलते हैं; पहले 30 अंक पाने वाला रंग जीतता है। हर छछूंदर से एक अंक मिलता है। अकेले खेलने पर कंप्यूटर प्रतिद्वंद्वी होता है।
+party_controls = खाना छुएँ या तीर कुंजियों से चुनकर Enter या स्पेस दबाएँ। Escape से विराम लगता है। बंद करने पर खेल सहेजा जाता है और दोबारा खोलने पर विराम में रहता है।
+party_computer = कंप्यूटर
+party_player = खिलाड़ी { $n }
+party_draw = बराबरी!
+party_wins = { $player } जीता!
+party_turn = { $player } की बारी
+party_cross = क्रॉस
+party_ring = गोला
+party_empty = खाली
+party_matched = जोड़ी मिल गई
+party_card_value = कार्ड { $n }
+party_hidden = उल्टा कार्ड
+party_selection = पंक्ति { $row }, स्तंभ { $column }: { $state }
+party_board = खेल का बोर्ड। तीर से चुनें, Enter से खेलें।
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = साँप
+nav_paintfight = रंगों की लड़ाई
+nav_pool = पूल
+arena_snakes_rules = अपने कोने के जॉयस्टिक से चलाएँ। हर धड़कन पर साँप लंबा होता है और समय के साथ तेज़ी से बढ़ता है। किनारा पार करने पर दूसरी ओर दिखाई देता है। दूसरे साँपों के सिर और शरीर से बचें; अपनी पूँछ पार कर सकते हैं। आखिरी जीवित साँप जीतता है। अकेले खेलने पर कंप्यूटर प्रतिद्वंद्वी होता है।
+arena_paint_rules = 45 सेकंड में दूसरों से अधिक क्षेत्र रंगें। चलने के लिए अपना जॉयस्टिक दबाए रखें और रुकने के लिए छोड़ें। विरोधी रंगों पर रंग चढ़ाएँ और गति बढ़ाने के लिए बिजली के चिह्न लें। तारे लेने से बड़ा क्षेत्र आपके रंग में रंग जाता है। सबसे बड़ा क्षेत्र जीतता है। अकेले खेलने पर कंप्यूटर प्रतिद्वंद्वी होगा।
+arena_pool_rules = अपने समूह की सातों गेंदें और फिर काली 8 नंबर की गेंद पॉकेट में डालें। खिलाड़ी 1 की सादी गेंदें (1–7) हैं; खिलाड़ी 2 या कंप्यूटर की धारीदार गेंदें (9–15) हैं। 8 नंबर की गेंद पहले डालने पर हार होगी। अपनी गेंद डालने पर एक और शॉट मिलता है; चूकने या सफेद गेंद डालने पर बारी बदलती है।
+arena_pool_solids = सादी · 1–7
+arena_pool_stripes = धारीदार · 9–15
+arena_controls = सभी खिलाड़ी अपने जॉयस्टिक एक साथ खींच सकते हैं। कीबोर्ड: खिलाड़ी 1 WASD, खिलाड़ी 2 तीर, खिलाड़ी 3 IJKL, खिलाड़ी 4 TFGH। छोड़ने पर दिशा बनी रहती है। Escape से विराम। बंद करने पर दौर सहेजा जाता है और दोबारा विराम में खुलता है।
+arena_pool_controls = निशाना लगाने के लिए सफेद गेंद से पीछे खींचें और शॉट के लिए छोड़ें। अधिक खींचने पर अधिक ताकत मिलेगी। रेखा दिशा दिखाती है। उँगली, माउस या ट्रैकपैड इस्तेमाल करें। खिलाड़ी बदलने या फिर शुरू करने के लिए विराम दें।
+arena_countdown = { $n } में शुरू…
+arena_remaining = { $seconds } सेकंड बाकी
+arena_rolling = गेंदें चल रही हैं…
+arena_alive = खेल में
+arena_out = बाहर
+arena_ai = एआई
+arena_board = साझा खेल क्षेत्र। हर खिलाड़ी अपने कोने का जॉयस्टिक चलाता है; पूल में सफेद गेंद से पीछे खींचकर छोड़ें।
+
+# Mobile game catalog
+
+party_moles_race = पहले 30 अंक · अपना रंग टैप करें
+
+party_round_wins = जीते गए राउंड
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = सामान्य
+party_turn_badge = बारी
+party_playing_badge = खेल रहे हैं
+party_waiting_badge = प्रतीक्षा
+party_winner_badge = विजेता
+party_finished_badge = समाप्त
+party_everyone_plays = सभी साथ खेलें
+party_wins_count = { $n } जीत
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status } · { $detail }
+
+home_player_count = खिलाड़ी: { $n }
+home_players_label = खिलाड़ी:
+
+nav_basketball = बास्केटबॉल
+basketball_swipe = गेंद को बास्केट की ओर स्वाइप करें
+basketball_board = बास्केटबॉल कोर्ट
+basketball_rules = शॉट के लिए गेंद को ऊपर बास्केट की ओर स्वाइप करें। दिशा और गति से शॉट नियंत्रित होता है। हर खिलाड़ी को 30 सेकंड, अकेले खेलने पर 45 सेकंड मिलते हैं। समय पहले शॉट से शुरू होता है। दूसरी ओर के खिलाड़ी की बारी पर कोर्ट घूमता है। समय समाप्त होने पर हवा में मौजूद गेंद भी अंक दिला सकती है।
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = बटन फ़ुटबॉल
+nav_dotsboxes = बिंदु और डिब्बे
+nav_impostor = छिपा खिलाड़ी
+nav_minigolf = मिनी गोल्फ़
+nav_fruitmerge = फल मिलाएँ
+buttonsoccer_rules = गोटी को पीछे खींचें और शॉट के लिए छोड़ें। सभी गोटियाँ रुकने पर बारी बदलती है। तीन गोल करके जीतें।
+dotsboxes_rules = दो बिंदुओं के बीच खाली रेखा पर टैप करें। डिब्बा पूरा करने पर वह आपका होता है और फिर बारी मिलती है। सबसे अधिक डिब्बे जीतते हैं।
+impostor_rules = डिवाइस आगे दें और अपना शब्द गुप्त रूप से देखें। एक खिलाड़ी छिपा हुआ है। संकेतों पर चर्चा करके उसे चुनें।
+minigolf_rules = गेंद पीछे खींचें और छोड़ें। बारी-बारी से बाधाओं से उछाल लेकर गेंद डालें। सात दौर के बाद सबसे अधिक सफल शॉट वाला जीतता है।
+fruitmerge_rules = निशाना लगाने के लिए खींचें और फल छोड़ें। समान फल मिलकर बड़ा फल बनते हैं। ढेर को बिंदु वाली रेखा से नीचे रखें।
+fruitmerge_sweep = साफ़ करें
+
+# Impostor: private reveal and group voting.
+impostor_word_for = { $player } के लिए शब्द
+impostor_hold = दिखाने के लिए दबाकर रखें
+impostor_role = आप भेदिया हैं!
+impostor_discuss = चर्चा
+impostor_clues = बारी-बारी से गुप्त शब्द से जुड़ा कोई शब्द या वाक्य कहें। घड़ी की दिशा में 1–3 चक्कर खेलें, फिर चर्चा करें कि भेदिया कौन है।
+impostor_vote = वोट दें
+impostor_choose = मिलकर तय करें कि भेदिया कौन है।
+impostor_confirm = { $player } को वोट दें?
+impostor_caught = भेदिया पकड़ा गया!
+impostor_escaped = भेदिया जीत गया!
+impostor_secret = गुप्त शब्द
+impostor_pass = { $player } को दें
+impostor_hint = भेदिए को श्रेणी दिखाएँ
+impostor_roles = भेदिए
+impostor_categories = श्रेणियाँ
+impostor_language = शब्दों की भाषा
+impostor_next = अगला दौर
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = फलों का मुकाबला
+fruitduel_rules = फल दिखने पर अपने रंग का बटन दबाएँ। जो तलवार सबसे पहले फल काटती है, उसे एक अंक मिलता है। उपहार, फूल और बीच बॉल से बचें: गलत टैप करने पर तलवार धीरे वापस आती है। पहले 10 अंक पाने वाला जीतता है। अकेले कंप्यूटर के विरुद्ध या अधिकतम चार खिलाड़ियों के साथ खेलें।
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

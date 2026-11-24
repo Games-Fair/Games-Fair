@@ -1,7 +1,7 @@
 # Games Fair
 
 Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Flipside,
-Pipes, and Match Three in one app. Built with
+Pipes, Match Three, and thirteen additional mobile games in one app. Built with
 [Day](https://daybrite.dev) in one Rust codebase and rendered with the platform's own widgets on
 iPhone, Android, HarmonyOS, macOS, Windows, Linux, and the web. Every game runs entirely on the
 device, and your progress is saved when you leave a game and restored when you come back.
@@ -74,6 +74,47 @@ the App Fair publishes this app under are separate, and live in `Day-appfair.tom
   board and progress save automatically. Original sound cues accompany haptic patterns,
   with separate sound, vibration, and reduced-motion settings.
 
+On phones, tablets, and touch-device browser profiles, **Players: 1 / 2 / 3 / 4** filters the
+catalog by the number of people playing. Desktop players can play Tic-Tac-Toe, Memory, Pool,
+Button Soccer, Dots and Boxes, Mini Golf, and Fruit Merge alongside the classic solo games.
+Charades, Impostor, Fruit Duel, Paint Fight, Whack-a-Mole, Snakes, and Basketball Hoops use
+the mobile catalog. Flipside also supports pass-and-play on a shared device.
+
+- **Tic-Tac-Toe.** Two players or an unbeatable computer; animated marks, winning lines, draws,
+  and rematches with a running win tally.
+- **Memory.** Thirty illustrated cards and fifteen pairs, with animated reveals and pair removal.
+  One to four players; matching keeps the turn, a mismatch passes it. Solo play counts attempts.
+- **Whack-a-Mole.** Simultaneous colored targets in eleven holes. Tap your color; the first to
+  thirty wins. One to four humans, with a computer opponent when playing alone.
+- **Snakes.** Continuous steering with independent corner joysticks for up to four players.
+  Illustrated snake heads and coiled body segments, accelerating body growth, and opposite-edge wrapping. Avoid other
+  snakes; the last survivor wins. Solo play adds a computer opponent.
+- **Paint Fight.** Hold your joystick to roll, repaint rival territory, and collect speed boosts and paint bursts. Own the most area after 45 seconds.
+  Independent touch controls, live percentages, a time bar, and solo computer play.
+- **Pool.** Pocket the seven solids or stripes in your group before the black eight. Pull back from the cue ball,
+  preview the contact point and power, then release. Ball collisions, cushions, pockets, scratches,
+  retained turns, early-eight losses, computer shots, and rematches are implemented.
+
+- **Basketball Hoops.** Swipe shots with spinning basketballs, rim and backboard rebounds, net
+  swishes, bounce audio and haptics. Thirty-second turns for two to four players, 45 seconds solo;
+  the court flips for the players across the device.
+
+- **Button Soccer.** Flick star discs at a soccer ball, using six formations, rebound shots,
+  animated goals and a first-to-three match. One to four players, including solo AI.
+- **Dots and Boxes.** Claim the fourth side of a box to score and keep your turn. One to four
+  players, including an opponent that avoids handing over easy boxes.
+- **Impostor.** Privately reveal roles, discuss clues and vote together. Three to ten players,
+  one or two impostors, category filters, optional hints and six word-deck languages.
+- **Mini Golf.** Seven rounds of hole-in-one attempts across nine courses, including moving
+  obstacles and wind. Alternating ends, rebounds, hole effects and solo AI.
+- **Fruit Duel.** Race to slice fruit, watch for decoys, and be the first to ten points.
+- **Fruit Merge.** Drop and stack eleven kinds of fruit, merge matching pairs, undo a drop,
+  sweep small fruit, and chase a saved best score at three difficulties.
+
+The new games use the catalog’s selected player count, sound and vibration controls, pause/resume,
+saved rounds, and result celebrations. The arcade illustrations are drawn in SVG and code. Their
+sound effects are synthesized locally. See the [artwork and audio build notes](docs/party-games.md).
+
 Every game has the same shell: a pause button, a menu to resume, start over, open the
 settings, or reread the rules, and a results card with your score or the outcome. The rules open by
 themselves the first time you play a game. Each game plays sound effects timed to its haptics,
@@ -85,7 +126,7 @@ number drops it. In Solitaire, 1 to 7 pick a column and another of those digits 
 a card and ↑ passes it. In Mines, the arrows move the pointer, Space or Return uncovers, and F
 plants a flag.
 
-The app's own Settings hold what applies to every game: Appearance, Language (any of the 13
+The app uses a consistent dark appearance for its native controls. Its Settings hold what applies to every game: Language (any of the 13
 the app ships), the Sounds and Vibrations a game starts with the first time it opens (a game
 you have changed keeps its own), and Reset all records, which clears every game's best scores,
 best times, and games won at once. About shows the version, links to this site and the source,
@@ -188,8 +229,6 @@ then run `python3 scripts/android-cover-touch-test.py SERIAL` with `adb` on PATH
 This uses native screen taps to check that passive game headers cannot activate the hidden
 home grid, while pause, close, and the home tiles still respond. Ordinary dayscript taps
 address a node directly and cannot detect this form of touch-through.
-
-Day Games is open source under the Apache-2.0 license.
 
 ## License
 

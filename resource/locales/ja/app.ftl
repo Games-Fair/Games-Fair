@@ -444,3 +444,118 @@ mt_help_goals = 各レベルの目標はスコアの下に表示されます。�
 mt_help_keys = 矢印とEnterで選択・入れ替え。Hで入れ替えられる場所を強調し、Enterで実行します。一時停止から設定、ルール、やり直しを開けます。効果音、振動、動きを減らす設定は変更できます。盤面と進行状況は自動で保存されます。
 mt_complete_detail = どのレベルもやり直して、スコアと星の評価を上げられます。
 mt_matching = そろえています…
+
+# Local party games
+nav_tictactoe = 三目並べ
+nav_memory = 神経衰弱
+nav_moles = もぐらたたき
+party_ttt_rules = 同じ印を縦・横・斜めのいずれかに3つ並べます。プレイヤー1は×、プレイヤー2は○です。1人ではコンピューターと対戦します。
+party_memory_rules = 2枚のカードをめくります。同じ絵なら1組獲得し、続けてプレイできます。違う絵なら次の人の番です。全15組を集め、最も多い人の勝ちです。1人ではコンピューターと対戦します。
+party_moles_rules = 自分の色のモグラをタップします。全員同時にプレイし、先に30点に達した色の勝ちです。1匹につき1点。1人プレイではコンピューターと対戦します。
+party_controls = マスをタップするか、矢印キーで選び、Enterまたはスペースで決定します。Escapeで一時停止します。閉じると保存され、再び開くと一時停止状態になります。
+party_computer = コンピューター
+party_player = プレイヤー{ $n }
+party_draw = 引き分け！
+party_wins = { $player }の勝ち！
+party_turn = { $player }の番
+party_cross = バツ
+party_ring = マル
+party_empty = 空き
+party_matched = ペア獲得済み
+party_card_value = カード { $n }
+party_hidden = 裏向き
+party_selection = { $row }行{ $column }列：{ $state }
+party_board = ゲーム盤。矢印で選び、Enterで決定。
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = ヘビ
+nav_paintfight = ペイント対決
+nav_pool = ビリヤード
+arena_snakes_rules = 隅のジョイスティックで操作します。拍子に合わせて体が伸び、時間がたつほど成長が速くなります。端を越えると反対側に出ます。他のヘビの頭と体を避けましょう。自分のしっぽは通り抜けられます。最後まで生き残ったヘビが勝ち。1人ならコンピューターと対戦します。
+arena_paint_rules = 45秒で相手より広い面積を塗りましょう。自分のジョイスティックを押し続けると移動し、離すと止まります。相手の色を上塗りし、稲妻を集めて加速しましょう。星を取ると広い範囲を自分の色で塗れます。最も広く塗った人が勝ちです。1人ではコンピューターと対戦します。
+arena_pool_rules = 自分のグループの球7個を落とし、最後に黒い8番を落とします。プレイヤー1はソリッド（1〜7番）、プレイヤー2またはコンピューターはストライプ（9〜15番）です。8番を先に落とすと負けます。自分の球を落とすと続けて打てます。外すか白球を落とすと交代します。
+arena_pool_solids = ソリッド · 1–7
+arena_pool_stripes = ストライプ · 9–15
+arena_controls = 全員が自分のジョイスティックを同時に操作できます。キーボードはプレイヤー1がWASD、2が矢印、3がIJKL、4がTFGHです。離すとその方向に進み続けます。Escapeで一時停止。閉じると保存され、再び開くと一時停止状態になります。
+arena_pool_controls = 白球から後ろにドラッグして狙い、離すと打ちます。長く引くほど強く打てます。ガイドが方向を示します。指、マウス、トラックパッドを使えます。一時停止すると人数の変更や再スタートができます。
+arena_countdown = あと{ $n }で開始…
+arena_remaining = 残り{ $seconds }秒
+arena_rolling = 球が動いています…
+arena_alive = 生存
+arena_out = 脱落
+arena_ai = AI
+arena_board = 共用アリーナ。各プレイヤーは自分の隅のジョイスティックを使います。ビリヤードは白球から後ろにドラッグして離します。
+
+# Mobile game catalog
+
+party_moles_race = 先に30点 · 自分の色をタップ
+
+party_round_wins = ラウンド勝利数
+party_series_score = { $player }：{ $wins }
+
+# Shared player scoreboards
+settings_general = 一般
+party_turn_badge = 手番
+party_playing_badge = プレイ中
+party_waiting_badge = 待機中
+party_winner_badge = 勝者
+party_finished_badge = 終了
+party_everyone_plays = 全員でプレイ
+party_wins_count = { $n }勝
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status }・{ $detail }
+
+home_player_count = プレイヤー数：{ $n }
+home_players_label = 人数：
+
+nav_basketball = バスケットボール
+basketball_swipe = ボールをゴールに向けてスワイプ
+basketball_board = バスケットコート
+basketball_rules = ボールを上にスワイプしてシュート。方向と速さで狙いを調整します。各プレイヤー30秒、1人なら45秒でできるだけ多く得点しましょう。最初のシュートでタイマーが始まります。反対側のプレイヤーの番ではコートが反転します。終了時に飛んでいるボールも得点になります。
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = ボタンサッカー
+nav_dotsboxes = 点と四角
+nav_impostor = インポスター
+nav_minigolf = ミニゴルフ
+nav_fruitmerge = フルーツ合体
+buttonsoccer_rules = コマを後ろに引いて離すとシュートします。すべてのコマが止まると交代します。3点先取で勝利。
+dotsboxes_rules = 点の間の空いた線をタップします。四角を完成させると得点し、もう一度プレイできます。四角が最も多い人の勝ちです。
+impostor_rules = 端末を回して自分の言葉をこっそり確認します。1人がインポスターです。ヒントを話し合い、投票で見つけましょう。
+minigolf_rules = ボールを後ろに引いて離します。交代で障害物の跳ね返りも使ってカップを狙います。7ラウンドで成功数が最も多い人の勝ちです。
+fruitmerge_rules = ドラッグで狙い、離すとフルーツが落ちます。同じフルーツは大きなフルーツに合体します。点線を超えないようにしましょう。
+fruitmerge_sweep = お掃除
+
+# Impostor: private reveal and group voting.
+impostor_word_for = { $player } の言葉
+impostor_hold = 長押しで表示
+impostor_role = あなたがインポスターです！
+impostor_discuss = 話し合い
+impostor_clues = 秘密の言葉に関連する言葉や短い説明を順番に言いましょう。時計回りに1〜3周したら、誰がインポスターか話し合います。
+impostor_vote = 投票
+impostor_choose = 誰がインポスターかみんなで決めましょう。
+impostor_confirm = { $player } に投票しますか？
+impostor_caught = インポスターを発見！
+impostor_escaped = インポスターの勝ち！
+impostor_secret = 秘密の言葉
+impostor_pass = { $player } に渡してください
+impostor_hint = インポスターにカテゴリを表示
+impostor_roles = インポスターの人数
+impostor_categories = カテゴリ
+impostor_language = 言葉の言語
+impostor_next = 次のラウンド
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = フルーツ対決
+fruitduel_rules = 果物が現れたら自分の色のボタンをタップ。最初に果物を切った剣が1点獲得します。プレゼント、花、ビーチボールには注意。間違えると剣の戻りが遅くなります。先に10点取った人の勝ち。1人でコンピューターと対戦するか、最大4人で遊べます。
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

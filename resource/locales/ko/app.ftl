@@ -444,3 +444,118 @@ mt_help_goals = 각 레벨의 목표는 점수 아래에 표시됩니다. 목표
 mt_help_keys = 방향키와 Enter로 선택하고 바꿉니다. H는 가능한 교환을 표시하고 Enter로 실행합니다. 일시정지에서 설정, 규칙, 다시 하기를 열 수 있습니다. 효과음, 진동, 동작 줄이기를 조정할 수 있습니다. 보드와 진행 상황은 자동으로 저장됩니다.
 mt_complete_detail = 레벨을 다시 플레이해 점수와 별점을 올릴 수 있습니다.
 mt_matching = 맞추는 중…
+
+# Local party games
+nav_tictactoe = 틱택토
+nav_memory = 기억력 게임
+nav_moles = 두더지 잡기
+party_ttt_rules = 같은 표시 세 개를 가로, 세로 또는 대각선으로 연결하세요. 플레이어 1은 ×, 플레이어 2는 ○입니다. 혼자 하면 컴퓨터가 상대가 됩니다.
+party_memory_rules = 카드 두 장을 뒤집으세요. 같은 그림이면 한 쌍을 얻고 다시 플레이합니다. 다르면 차례가 넘어갑니다. 15쌍을 모두 찾아 가장 많이 모으면 승리합니다. 혼자 하면 컴퓨터가 상대가 됩니다.
+party_moles_rules = 자기 색의 두더지를 누르세요. 모두 동시에 플레이하며 먼저 30점을 얻은 색이 이깁니다. 두더지 한 마리당 1점입니다. 혼자 하면 컴퓨터와 대결합니다.
+party_controls = 칸을 누르거나 방향키로 선택한 뒤 Enter 또는 스페이스를 누르세요. Escape로 일시 정지합니다. 닫을 때 저장되며 다시 열면 일시 정지 상태입니다.
+party_computer = 컴퓨터
+party_player = 플레이어 { $n }
+party_draw = 무승부!
+party_wins = { $player } 승리!
+party_turn = { $player } 차례
+party_cross = 십자
+party_ring = 원
+party_empty = 빈칸
+party_matched = 짝 찾음
+party_card_value = 카드 { $n }
+party_hidden = 뒷면
+party_selection = { $row }행 { $column }열: { $state }
+party_board = 게임판. 방향키로 선택하고 Enter로 플레이하세요.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = 뱀
+nav_paintfight = 페인트 대결
+nav_pool = 당구
+arena_snakes_rules = 모서리의 조이스틱으로 조종하세요. 박자마다 몸이 길어지고 시간이 갈수록 성장 속도가 빨라집니다. 가장자리를 넘으면 반대편에 나타납니다. 다른 뱀의 머리와 몸을 피하세요. 자기 꼬리는 지나갈 수 있습니다. 마지막까지 살아남으면 승리합니다. 혼자서는 컴퓨터와 대결합니다.
+arena_paint_rules = 45초 동안 상대보다 넓은 영역을 칠하세요. 자신의 조이스틱을 누르면 움직이고 놓으면 멈춥니다. 상대 색 위에 덧칠하고 번개를 모아 속도를 높이세요. 별을 얻으면 넓은 영역을 자신의 색으로 칠합니다. 가장 넓게 칠한 사람이 승리합니다. 혼자 하면 컴퓨터가 상대가 됩니다.
+arena_pool_rules = 자기 그룹의 공 일곱 개를 넣고 마지막에 검은 8번 공을 넣으세요. 플레이어 1은 단색 공(1–7), 플레이어 2 또는 컴퓨터는 줄무늬 공(9–15)입니다. 8번 공을 먼저 넣으면 패배합니다. 자기 공을 넣으면 한 번 더 칩니다. 실패하거나 흰 공을 넣으면 차례가 넘어갑니다.
+arena_pool_solids = 단색 · 1–7
+arena_pool_stripes = 줄무늬 · 9–15
+arena_controls = 각자 조이스틱을 동시에 드래그할 수 있습니다. 키보드: 플레이어 1 WASD, 2 방향키, 3 IJKL, 4 TFGH. 놓으면 현재 방향으로 계속 갑니다. Escape는 일시 정지입니다. 닫으면 저장되고 다시 열면 일시 정지 상태입니다.
+arena_pool_controls = 흰 공에서 뒤로 드래그해 조준한 뒤 놓아 치세요. 길게 당길수록 힘이 강해집니다. 안내선이 방향을 표시합니다. 손가락, 마우스 또는 트랙패드를 사용하세요. 일시 정지에서 인원을 바꾸거나 다시 시작할 수 있습니다.
+arena_countdown = { $n } 후 시작…
+arena_remaining = { $seconds }초 남음
+arena_rolling = 공이 움직이는 중…
+arena_alive = 생존
+arena_out = 탈락
+arena_ai = AI
+arena_board = 공유 경기장. 각자 모서리 조이스틱을 사용합니다. 당구에서는 흰 공에서 뒤로 드래그한 뒤 놓으세요.
+
+# Mobile game catalog
+
+party_moles_race = 먼저 30점 · 자기 색 누르기
+
+party_round_wins = 라운드 승리
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = 일반
+party_turn_badge = 차례
+party_playing_badge = 플레이 중
+party_waiting_badge = 대기 중
+party_winner_badge = 승자
+party_finished_badge = 종료
+party_everyone_plays = 모두 함께 플레이
+party_wins_count = { $n }승
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status } · { $detail }
+
+home_player_count = 플레이어 수: { $n }
+home_players_label = 인원:
+
+nav_basketball = 농구 슛
+basketball_swipe = 공을 골대 쪽으로 스와이프하세요
+basketball_board = 농구 코트
+basketball_rules = 공을 위로 스와이프해 슛하세요. 방향과 속도로 슛을 조절합니다. 플레이어마다 30초, 혼자서는 45초 동안 최대한 많이 득점하세요. 첫 슛부터 시간이 흐릅니다. 반대편 플레이어 차례에는 코트가 뒤집힙니다. 종료 전에 던진 공도 득점할 수 있습니다.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = 버튼 축구
+nav_dotsboxes = 점과 상자
+nav_impostor = 임포스터
+nav_minigolf = 미니 골프
+nav_fruitmerge = 과일 합치기
+buttonsoccer_rules = 말을 뒤로 당겼다 놓아 슛하세요. 모든 말이 멈추면 차례가 바뀝니다. 먼저 세 골을 넣으면 승리합니다.
+dotsboxes_rules = 두 점 사이의 빈 선을 누르세요. 상자를 완성하면 점수를 얻고 다시 플레이합니다. 상자를 가장 많이 차지하면 승리합니다.
+impostor_rules = 기기를 돌려가며 자신의 단어를 몰래 확인하세요. 한 명은 임포스터입니다. 단서를 나누고 투표로 찾아내세요.
+minigolf_rules = 공을 뒤로 당겼다 놓으세요. 번갈아 장애물의 반사도 이용해 홀을 노리세요. 일곱 라운드에서 가장 많이 성공하면 승리합니다.
+fruitmerge_rules = 드래그로 조준하고 놓아 과일을 떨어뜨리세요. 같은 과일은 더 큰 과일로 합쳐집니다. 점선 아래로 쌓으세요.
+fruitmerge_sweep = 정리
+
+# Impostor: private reveal and group voting.
+impostor_word_for = { $player }의 단어
+impostor_hold = 길게 눌러 공개
+impostor_role = 당신은 임포스터입니다!
+impostor_discuss = 토론
+impostor_clues = 비밀 단어와 관련된 단어나 문장을 차례로 말하세요. 시계 방향으로 1~3바퀴 돌고 누가 임포스터인지 토론하세요.
+impostor_vote = 투표
+impostor_choose = 누가 임포스터인지 함께 결정하세요.
+impostor_confirm = { $player }에게 투표할까요?
+impostor_caught = 임포스터 발견!
+impostor_escaped = 임포스터 승리!
+impostor_secret = 비밀 단어
+impostor_pass = { $player }에게 넘기세요
+impostor_hint = 임포스터에게 범주 표시
+impostor_roles = 임포스터 수
+impostor_categories = 범주
+impostor_language = 단어 언어
+impostor_next = 다음 라운드
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = 과일 대결
+fruitduel_rules = 과일이 나타나면 자신의 색 버튼을 누르세요. 먼저 과일을 자른 칼이 1점을 얻습니다. 선물, 꽃, 비치볼은 피하세요. 잘못 누르면 칼이 천천히 돌아옵니다. 먼저 10점을 얻으면 승리합니다. 혼자 컴퓨터와 대결하거나 최대 4명이 함께 즐기세요.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

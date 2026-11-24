@@ -455,3 +455,118 @@ mt_help_goals = Each level lists its goals under the score: reach the target sco
 mt_help_keys = Use arrows and Enter to select and swap. H highlights a legal swap; Enter plays it. Pause opens settings, rules, and replay. Sounds, vibrations, and reduced motion are adjustable. Your board and progress save automatically.
 mt_complete_detail = You can replay any level to improve your score and star rating.
 mt_matching = Matching…
+
+# Local party games
+nav_tictactoe = Tic-Tac-Toe
+nav_memory = Memory
+nav_moles = Whack-a-Mole
+party_ttt_rules = Place three matching marks in a row, column, or diagonal. Player 1 is the cross; Player 2 is the ring. In solo play, you face the computer.
+party_memory_rules = Reveal two cards. Matching pictures score a pair and let you play again. A mismatch passes the turn. Collect all fifteen pairs; the most pairs wins. In solo play, you face the computer.
+party_moles_rules = Tap moles of your color. Everyone plays at once; the first color to reach 30 wins. Each mole scores once. Solo play adds a computer opponent.
+party_controls = Tap a square, or use the arrow keys to select and Enter or Space to play. Escape pauses. Games save when closed and reopen paused.
+party_computer = Computer
+party_player = Player { $n }
+party_draw = It's a draw!
+party_wins = { $player } wins!
+party_turn = { $player }'s turn
+party_cross = Cross
+party_ring = Ring
+party_empty = Empty
+party_matched = Matched
+party_card_value = Card { $n }
+party_hidden = Face down
+party_selection = Row { $row }, column { $column }: { $state }
+party_board = Game board. Use arrows to select, Enter to play.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = Snakes
+nav_paintfight = Paint Fight
+nav_pool = Pool
+arena_snakes_rules = Steer with your corner joystick. Your snake grows a new body segment with each beat, faster as the round progresses. Cross an edge to appear on the opposite side. Avoid other snakes’ heads and bodies; you can cross your own tail. The last snake alive wins. Solo play adds a computer opponent.
+arena_paint_rules = Paint more of the arena than your opponents in 45 seconds. Hold your corner joystick to move; release to stop. Paint over rival colors and collect lightning bolts for a speed boost. Star pickups splash a large area in your color. The largest painted area wins. In solo play, you face the computer.
+arena_pool_rules = Pocket all seven balls in your group, then the black 8-ball. Player 1 has solids (1–7); Player 2 or the computer has stripes (9–15). Pocketing the 8-ball early loses. Pocketing your own ball earns another shot; a miss or pocketing the cue ball passes the turn.
+arena_pool_solids = Solids · 1–7
+arena_pool_stripes = Stripes · 9–15
+arena_controls = Each player can hold and drag their own joystick at the same time. On a keyboard: Player 1 uses WASD, Player 2 arrows, Player 3 IJKL, Player 4 TFGH. Release to keep your heading. Escape pauses. Closing saves the round; reopening keeps it paused.
+arena_pool_controls = Drag back from the cue ball to aim, then release to shoot. A longer drag gives more power. The guide shows the shot direction. Use a finger, mouse, or trackpad. Pause to change players or restart.
+arena_countdown = Starting in { $n }…
+arena_remaining = { $seconds } s remaining
+arena_rolling = Balls rolling…
+arena_alive = In
+arena_out = Out
+arena_ai = AI
+arena_board = Shared game arena. Each player uses their own corner joystick; in Pool, drag back from the cue ball and release to shoot.
+
+# Mobile game catalog
+
+party_moles_race = First to 30 · Tap your color
+
+party_round_wins = Round wins
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = General
+party_turn_badge = Turn
+party_playing_badge = Playing
+party_waiting_badge = Waiting
+party_winner_badge = Winner
+party_finished_badge = Finished
+party_everyone_plays = Everyone plays
+party_wins_count = Wins: { $n }
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status } · { $detail }
+
+home_player_count = Players: { $n }
+home_players_label = Players:
+
+nav_basketball = Basketball Hoops
+basketball_swipe = Swipe the ball toward the hoop
+basketball_board = Basketball court
+basketball_rules = Swipe a ball upward toward the basket to shoot. Aim and swipe speed control your shot. Score as many baskets as possible in 30 seconds per player, or 45 seconds solo. The timer starts with your first shot. The court flips for players on the opposite side; balls already in flight can still score after time expires.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = Button Soccer
+nav_dotsboxes = Dots and Boxes
+nav_impostor = Impostor
+nav_minigolf = Mini Golf
+nav_fruitmerge = Fruit Merge
+buttonsoccer_rules = Drag a disc backward and release to shoot. Players take turns after all pieces stop. Score three goals to win.
+dotsboxes_rules = Tap an empty line between two dots. Complete a box to claim it and play again. Own the most boxes to win.
+impostor_rules = Pass the device and secretly reveal your word. One player is the impostor. Discuss clues, then vote together to expose the impostor.
+minigolf_rules = Drag back from the ball and release to putt. Take turns, bounce off obstacles, and sink the ball. Play seven rounds; the most successful shots win.
+fruitmerge_rules = Drag to aim and release to drop a fruit. Matching fruits merge into a bigger fruit. Keep the pile below the dotted line.
+fruitmerge_sweep = Sweep
+
+# Impostor: private reveal and group voting.
+impostor_word_for = The word for { $player }
+impostor_hold = Hold to reveal
+impostor_role = You are the impostor!
+impostor_discuss = Discussion
+impostor_clues = Take turns giving a word or phrase related to the secret. Go clockwise for 1–3 rounds, then discuss who the impostor could be.
+impostor_vote = Vote
+impostor_choose = Decide together who the impostor is.
+impostor_confirm = Vote for { $player }?
+impostor_caught = Impostor exposed!
+impostor_escaped = Impostor wins!
+impostor_secret = Secret word
+impostor_pass = Pass to { $player }
+impostor_hint = Show category to impostor
+impostor_roles = Impostors
+impostor_categories = Categories
+impostor_language = Word language
+impostor_next = Next round
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = Fruit Duel
+fruitduel_rules = Tap your colored button when a fruit appears. The first blade to cut it earns one point. Avoid the gift, flower, and beach ball: a wrong tap makes your sword recover slowly. First to 10 wins. Play solo against the computer or with up to four players.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

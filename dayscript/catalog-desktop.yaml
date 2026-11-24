@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+name: desktop-catalog
+flow:
+  - assert_missing: { id: home_player_filter }
+  - assert_missing: { id: tile_fruitduel }
+  - assert_missing: { id: tile_charades }
+  - assert_missing: { id: tile_snakes }
+  - assert_missing: { id: tile_impostor }
+  - assert_missing: { id: tile_paintfight }
+  - assert_missing: { id: tile_moles }
+  - assert_missing: { id: tile_basketball }
+  - assert_visible: { id: tile_tictactoe }
+  - navigate: { route: tictactoe }
+  - pause: { secs: 0.5 }
+  - tap: { id: tictactoe_help_done, if_present: true }
+  - tap: { id: tictactoe_resume, if_present: true }
+  - tap: { id: tictactoe_pause }
+  - tap: { id: tictactoe_new_game, if_present: true }
+  - key: { id: tictactoe_board, key: ArrowRight }
+  - key: { id: tictactoe_board, key: ArrowDown }
+  - key: { id: tictactoe_board, key: Enter }
+  - pause: { secs: 1.2 }
+  - screenshot: desktop-vector-marks
+  - nav_back: {}

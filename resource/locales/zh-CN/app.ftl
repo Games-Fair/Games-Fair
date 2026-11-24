@@ -444,3 +444,118 @@ mt_help_goals = 每个关卡的目标都列在分数下方：达到目标分数�
 mt_help_keys = 用方向键和回车选择并交换。H 高亮一个可行交换，回车执行。暂停可打开设置、规则和重玩。音效、振动和减弱动态效果均可调整。棋盘和进度会自动保存。
 mt_complete_detail = 可重玩任意关卡，提高得分和星级。
 mt_matching = 消除中…
+
+# Local party games
+nav_tictactoe = 井字棋
+nav_memory = 记忆配对
+nav_moles = 打地鼠
+party_ttt_rules = 将三个相同标记连成横行、竖列或对角线。玩家1使用叉号，玩家2使用圆圈。单人模式下，你将与电脑对战。
+party_memory_rules = 翻开两张卡牌。相同图片组成一对，并可继续翻牌。不同则轮到下一位。找齐15对，配对最多者获胜。单人模式下，你将与电脑对战。
+party_moles_rules = 点击自己颜色的地鼠。所有人同时游戏，最先达到30分的颜色获胜。每只地鼠只能得分一次。单人模式与电脑对战。
+party_controls = 点击方格，或用方向键选择后按回车键或空格键操作。Escape键暂停。关闭时自动保存，重新打开时处于暂停状态。
+party_computer = 电脑
+party_player = 玩家{ $n }
+party_draw = 平局！
+party_wins = { $player }获胜！
+party_turn = 轮到{ $player }
+party_cross = 叉号
+party_ring = 圆圈
+party_empty = 空格
+party_matched = 已配对
+party_card_value = 卡牌 { $n }
+party_hidden = 背面朝上
+party_selection = 第{ $row }行，第{ $column }列：{ $state }
+party_board = 游戏棋盘。用方向键选择，回车键操作。
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = 贪吃蛇对战
+nav_paintfight = 涂色大战
+nav_pool = 台球
+arena_snakes_rules = 用角落的摇杆控制蛇。每一拍身体都会增长，随着回合推进越长越快。越过边缘会从对面出现。避开其他蛇的头和身体，可以穿过自己的尾巴。最后存活的蛇获胜。单人模式与电脑对战。
+arena_paint_rules = 在45秒内涂满比对手更大的面积。按住自己的摇杆移动，松开即可停止。覆盖对手的颜色，收集闪电来加速。收集星星可将大片区域染成自己的颜色。涂色面积最大者获胜。单人模式下，你将与电脑对战。
+arena_pool_rules = 先打进自己组的七颗球，最后打进黑色8号球。玩家1使用全色球（1–7号），玩家2或电脑使用花色球（9–15号）。提前打进8号球会输掉比赛。打进自己的球可继续击球；未进球或白球落袋则交换回合。
+arena_pool_solids = 全色球 · 1–7
+arena_pool_stripes = 花色球 · 9–15
+arena_controls = 每位玩家可同时拖动自己的摇杆。键盘：玩家1用WASD，玩家2用方向键，玩家3用IJKL，玩家4用TFGH。松开后保持当前方向。Escape键暂停。关闭时保存，重新打开时处于暂停状态。
+arena_pool_controls = 从白球向后拖动瞄准，松开即可击球。拖得越远，力度越大。辅助线显示方向。可用手指、鼠标或触控板。在暂停中更改人数或重新开始。
+arena_countdown = { $n }后开始…
+arena_remaining = 剩余{ $seconds }秒
+arena_rolling = 球正在滚动…
+arena_alive = 存活
+arena_out = 淘汰
+arena_ai = 电脑
+arena_board = 共享竞技场。每位玩家使用自己角落的摇杆；台球中从白球向后拖动并松开即可击球。
+
+# Mobile game catalog
+
+party_moles_race = 先得30分 · 点击自己的颜色
+
+party_round_wins = 回合胜场
+party_series_score = { $player }：{ $wins }
+
+# Shared player scoreboards
+settings_general = 通用
+party_turn_badge = 当前回合
+party_playing_badge = 游戏中
+party_waiting_badge = 等待中
+party_winner_badge = 获胜者
+party_finished_badge = 已结束
+party_everyone_plays = 所有玩家同时进行
+party_wins_count = { $n }胜
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status } · { $detail }
+
+home_player_count = 玩家人数：{ $n }
+home_players_label = 人数：
+
+nav_basketball = 篮球投篮
+basketball_swipe = 将篮球向篮筐滑动
+basketball_board = 篮球场
+basketball_rules = 向上滑动篮球投篮，方向和速度决定球的轨迹。每位玩家有30秒，单人模式有45秒，尽可能多得分。首次投篮开始计时。轮到对面的玩家时球场会翻转。时间结束时仍在空中的球也可以得分。
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = 纽扣足球
+nav_dotsboxes = 点格棋
+nav_impostor = 冒充者
+nav_minigolf = 迷你高尔夫
+nav_fruitmerge = 水果合成
+buttonsoccer_rules = 向后拖动棋子并松开射门。所有棋子停下后轮到下一位。先得三分获胜。
+dotsboxes_rules = 点击两点之间的空线。完成方格即可占领并再走一步。方格最多者获胜。
+impostor_rules = 传递设备并秘密查看自己的词语。一名玩家是冒充者。讨论线索后投票找出他。
+minigolf_rules = 向后拖动球并松开击球。轮流利用障碍物反弹入洞。七轮后成功次数最多者获胜。
+fruitmerge_rules = 拖动瞄准并松开掉落水果。相同水果会合成更大的水果。不要让堆叠超过虚线。
+fruitmerge_sweep = 清理
+
+# Impostor: private reveal and group voting.
+impostor_word_for = { $player } 的词语
+impostor_hold = 按住揭晓
+impostor_role = 你是卧底！
+impostor_discuss = 讨论
+impostor_clues = 轮流说一个与秘密词语有关的词或短句。顺时针进行1至3轮，然后讨论谁是卧底。
+impostor_vote = 投票
+impostor_choose = 共同决定谁是卧底。
+impostor_confirm = 投票给 { $player }？
+impostor_caught = 卧底被发现了！
+impostor_escaped = 卧底获胜！
+impostor_secret = 秘密词语
+impostor_pass = 传给 { $player }
+impostor_hint = 向卧底显示类别
+impostor_roles = 卧底人数
+impostor_categories = 类别
+impostor_language = 词语语言
+impostor_next = 下一轮
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = 水果对决
+fruitduel_rules = 水果出现时，点击自己颜色的按钮。最先切开水果的刀获得1分。不要切礼物、花和沙滩球：点错后，刀会缓慢归位。先得10分者获胜。可以单人与电脑对战，也可以最多四人一起玩。
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

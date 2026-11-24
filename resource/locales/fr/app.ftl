@@ -453,3 +453,118 @@ mt_help_goals = Chaque niveau affiche ses objectifs sous le score : atteignez le
 mt_help_keys = Au clavier : flèches et Entrée pour sélectionner et échanger. H met en évidence un échange possible ; Entrée le joue. Pause ouvre les paramètres, les règles et l'option Rejouer. Sons, vibrations et animations réduites sont réglables. La grille et la progression se sauvegardent automatiquement.
 mt_complete_detail = Vous pouvez rejouer n'importe quel niveau pour améliorer votre score et vos étoiles.
 mt_matching = Alignement…
+
+# Local party games
+nav_tictactoe = Morpion
+nav_memory = Mémoire
+nav_moles = Tape-taupe
+party_ttt_rules = Alignez trois symboles identiques en ligne, en colonne ou en diagonale. Le joueur 1 joue les croix et le joueur 2 les ronds. En solo, affrontez l’ordinateur.
+party_memory_rules = Retournez deux cartes. Deux images identiques forment une paire et vous rejouez. Sinon, le tour passe. Trouvez les 15 paires ; le plus de paires gagne. En solo, affrontez l’ordinateur.
+party_moles_rules = Touchez les taupes de votre couleur. Tout le monde joue en même temps ; la première couleur à 30 gagne. Chaque taupe compte une fois. En solo, affrontez l’ordinateur.
+party_controls = Touchez une case ou utilisez les flèches pour la sélectionner, puis Entrée ou Espace pour jouer. Échap met en pause. La partie est sauvegardée à la fermeture et se rouvre en pause.
+party_computer = Ordinateur
+party_player = Joueur { $n }
+party_draw = Égalité !
+party_wins = { $player } gagne !
+party_turn = Au tour de { $player }
+party_cross = Croix
+party_ring = Rond
+party_empty = Vide
+party_matched = Paire trouvée
+party_card_value = Carte { $n }
+party_hidden = Face cachée
+party_selection = Ligne { $row }, colonne { $column } : { $state }
+party_board = Plateau. Flèches pour sélectionner, Entrée pour jouer.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = Serpents
+nav_paintfight = Bataille de peinture
+nav_pool = Billard
+arena_snakes_rules = Dirigez avec le joystick de votre coin. Votre serpent grandit à chaque pulsation, de plus en plus vite. Franchissez un bord pour réapparaître à l’opposé. Évitez les autres serpents ; vous pouvez traverser votre propre queue. Le dernier serpent vivant gagne. En solo, vous affrontez l’ordinateur.
+arena_paint_rules = Peignez plus de surface que vos adversaires en 45 secondes. Maintenez votre joystick pour avancer ; relâchez-le pour arrêter. Recouvrez les couleurs adverses et ramassez les éclairs pour accélérer. Les étoiles éclaboussent une grande zone de votre couleur. La plus grande surface gagne. En solo, affrontez l’ordinateur.
+arena_pool_rules = Empochez les sept billes de votre groupe, puis la noire 8. Le joueur 1 joue les pleines (1–7) ; le joueur 2 ou l’ordinateur, les rayées (9–15). Empocher la 8 trop tôt fait perdre. Empocher une bille de votre groupe donne un autre tir ; un tir manqué ou la blanche empochée passe le tour.
+arena_pool_solids = Pleines · 1–7
+arena_pool_stripes = Rayées · 9–15
+arena_controls = Chaque joueur peut déplacer son joystick en même temps. Au clavier : joueur 1 WASD, joueur 2 flèches, joueur 3 IJKL, joueur 4 TFGH. Relâchez pour garder le cap. Échap met en pause. La partie se sauvegarde à la fermeture et se rouvre en pause.
+arena_pool_controls = Tirez en arrière depuis la bille blanche pour viser, puis relâchez pour tirer. Une traction plus longue donne plus de force. Le guide indique la direction. Utilisez le doigt, la souris ou le pavé tactile. Mettez en pause pour changer de joueurs ou recommencer.
+arena_countdown = Début dans { $n }…
+arena_remaining = Il reste { $seconds } s
+arena_rolling = Les billes roulent…
+arena_alive = En jeu
+arena_out = Éliminé
+arena_ai = IA
+arena_board = Arène partagée. Chacun utilise le joystick de son coin ; au billard, tirez en arrière depuis la blanche puis relâchez.
+
+# Mobile game catalog
+
+party_moles_race = Premier à 30 · Touchez votre couleur
+
+party_round_wins = Manches gagnées
+party_series_score = { $player } : { $wins }
+
+# Shared player scoreboards
+settings_general = Général
+party_turn_badge = Son tour
+party_playing_badge = En jeu
+party_waiting_badge = En attente
+party_winner_badge = Gagnant
+party_finished_badge = Terminé
+party_everyone_plays = Tout le monde joue
+party_wins_count = Victoires : { $n }
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) } %
+party_status_detail = { $status } · { $detail }
+
+home_player_count = Joueurs : { $n }
+home_players_label = Joueurs :
+
+nav_basketball = Paniers de basket
+basketball_swipe = Glissez le ballon vers le panier
+basketball_board = Terrain de basket
+basketball_rules = Glissez un ballon vers le haut pour tirer. La direction et la vitesse contrôlent le tir. Marquez le plus de paniers possible en 30 secondes par joueur, ou 45 en solo. Le chrono démarre au premier tir. Le terrain pivote pour les joueurs du côté opposé. Les ballons en vol peuvent encore marquer après la fin du temps.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = Football à boutons
+nav_dotsboxes = Points et carrés
+nav_impostor = Imposteur
+nav_minigolf = Minigolf
+nav_fruitmerge = Fusion de fruits
+buttonsoccer_rules = Tirez un palet en arrière puis relâchez pour tirer. Le tour change quand toutes les pièces sont immobiles. Trois buts pour gagner.
+dotsboxes_rules = Touchez une ligne libre entre deux points. Fermez un carré pour le gagner et rejouer. Le plus de carrés gagne.
+impostor_rules = Passez l’appareil et révélez votre mot en secret. Un joueur est l’imposteur. Échangez des indices puis votez pour le démasquer.
+minigolf_rules = Tirez la balle en arrière puis relâchez. Jouez à tour de rôle et utilisez les rebonds. Après sept manches, le plus de tirs réussis gagne.
+fruitmerge_rules = Glissez pour viser puis relâchez un fruit. Les fruits identiques fusionnent en un plus gros. Gardez la pile sous la ligne pointillée.
+fruitmerge_sweep = Balayer
+
+# Impostor: private reveal and group voting.
+impostor_word_for = Le mot pour { $player }
+impostor_hold = Maintenir pour révéler
+impostor_role = Vous êtes l’imposteur !
+impostor_discuss = Discussion
+impostor_clues = À tour de rôle, donnez un mot ou une phrase en rapport avec le mot secret. Faites 1 à 3 tours dans le sens horaire, puis cherchez l’imposteur ensemble.
+impostor_vote = Voter
+impostor_choose = Décidez ensemble qui est l’imposteur.
+impostor_confirm = Voter pour { $player } ?
+impostor_caught = Imposteur démasqué !
+impostor_escaped = L’imposteur gagne !
+impostor_secret = Mot secret
+impostor_pass = Passez à { $player }
+impostor_hint = Montrer la catégorie à l’imposteur
+impostor_roles = Imposteurs
+impostor_categories = Catégories
+impostor_language = Langue des mots
+impostor_next = Manche suivante
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = Duel de fruits
+fruitduel_rules = Touchez votre bouton de couleur quand un fruit apparaît. La première lame qui le coupe gagne un point. Évitez le cadeau, la fleur et le ballon : une erreur ralentit le retour de votre sabre. Le premier à 10 points gagne. Jouez seul contre l’ordinateur ou à quatre au maximum.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

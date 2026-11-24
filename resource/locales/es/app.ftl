@@ -453,3 +453,118 @@ mt_help_goals = Cada nivel muestra sus objetivos bajo la puntuación: alcanza la
 mt_help_keys = Usa las flechas e Intro para seleccionar e intercambiar. H resalta un intercambio válido; Intro lo juega. Pausar abre la configuración, las reglas y la opción de repetir. Puedes ajustar sonidos, vibraciones y movimiento reducido. El tablero y el progreso se guardan automáticamente.
 mt_complete_detail = Puedes repetir cualquier nivel para mejorar tu puntuación y tus estrellas.
 mt_matching = Combinando…
+
+# Local party games
+nav_tictactoe = Tres en raya
+nav_memory = Memoria
+nav_moles = Atrapa al topo
+party_ttt_rules = Forma una línea de tres símbolos iguales en horizontal, vertical o diagonal. El jugador 1 usa cruces y el jugador 2 círculos. En solitario juegas contra la máquina.
+party_memory_rules = Revela dos cartas. Las imágenes iguales suman un par y permiten repetir turno. Un fallo pasa el turno. Encuentra los 15 pares; gana quien tenga más. En solitario juegas contra la máquina.
+party_moles_rules = Toca los topos de tu color. Todos juegan a la vez; gana el primer color que llegue a 30. Cada topo puntúa una vez. En solitario juegas contra la computadora.
+party_controls = Toca una casilla o selecciónala con las flechas y juega con Intro o Espacio. Escape pausa el juego. La partida se guarda al cerrar y se abre en pausa.
+party_computer = Máquina
+party_player = Jugador { $n }
+party_draw = ¡Empate!
+party_wins = ¡Gana { $player }!
+party_turn = Turno de { $player }
+party_cross = Cruz
+party_ring = Círculo
+party_empty = Vacía
+party_matched = Pareja encontrada
+party_card_value = Carta { $n }
+party_hidden = Boca abajo
+party_selection = Fila { $row }, columna { $column }: { $state }
+party_board = Tablero. Usa las flechas para seleccionar e Intro para jugar.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = Serpientes
+nav_paintfight = Batalla de pintura
+nav_pool = Billar
+arena_snakes_rules = Dirige con el joystick de tu esquina. Tu serpiente crece con cada pulso, cada vez más rápido. Al cruzar un borde aparece por el lado opuesto. Evita las cabezas y cuerpos de las demás; puedes cruzar tu propia cola. Gana la última serpiente viva. En solitario juegas contra la computadora.
+arena_paint_rules = Pinta más superficie que tus rivales en 45 segundos. Mantén tu joystick para moverte; suéltalo para parar. Cubre los colores rivales y recoge rayos para acelerar. Las estrellas tiñen una gran área de tu color. Gana la mayor superficie. En solitario juegas contra la máquina.
+arena_pool_rules = Mete las siete bolas de tu grupo y después la negra 8. El jugador 1 juega con las lisas (1–7); el jugador 2 o la máquina, con las rayadas (9–15). Meter la 8 antes de tiempo supone perder. Meter una bola propia permite otro tiro; fallar o meter la blanca pasa el turno.
+arena_pool_solids = Lisas · 1–7
+arena_pool_stripes = Rayadas · 9–15
+arena_controls = Todos pueden arrastrar su propio joystick a la vez. Teclado: jugador 1 WASD, jugador 2 flechas, jugador 3 IJKL, jugador 4 TFGH. Al soltar mantienes la dirección. Escape pausa. Se guarda al cerrar y se abre en pausa.
+arena_pool_controls = Arrastra hacia atrás desde la bola blanca para apuntar y suelta para tirar. Arrastrar más aumenta la fuerza. La guía indica la dirección. Usa el dedo, ratón o trackpad. Pausa para cambiar jugadores o reiniciar.
+arena_countdown = Empieza en { $n }…
+arena_remaining = Quedan { $seconds } s
+arena_rolling = Bolas en movimiento…
+arena_alive = En juego
+arena_out = Fuera
+arena_ai = IA
+arena_board = Campo compartido. Cada jugador usa el joystick de su esquina; en Billar, arrastra hacia atrás desde la blanca y suelta.
+
+# Mobile game catalog
+
+party_moles_race = Primero a 30 · Toca tu color
+
+party_round_wins = Rondas ganadas
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = General
+party_turn_badge = Turno
+party_playing_badge = Jugando
+party_waiting_badge = Esperando
+party_winner_badge = Ganador
+party_finished_badge = Finalizado
+party_everyone_plays = Todos juegan
+party_wins_count = Victorias: { $n }
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) } %
+party_status_detail = { $status } · { $detail }
+
+home_player_count = Jugadores: { $n }
+home_players_label = Jugadores:
+
+nav_basketball = Canastas
+basketball_swipe = Desliza el balón hacia el aro
+basketball_board = Cancha de baloncesto
+basketball_rules = Desliza un balón hacia arriba para lanzar. La dirección y la velocidad controlan el tiro. Encesta tanto como puedas en 30 segundos por jugador, o 45 en solitario. El tiempo empieza con el primer tiro. La cancha gira para quienes juegan desde el lado opuesto. Los balones en el aire aún pueden puntuar al terminar el tiempo.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = Fútbol de botones
+nav_dotsboxes = Puntos y cajas
+nav_impostor = Impostor
+nav_minigolf = Minigolf
+nav_fruitmerge = Fusión de frutas
+buttonsoccer_rules = Arrastra una ficha hacia atrás y suelta para tirar. El turno cambia cuando todas las piezas se detienen. Gana quien marque tres goles.
+dotsboxes_rules = Toca una línea libre entre dos puntos. Completa una caja para ganarla y repetir turno. Gana quien tenga más cajas.
+impostor_rules = Pasa el dispositivo y revela tu palabra en secreto. Un jugador es el impostor. Compartid pistas y votad para descubrirlo.
+minigolf_rules = Arrastra hacia atrás desde la pelota y suelta. Turnaos y aprovechad los rebotes. Tras siete rondas gana quien haya acertado más veces.
+fruitmerge_rules = Arrastra para apuntar y suelta una fruta. Las frutas iguales se fusionan en otra mayor. Mantén la pila bajo la línea de puntos.
+fruitmerge_sweep = Limpiar
+
+# Impostor: private reveal and group voting.
+impostor_word_for = La palabra para { $player }
+impostor_hold = Mantén pulsado para revelar
+impostor_role = ¡Eres el impostor!
+impostor_discuss = Discusión
+impostor_clues = Por turnos, decid una palabra o frase relacionada con la palabra secreta. Haced 1–3 rondas en sentido horario y debatid quién es el impostor.
+impostor_vote = Votar
+impostor_choose = Decidid juntos quién es el impostor.
+impostor_confirm = ¿Votar por { $player }?
+impostor_caught = ¡Impostor descubierto!
+impostor_escaped = ¡Gana el impostor!
+impostor_secret = Palabra secreta
+impostor_pass = Pasa a { $player }
+impostor_hint = Mostrar categoría al impostor
+impostor_roles = Impostores
+impostor_categories = Categorías
+impostor_language = Idioma de las palabras
+impostor_next = Siguiente ronda
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = Duelo de frutas
+fruitduel_rules = Toca tu botón de color cuando aparezca una fruta. La primera espada que la corte gana un punto. Evita el regalo, la flor y la pelota: si te equivocas, tu espada tarda más en volver. Gana quien llegue a 10 puntos. Juega contra la máquina o con hasta cuatro personas.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

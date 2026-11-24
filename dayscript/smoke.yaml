@@ -7,7 +7,6 @@
 flow:
   # The home grid mounts immediately on every platform.
   - wait_for: { id: home }
-  - assert_visible: { id: app_title }
   - assert_visible: { id: tile_breakout }
 
   # A tile tap presents the game in the fullscreen cover.
@@ -37,12 +36,6 @@ flow:
   - navigate: { route: solitaire }
   - pause: { secs: 0.6 }
   - assert_visible: { id: sol_canvas }
-  - nav_back:
-  - pause: { secs: 0.6 }
-
-  - navigate: { route: charades }
-  - pause: { secs: 0.6 }
-  - assert_visible: { id: 'ch_deck:animals' }
   - nav_back:
   - pause: { secs: 0.6 }
 

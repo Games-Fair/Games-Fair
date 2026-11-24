@@ -453,3 +453,118 @@ mt_help_goals = Cada nível mostra seus objetivos abaixo da pontuação: alcance
 mt_help_keys = Use as setas e Enter para selecionar e trocar. H destaca uma troca válida; Enter a executa. Pausar abre ajustes, regras e a opção de jogar de novo. Sons, vibrações e movimento reduzido são ajustáveis. O tabuleiro e o progresso são salvos automaticamente.
 mt_complete_detail = Jogue qualquer nível de novo para melhorar sua pontuação e suas estrelas.
 mt_matching = Combinando…
+
+# Local party games
+nav_tictactoe = Jogo da velha
+nav_memory = Memória
+nav_moles = Acerte a toupeira
+party_ttt_rules = Alinhe três símbolos iguais na horizontal, vertical ou diagonal. O jogador 1 usa cruzes e o jogador 2 círculos. Sozinho, você enfrenta o computador.
+party_memory_rules = Vire duas cartas. Figuras iguais valem um par e outro turno. Caso contrário, o turno passa. Encontre os 15 pares; vence quem tiver mais. Sozinho, você enfrenta o computador.
+party_moles_rules = Toque nas toupeiras da sua cor. Todos jogam juntos; vence a primeira cor a chegar a 30. Cada toupeira pontua uma vez. Sozinho, você enfrenta o computador.
+party_controls = Toque em uma casa ou selecione com as setas e jogue com Enter ou Espaço. Escape pausa. O jogo é salvo ao fechar e reabre pausado.
+party_computer = Computador
+party_player = Jogador { $n }
+party_draw = Empate!
+party_wins = { $player } venceu!
+party_turn = Vez de { $player }
+party_cross = Cruz
+party_ring = Círculo
+party_empty = Vazia
+party_matched = Par encontrado
+party_card_value = Carta { $n }
+party_hidden = Virada para baixo
+party_selection = Linha { $row }, coluna { $column }: { $state }
+party_board = Tabuleiro. Use as setas para selecionar e Enter para jogar.
+party_count = { $n }
+
+# Shared-device arcade games
+nav_snakes = Cobras
+nav_paintfight = Batalha de tinta
+nav_pool = Sinuca
+arena_snakes_rules = Controle com o joystick do seu canto. Sua cobra cresce a cada batida, cada vez mais rápido. Cruze uma borda para aparecer do lado oposto. Evite as cabeças e os corpos das outras cobras; você pode cruzar sua própria cauda. A última cobra viva vence. No modo solo, você enfrenta o computador.
+arena_paint_rules = Pinte mais área que os adversários em 45 segundos. Segure seu joystick para mover; solte para parar. Cubra as cores rivais e pegue raios para acelerar. As estrelas pintam uma grande área com sua cor. A maior área vence. Sozinho, você enfrenta o computador.
+arena_pool_rules = Encaçape as sete bolas do seu grupo e depois a preta 8. O jogador 1 fica com as lisas (1–7); o jogador 2 ou o computador, com as listradas (9–15). Encaçapar a 8 antes da hora perde o jogo. Encaçapar uma bola sua dá outra tacada; errar ou encaçapar a branca passa a vez.
+arena_pool_solids = Lisas · 1–7
+arena_pool_stripes = Listradas · 9–15
+arena_controls = Todos podem arrastar seu próprio joystick ao mesmo tempo. Teclado: jogador 1 WASD, jogador 2 setas, jogador 3 IJKL, jogador 4 TFGH. Solte para manter a direção. Escape pausa. Salva ao fechar e reabre pausado.
+arena_pool_controls = Arraste para trás a partir da bola branca para mirar e solte para bater. Arrastar mais dá mais força. A guia mostra a direção. Use dedo, mouse ou trackpad. Pause para trocar jogadores ou reiniciar.
+arena_countdown = Começa em { $n }…
+arena_remaining = Restam { $seconds } s
+arena_rolling = Bolas em movimento…
+arena_alive = No jogo
+arena_out = Fora
+arena_ai = IA
+arena_board = Arena compartilhada. Cada jogador usa o joystick do seu canto; na sinuca, arraste para trás a partir da branca e solte.
+
+# Mobile game catalog
+
+party_moles_race = Primeiro a 30 · Toque na sua cor
+
+party_round_wins = Rodadas vencidas
+party_series_score = { $player }: { $wins }
+
+# Shared player scoreboards
+settings_general = Geral
+party_turn_badge = Vez
+party_playing_badge = Jogando
+party_waiting_badge = Aguardando
+party_winner_badge = Vencedor
+party_finished_badge = Concluído
+party_everyone_plays = Todos jogam
+party_wins_count = Vitórias: { $n }
+party_area_percent = { NUMBER($n, minimumFractionDigits: 1, maximumFractionDigits: 1) }%
+party_status_detail = { $status } · { $detail }
+
+home_player_count = Jogadores: { $n }
+home_players_label = Jogadores:
+
+nav_basketball = Cestas de basquete
+basketball_swipe = Deslize a bola em direção à cesta
+basketball_board = Quadra de basquete
+basketball_rules = Deslize uma bola para cima para arremessar. A direção e a velocidade controlam o arremesso. Faça o máximo de cestas em 30 segundos por jogador ou 45 jogando sozinho. O tempo começa no primeiro arremesso. A quadra gira para quem está do outro lado. Bolas no ar ainda podem pontuar após o tempo acabar.
+basketball_point = +1
+
+# Reference party games
+nav_buttonsoccer = Futebol de botão
+nav_dotsboxes = Pontos e caixas
+nav_impostor = Impostor
+nav_minigolf = Minigolfe
+nav_fruitmerge = Fusão de frutas
+buttonsoccer_rules = Puxe um botão para trás e solte para chutar. A vez muda quando todas as peças param. Faça três gols para vencer.
+dotsboxes_rules = Toque em uma linha livre entre dois pontos. Complete uma caixa para conquistá-la e jogar de novo. Quem tiver mais caixas vence.
+impostor_rules = Passe o aparelho e revele sua palavra em segredo. Um jogador é o impostor. Compartilhem dicas e votem para descobri-lo.
+minigolf_rules = Puxe a bola para trás e solte. Joguem por turnos usando os rebotes. Após sete rodadas, vence quem acertar mais buracos.
+fruitmerge_rules = Arraste para mirar e solte uma fruta. Frutas iguais se fundem em uma maior. Mantenha a pilha abaixo da linha pontilhada.
+fruitmerge_sweep = Limpar
+
+# Impostor: private reveal and group voting.
+impostor_word_for = A palavra de { $player }
+impostor_hold = Segure para revelar
+impostor_role = Você é o impostor!
+impostor_discuss = Discussão
+impostor_clues = Cada pessoa diz uma palavra ou frase relacionada à palavra secreta. Façam 1–3 rodadas no sentido horário e discutam quem pode ser o impostor.
+impostor_vote = Votar
+impostor_choose = Decidam juntos quem é o impostor.
+impostor_confirm = Votar em { $player }?
+impostor_caught = Impostor descoberto!
+impostor_escaped = O impostor venceu!
+impostor_secret = Palavra secreta
+impostor_pass = Passe para { $player }
+impostor_hint = Mostrar categoria ao impostor
+impostor_roles = Impostores
+impostor_categories = Categorias
+impostor_language = Idioma das palavras
+impostor_next = Próxima rodada
+impostor_content = { $text }
+
+# Fruit Duel
+nav_fruitduel = Duelo de frutas
+fruitduel_rules = Toque no seu botão colorido quando aparecer uma fruta. A primeira lâmina a cortá-la ganha um ponto. Evite o presente, a flor e a bola: um erro faz sua espada voltar mais devagar. Vence quem chegar a 10 pontos. Jogue contra o computador ou com até quatro pessoas.
+
+# Word-deck language names are shown in the language of the deck.
+impostor_deck_english = English
+impostor_deck_spanish = Español
+impostor_deck_french = Français
+impostor_deck_german = Deutsch
+impostor_deck_italian = Italiano
+impostor_deck_portuguese = Português

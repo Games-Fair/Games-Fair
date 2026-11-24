@@ -10,6 +10,19 @@ use gamekit::chrome::{Sfx, cues};
 
 /// Each game's directory under `games/`, with the clips it preloads besides the shared ones.
 const GAMES: &[(&str, &[Sfx])] = &[
+    ("basketball", basketball::SOUNDS),
+    ("buttonsoccer", buttonsoccer::SOUNDS),
+    ("dotsboxes", dotsboxes::SOUNDS),
+    ("fruitduel", fruitduel::SOUNDS),
+    ("fruitmerge", fruitmerge::SOUNDS),
+    ("minigolf", minigolf::SOUNDS),
+    ("impostor", impostor::SOUNDS),
+    ("memory", memory::SOUNDS),
+    ("moles", moles::SOUNDS),
+    ("snakes", snakes::SOUNDS),
+    ("pool", pool::SOUNDS),
+    ("tictactoe", &[]),
+    ("paintfight", &[]),
     ("blockblast", blockblast::SOUNDS),
     ("breakout", breakout::SOUNDS),
     ("charades", charades::SOUNDS),
@@ -38,7 +51,7 @@ fn names(clips: &[Sfx]) -> BTreeSet<String> {
     clips.iter().map(|c| c.as_str().to_string()).collect()
 }
 
-/// Every `"sounds/…"` string literal in the Rust files under `dir`.
+/// Sound paths and generated sound resource accessors referenced under `dir`.
 fn named_in(dir: &Path) -> BTreeSet<String> {
     let mut out = BTreeSet::new();
     for entry in std::fs::read_dir(dir).unwrap() {
@@ -47,6 +60,15 @@ fn named_in(dir: &Path) -> BTreeSet<String> {
             out.extend(named_in(&path));
         } else if path.extension().is_some_and(|e| e == "rs") {
             let text = std::fs::read_to_string(&path).unwrap();
+            for tail in text.split("res::assets::sounds::").skip(1) {
+                let accessor: String = tail
+                    .chars()
+                    .take_while(|c| c.is_ascii_alphanumeric() || matches!(c, ':' | '_'))
+                    .collect();
+                if let Some(stem) = accessor.strip_suffix("_wav") {
+                    out.insert(format!("sounds/{}.wav", stem.replace("::", "/")));
+                }
+            }
             let mut rest = text.as_str();
             while let Some(i) = rest.find("\"sounds/") {
                 let tail = &rest[i + 1..];

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 256"><!-- SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception --><defs><linearGradient id="metal" x2=".8" y2="1"><stop stop-color="#effdff" /><stop offset=".46" stop-color="#b5e6ed" /><stop offset=".49" stop-color="#e8faff" /><stop offset="1" stop-color="#71a1bf" /></linearGradient>
+    </defs><g id="scimitar" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M31 182C31 153 21 127 26 99C31 66 54 32 92 5C68 45 57 76 51 108C46 136 46 161 47 182Z" fill="url(#metal)" stroke="#294455" stroke-width="2.8" />
+      <path d="M32 173C32 147 24 124 29 100C34 69 52 40 81 17C53 52 40 83 37 110C34 136 37 155 37 173Z" fill="#f2ffff" />
+      <path d="M42 165C40 138 38 120 44 94C49 72 58 51 69 35C56 66 49 90 46 114Z" fill="#77a6b8" />
+      <path d="M31 180Q39 183 47 179L47 195Q45 213 49 229L42 237L29 232Q35 211 31 195Z" fill="currentColor" stroke="#443741" stroke-width="3" />
+      <path d="M33 197l12-5m-12 13 12-5m-12 13 12-5m-12 13 13-5m-14 13 14-5" stroke="#402f3d" opacity=".62" stroke-width="3" />
+      <path d="M11 176Q19 183 31 177L38 173L46 177Q53 180 63 174Q67 170 69 174Q72 183 60 185L47 185L41 191L34 186Q25 183 18 188Q9 192 7 183Q6 178 11 176Z" fill="#e6aa52" stroke="#553e38" stroke-width="2.8" />
+      <path d="M15 182Q24 184 35 179L39 177L46 181M52 182l10-3" fill="none" stroke="#ffe7a0" stroke-width="2.2" />
+      <path d="M30 228Q39 232 48 225Q48 234 56 235Q52 246 38 244Q27 242 27 236Z" fill="#e6aa52" stroke="#553e38" stroke-width="2.8" />
+      <path d="M31 235q8 6 17 2" fill="none" stroke="#ffe7a0" stroke-width="2.5" />
+    </g>
+  </svg>

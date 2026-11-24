@@ -23,6 +23,35 @@ const LISTS: &[&str] = &["ch_deck_list"];
 
 /// Every key a game saves, so each opens as it would the first time, put back afterwards.
 const KEYS: &[&str] = &[
+    "fruitduel.v2",
+    "fruitduel.settings",
+    "fruitmerge.best",
+    "fruitmerge.v2",
+    "fruitmerge.settings",
+    "buttonsoccer.v2",
+    "buttonsoccer.settings",
+    "dotsboxes.v1",
+    "dotsboxes.settings",
+    "minigolf.v2",
+    "minigolf.settings",
+    "impostor.v2",
+    "impostor.settings",
+    "impostor.feedback",
+    "snakes.v1",
+    "snakes.settings",
+    "basketball.v1",
+    "basketball.settings",
+    "basketball.difficulty",
+    "paintfight.v1",
+    "paintfight.settings",
+    "pool.v1",
+    "pool.settings",
+    "tictactoe.v1",
+    "tictactoe.settings",
+    "memory.v1",
+    "memory.settings",
+    "moles.v1",
+    "moles.settings",
     "blockblast.best",
     "blockblast.settings",
     "blockblast.v1",
@@ -108,6 +137,55 @@ type Page = fn() -> AnyPiece;
 
 /// Each game: its page, and the button that dismisses its first-run how-to-play card.
 const GAMES: &[(&str, Page, &str)] = &[
+    (
+        "fruitduel",
+        || fruitduel::fruitduel_page(4),
+        "fruitduel_help_done",
+    ),
+    (
+        "dotsboxes",
+        || dotsboxes::dotsboxes_page(4),
+        "dotsboxes_help_done",
+    ),
+    (
+        "buttonsoccer",
+        || buttonsoccer::buttonsoccer_page(4),
+        "buttonsoccer_help_done",
+    ),
+    (
+        "minigolf",
+        || minigolf::minigolf_page(4),
+        "minigolf_help_done",
+    ),
+    (
+        "fruitmerge",
+        fruitmerge::fruitmerge_page,
+        "fruitmerge_help_done",
+    ),
+    (
+        "impostor",
+        || impostor::impostor_page(4),
+        "impostor_help_done",
+    ),
+    (
+        "basketball",
+        || basketball::basketball_page(4),
+        "basketball_help_done",
+    ),
+    ("snakes", || snakes::snakes_page(2), "snakes_help_done"),
+    (
+        "paintfight",
+        || paintfight::paintfight_page(2),
+        "paintfight_help_done",
+    ),
+    ("pool", || pool::pool_page(2), "pool_help_done"),
+    (
+        "tictactoe",
+        || tictactoe::tictactoe_page(2),
+        "tictactoe_help_done",
+    ),
+    ("memory", || memory::memory_page(2), "memory_help_done"),
+    ("moles", || moles::moles_page(2), "moles_help_done"),
     ("blockblast", blockblast::blockblast_page, "bb_help_done"),
     ("breakout", breakout::breakout_page, "bk_help_done"),
     ("charades", charades::charades_page, "ch_help_done"),
@@ -373,4 +451,122 @@ fn a_drawn_readout_follows_the_game() {
         assert_eq!(text_of("pp_moves"), "1");
     });
     assert!(checked, "pipes never opened");
+}
+
+/// Changing catalog player count must never resume a different-sized match or open setup again.
+#[test]
+fn selected_player_count_starts_each_game_without_setup() {
+    type PartyPage = (
+        &'static str,
+        fn(usize) -> AnyPiece,
+        usize,
+        &'static str,
+        &'static str,
+    );
+    let games: [PartyPage; 10] = [
+        (
+            "dotsboxes.v1",
+            dotsboxes::dotsboxes_page,
+            4,
+            "dotsboxes_help_done",
+            "humans",
+        ),
+        (
+            "buttonsoccer.v2",
+            buttonsoccer::buttonsoccer_page,
+            4,
+            "buttonsoccer_help_done",
+            "humans",
+        ),
+        (
+            "minigolf.v2",
+            minigolf::minigolf_page,
+            4,
+            "minigolf_help_done",
+            "humans",
+        ),
+        (
+            "tictactoe.v1",
+            tictactoe::tictactoe_page,
+            2,
+            "tictactoe_help_done",
+            "players",
+        ),
+        (
+            "memory.v1",
+            memory::memory_page,
+            4,
+            "memory_help_done",
+            "players",
+        ),
+        (
+            "moles.v1",
+            moles::moles_page,
+            4,
+            "moles_help_done",
+            "players",
+        ),
+        (
+            "snakes.v1",
+            snakes::snakes_page,
+            4,
+            "snakes_help_done",
+            "humans",
+        ),
+        (
+            "paintfight.v1",
+            paintfight::paintfight_page,
+            4,
+            "paintfight_help_done",
+            "humans",
+        ),
+        ("pool.v1", pool::pool_page, 2, "pool_help_done", "humans"),
+        (
+            "basketball.v1",
+            basketball::basketball_page,
+            4,
+            "basketball_help_done",
+            "humans",
+        ),
+    ];
+    let selected = Signal::new(0usize);
+    let players = Signal::new(1usize);
+    let saved = Saved::take(selected);
+    let (mock, _) = MockToolkit::new();
+    day_core::launch_with(mock, dayapp::window().size(390.0, 844.0), move || {
+        zstack(
+            games
+                .iter()
+                .enumerate()
+                .map(|(i, &(_, page, _, _, _))| {
+                    when(
+                        move || selected.get() == i + 1,
+                        move || page(players.get_untracked()),
+                    )
+                    .any()
+                })
+                .collect::<Vec<_>>(),
+        )
+        .any()
+    });
+    for (i, (key, _, max, help, field)) in games.iter().enumerate() {
+        let (name, _) = key.split_once('.').expect("versioned game key");
+        for n in 1..=*max {
+            players.set(n);
+            selected.set(i + 1);
+            flush_sync();
+            tap(help);
+            for id in [format!("{name}_players"), format!("{name}_menu")] {
+                assert!(
+                    day_core::with_tree(|t| t.find_by_id(&id).is_none()),
+                    "{name}/{n}: unexpected setup or stale save overlay {id}"
+                );
+            }
+            selected.set(0);
+            flush_sync();
+            let state: serde_json::Value = gamekit::restore(key).expect("saved match");
+            assert_eq!(state[field].as_u64(), Some(n as u64), "{name}");
+        }
+    }
+    drop(saved);
 }

@@ -62,6 +62,10 @@ jobs:
       # The walkthroughs beside the app: the navigation sweep, every game's screenshots, and the
       # two games whose input needs its own script.
       scripts: dayscript/smoke.yaml dayscript/games.yaml dayscript/flipside.yaml dayscript/pipes.yaml
+      target-scripts: |
+        macos-appkit, linux-gtk, linux-qt, windows-winui, web-dom: dayscript/smoke.yaml dayscript/games.yaml dayscript/flipside.yaml dayscript/pipes.yaml dayscript/catalog-desktop.yaml
+        harmony-arkui: dayscript/smoke.yaml dayscript/games.yaml dayscript/flipside.yaml dayscript/pipes.yaml dayscript/catalog.yaml
+        android-material, ios-uikit: dayscript/smoke.yaml dayscript/games.yaml dayscript/flipside.yaml dayscript/pipes.yaml dayscript/catalog.yaml dayscript/party.yaml
       # Pins every game's RNG, so a scripted run meets the same puzzle and layout everywhere.
       launch-env: DAY_GAMES_SEED=15
       # Every language the app ships, read from resource/locales/, so a language added to the app

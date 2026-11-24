@@ -21,7 +21,9 @@
 //! settings and how-to-play sheets, the pause button, and the haptic gate.
 
 pub mod animation;
+pub mod art;
 pub mod chrome;
+pub mod multiplayer;
 
 use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
@@ -254,3 +256,7 @@ mod tests {
         assert_eq!(ran.get(), 1);
     }
 }
+
+pub mod sprites;
+
+pub mod board_game;

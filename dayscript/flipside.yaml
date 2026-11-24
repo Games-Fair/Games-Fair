@@ -3,6 +3,7 @@
 name: flipside
 flow:
   - wait_for: { id: home }
+  - tap: { id: home_players_2, if_present: true }
   - navigate: { route: flipside }
   - pause: { secs: 0.5 }
   - nav_back: {}
@@ -11,8 +12,8 @@ flow:
   - pause: { secs: 0.5 }
   - tap: { id: fs_pause }
   - tap: { id: fs_new_game }
-  - select: { id: fs_mode, index: 1 }
-  - tap: { id: fs_start }
+  - select: { id: fs_mode, index: 1, if_present: true }
+  - tap: { id: fs_start, if_present: true }
   - assert_text: { id: fs_black_score, text: "2" }
   - assert_text: { id: fs_white_score, text: "2" }
   - screenshot: flipside-opening
@@ -44,11 +45,20 @@ flow:
   - pause: { secs: 0.5 }
   - assert_text: { id: fs_black_score, text: "3" }
   - assert_text: { id: fs_white_score, text: "3" }
+  - nav_back: {}
+  - pause: { secs: 0.4 }
+  - tap: { id: home_players_1, if_present: true }
+  - navigate: { route: flipside }
+  - pause: { secs: 0.5 }
   - tap: { id: fs_pause }
   - tap: { id: fs_new_game }
-  - select: { id: fs_mode, index: 0 }
+  - select: { id: fs_mode, index: 0, if_present: true }
+  - tap: { id: fs_start, if_present: true }
+  - tap: { id: fs_pause }
+  - tap: { id: fs_settings }
   - select: { id: fs_difficulty, index: 2 }
-  - tap: { id: fs_start }
+  - tap: { id: fs_done }
+  - tap: { id: fs_resume }
   - key: { id: fs_board, key: Enter }
   - tap: { id: fs_pause }
   - pause: { secs: 1.0 }
