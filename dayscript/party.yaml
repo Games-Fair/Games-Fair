@@ -107,7 +107,8 @@ flow:
   # Charades: the decks, then a card from a round started by hand (dayscript/charades.yaml
   # explains why tilting goes off first).
   - navigate: { route: charades }
-  - pause: { secs: 0.6 }
+  - tap: { id: ch_help_done, if_present: true }
+  - wait_for: { id: ch_settings }
   - screenshot: { name: charades, title: Charades, caption: "Hold the phone to your forehead, let your friends give clues, and nod when you guess right.", source: games/charades/src/lib.rs }
   - tap: { id: ch_settings }
   - pause: { secs: 0.4 }
