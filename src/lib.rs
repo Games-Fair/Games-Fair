@@ -58,6 +58,7 @@ day::routes! {
         Mines => "mines",
         Flipside => "flipside",
         Pipes => "pipes",
+        Chess => "chess",
         TicTacToe => "tictactoe",
         Memory => "memory",
         Moles => "moles",
@@ -135,6 +136,7 @@ fn game_background(section: Section) -> Color {
         Section::Mines => mines::SURFACE,
         Section::Flipside => flipside::SURFACE,
         Section::Pipes => pipes::SURFACE,
+        Section::Chess => fair_chess::SURFACE,
         Section::TicTacToe => tictactoe::SURFACE,
         Section::Memory => memory::SURFACE,
         Section::Moles => moles::SURFACE,
@@ -373,7 +375,7 @@ fn supports_players(section: Section, players: usize, mobile: bool) -> bool {
     match section {
         Section::Impostor => players >= 3,
         Section::Charades => players >= 2,
-        Section::TicTacToe | Section::Pool | Section::Flipside => players <= 2,
+        Section::Chess | Section::TicTacToe | Section::Pool | Section::Flipside => players <= 2,
         Section::Memory
         | Section::Moles
         | Section::Snakes
@@ -386,11 +388,12 @@ fn supports_players(section: Section, players: usize, mobile: bool) -> bool {
         _ => players == 1,
     }
 }
-const CATALOG: [Section; 24] = [
+const CATALOG: [Section; 25] = [
     Section::Breakout,
     Section::Sirtet,
     Section::Game2048,
     Section::Sudoku,
+    Section::Chess,
     Section::BlockBlast,
     Section::Solitaire,
     Section::Pipes,
@@ -500,6 +503,14 @@ fn catalog_tile(open: Signal<Option<GameRoute>>, section: Section) -> AnyPiece {
             res::str::nav_charades(),
             charades::charades_preview(),
             id!(tile_charades),
+        )
+        .any(),
+        Section::Chess => tile(
+            open,
+            section,
+            res::str::nav_chess(),
+            fair_chess::preview(),
+            id!(tile_chess),
         )
         .any(),
         Section::TicTacToe => tile(
@@ -825,6 +836,9 @@ fn game_cover(
                 mobile.get_untracked().then(|| players.get_untracked()),
             ),
             Section::Pipes => pipes::pipes_page(),
+            Section::Chess => {
+                fair_chess::page(mobile.get_untracked().then(|| players.get_untracked()))
+            }
             Section::TicTacToe => tictactoe::tictactoe_page(players.get_untracked()),
             Section::Memory => memory::memory_page(players.get_untracked()),
             Section::Moles => moles::moles_page(players.get_untracked()),
@@ -864,6 +878,7 @@ mod catalog_tests {
             assert_eq!(supports_players(Section::Sudoku, p, true), p == 1);
             assert_eq!(supports_players(Section::Flipside, p, true), p <= 2);
             assert_eq!(supports_players(Section::TicTacToe, p, true), p <= 2);
+            assert_eq!(supports_players(Section::Chess, p, true), p <= 2);
             assert_eq!(supports_players(Section::Pool, p, true), p <= 2);
             assert_eq!(supports_players(Section::Charades, p, true), p >= 2);
             assert_eq!(supports_players(Section::FruitMerge, p, true), p == 1);

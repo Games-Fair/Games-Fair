@@ -43,6 +43,7 @@ day = { package = "day-app", version = "0.*" }
 day-piece-settings = "0.*"
 day-spec = "0.*"
 day-core = "0.*"
+fair-chess = { path = "games/chess" }
 tictactoe = { path = "games/tictactoe" }
 memory = { path = "games/memory" }
 moles = { path = "games/moles" }
@@ -83,6 +84,18 @@ day-build = "0.*"
 [lints]
 workspace = true
 
+# Keep move search and endgame adjudication interactive on debug phone builds.
+[profile.dev.package.fair-chess]
+opt-level = 3
+[profile.dev.package.open-chess-analysis]
+opt-level = 3
+[profile.dev.package.cozy-chess]
+opt-level = 3
+[profile.dev.package.chasolver]
+opt-level = 3
+[profile.dev.package.chess]
+opt-level = 3
+
 # Solitaire proves each new deal winnable by searching tens of thousands of positions, which an
 # unoptimized build does dozens of times slower; debug builds and walkthroughs optimize that crate.
 [profile.dev.package.solitaire]
@@ -106,6 +119,7 @@ members = [
     "games/twentyfortyeight",
     "gamekit",
     "game-resources",
+    "games/chess",
     "games/tictactoe",
     "games/memory",
     "games/moles",

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+<!-- SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception -->
+<ellipse cx="49" cy="84" rx="29" ry="4" fill="#152923" opacity=".22"/>
+<g fill="currentColor" stroke="#39382e" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M45 9 H51 V16 H58 V22 H51 V29 H45 V22 H38 V16 H45Z"/>
+<path d="M48 34 Q40 24 31 29 Q20 35 28 45 L35 52 Q48 57 61 52 L68 45 Q76 34 65 29 Q57 25 48 34Z"/>
+<path d="M38 53 Q42 59 32 66 Q48 72 64 66 Q54 59 58 53Z"/>
+<path d="M48 35 V47 M33 46 Q48 51 63 46" fill="none" stroke="#ab8958" stroke-width="2.4"/>
+<path d="M31 64 Q48 68 65 64 L68 71 Q48 76 28 71Z"/>
+<path d="M28 70 Q48 74 68 70 Q68 75 74 78 L76 83 Q48 88 20 83 L22 78 Q28 75 28 70Z"/>
+<path d="M25 78 Q48 82 71 78" fill="none" stroke="#ab8958" stroke-width="1.8"/>
+</g></svg>

@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# A local rapid game. Both sides must move before they can agree to a draw.
+name: chess
+flow:
+  - wait_for: { id: home }
+  - tap: { id: home_players_2, if_present: true }
+  - navigate: { route: chess }
+  - wait_for: { id: chess_menu }
+  - tap: { id: chess_again, if_present: true }
+  - tap: { id: chess_new, if_present: true }
+  - select: { id: chess_opponent, index: 1, if_present: true }
+  - tap: { id: chess_rapid }
+  # Face-to-face players keep their seats and the board stays put on Black's turn.
+  - tap: { id: chess_pause }
+  - tap: { id: chess_settings }
+  - toggle: { id: chess_flip_board, value: false }
+  - tap: { id: chess_done }
+  - tap: { id: chess_resume }
+  # e2–e4
+  - key: { id: chess_board, key: Enter }
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: Enter }
+  # e7–e5
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: Enter }
+  - key: { id: chess_board, key: ArrowDown }
+  - key: { id: chess_board, key: ArrowDown }
+  - key: { id: chess_board, key: Enter }
+  - tap: { id: chess_pause }
+  - tap: { id: chess_offer }
+  - tap: { id: chess_cancel }
+  - nav_back: {}
+  - wait_for: { id: home }
+  - navigate: { route: chess }
+  - wait_for: { id: chess_resume }
+  - tap: { id: chess_offer }
+  - tap: { id: chess_confirm }
+  - assert_visible: { id: chess_again }
+  - tap: { id: chess_quit }
+  # Solo play uses the same board and restores independently on a phone.
+  - wait_for: { id: home }
+  - tap: { id: home_players_1, if_present: true }
+  - navigate: { route: chess }
+  - wait_for: { id: chess_menu }
+  - tap: { id: chess_again, if_present: true }
+  - tap: { id: chess_new, if_present: true }
+  - select: { id: chess_opponent, index: 0, if_present: true }
+  - tap: { id: chess_untimed }
+  - key: { id: chess_board, key: Enter }
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: ArrowUp }
+  - key: { id: chess_board, key: Enter }
+  - pause: { secs: 3 }
+  - tap: { id: chess_pause }
+  # This action becomes available only after both players have made a move.
+  - assert_visible: { id: chess_offer }
+  - tap: { id: chess_quit }

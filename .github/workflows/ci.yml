@@ -73,6 +73,10 @@ jobs:
       #locales: all
       locales: en fr
       themes: light dark
+      # The Linux emulator's legacy GLES translator stalls on the landscape tablet catalog.
+      # Use the ANGLE software renderer for that profile, as Day does in conformance CI.
+      target-setup: |
+        android-material: if jq -e '.profile == "medium_tablet"' <<< "$DAY_SCRIPT_REPORT_CONTEXT" >/dev/null; then echo "DAY_EMULATOR_GPU=swangle_indirect" >> "$GITHUB_ENV"; fi
       # Android captures on a 9:16 phone rather than the default 20:9 one: Google Play takes a
       # screenshot whose long side is at most twice its short, and the listing's screenshots
       # are these captures. The tablet is the default: captured halved (1280x800) and scaled

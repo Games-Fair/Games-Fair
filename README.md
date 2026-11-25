@@ -1,6 +1,6 @@
 # Games Fair
 
-Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Flipside,
+Solitaire, Block Blast, Breakout, falling blocks, Sudoku, 2048, Mines, Charades, Chess, Flipside,
 Pipes, Match Three, and thirteen additional mobile games in one app. Built with
 [Day](https://daybrite.dev) in one Rust codebase and rendered with the platform's own widgets on
 iPhone, Android, HarmonyOS, macOS, Windows, Linux, and the web. Every game runs entirely on the
@@ -54,6 +54,11 @@ the App Fair publishes this app under are separate, and live in `Day-appfair.tom
   or 9×9 generated puzzle; lock tiles to protect them, and watch a wave of light cross the
   completed network. Every puzzle is solvable. Saves include rotations and locks, and each
   board size keeps its fewest-rotation record. Arrows select, Space/Enter rotates, and L locks.
+- **Chess.** Play White against the computer or share the board with another player. Tap or drag
+  to move, or use the arrow keys and Enter. Choose untimed play, five minutes per side, or ten
+  minutes with a five-second increment. Local players can turn the board between moves.
+  The offline computer opponent uses the classical evaluator and search from
+  [Open Chess Analysis](https://docs.rs/open-chess-analysis/0.1.8/open_chess_analysis/).
 - **Flipside.** Trap and flip opposing discs on an 8×8 board. Play Black against three
   computer difficulties or share the board in pass-and-play. Legal moves are marked, flips
   animate, and a side with no move passes automatically. Use arrows and Space/Enter on a

@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+[package]
+name = "fair-chess"
+version.workspace = true
+edition = "2024"
+license = "AGPL-3.0-only WITH App-Fair-Distribution-Exception"
+
+[dependencies]
+chess = "3.2"
+chasolver = "3.0"
+cozy-chess = "0.3.4"
+open-chess-analysis = "0.1.8"
+day-localization-ui = "0.*"
+day-pieces = "0.*"
+day-spec = "0.*"
+day-core = "0.*"
+gamekit = { path = "../../gamekit" }
+game-resources = { path = "../../game-resources" }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"
+
+[lints]
+workspace = true

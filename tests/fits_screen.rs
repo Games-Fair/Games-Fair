@@ -23,6 +23,9 @@ const LISTS: &[&str] = &["ch_deck_list"];
 
 /// Every key a game saves, so each opens as it would the first time, put back afterwards.
 const KEYS: &[&str] = &[
+    "chess.local.v1",
+    "chess.settings",
+    "chess.flip",
     "fruitduel.v2",
     "fruitduel.settings",
     "fruitmerge.best",
@@ -178,6 +181,7 @@ const GAMES: &[(&str, Page, &str)] = &[
         || paintfight::paintfight_page(2),
         "paintfight_help_done",
     ),
+    ("chess", || fair_chess::page(Some(2)), "chess_rapid"),
     ("pool", || pool::pool_page(2), "pool_help_done"),
     (
         "tictactoe",
