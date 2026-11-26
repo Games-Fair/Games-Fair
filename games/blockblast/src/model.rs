@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! The Block Blast rules, with no UI in them: the 8×8 board, the three-piece tray, placement,
 //! simultaneous row-and-column clears, scoring with combo multipliers and the perfect-clear
 //! bonus, the difficulty-controlled piece generator, game-over detection, and the save state.

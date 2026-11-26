@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! What day-build does before this project compiles: the typed `res::` constants generated from
 //! `resource/` (https://daybrite.dev/docs/resources), the app title `src/lib.rs` embeds for the
 //! home and window headings, and the bundled fonts' license texts About shows.

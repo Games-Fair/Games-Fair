@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Mines' rules, free of UI: a board whose mines are laid only once the first tap has landed (so
 //! it can never be the one that ends the game), revealing and the cascade it opens, flags,
 //! chording a satisfied number, and the records a finished game leaves behind.

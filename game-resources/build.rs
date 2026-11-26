@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 fn main() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("..");
     let plan = day_build::plan_resources(&root).expect("shared game resources");

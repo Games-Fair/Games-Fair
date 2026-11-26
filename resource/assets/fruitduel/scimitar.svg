@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 256"><!-- SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception --><defs><linearGradient id="metal" x2=".8" y2="1"><stop stop-color="#effdff" /><stop offset=".46" stop-color="#b5e6ed" /><stop offset=".49" stop-color="#e8faff" /><stop offset="1" stop-color="#71a1bf" /></linearGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 256"><!-- SPDX-License-Identifier: GPL-2.0-or-later --><defs><linearGradient id="metal" x2=".8" y2="1"><stop stop-color="#effdff" /><stop offset=".46" stop-color="#b5e6ed" /><stop offset=".49" stop-color="#e8faff" /><stop offset="1" stop-color="#71a1bf" /></linearGradient>
     </defs><g id="scimitar" stroke-linecap="round" stroke-linejoin="round">
       <path d="M31 182C31 153 21 127 26 99C31 66 54 32 92 5C68 45 57 76 51 108C46 136 46 161 47 182Z" fill="url(#metal)" stroke="#294455" stroke-width="2.8" />
       <path d="M32 173C32 147 24 124 29 100C34 69 52 40 81 17C53 52 40 83 37 110C34 136 37 155 37 173Z" fill="#f2ffff" />

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Games Fair: UI strings (https://daybrite.dev/docs/localization). This is the catalog the other
 # locales are generated against: a key added here is added to locales/<tag>/app.ftl beside it,
 # which day-build picks up on its own.

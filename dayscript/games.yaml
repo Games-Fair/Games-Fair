@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Gameplay sweep for screenshots. Run with `--env DAY_GAMES_SEED=15` so the Sudoku cells it
 # taps are empty (see dayscript/sudoku.yaml).
 name: games

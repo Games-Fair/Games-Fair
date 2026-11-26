@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Native hit-test regression, on a 360×640dp Android emulator (e.g. 720×1280 @ 320dpi).
 
 First launch Day-Games with `day launch -p android-material --android-device SERIAL

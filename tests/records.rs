@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Settings › Records › Reset all records: every game's stored records go, and a saved game that
 //! carries its best (Block Blast, Sirtet, 2048) keeps the game but not the record. The prefs
 //! store is the machine's own, so each key's previous value is put back afterwards.

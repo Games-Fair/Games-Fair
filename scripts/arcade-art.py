@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Render the arcade illustrations with librsvg and Pillow. Run from any directory."""
 import io
 import json
@@ -40,7 +40,7 @@ def vector_sprite(filename, element, view, dependencies=()):
     ns = 'http://www.w3.org/2000/svg'
     ET.register_namespace('', ns)
     svg = ET.Element(f'{{{ns}}}svg', {'viewBox': view})
-    svg.append(ET.Comment(' SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception '))
+    svg.append(ET.Comment(' SPDX-License-Identifier: GPL-2.0-or-later '))
     defs = ET.SubElement(svg, f'{{{ns}}}defs')
     for name in dependencies:
         defs.append(deepcopy(root.find(f".//*[@id='{name}']")))

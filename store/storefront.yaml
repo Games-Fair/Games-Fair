@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # The store listing: submission info, the localized text, and the screenshots each listing shows. It belongs
 # to the App Store record (ID 6761661340) and the Play listing this app already has.
 #
@@ -71,8 +71,8 @@ storefront:
       your device. Your progress is saved when you leave a game and restored when you come back,
       including if the phone puts the app to sleep mid-round.
 
-      Games Fair is published by the App Fair Project and is free software under the GNU Affero
-      General Public License, with an exception for distribution through the app stores. It is built
+      Games Fair is published by the App Fair Project and is free software under the GNU General
+      Public License version 2 or later. It is built
       with the Day framework: one Rust codebase drawing itself with each platform's real native
       widgets. github.com/Games-Fair/Games-Fair
     keywords: ["solitaire", "cards", "block", "blast", "sudoku", "2048", "puzzle", "arcade", "classic", "offline", "no ads", "mines", "charades"]

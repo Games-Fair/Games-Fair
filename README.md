@@ -237,14 +237,11 @@ address a node directly and cannot detect this form of touch-through.
 
 ## License
 
-Games Fair is free software under the GNU Affero General Public License, version 3 only
-([`LICENSE.txt`](LICENSE.txt)), with the App Fair Distribution Exception
-([`LICENSE-EXCEPTIONS.txt`](LICENSE-EXCEPTIONS.txt)), which permits distribution through an app
-storefront notwithstanding terms that would otherwise conflict with the AGPL. Every source file
-says so:
+Games Fair is free software under the [GNU General Public License, version 2 or later](LICENSE.txt).
+App-owned source files carry this notice.
 
 ```
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 ```
 
 ## Publishing through the App Fair

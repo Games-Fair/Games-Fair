@@ -1,9 +1,9 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 [package]
 name = "sirtet"
 version.workspace = true
 edition = "2024"
-license = "Apache-2.0"
+license = "GPL-2.0-or-later"
 
 # A composite Day piece: a reusable widget built purely from Day's core primitives, with no native
 # per-backend code and no cargo features, so it works on every backend as is. Depend on it with a

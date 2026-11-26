@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
-<!-- SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception -->
+<!-- SPDX-License-Identifier: GPL-2.0-or-later -->
 <ellipse cx="49" cy="84" rx="29" ry="4" fill="#152923" opacity=".22"/>
 <g fill="currentColor" stroke="#39382e" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
 <path d="M30 66 Q32 55 44 49 Q54 43 54 35 Q49 43 40 43 L30 51 Q27 53 23 51 L18 46 Q17 43 21 39 L34 24 L35 14 L44 19 L49 10 L53 18 Q68 21 72 39 Q76 52 64 67Z"/>

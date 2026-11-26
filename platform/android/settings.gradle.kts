@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 pluginManagement {
     // Day's Gradle plugins, put in place by `day build`, `day prepare`, and `day open` from the Day
     // this app builds against (https://daybrite.dev/docs/platforms/android-material#the-gradle-project).

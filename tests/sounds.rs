@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! The bundled sound clips: every clip a game names is bundled and preloaded, every bundled clip
 //! is played by something, and each one is in the format `day-part-sound` plays on every platform
 //! without converting (16-bit PCM WAV, mono, 44.1 kHz).

@@ -11,4 +11,4 @@ No sampled or third-party material.
 16-bit PCM WAV, mono, 44.1 kHz; all clips fit mobile SoundPool limits.
 
 Copyright The Daybrite Project.
-AGPL-3.0-only WITH App-Fair-Distribution-Exception.
+GPL-2.0-or-later.

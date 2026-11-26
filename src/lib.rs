@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Games Fair is a [Day](https://daybrite.dev) app of small arcade/puzzle games, one crate each.
 //! `root()` is the whole UI, shared by every platform: the phones, the desktops, and the web.
 //!

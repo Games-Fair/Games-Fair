@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
-  <!-- SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception -->
+  <!-- SPDX-License-Identifier: GPL-2.0-or-later -->
   <!-- All drawings use a 100-unit square. Player pieces inherit their team's color. -->
   <defs>
     <radialGradient id="fur" cx=".33" cy=".22" r=".8"><stop stop-color="#bc8e70"/><stop offset=".65" stop-color="#92644e"/><stop offset="1" stop-color="#63463f"/></radialGradient>

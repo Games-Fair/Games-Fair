@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! "Be Jewelled": faceted gemstones in deep jewel color, glitter and embers flying off every
 //! move, bursts that flare and shake the board, starlight over a resting board, and a glass
 //! marimba.

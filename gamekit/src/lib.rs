@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! gamekit is the games' standard save-state mechanism. Each game serializes its durable state
 //! (board, score, best) to JSON in `day-part-preferences` (docs/prefs.md) and restores it the next
 //! time it opens. Two write triggers cover every exit path:

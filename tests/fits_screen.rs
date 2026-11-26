@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Every game fits the screen it is given: nothing drawn past the window's edges, and no page
 //! that has to scroll to show its own controls. The narrowest iPhone layout is 320 points wide
 //! (an iPhone 13 mini or SE with Display Zoom set to Larger Text), and a game that assumed the

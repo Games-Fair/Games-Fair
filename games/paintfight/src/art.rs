@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 use day_pieces::prelude::*;
 const INK: Color = Color::hex(0x252334);
 fn oval(d: &mut Draw, x: f64, y: f64, w: f64, h: f64, color: Color) {

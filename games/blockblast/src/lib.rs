@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Block Blast: drag pieces from a three-piece tray onto an 8×8 board; a full row or column
 //! clears. One immediate-mode canvas (docs/canvas.md) draws the board, the tray and every effect,
 //! stepped on Day's frame clock: a picked-up piece grows to board size and rides above the

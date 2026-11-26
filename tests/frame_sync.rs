@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Mount real game pages and deliver manual native frames: idle means no requested callbacks,
 //! not merely no repaint. Input goes through the same event handlers as native/Dayscript input.
 #![cfg(feature = "mock")]

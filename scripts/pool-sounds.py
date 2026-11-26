@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Original Pool Foley, synthesized from damped material resonances (no borrowed samples).
 
 A rounded phenolic-ball knock, felt-tip cue contact, rubber cushions and a leather/net

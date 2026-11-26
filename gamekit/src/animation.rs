@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Demand-driven game loops on Day's native, window-scoped display scheduler.
 
 use day_core::frame::{FrameClock, FrameHandle};

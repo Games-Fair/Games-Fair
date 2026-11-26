@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! The offline computer player. Open Chess Analysis searches the same cozy-chess
 //! position the game adjudicates, including its castling and en passant rights.
 use crate::model::legal;

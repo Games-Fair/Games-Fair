@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! The chrome every game shares: the dark card the pause menu, the
 //! game-over card, the settings sheet, and the how-to-play sheet sit on; the menu buttons; the
 //! pause button and its glyph; the per-game settings record; and the haptic gate. Composed from

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Impact particles and a tapered saber trail.
 use crate::{
     model::{FOLLOW_THROUGH, Game, WINDUP, blade_point, world},

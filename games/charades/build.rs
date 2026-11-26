@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Compiles the word lists into the game: every `words/<locale>/<deck>.txt` becomes an entry of
 //! `LOCALES` in `$OUT_DIR/words.rs`, which src/model.rs includes. Adding a locale or a deck is
 //! adding files; no code changes (words/README.md).

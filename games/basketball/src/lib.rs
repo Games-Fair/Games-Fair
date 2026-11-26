@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 use day_localization_ui::LocalizedText;
 use day_pieces::prelude::*;
 use day_spec::Key;

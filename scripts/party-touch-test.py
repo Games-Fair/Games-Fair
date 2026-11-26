@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Native two-finger, pool drag, and save/resume regression on an isolated Android emulator.
 Launch Games Fair with --locale en --env DAY_GAMES_SEED=15 first.
 Usage: DAY_CLI=/path/to/day python3 scripts/party-touch-test.py emulator-SERIAL

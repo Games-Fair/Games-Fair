@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 name: escape-pauses
 description: In every game, Escape opens the pause menu (with Resume and Close Game) and Escape again resumes.
 flow:

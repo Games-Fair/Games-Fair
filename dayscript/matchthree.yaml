@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Run with --env DAY_GAMES_SEED=15 --locale en. Uses the real rules and normal controls.
 # Level moves are checked by model::tests::deterministic_levels_are_winnable.
 name: matchthree

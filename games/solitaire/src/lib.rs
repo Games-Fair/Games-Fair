@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Solitaire: Klondike, dealt winnable. Two canvases draw the table (docs/canvas.md): the lower
 //! one holds the cards at rest and re-records only when something changes; the upper one takes
 //! every touch, click and key and draws whatever moves, stepped on Day's frame clock.

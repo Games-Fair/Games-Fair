@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! The effects layer every theme shares: piece outlines, a small particle system that trails
 //! moving pieces and bursts where matches clear, and the resting board's ambience. Particle
 //! positions are in board cells (the piece in column 2, row 3 sits at (2.5, 3.5)), so a resize

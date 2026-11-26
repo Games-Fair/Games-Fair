@@ -1,9 +1,9 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 [package]
 name = "charades"
 version.workspace = true
 edition = "2024"
-license = "Apache-2.0"
+license = "GPL-2.0-or-later"
 # Compiles every word list under words/ into the game (words/README.md).
 build = "build.rs"
 

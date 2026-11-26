@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Convex contact outlines sampled from the illustrated fruit skins. Two round fruits use
 //! circles. Angular impulses let uneven fruit rock.
 use crate::model::{Fruit, SIZES};

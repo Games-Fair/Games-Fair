@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Material-specific Pool Foley. Velocity changes timbre and gain, never playback pitch.
 use game_resources::res::assets::sounds::pool as clips;
 use gamekit::chrome;

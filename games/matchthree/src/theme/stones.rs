@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! "Sea Stones": sea-worn pebbles in quiet natural colors on a tide-pool board. Matches lift
 //! away with a slow ripple and a little foam, waves wash up over a resting board and leave the
 //! stones glistening, and every sound is pebbles clicking together in the surf.

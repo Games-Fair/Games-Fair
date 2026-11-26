@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! 2048: a sliding-tile number puzzle on an immediate-mode canvas. Slides, merges and spawns
 //! tween on Day's frame clock (https://daybrite.dev/docs/canvas). A composite Day piece: pure
 //! composition over `day_pieces`. Swipe to move; combine equal tiles to reach 2048.

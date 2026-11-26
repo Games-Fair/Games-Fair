@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Generated puzzle seed 15. The final section replays a complete known solution.
 # Run with --env DAY_GAMES_SEED=15. No network or external fixture is needed.
 name: pipes

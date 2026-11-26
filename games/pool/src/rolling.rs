@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! World-space rolling orientation, integrated from travel rather than frame count or speed.
 use crate::model::BALL_R;
 use serde::{Deserialize, Serialize};

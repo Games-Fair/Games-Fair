@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Original Match Three glass-marimba cues. No recordings or external samples.
 Rebuild: python3 scripts/matchthree-sounds.py
 """

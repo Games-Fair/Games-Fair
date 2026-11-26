@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Deterministic match-N engine. Resolution is atomic; animation replays immutable snapshots.
 use serde::{Deserialize, Serialize};
 pub const N: usize = 7;

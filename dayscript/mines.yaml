@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Mines from the keyboard: a fresh Easy board, F flags the square under the pointer, Space
 # uncovers (the first tap is always safe), then Flag Mode, a bigger board, and settings.
 # Run with `--env DAY_GAMES_SEED=15`.

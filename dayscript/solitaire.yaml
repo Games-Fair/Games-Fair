@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Solitaire walkthrough (https://daybrite.dev/docs/dayscript): a Turn One deal played from the
 # keyboard, a hint and an undo, then the pause menu, the draw picker, settings, and the rules.
 #

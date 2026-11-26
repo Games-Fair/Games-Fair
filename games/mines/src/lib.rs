@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Mines is the classic sweeper on one immediate-mode canvas (docs/canvas.md), stepped on Day's
 //! frame clock: squares pop open in rings out from the tap, flags plant with a wobble, a mine ends
 //! the game with a shake and a burst of sparks, and a swept board plants the flags it never had to.

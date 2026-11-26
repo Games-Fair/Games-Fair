@@ -1,9 +1,9 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 [package]
 name = "snakes"
 version.workspace = true
 edition = "2024"
-license = "AGPL-3.0-only WITH App-Fair-Distribution-Exception"
+license = "GPL-2.0-or-later"
 
 [dependencies]
 day-localization-ui = "0.*"

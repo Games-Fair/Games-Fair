@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Decode bundled sprite sheets once per mounted game, on all canvas backends.
 use day_core::Bitmap;
 use day_reactive::{Scope, Signal};

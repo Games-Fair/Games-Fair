@@ -1,10 +1,13 @@
 # Sound clips
 
-Every clip in this directory comes from one of six sound packs by Kenney (Kenney Vleugels,
+The clips listed in the table below come from six sound packs by Kenney (Kenney Vleugels,
 [kenney.nl](https://kenney.nl)), released under
 [Creative Commons CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Each pack's own
 `License.txt` says: "You may use these assets in personal and commercial projects. Credit (Kenney
 or www.kenney.nl) would be nice but is not mandatory." We credit Kenney here anyway.
+
+The original [Flipside](flipside/README.md), [Match Three](matchthree/README.md) and
+[Pipes](pipes/README.md) clips use the app’s GPL-2.0-or-later license.
 
 | Pack | Version | Page |
 |---|---|---|

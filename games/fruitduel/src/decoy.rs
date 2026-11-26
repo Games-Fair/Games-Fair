@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Contact against the painted gift, flower and beach ball in their rotated artwork coordinates.
 use super::model::{EDGE, blade_point, world};
 use gamekit::multiplayer::Vec2;

@@ -1,9 +1,9 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 [package]
 name = "gamekit"
 version.workspace = true
 edition = "2024"
-license = "Apache-2.0"
+license = "GPL-2.0-or-later"
 
 # The games' shared save-state mechanism: serde_json snapshots in day-part-preferences, written on
 # game exit (scope cleanup) and on app backgrounding (lifecycle phases where delivered).

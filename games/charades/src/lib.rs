@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Charades is the party game played with a phone on your forehead. One player holds it up, screen
 //! facing out, and guesses the word the others describe, act out or hum; a nod (the phone tilted
 //! toward the floor) scores it, tipping the head back passes. The accelerometer reads the tilt

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Sirtet is a falling-tetromino stacker on an immediate-mode canvas, with gravity on Day's
 //! frame clock (https://daybrite.dev/docs/canvas). A composite Day piece: pure composition over
 //! `day_pieces`. Tap rotates, horizontal drag shifts, downward drag soft-drops.

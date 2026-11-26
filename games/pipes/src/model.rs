@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! A connected tree, scrambled by rotations. Any leak-free connected arrangement wins;
 //! puzzles are guaranteed solvable, but we do not require a unique solution.
 use serde::{Deserialize, Serialize};

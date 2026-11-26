@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Themes: the same game in different dress. A theme only changes what is seen, heard and
 //! felt; the rules, the levels and the timing of every move stay the same, so a theme can be
 //! changed in the middle of a level.

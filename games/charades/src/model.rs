@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Charades' rules and data, free of UI: the word decks and the locale they come from, which words
 //! a round deals so none repeats until its deck is used up, a round's clock and score, and reading
 //! a nod or a tip back from the accelerometer.

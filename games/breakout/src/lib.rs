@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Breakout: a real-time brick-breaker drawn on an immediate-mode canvas and driven by Day's frame
 //! clock (https://daybrite.dev/docs/canvas): an eased, finger-tracking paddle that can smash the
 //! ball up or down, multi-hit armored bricks, five power-ups with timer badges, combos with score

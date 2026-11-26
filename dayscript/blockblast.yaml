@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Block Blast walkthrough (https://daybrite.dev/docs/dayscript): a fresh Normal game played from
 # the keyboard, the pause menu, the difficulty picker, settings, and the rules sheet.
 #

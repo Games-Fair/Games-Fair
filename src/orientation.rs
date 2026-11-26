@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 //! Native rotation policy, scoped to the open game. Catalogs and adaptive games stay unlocked.
 pub fn portrait(locked: bool) {
     #[cfg(target_os = "ios")]

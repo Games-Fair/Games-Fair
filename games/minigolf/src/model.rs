@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 use gamekit::{board_game::Feedback, multiplayer::Vec2};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Serialize, Deserialize)]

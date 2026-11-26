@@ -1,3 +1,3 @@
-// SPDX-License-Identifier: AGPL-3.0-only WITH App-Fair-Distribution-Exception
+// SPDX-License-Identifier: GPL-2.0-or-later
 import { appTasks } from '@ohos/hvigor-ohos-plugin';
 export default { system: appTasks, plugins: [] };
