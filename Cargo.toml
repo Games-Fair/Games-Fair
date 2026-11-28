@@ -154,7 +154,7 @@ undocumented_unsafe_blocks = "warn"
 unwrap_used = "warn"
 
 [workspace.package]
-version = "3.0.2"
+version = "3.0.3"
 
 # Fixed-step physics and computer shot searches run within the animation frame.
 [profile.dev.package.minigolf]
