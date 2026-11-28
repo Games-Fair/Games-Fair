@@ -130,7 +130,7 @@ checksum = "ac07cdecf99051d9a5238b80f35af32cdeba5b336e55d957b318b50137e18da5"
 
 [[package]]
 name = "basketball"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -170,7 +170,7 @@ dependencies = [
 
 [[package]]
 name = "blockblast"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -185,7 +185,7 @@ dependencies = [
 
 [[package]]
 name = "breakout"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-localization-ui",
@@ -200,7 +200,7 @@ dependencies = [
 
 [[package]]
 name = "buttonsoccer"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -287,7 +287,7 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
 name = "charades"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -1140,7 +1140,7 @@ dependencies = [
 
 [[package]]
 name = "dotsboxes"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -1199,7 +1199,7 @@ dependencies = [
 
 [[package]]
 name = "fair-chess"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "chasolver",
  "chess",
@@ -1265,7 +1265,7 @@ dependencies = [
 
 [[package]]
 name = "flipside"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -1332,7 +1332,7 @@ dependencies = [
 
 [[package]]
 name = "fruitduel"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -1348,7 +1348,7 @@ dependencies = [
 
 [[package]]
 name = "fruitmerge"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -1452,7 +1452,7 @@ dependencies = [
 
 [[package]]
 name = "game-resources"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-app",
  "day-build",
@@ -1460,7 +1460,7 @@ dependencies = [
 
 [[package]]
 name = "gamekit"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -1481,7 +1481,7 @@ dependencies = [
 
 [[package]]
 name = "games-fair"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "basketball",
  "blockblast",
@@ -2164,7 +2164,7 @@ checksum = "65b27460c2c92b037f3f94c538ed9a3342f3fdf923606781629ccb35f82d042a"
 
 [[package]]
 name = "impostor"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -2387,7 +2387,7 @@ checksum = "5d15f86d12da44cd8d4ec3c73984537eb7f4cadcb9776a575a0a8a05ca11005c"
 
 [[package]]
 name = "matchthree"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-localization-ui",
  "day-part-haptics",
@@ -2434,7 +2434,7 @@ dependencies = [
 
 [[package]]
 name = "memory"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -2450,7 +2450,7 @@ dependencies = [
 
 [[package]]
 name = "mines"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -2465,7 +2465,7 @@ dependencies = [
 
 [[package]]
 name = "minigolf"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -2501,7 +2501,7 @@ dependencies = [
 
 [[package]]
 name = "moles"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -3173,7 +3173,7 @@ dependencies = [
 
 [[package]]
 name = "paintfight"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -3255,7 +3255,7 @@ checksum = "c938015719552d665fd0553b90d96cd7ff58e83e4c061ca99e6bb78865a72752"
 
 [[package]]
 name = "pipes"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-localization-ui",
  "day-pieces",
@@ -3295,7 +3295,7 @@ dependencies = [
 
 [[package]]
 name = "pool"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -3631,7 +3631,7 @@ checksum = "33f4fe9184a62d842c9ef383018f3306d8ba224fd9d836f56d7288308847c256"
 
 [[package]]
 name = "sirtet"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-localization-ui",
@@ -3665,7 +3665,7 @@ checksum = "3244542535d5de959d90ec55d1b5ff0fd2bb7b1310223907d5f11932847f7b59"
 
 [[package]]
 name = "snakes"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -3681,7 +3681,7 @@ dependencies = [
 
 [[package]]
 name = "solitaire"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -3711,7 +3711,7 @@ dependencies = [
 
 [[package]]
 name = "sudoku"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-localization-ui",
@@ -3843,7 +3843,7 @@ dependencies = [
 
 [[package]]
 name = "tictactoe"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-geometry",
@@ -3947,7 +3947,7 @@ checksum = "009dbb7700f11c55ef83aebbe4c0e9cf1f1ac0844bd8d6f00dc38f302026e13a"
 
 [[package]]
 name = "twentyfortyeight"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "day-core",
  "day-localization-ui",
