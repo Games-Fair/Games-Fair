@@ -96,8 +96,8 @@ struct Saved {
 }
 
 impl Saved {
-    fn take(selected: Signal<usize>) -> Self {
-        let values = KEYS
+    fn take(selected: Signal<usize>, keys: &[&str]) -> Self {
+        let values = keys
             .iter()
             .map(|k| {
                 let key = format!("save.{k}");
@@ -318,7 +318,7 @@ fn overflows(s: &MockState, window: Size) -> Vec<String> {
 /// phone's backend would, and run `each` on every game with its help card up and then down.
 fn with_games(width: f64, height: f64, mut each: impl FnMut(&str, &str, &MockProbe)) {
     let selected = Signal::new(0usize);
-    let saved = Saved::take(selected);
+    let saved = Saved::take(selected, KEYS);
     let (mock, probe): (MockToolkit, MockProbe) = MockToolkit::new();
     gamekit::set_seed_override(15);
     day_core::launch_with(mock, dayapp::window().size(width, height), move || {
@@ -535,7 +535,7 @@ fn selected_player_count_starts_each_game_without_setup() {
     ];
     let selected = Signal::new(0usize);
     let players = Signal::new(1usize);
-    let saved = Saved::take(selected);
+    let saved = Saved::take(selected, KEYS);
     let (mock, _) = MockToolkit::new();
     day_core::launch_with(mock, dayapp::window().size(390.0, 844.0), move || {
         zstack(
@@ -573,4 +573,35 @@ fn selected_player_count_starts_each_game_without_setup() {
         }
     }
     drop(saved);
+}
+
+// The mock and AppKit both derive touch contacts from drags. A stationary mouse click
+// reaches this board as Event::Tap, without any TouchPhase::Began or keyboard event.
+#[test]
+fn chess_moves_a_pawn_with_two_stationary_clicks() {
+    let selected = Signal::new(1usize);
+    let _saved = Saved::take(
+        selected,
+        &["chess.local.v1", "chess.settings", "chess.flip"],
+    );
+    let (mock, probe) = MockToolkit::new();
+    day_core::launch_with(mock, dayapp::window().size(400.0, 740.0), move || {
+        when(move || selected.get() == 1, || fair_chess::page(Some(2))).any()
+    });
+    assert!(tap("chess_untimed"));
+    let size = frame_of(&probe.state.borrow(), "chess_board").size;
+    // In this tall window the board spans the canvas width, centered vertically.
+    let cell = size.width / 8.0;
+    let board = day_core::with_tree(|t| t.find_by_id("chess_board")).unwrap();
+    for rank in [2, 4] {
+        let point = Point::new(
+            4.5 * cell,
+            size.height / 2.0 + (4.5 - f64::from(rank)) * cell,
+        );
+        probe.emit(day_core::rnode_to_id(board), Event::Tap(point));
+    }
+    selected.set(0);
+    flush_sync();
+    let game: serde_json::Value = gamekit::restore("chess.local.v1").expect("saved game");
+    assert_eq!(game["moves"], serde_json::json!(["e2e4"]));
 }

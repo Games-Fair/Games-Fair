@@ -438,28 +438,19 @@ fn board(ui: Rc<Ui>) -> AnyPiece {
             party_art::confetti(draw, size, d.finish_age.get());
         }
     })
-    .on_touches(move |touches| {
-        for contact in touches
-            .iter()
-            .filter(|t| t.phase == day_spec::TouchPhase::Began)
-        {
-            let p = contact.location;
-            let (x, y, cell) = layout(t.size.get());
-            if cell <= 0.0 {
-                continue;
-            }
-            if let Some(i) = (0..30).find(|&i| {
-                let (column, row) = cell_position(i);
-                p.x >= x + column * cell
-                    && p.x < x + (column + 1.0) * cell
-                    && p.y >= y + row * cell
-                    && p.y < y + (row + 1.0) * cell
-            }) {
-                t.keyboard.set(false);
-                t.cursor.set(i);
-                t.play(i);
-                t.repaint.notify();
-            }
+    .on_tap_at(move |p| {
+        let (x, y, cell) = layout(t.size.get());
+        if let Some(i) = (0..30).find(|&i| {
+            let (column, row) = cell_position(i);
+            p.x >= x + column * cell
+                && p.x < x + (column + 1.0) * cell
+                && p.y >= y + row * cell
+                && p.y < y + (row + 1.0) * cell
+        }) {
+            t.keyboard.set(false);
+            t.cursor.set(i);
+            t.play(i);
+            t.repaint.notify();
         }
     })
     .on_key(move |e| k.key(e.key))

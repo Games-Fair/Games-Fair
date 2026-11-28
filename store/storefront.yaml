@@ -16,7 +16,11 @@ storefront:
       Every game plays offline from the first launch. Tap a tile on the home screen to open a game full
       screen; the X closes it and saves your progress.
 
-      No account, no network access, no advertising, and no purchases of any kind.
+      The games use no network connection. The app connects in one place: opening Settings > App Fair
+      downloads the public list of App Fair apps and their icons from appfair.net. That page also
+      has a Donate row, which opens appfair.org/donate in the browser.
+
+      The app has no accounts, advertising, or purchases.
 
   # The listing text (docs/store.md): the default locale's fields, then a table per other
   # locale carrying what differs from them; the name and the URLs are set once here.
@@ -67,9 +71,10 @@ storefront:
 
       WHAT IT DOES NOT DO
 
-      No advertising. No purchases. No account. No network access at all — every game runs entirely on
-      your device. Your progress is saved when you leave a game and restored when you come back,
-      including if the phone puts the app to sleep mid-round.
+      No advertising. No purchases. No account. Every game runs entirely on your device and plays
+      offline. The app connects to the internet in one place: the App Fair page in Settings downloads
+      the list of other App Fair apps when you open it. Your progress is saved when you leave a game
+      and restored when you come back, including if the phone puts the app to sleep mid-round.
 
       Games Fair is published by the App Fair Project and is free software under the GNU General
       Public License version 2 or later. It is built

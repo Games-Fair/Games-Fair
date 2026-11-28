@@ -41,6 +41,8 @@ day = { package = "day-app", version = "0.*" }
 # Settings and About (https://daybrite.dev/docs/settings): the Preferences window and menu items
 # on the desktops, the cover the home grid's gear opens on the phones and the web.
 day-piece-settings = "0.*"
+# The App Fair group every App Fair app carries in its settings.
+day-piece-appfair = "0.*"
 day-spec = "0.*"
 day-core = "0.*"
 fair-chess = { path = "games/chess" }

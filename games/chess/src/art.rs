@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 use super::*;
 use cozy_chess::{File, Rank};
-use day_spec::TouchPhase;
+use day_spec::{GestureKind, Support, TouchPhase};
 use gamekit::sprites::{Ink, VectorSprite};
 const LIGHT: Color = Color::hex(0xe3d6b9);
 const DARK: Color = Color::hex(0x779181);
@@ -188,6 +188,13 @@ fn bands(d: &mut Draw, grid: Grid, g: &Game, images: &[[Option<day_core::Bitmap>
         }
     }
 }
+fn playable_grid(ui: &Ui) -> Option<Grid> {
+    (ui.overlay.get_untracked() == Overlay::Play
+        && !ui.computer()
+        && !(ui.flip.get_untracked() && ui.motion.get().is_some()))
+    .then(|| Grid::new(ui.size.get(), ui.reversed()))
+}
+
 pub(super) fn board(ui: Rc<Ui>) -> AnyPiece {
     let assets = [
         res::assets::chess::pawn_svg,
@@ -202,7 +209,7 @@ pub(super) fn board(ui: Rc<Ui>) -> AnyPiece {
     let t = ui.clone();
     let k = ui.clone();
     let a = ui.clone();
-    canvas(move |d, size| {
+    let board = canvas(move |d, size| {
         u.repaint.track();
         u.size.set(size);
         let grid = Grid::new(size, u.reversed());
@@ -331,13 +338,9 @@ pub(super) fn board(ui: Rc<Ui>) -> AnyPiece {
         }
     })
     .on_touches(move |events| {
-        if t.overlay.get_untracked() != Overlay::Play
-            || t.computer()
-            || (t.flip.get_untracked() && t.motion.get().is_some())
-        {
+        let Some(grid) = playable_grid(&t) else {
             return;
-        }
-        let grid = Grid::new(t.size.get(), t.reversed());
+        };
         for e in events {
             let sq = grid.square(e.location);
             if e.phase == TouchPhase::Began
@@ -397,16 +400,30 @@ pub(super) fn board(ui: Rc<Ui>) -> AnyPiece {
                 _ => {}
             }
         }
-    })
-    .on_key(move |e| k.key(e.key))
-    .focused(ui.focus)
-    .a11y(move |v| {
-        v.label(res::str::party_board())
-            .value(move || a.selection())
-    })
-    .id(id!(chess_board))
-    .grow(Dimension::Both)
-    .any()
+    });
+    // A toolkit that derives contacts from drags delivers a stationary click only as a tap.
+    // Native touch handlers already play the square on release.
+    let board = if day_core::gesture_support(GestureKind::Touches) == Support::Emulated {
+        let tap = ui.clone();
+        board.on_tap_at(move |at| {
+            if let Some(square) = playable_grid(&tap).and_then(|grid| grid.square(at)) {
+                tap.keyboard.set(false);
+                tap.tap(square);
+            }
+        })
+    } else {
+        board
+    };
+    board
+        .on_key(move |e| k.key(e.key))
+        .focused(ui.focus)
+        .a11y(move |v| {
+            v.label(res::str::party_board())
+                .value(move || a.selection())
+        })
+        .id(id!(chess_board))
+        .grow(Dimension::Both)
+        .any()
 }
 pub fn preview() -> AnyPiece {
     let art = VectorSprite::new(res::assets::chess::knight_svg, Ink::Team(INKS[0]));
