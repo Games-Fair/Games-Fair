@@ -714,9 +714,9 @@ dependencies = [
 
 [[package]]
 name = "day-piece-settings"
-version = "0.7.12"
+version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50b13bf43253c97360427d777aca035f31754017c1e41c18b76b7a168517552e"
+checksum = "621de5ee3ab794f13fe066667b7c20623c64ab26ea7fbd43acb36540cccad85e"
 dependencies = [
  "cc",
  "day-core",
